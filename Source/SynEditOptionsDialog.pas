@@ -36,33 +36,13 @@ Known Issues:
 
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNEDITOPTIONSDIALOG}
 unit SynEditOptionsDialog;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  Qt,
-  Types,
-  QGraphics,
-  QControls,
-  QForms,
-  QDialogs,
-  QStdCtrls,
-  QComCtrls,
-  QExtCtrls,
-  QButtons,
-  QImgList,
-  QMenus,
-  QSynEdit,
-  QSynEditHighlighter,
-  QSynEditMiscClasses,
-  QSynEditKeyCmds,
-{$ELSE}
   Windows,
   Messages,
   Graphics,
@@ -83,7 +63,6 @@ uses
   SynEditHighlighter,
   SynEditMiscClasses,
   SynEditKeyCmds,
-{$ENDIF}
   Classes,
   SysUtils;
 
@@ -364,11 +343,7 @@ implementation
 {$R *.dfm}
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditKeyConst;
-{$ELSE}
   SynEditKeyConst;
-{$ENDIF}
 
 { TSynEditOptionsDialog }
 

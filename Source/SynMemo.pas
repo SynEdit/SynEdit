@@ -38,35 +38,24 @@ Known Issues:
   - EM_XXX messages aren't implemented on CLX, although this could be useful;
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNMEMO}
 unit SynMemo;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  Qt,
-  Types,
-  QSynEdit,
-  QSynEditTextBuffer,
-  QSynEditTypes,
-{$ELSE}
   RichEdit,
   Windows,
   Messages,
   SynEdit,
   SynEditTextBuffer,
   SynEditTypes,
-{$ENDIF}
   SysUtils,
   Classes;
 
 type
   TSynMemo = class(TSynEdit)
-{$IFNDEF SYN_CLX}
   private
     // EM_XXX see winuser.h (PSDK August 2001)
     procedure EMGetSel(var Message: TMessage); message EM_GETSEL;
@@ -199,27 +188,17 @@ type
     procedure EMSETEDITSTYLE(var Message: TMessage); message EM_SETEDITSTYLE;
     procedure EMGETEDITSTYLE(var Message: TMessage); message EM_GETEDITSTYLE;
     }
-{$ENDIF NOT SYN_CLX}
   end;
 
 implementation
 
 uses
-{$IFDEF SYN_COMPILER_18_UP}
-  AnsiStrings,
-{$ENDIF}
 {$IFDEF UNICODE}
   WideStrUtils,
 {$ENDIF}
-{$IFDEF SYN_CLX}
-  QSynUnicode,
-  QSynEditMiscProcs;
-{$ELSE}
   SynUnicode,
   SynEditMiscProcs;
-{$ENDIF}
 
-{$IFNDEF SYN_CLX}
 
 { TSynMemo }
 
@@ -270,7 +249,7 @@ begin
     if IsWindowUnicode(Handle) then
       WStrLCopy(PWideChar(Message.lParam), PWideChar(SelText), Length(SelText))
     else
-      {$IFDEF SYN_COMPILER_18_UP}AnsiStrings.{$ENDIF}StrLCopy(PAnsiChar(Message.lParam), PAnsiChar(AnsiString(SelText)), Length(SelText));
+      StrLCopy(PAnsiChar(Message.lParam), PAnsiChar(AnsiString(SelText)), Length(SelText));
     Message.Result := Length(SelText);
   end;                          
 end;
@@ -326,7 +305,7 @@ var
   DestAnsi, SourceAnsi: PAnsiChar;
   DestWide, SourceWide: PWideChar;
 begin
-  if {$IFNDEF SYN_COMPILER_16_UP}(Message.WParam >= 0) and {$ENDIF}(Integer(Message.WParam) < Lines.Count) then
+  if (Message.WParam >= 0) and (Message.WParam < Lines.Count) then
   begin
     if IsWindowUnicode(Handle) then
     begin
@@ -339,8 +318,8 @@ begin
     begin
       DestAnsi := PAnsiChar(Message.LParam);
       SourceAnsi := PAnsiChar(AnsiString(Lines[Message.WParam]));
-      {$IFDEF SYN_COMPILER_18_UP}AnsiStrings.{$ENDIF}StrLCopy(DestAnsi, SourceAnsi, PWord(Message.LParam)^);
-      Message.Result := {$IFDEF SYN_COMPILER_18_UP}AnsiStrings.{$ENDIF}StrLen(DestAnsi);
+      StrLCopy(DestAnsi, SourceAnsi, PWord(Message.LParam)^);
+      Message.Result := StrLen(DestAnsi);
     end
   end
   else
@@ -379,7 +358,7 @@ begin
   vPos := DisplayToBufferPos(PixelsToRowColumn(Message.LParamLo, Message.LParamHi));
 
   Dec(vPos.Line);
-  if vPos.Line >= Lines.Count then 
+  if vPos.Line >= Lines.Count then
     vPos.Char := 1
   else if vPos.Char > Length(Lines[vPos.Line]) then
     vPos.Char := Length(Lines[vPos.Line]) + 1; // ???
@@ -395,7 +374,6 @@ begin
   Message.Result := MakeLong(vPos.Char{CharIndex}, vPos.Line{Line zero based});
 end;
 
-{$ENDIF}
 
 end.
 

@@ -1,3 +1,14 @@
+Unicode SynEdit CodeFolding branch
+==================================
+
+In this branch I will attempt to merge the improvements made to SynEdit by the Letterpress project (https://sourceforge.net/projects/letterpress/) including eventually the Code folding stuff.
+
+Letterpress is a major departure from the existing code base:
+a) has removed SYN_CLX IFDEFs and support for earlier version of DELPHI using generics in a couple of places.
+b) used the SynUnihighlighter as the basis for syntax highlighting and has dropped support for existing highlighters
+
+The plan is to merge features one by one starting with the improved WordWrap plugin and printing later moving to Code Folding.
+
 Unicode SynEdit
 ===============
 
@@ -30,18 +41,6 @@ suggestions or fixes are welcome.
 
 There is no documentation yet, help in this area is especially welcome!
 
-CVS access
-----------
-
-CVSROOT is:
-:pserver:anonymous@synedit.cvs.sourceforge.net:/cvsroot/synedit 
-
-To get Unicode SynEdit you have to choose the tag/branch:
-Unicode_2004_08_31
-
-Note that the date stamp included above was the date when the branch was made
-and does not have any correlation with the latest release date, i.e. you will
-always get the latest version using the branch above.
 
 Historical Note
 ---------------

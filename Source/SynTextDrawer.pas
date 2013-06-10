@@ -915,9 +915,7 @@ procedure TheTextDrawer.ExtTextOut(X, Y: Integer; Options: TTextOutOptions;
     for i := 0 to Length - 1 do
     begin
       Size := TextExtent(PWideChar(@Text[i]), 1);
-      if Size.cx <> CharWidth then
-         FETODist[i] := Ceil(Size.cx / CharWidth) * CharWidth
-      else FETODist[i] := CharWidth;
+      FETODist[i] := Ceil(Size.cx / CharWidth) * CharWidth;
     end;
   end;
 
@@ -1002,7 +1000,7 @@ begin
          Exit;
       end;
    end;
-   Result := SynUnicode.TextExtent(FStockBitmap.Canvas, Text).cX;
+  Result := SynUnicode.TextExtent(FStockBitmap.Canvas, Text).cX;
 end;
 
 function TheTextDrawer.TextWidth(Text: PWideChar; Count: Integer): Integer;

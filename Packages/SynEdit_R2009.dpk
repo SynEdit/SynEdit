@@ -127,7 +127,6 @@ contains
   SynHighlighterURI in '..\Source\SynHighlighterURI.pas',
   SynURIOpener in '..\Source\SynURIOpener.pas',
   SynHighlighterDOT in '..\Source\SynHighlighterDOT.pas',
-  SynHighlighterDWS in '..\Source\SynHighlighterDWS.pas',
   SynHighlighterVrml97 in '..\Source\SynHighlighterVrml97.pas',
   SynHighlighterEiffel in '..\Source\SynHighlighterEiffel.pas',
   SynUnicode in '..\Source\SynUnicode.pas',

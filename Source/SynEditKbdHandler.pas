@@ -36,29 +36,19 @@ located at http://SynEdit.SourceForge.net
 Known Issues:
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNEDITKBDHANDLER}
 unit SynEditKbdHandler;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  Types,
-  QGraphics,
-  QControls,
-  QForms,
-  QSynEditTypes,
-{$ELSE}
   Windows,
   Messages,
   Graphics,
   Controls,
   Forms,
   SynEditTypes,
-{$ENDIF}
   SysUtils,
   Classes;
 

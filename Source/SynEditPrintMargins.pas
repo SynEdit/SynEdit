@@ -82,9 +82,7 @@ CONTENTS:
 
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNEDITPRINTMARGINS}
 unit SynEditPrintMargins;
-{$ENDIF}
 {$M+}
 
 {$I SynEdit.inc }
@@ -92,17 +90,10 @@ unit SynEditPrintMargins;
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  QGraphics,
-  QSynEditPrintTypes,
-  QSynEditPrinterInfo,
-  QSynUnicode,  
-{$ELSE}
   Graphics,
   SynEditPrintTypes,
   SynEditPrinterInfo,
   SynUnicode,
-{$ENDIF}
   Classes,
   SysUtils;
 

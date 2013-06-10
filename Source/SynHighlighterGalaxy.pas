@@ -45,25 +45,17 @@ Galaxy is a PBEM game for 10 to 500+ players, to see it wokring goto: http://mem
 The keywords in the string list KeyWords have to be in lowercase and sorted.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERGALAXY}
 unit SynHighlighterGalaxy;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  QGraphics,
-  QSynEditHighlighter,
-  QSynUnicode,
-{$ELSE}
   Windows,
   Graphics,
   SynEditHighlighter,
   SynUnicode,
-{$ENDIF}
   SysUtils, Classes;
 
 type
@@ -114,10 +106,8 @@ type
     procedure Next; override;
     procedure SetRange(Value: Pointer); override;
     procedure ResetRange; override;
-    {$IFNDEF SYN_CLX}
     function SaveToRegistry(RootKey: HKEY; Key: string): boolean; override;
     function LoadFromRegistry(RootKey: HKEY; Key: string): boolean; override;
-    {$ENDIF}
   published
     property CommentAttri: TSynHighlighterAttributes read fCommentAttri
       write fCommentAttri;
@@ -134,11 +124,7 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditStrConst;
-{$ELSE}
   SynEditStrConst;
-{$ENDIF}
 
 function TSynGalaxySyn.IsIdentChar(AChar: WideChar): Boolean;
 begin
@@ -406,7 +392,6 @@ begin
   Result := SYNS_LangGalaxy;
 end;
 
-{$IFNDEF SYN_CLX}
 function TSynGalaxySyn.LoadFromRegistry(RootKey: HKEY; Key: string): boolean;
 var
   r: TBetterRegistry;
@@ -445,7 +430,6 @@ begin
     r.Free;
   end;
 end;
-{$ENDIF}
 
 class function TSynGalaxySyn.GetFriendlyLanguageName: UnicodeString;
 begin

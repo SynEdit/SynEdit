@@ -43,18 +43,12 @@ CONTENTS:
 -------------------------------------------------------------------------------}
 
 
-{$IFNDEF QSYNEDITPRINTTYPES}
 unit SynEditPrintTypes;
-{$ENDIF}
 
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  QSynUnicode,
-{$ELSE}
   SynUnicode,
-{$ENDIF}
   Classes, SysUtils;
 
 const

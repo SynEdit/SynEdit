@@ -41,28 +41,18 @@ Known Issues:
   We'll have to wait for LaTeX 3.)
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNEXPORTTEX}
 unit SynExportTeX;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  Qt,
-  QGraphics,
-  QSynEditExport,
-  QSynEditHighlighter,
-  QSynUnicode,  
-{$ELSE}
   Windows,
   Graphics,
   SynEditExport,
   SynEditHighlighter,
   SynUnicode,
-{$ENDIF}
   Classes;
 
 type
@@ -127,13 +117,8 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditMiscProcs,
-  QSynEditStrConst,
-{$ELSE}
   SynEditMiscProcs,
   SynEditStrConst,
-{$ENDIF}
   SysUtils;
 
 

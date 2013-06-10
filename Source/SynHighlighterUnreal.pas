@@ -41,28 +41,19 @@ Known Issues:
 @lastmod(2001-06-29)
 }
 
-{$IFNDEF QSYNHIGHLIGHTERUNREAL}
 unit SynHighlighterUnreal;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  QGraphics,
-  QSynEditHighlighter,
-  QSynEditTypes,
-  QSynUnicode,
-{$ELSE}
   Graphics,
   Registry,
   Windows, // registry constants
   SynEditHighlighter,
   SynEditTypes,
   SynUnicode,
-{$ENDIF}
   SysUtils,
   Classes;
 
@@ -350,11 +341,7 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditStrConst;
-{$ELSE}
   SynEditStrConst;
-{$ENDIF}
 
 const
   KeyWords: array[0..142] of UnicodeString = (
@@ -2497,7 +2484,6 @@ end;
 procedure TSynUnrealSyn.EnumUserSettings(settings: TStrings);
 begin
   { returns the user settings that exist in the registry }
-{$IFNDEF SYN_CLX}
   with TBetterRegistry.Create do
   begin
     try
@@ -2514,7 +2500,6 @@ begin
       Free;
     end;
   end;
-{$ENDIF}
 end;
 
 function TSynUnrealSyn.UseUserSettings(settingIndex: integer): boolean;
@@ -2525,7 +2510,6 @@ function TSynUnrealSyn.UseUserSettings(settingIndex: integer): boolean;
 //   false: problem reading settings or invalid version specified - old settings
 //          were preserved
 
-{$IFNDEF SYN_CLX}
   function ReadCPPBSettings(settingIndex: integer): boolean;
 
     function ReadCPPBSetting(settingTag: string; attri: TSynHighlighterAttributes; key: string): boolean;
@@ -2627,14 +2611,9 @@ function TSynUnrealSyn.UseUserSettings(settingIndex: integer): boolean;
       sl.Free;
     end;
   end; { ReadCPPBSettings }
-{$ENDIF}
 
 begin
-{$IFDEF SYN_CLX}
-  Result := False;
-{$ELSE}
   Result := ReadCPPBSettings(settingIndex);
-{$ENDIF}
 end; { TSynUnrealSyn.UseUserSettings }
 
 class function TSynUnrealSyn.GetLanguageName: string;

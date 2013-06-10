@@ -35,28 +35,13 @@ located at http://SynEdit.SourceForge.net
 Known Issues:
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNEDITKEYCMDEDITOR}
 unit SynEditKeyCmdEditor;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  Qt,
-  QGraphics,
-  QMenus,
-  QControls,
-  QForms,
-  QDialogs,
-  QStdCtrls,
-  QExtCtrls,
-  QComCtrls,
-  QSynEditKeyCmds,
-  QSynEditMiscClasses,
-{$ELSE}
   Windows,
   Messages,
   Graphics,
@@ -69,7 +54,6 @@ uses
   ExtCtrls,
   SynEditKeyCmds,
   SynEditMiscClasses,
-{$ENDIF}
   SysUtils,
   Classes;
 

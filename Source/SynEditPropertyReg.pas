@@ -35,9 +35,7 @@ located at http://SynEdit.SourceForge.net
 Known Issues:
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNEDITPROPERTYREG}
 unit SynEditPropertyReg;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
@@ -47,22 +45,13 @@ uses
 {$IFDEF SYN_COMPILER_6_UP}
   DesignIntf,
   DesignEditors,
-  {$IFDEF SYN_KYLIX}
-  ClxEditors,
-  ClxStrEdit,
-  {$ELSE}
   VCLEditors,
   StrEdit,
-  {$ENDIF}
 {$ELSE}
   DsgnIntf,
   StrEdit,
 {$ENDIF}
-{$IFDEF SYN_CLX}
-  QSynUnicode,
-{$ELSE}
   SynUnicode,
-{$ENDIF}
 {$IFDEF USE_TNT_DESIGNTIME_SUPPORT}
   TntClasses,
   TntStrEdit_Design,
@@ -135,22 +124,6 @@ procedure Register;
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QDialogs,
-  QForms,
-  QGraphics,
-  QControls,
-  QSynEditKeyCmds,
-  QSynEditKeyCmdsEditor,
-  QSynEdit,
-  QSynEditPrint,
-  QSynEditPrintMargins,
-  QSynEditPrintMarginsDialog,
-  QSynCompletionProposal,
-  QSynMacroRecorder,
-  QSynAutoCorrect,
-  QSynAutoCorrectEditor,
-{$ELSE}
   Dialogs,
   Forms,
   Graphics,
@@ -165,7 +138,6 @@ uses
   SynMacroRecorder,
   SynAutoCorrect,
   SynAutoCorrectEditor,
-{$ENDIF}
   SysUtils;
 
 {$IFDEF USE_TNT_DESIGNTIME_SUPPORT}
@@ -238,11 +210,8 @@ begin
   try
     FontDialog.Font := TFont(GetOrdValue);
     FontDialog.HelpContext := hcDFontEditor;
-  {$IFDEF SYN_CLX}
-  {$ELSE}
     FontDialog.Options := FontDialog.Options + [fdShowHelp, fdForceFontExist,
        fdFixedPitchOnly];
-  {$ENDIF}
     if FontDialog.Execute then
       SetOrdValue(Longint(FontDialog.Font));
   finally

@@ -38,27 +38,18 @@ located at http://SynEdit.SourceForge.net
 Known Issues:
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNEXPORTRTF}
 unit SynExportRTF;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-  {$IFDEF SYN_CLX}
-  Qt,
-  QGraphics,
-  QSynEditExport,
-  QSynUnicode,  
-  {$ELSE}
   Windows,
   Graphics,
   RichEdit,
   SynEditExport,
-  SynUnicode,    
-  {$ENDIF}
+  SynUnicode,
   Classes;
 
 type
@@ -100,12 +91,7 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditStrConst,
-  QSynEditMiscProcs,
-{$ELSE}
   SynEditStrConst,
-{$ENDIF}
   SysUtils;
 
 { TSynExporterRTF }
@@ -115,9 +101,7 @@ begin
   inherited Create(AOwner);
   fListColors := TList.Create;
   fDefaultFilter := SYNS_FilterRTF;
-{$IFNDEF SYN_CLX}
   fClipboardFormat := RegisterClipboardFormat(CF_RTF);
-{$ENDIF} // TODO: register for Kylix, too, see what Netscape Composer uses/accepts
   FEncoding := seUTF8;
 end;
 

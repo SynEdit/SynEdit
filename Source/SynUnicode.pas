@@ -26,7 +26,7 @@ replace them with the notice and other provisions required by the GPL.
 If you do not delete the provisions above, a recipient may use your version
 of this file under either the MPL or the GPL.
 
-$Id: SynUnicode.pas,v 1.1.3.19 2012/11/07 08:54:20 CodehunterWorks Exp $
+$Id: SynUnicode.pas,v 1.1.2.46 2009/09/28 17:54:20 maelh Exp $
 
 You may retrieve the latest version of this file at the SynEdit home page,
 located at http://SynEdit.SourceForge.net
@@ -40,14 +40,9 @@ Provides:
 - Unicode clipboard support
 - Unicode-version of TCanvas-methods
 - Some character constants like CR&LF.
-
-Last Changes:
-- 1.1.3.19: Added TUnicodeStringList.CustomSort
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNUNICODE}
 unit SynUnicode;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
@@ -57,16 +52,11 @@ uses
   {$IFDEF SYN_WIN32}
   Windows,
   {$ENDIF}
-  {$IFDEF SYN_CLX}
-  QGraphics,
-  QClipbrd,  
-  {$ELSE}
   Messages,
   Controls,
   Forms,
   Graphics,
-  Clipbrd,  
-  {$ENDIF}
+  Clipbrd,
   {$IFDEF SYN_COMPILER_6_UP}
   Types,
   {$ENDIF}
@@ -237,9 +227,7 @@ type
     FObject: TObject;
   end;
 
-  TUnicodeStringList = class;
   TUnicodeStringItemList = array of TUnicodeStringItem;
-  TUnicodeStringListSortCompare = function (AString1, AString2: UnicodeString): Integer;
 
   TUnicodeStringList = class(TUnicodeStrings)
   private
@@ -251,8 +239,7 @@ type
     FOnChanging: TNotifyEvent;
     procedure ExchangeItems(Index1, Index2: Integer);
     procedure Grow;
-    procedure QuickSort(L, R: Integer); overload;
-    procedure QuickSort(L, R: Integer; SCompare: TUnicodeStringListSortCompare); overload;
+    procedure QuickSort(L, R: Integer);
     procedure InsertItem(Index: Integer; const S: UnicodeString);
     procedure SetSorted(Value: Boolean);
     {$IFDEF OWN_UnicodeString_MEMMGR}
@@ -280,7 +267,6 @@ type
     function IndexOf(const S: UnicodeString): Integer; override;
     procedure Insert(Index: Integer; const S: UnicodeString); override;
     procedure Sort; virtual;
-    procedure CustomSort(Compare: TUnicodeStringListSortCompare); virtual;
 
     property Duplicates: TDuplicates read FDuplicates write FDuplicates;
     property Sorted: Boolean read FSorted write SetSorted;
@@ -302,7 +288,6 @@ function WStrAlloc(Size: Cardinal): PWideChar;
 function WStrNew(const Str: PWideChar): PWideChar;
 procedure WStrDispose(Str: PWideChar);
 {$ENDIF}
-
 
 {$IFNDEF SYN_COMPILER_6_UP}
 {$IFDEF SYN_WIN32} // Kylix should have that from version 1 on
@@ -445,13 +430,9 @@ var
 implementation
 
 uses
-  {$IFDEF SYN_CLX}
-  QSynEditTextBuffer,
-  {$ELSE}
   SynEditTextBuffer,
-    {$IFDEF SYN_UNISCRIBE}
-    SynUsp10,
-    {$ENDIF}
+  {$IFDEF SYN_UNISCRIBE}
+  SynUsp10,
   {$ENDIF}
   Math,
   {$IFDEF SYN_LINUX}
@@ -464,11 +445,7 @@ uses
   {$IFDEF SYN_COMPILER_6_UP}
   RTLConsts;
   {$ELSE}
-    {$IFDEF SYN_CLX}
-    QConsts;
-    {$ELSE}
     Consts;
-    {$ENDIF}
   {$ENDIF}
 
 {$IFNDEF UNICODE}
@@ -1484,43 +1461,6 @@ begin
   until I >= R;
 end;
 
-procedure TUnicodeStringList.QuickSort(L, R: Integer; SCompare: TUnicodeStringListSortCompare);
-var
-  I, J: Integer;
-  P: UnicodeString;
-begin
-  repeat
-    I := L;
-    J := R;
-    P := FList[(L + R) shr 1].FString;
-    repeat
-      while SCompare(FList[I].FString, P) < 0 do
-        Inc(I);
-      while SCompare(FList[J].FString, P) > 0 do
-        Dec(J);
-      if I <= J then
-      begin
-        ExchangeItems(I, J);
-        Inc(I);
-        Dec(J);
-      end;
-    until I > J;
-    if L < J then
-      QuickSort(L, J);
-    L := I;
-  until I >= R;
-end;
-
-procedure TUnicodeStringList.CustomSort(Compare: TUnicodeStringListSortCompare);
-begin
-  if not Sorted and (FCount > 1) then
-  begin
-    Changing;
-    QuickSort(0, FCount - 1, Compare);
-    Changed;
-  end;
-end;
-
 procedure TUnicodeStringList.SetCapacity(NewCapacity: Integer);
 begin
   SetLength(FList, NewCapacity);
@@ -1587,7 +1527,7 @@ begin
 end;
 
 function WStrCopy(Dest: PWideChar; const Source: PWideChar): PWideChar;
-{$IFDEF SYN_COMPILER_16_UP}
+{$IFDEF CPUX64}
 begin
   Result := SysUtils.StrCopy(Dest, Source)
 {$ELSE}
@@ -1615,7 +1555,7 @@ asm
 end;
 
 function WStrLCopy(Dest: PWideChar; const Source: PWideChar; MaxLen: Cardinal): PWideChar;
-{$IFDEF SYN_COMPILER_16_UP}
+{$IFDEF CPUX64}
 begin
   Result := SysUtils.StrLCopy(Dest, Source, MaxLen)
 {$ELSE}
@@ -1949,11 +1889,7 @@ begin
       Result := lpsz;
       while lpsz^ <> #0 do
       begin
-        {$IFDEF SYN_CLX}
-        lpsz^ := WideChar(QSynUnicode.WCharUpper(PWideChar(lpsz^)));
-        {$ELSE}
         lpsz^ := WideChar(SynUnicode.WCharUpper(PWideChar(lpsz^)));
-        {$ENDIF}
         Inc(lpsz);
       end;
     end;
@@ -1971,11 +1907,7 @@ begin
     Result := cchLength;
     for i := 1 to cchLength do
     begin
-      {$IFDEF SYN_CLX}
-      lpsz^ := WideChar(QSynUnicode.WCharUpper(PWideChar(lpsz^)));
-      {$ELSE}
       lpsz^ := WideChar(SynUnicode.WCharUpper(PWideChar(lpsz^)));
-      {$ENDIF}
       Inc(lpsz);
     end;
   end;
@@ -2009,11 +1941,7 @@ begin
       Result := lpsz;
       while lpsz^ <> #0 do
       begin
-        {$IFDEF SYN_CLX}
-        lpsz^ := WideChar(QSynUnicode.WCharLower(PWideChar(lpsz^)));
-        {$ELSE}
         lpsz^ := WideChar(SynUnicode.WCharLower(PWideChar(lpsz^)));
-        {$ENDIF}
         Inc(lpsz);
       end;
     end;
@@ -2031,11 +1959,7 @@ begin
     Result := cchLength;
     for i := 1 to cchLength do
     begin
-      {$IFDEF SYN_CLX}
-      lpsz^ := WideChar(QSynUnicode.WCharLower(PWideChar(lpsz^)));
-      {$ELSE}
       lpsz^ := WideChar(SynUnicode.WCharLower(PWideChar(lpsz^)));
-      {$ENDIF}
       Inc(lpsz);
     end;
   end;
@@ -2048,8 +1972,7 @@ begin
   Len := Length(S);
   SetString(Result, PWideChar(S), Len);
   if Len > 0 then
-    {$IFDEF SYN_CLX} QSynUnicode. {$ELSE} SynUnicode. {$ENDIF}
-    WCharUpperBuff(Pointer(Result), Len);
+    SynUnicode.WCharUpperBuff(Pointer(Result), Len);
 end;
 
 function SynWideLowerCase(const S: UnicodeString): UnicodeString;
@@ -2059,8 +1982,7 @@ begin
   Len := Length(S);
   SetString(Result, PWideChar(S), Len);
   if Len > 0 then
-    {$IFDEF SYN_CLX} QSynUnicode. {$ELSE} SynUnicode. {$ENDIF}
-    WCharLowerBuff(Pointer(Result), Len);
+    SynUnicode.WCharLowerBuff(Pointer(Result), Len);
 end;
 {$ELSE}
 function SynWideUpperCase(const S: UnicodeString): UnicodeString;
@@ -2241,12 +2163,12 @@ end;
 // byte to go from LSB to MSB and vice versa.
 // EAX contains address of string
 procedure StrSwapByteOrder(Str: PWideChar);
-{$IFDEF SYN_COMPILER_16_UP}
+{$IFDEF CPUX64}
 var
   P: PWord;
 begin
   P := PWord(Str);
-  while P^ <> 0 do 
+  while P^ <> 0 do
   begin
     P^ := MakeWord(HiByte(P^), LoByte(P^));
     Inc(P);
@@ -2501,7 +2423,7 @@ begin
     // value for GlyphBufferSize (see documentation of cGlyphs parameter of
     // ScriptStringAnalyse function)
     GlyphBufferSize := (3 * Count) div 2 + 16;
-    
+
     if Succeeded(ScriptStringAnalyse(DC, Str, Count, GlyphBufferSize, -1,
       SSAnalyseFlags, 0, nil, nil, nil, nil, nil, @saa)) then
     begin
@@ -2539,40 +2461,25 @@ type
 
 function TextExtent(ACanvas: TCanvas; const Text: UnicodeString): TSize;
 begin
-{$IFDEF SYN_CLX}
-  Result := ACanvas.TextExtent(Text);
-{$ELSE}
   with TAccessCanvas(ACanvas) do
   begin
     RequiredState([csHandleValid, csFontValid]);
     Result := GetTextSize(Handle, PWideChar(Text), Length(Text));
   end;
-{$ENDIF}
 end;
 
 function TextWidth(ACanvas: TCanvas; const Text: UnicodeString): Integer;
 begin
-{$IFDEF SYN_CLX}
-  Result := ACanvas.TextExtent(Text).cX;
-{$ELSE}
   Result := TextExtent(ACanvas, Text).cX;
-{$ENDIF}
 end;
 
 function TextHeight(ACanvas: TCanvas; const Text: UnicodeString): Integer;
 begin
-{$IFDEF SYN_CLX}
-  Result := ACanvas.TextExtent(Text).cY;
-{$ELSE}
   Result := TextExtent(ACanvas, Text).cY;
-{$ENDIF}
 end;
 
 procedure TextOut(ACanvas: TCanvas; X, Y: Integer; const Text: UnicodeString);
 begin
-{$IFDEF SYN_CLX}
-  ACanvas.TextOut(X, Y, Text);
-{$ELSE}
   with TAccessCanvas(ACanvas) do
   begin
     Changing;
@@ -2584,19 +2491,13 @@ begin
     MoveTo(X + SynUnicode.TextWidth(ACanvas, Text), Y);
     Changed;
   end;
-{$ENDIF}
 end;
 
 procedure TextRect(ACanvas: TCanvas; Rect: TRect; X, Y: Integer;
   const Text: UnicodeString);
-{$IFNDEF SYN_CLX}
 var
   Options: Longint;
-{$ENDIF}
 begin
-{$IFDEF SYN_CLX}
-  ACanvas.TextRect(Rect, X, Y, Text);
-{$ELSE}
   with TAccessCanvas(ACanvas) do
   begin
     Changing;
@@ -2612,7 +2513,6 @@ begin
       Length(Text), nil);
     Changed;
   end;
-{$ENDIF}
 end;
 
 {$IFNDEF UNICODE}
@@ -2970,7 +2870,7 @@ var
 begin
   // if Stream is nil, let Delphi raise the exception, by accessing Stream,
   // to signal an invalid result
-  
+
   // start analysis at actual Stream.Position
   Size := Stream.Size - Stream.Position;
 
@@ -3252,19 +3152,10 @@ end;
 
 function ClipboardProvidesText: Boolean;
 begin
-{$IFDEF SYN_CLX}
-  Result := Clipboard.Provides('text/plain');
-{$ELSE}
   Result := IsClipboardFormatAvailable(CF_TEXT) or IsClipboardFormatAvailable(CF_UNICODETEXT);
-{$ENDIF}
 end;
 
 function GetClipboardText: UnicodeString;
-{$IFDEF SYN_CLX}
-begin
-  Result := Clipboard.AsText;
-end;
-{$ELSE}
 var
   Mem: HGLOBAL;
   LocaleID: LCID;
@@ -3308,14 +3199,8 @@ begin
     Clipboard.Close;
   end;
 end;
-{$ENDIF}
 
 procedure SetClipboardText(const Text: UnicodeString);
-{$IFDEF SYN_CLX}
-begin
-  Clipboard.AsText := Text;
-end;
-{$ELSE}
 var
   Mem: HGLOBAL;
   P: PByte;
@@ -3369,7 +3254,6 @@ begin
     Clipboard.Close;
   end;
 end;
-{$ENDIF}
 
 {$IFNDEF UNICODE}
 {$IFNDEF SYN_COMPILER_6_UP}

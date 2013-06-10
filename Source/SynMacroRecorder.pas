@@ -35,29 +35,13 @@ located at http://SynEdit.SourceForge.net
 Known Issues:
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNMACRORECORDER}
 unit SynMacroRecorder;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  QConsts,
-  QStdCtrls,
-  QControls,
-  Qt,
-  Types,
-  QGraphics,
-  QMenus,
-  QSynEdit,
-  QSynEditKeyCmds,
-  QSynEditPlugins,
-  QSynEditTypes,
-  QSynUnicode,
-{$ELSE}
   StdCtrls,
   Controls,
   Windows,
@@ -69,7 +53,6 @@ uses
   SynEditPlugins,
   SynEditTypes,
   SynUnicode,
-{$ENDIF}
 {$IFDEF UNICODE}
   WideStrUtils,
 {$ENDIF}
@@ -271,15 +254,10 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QForms,
-  QSynEditMiscProcs,
-{$ELSE}
   Forms,
   SynEditMiscProcs,
 {$IFDEF SYN_COMPILER_6_UP}
   RTLConsts,
-{$ENDIF}
 {$ENDIF}
   SysUtils;
 
@@ -350,13 +328,8 @@ begin
   fMacroName := 'unnamed';
   fCommandIDs[mcRecord] := NewPluginCommand;
   fCommandIDs[mcPlayback] := NewPluginCommand;
-  {$IFDEF SYN_CLX} 
-  fShortCuts[mcRecord] := QMenus.ShortCut(Ord('R'), [ssCtrl, ssShift]);
-  fShortCuts[mcPlayback] := QMenus.ShortCut(Ord('P'), [ssCtrl, ssShift]);
-  {$ELSE}
   fShortCuts[mcRecord] := Menus.ShortCut(Ord('R'), [ssCtrl, ssShift]);
   fShortCuts[mcPlayback] := Menus.ShortCut(Ord('P'), [ssCtrl, ssShift]);
-  {$ENDIF}
 end;
 
 function TCustomSynMacroRecorder.CreateMacroEvent(aCmd: TSynEditorCommand): TSynMacroEvent;
@@ -951,9 +924,7 @@ begin
   aStream.Read(l, sizeof(l));
   GetMem(Buff, l * sizeof(WideChar));
   try
-  {$IFNDEF SYN_CLX}
     FillMemory(Buff, l, 0);
-  {$ENDIF}
     aStream.Read(Buff^, l * sizeof(WideChar));
     fString := Buff;
   finally
@@ -988,9 +959,7 @@ begin
   aStream.Write(l, sizeof(l));
   GetMem(Buff, l * sizeof(WideChar));
   try
-  {$IFNDEF SYN_CLX}
     FillMemory(Buff, l, 0);
-  {$ENDIF}
     WStrCopy(Buff, PWideChar(Value));
     aStream.Write(Buff^, l * sizeof(WideChar));
   finally

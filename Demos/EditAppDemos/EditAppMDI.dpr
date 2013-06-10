@@ -34,6 +34,9 @@ located at http://SynEdit.SourceForge.net
 Known Issues:
 -------------------------------------------------------------------------------}
 
+// JCL_DEBUG_EXPERT_GENERATEJDBG OFF
+// JCL_DEBUG_EXPERT_INSERTJDBG OFF
+// JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
 program EditAppMDI;
 
 uses

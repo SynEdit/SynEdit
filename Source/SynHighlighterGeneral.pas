@@ -29,7 +29,7 @@ replace them with the notice and other provisions required by the GPL.
 If you do not delete the provisions above, a recipient may use your version
 of this file under either the MPL or the GPL.
 
-$Id: SynHighlighterGeneral.pas,v 1.12 2011/04/14 15:12:54 Egg Exp $
+$Id: SynHighlighterGeneral.pas,v 1.15.2.8 2008/09/14 16:25:00 maelh Exp $
 
 You may retrieve the latest version of this file at the SynEdit home page,
 located at http://SynEdit.SourceForge.net
@@ -44,27 +44,18 @@ Known Issues:
 The SynHighlighterGeneral unit provides a customizable highlighter for SynEdit.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERGENERAL}
 unit SynHighlighterGeneral;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  QGraphics,
-  QSynEditTypes,
-  QSynEditHighlighter,
-  QSynUnicode,
-{$ELSE}
   Windows,
   Graphics,
   SynEditTypes,
   SynEditHighlighter,
   SynUnicode,
-{$ENDIF}
   SysUtils,
   Classes;
 
@@ -153,10 +144,8 @@ type
     procedure Next; override;
     procedure ResetRange; override;
     procedure SetRange(Value: Pointer); override;
-    {$IFNDEF SYN_CLX}
     function SaveToRegistry(RootKey: HKEY; Key: string): boolean; override;
     function LoadFromRegistry(RootKey: HKEY; Key: string): boolean; override;
-    {$ENDIF}
     property OnGetTokenAttribute : TGetTokenAttributeEvent read fOnGetTokenAttribute write fOnGetTokenAttribute;
     property StringMultiLine : Boolean read FStringMultiLine write FStringMultiLine;
   published
@@ -188,11 +177,7 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditStrConst;
-{$ELSE}
   SynEditStrConst;
-{$ENDIF}
 
 function TSynGeneralSyn.IsIdentChar(AChar: WideChar): Boolean;
 var
@@ -738,7 +723,6 @@ begin
   Result := SYNS_LangGeneral;
 end;
 
-{$IFNDEF SYN_CLX}
 function TSynGeneralSyn.LoadFromRegistry(RootKey: HKEY; Key: string): boolean;
 var
   r: TBetterRegistry;
@@ -769,7 +753,6 @@ begin
     else Result := false;
   finally r.Free; end;
 end;
-{$ENDIF}
 
 function TSynGeneralSyn.GetStringDelim: TStringDelim;
 begin

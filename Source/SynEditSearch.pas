@@ -36,24 +36,16 @@ located at http://SynEdit.SourceForge.net
 Known Issues:
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNEDITSEARCH}
 unit SynEditSearch;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditTypes,
-  QSynEditMiscClasses,
-  QSynUnicode,   
-{$ELSE}
   SynEditTypes,
   SynEditMiscClasses,
   SynUnicode,
-{$ENDIF}
   Classes;
 
 type
@@ -102,11 +94,7 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  Types,
-{$ELSE}
   Windows,
-{$ENDIF}
   SysUtils;
 
 constructor TSynEditSearch.Create(aOwner: TComponent);

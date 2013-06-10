@@ -38,29 +38,18 @@ located at http://SynEdit.SourceForge.net
 Known Issues:
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNEDITAUTOCOMPLETE}
 unit SynEditAutoComplete;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-  {$IFDEF SYN_CLX}
-  Qt,
-  QMenus,
-  Types,
-  QSynEdit,
-  QSynEditKeyCmds,
-  QSynUnicode,   
-  {$ELSE}
   Windows,
   Menus,
   SynEdit,
   SynEditKeyCmds,
-  SynUnicode,  
-  {$ENDIF}
+  SynUnicode,
   Classes;
 
 type
@@ -125,11 +114,7 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditTypes,
-{$ELSE}
   SynEditTypes,
-{$ENDIF}
   SysUtils;
 
 { TCustomSynAutoComplete }

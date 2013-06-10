@@ -41,9 +41,7 @@ Known Issues:
 { Base class for exporting a programming language source file or part of it to
   a formatted output like HTML or RTF and copying this to the Windows clipboard
   or saving it to a file. }
-{$IFNDEF QSYNEDITEXPORT}
 unit SynEditExport;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
@@ -53,22 +51,12 @@ uses
 {$IFDEF SYN_KYLIX}
   Libc,
 {$ENDIF}
-{$IFDEF SYN_CLX}
-  Qt,
-  QGraphics,
-  QClipbrd,
-  QSynEditHighlighter,
-  QSynEditTypes,
-  QSynUnicode,
-  Types,
-{$ELSE}
   Windows,
   Graphics,
   Clipbrd,
   SynEditHighlighter,
   SynEditTypes,
-  SynUnicode,  
-{$ENDIF}
+  SynUnicode,
   Classes,
   SysUtils;
 
@@ -224,13 +212,8 @@ uses
 {$IFDEF SYN_COMPILER_4_UP}
   Math,
 {$ENDIF}
-{$IFDEF SYN_CLX}
-  QSynEditMiscProcs,
-  QSynEditStrConst;
-{$ELSE}
   SynEditMiscProcs,
   SynEditStrConst;
-{$ENDIF}
 
 { TSynCustomExporter }
 
@@ -238,9 +221,7 @@ constructor TSynCustomExporter.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   fBuffer := TMemoryStream.Create;
-{$IFNDEF SYN_CLX}
   fClipboardFormat := CF_TEXT;
-{$ENDIF}
   FCharSize := 1;
   FEncoding := seUTF8;
   fFont := TFont.Create;
@@ -302,11 +283,6 @@ begin
 end;
 
 procedure SetClipboardText(Text: UnicodeString);
-{$IFDEF SYN_CLX}
-begin
-  Clipboard.AsText := Text;
-end;
-{$ELSE}
 var
   Mem: HGLOBAL;
   P: PByte;
@@ -359,7 +335,6 @@ begin
     Clipboard.Close;
   end;
 end;
-{$ENDIF}
 
 procedure TSynCustomExporter.CopyToClipboard;
 const
@@ -395,14 +370,11 @@ begin
 end;
 
 procedure TSynCustomExporter.CopyToClipboardFormat(AFormat: UINT);
-{$IFNDEF SYN_CLX}
 var
   hData: THandle;
   hDataSize: UINT;
   PtrData: PByte;
-{$ENDIF}
 begin
-{$IFNDEF SYN_CLX}
   hDataSize := GetBufferSize + 1;
   hData := GlobalAlloc(GMEM_MOVEABLE or GMEM_ZEROINIT or GMEM_SHARE, hDataSize);
   if hData <> 0 then
@@ -424,7 +396,6 @@ begin
     GlobalFree(hData);
     OutOfMemoryError;
   end;
-{$ENDIF}
 end;
 
 procedure TSynCustomExporter.DefineProperties(Filer: TFiler);
@@ -452,20 +423,12 @@ begin
     if not Assigned(ALines) or not Assigned(Highlighter) or (ALines.Count = 0)
       or (Start.Line > ALines.Count) or (Start.Line > Stop.Line)
     then
-    {$IFDEF SYN_CLX}
-      exit;
-    {$ELSE}
       Abort;
-    {$ENDIF}
     Stop.Line := Max(1, Min(Stop.Line, ALines.Count));
     Stop.Char := Max(1, Min(Stop.Char, Length(ALines[Stop.Line - 1]) + 1));
     Start.Char := Max(1, Min(Start.Char, Length(ALines[Start.Line - 1]) + 1));
     if (Start.Line = Stop.Line) and (Start.Char >= Stop.Char) then
-    {$IFDEF SYN_CLX}
-      exit;
-    {$ELSE}
       Abort;
-    {$ENDIF}
     // initialization
     fBuffer.Position := 0;
     // Size is ReadOnly in Delphi 2

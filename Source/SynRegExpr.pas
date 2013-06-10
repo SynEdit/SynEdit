@@ -1,6 +1,4 @@
-{$IFNDEF QSYNREGEXPR}
 unit SynRegExpr;
-{$ENDIF}
 
 {
      TRegExpr class library
@@ -92,11 +90,7 @@ interface
 {$IFDEF FPC} {$DEFINE OverMeth} {$ENDIF}
 
 uses
-{$IFDEF SYN_CLX}
-  QSynUnicode,
-{$ELSE}
-  SynUnicode,
-{$ENDIF}
+ SynUnicode,
  Classes,  // TStrings in Split method
  SysUtils; // Exception
 

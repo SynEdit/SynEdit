@@ -45,12 +45,8 @@ program pas2html;
 
 uses                                                             
   Windows, Classes, Clipbrd, SynHighlighterPas, SynExportHTML,
-  {$IFDEF SYN_CLX}
-  QSynUnicode;
-  {$ELSE}
   SynUnicode;
-  {$ENDIF}
-  
+
 var
   SettingsLines: TStrings;
   TextLines: TUnicodeStringList;

@@ -41,28 +41,13 @@ CONTENTS:
   a picture that can help with understanding the different values.
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNEDITPRINTMARGINSDIALOG}
 unit SynEditPrintMarginsDialog;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  Qt,
-  QGraphics,
-  QForms,
-  QControls,
-  QStdCtrls,
-  QButtons,
-  QExtCtrls,
-  QDialogs,
-  QSynEditPrint,
-  QSynEditPrintTypes,
-  QSynEditPrintMargins,
-{$ELSE}
   Windows,
   Graphics,
   Forms,
@@ -74,7 +59,6 @@ uses
   SynEditPrint,
   SynEditPrintTypes,
   SynEditPrintMargins,
-{$ENDIF}
   SysUtils,
   Classes;
 

@@ -44,26 +44,17 @@ The SynHighlighterCpp unit provides SynEdit with a C++ syntax highlighter.
 Thanks to Martin Waldenburg.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERCPP}
 unit SynHighlighterCpp;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  QGraphics,
-  QSynEditTypes,
-  QSynEditHighlighter,
-  QSynUnicode,
-{$ELSE}
   Graphics,
   SynEditTypes,
   SynEditHighlighter,
   SynUnicode,
-{$ENDIF}
   SysUtils,
   Classes;
 
@@ -211,12 +202,8 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditStrConst;
-{$ELSE}
   Windows,
   SynEditStrConst;
-{$ENDIF}
 
 const
   KeyWords: array[0..94] of UnicodeString = (
@@ -1340,7 +1327,6 @@ end;
 procedure TSynCppSyn.EnumUserSettings(settings: TStrings);
 begin
   { returns the user settings that exist in the registry }
-{$IFNDEF SYN_CLX}
   with TBetterRegistry.Create do
   begin
     try
@@ -1357,7 +1343,6 @@ begin
       Free;
     end;
   end;
-{$ENDIF}
 end;
 
 function TSynCppSyn.UseUserSettings(settingIndex: integer): boolean;
@@ -1368,7 +1353,6 @@ function TSynCppSyn.UseUserSettings(settingIndex: integer): boolean;
 //   false: problem reading settings or invalid version specified - old settings
 //          were preserved
 
-  {$IFNDEF SYN_CLX}
   function ReadCPPBSettings(settingIndex: integer): boolean;
 
     function ReadCPPBSetting(settingTag: string; attri: TSynHighlighterAttributes; key: string): boolean;
@@ -1499,14 +1483,9 @@ function TSynCppSyn.UseUserSettings(settingIndex: integer): boolean;
       end;
     finally s.Free; end;
   end; { ReadCPPBSettings }
-  {$ENDIF}
 
 begin
-  {$IFNDEF SYN_CLX}
   Result := ReadCPPBSettings(settingIndex);
-  {$ELSE}
-  Result := False;
-  {$ENDIF}
 end; { TSynCppSyn.UseUserSettings }
 
 function TSynCppSyn.IsFilterStored: Boolean;

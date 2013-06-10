@@ -5,11 +5,13 @@ object fmEditorOptionsDialog: TfmEditorOptionsDialog
   Caption = 'Editor Options'
   ClientHeight = 394
   ClientWidth = 369
+  Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
+  OldCreateOrder = True
   Position = poScreenCenter
   OnCreate = FormCreate
   OnShow = FormShow
@@ -149,6 +151,7 @@ object fmEditorOptionsDialog: TfmEditorOptionsDialog
           Width = 120
           Height = 17
           Caption = 'Visible'
+          Checked = True
           State = cbChecked
           TabOrder = 0
         end
@@ -338,6 +341,10 @@ object fmEditorOptionsDialog: TfmEditorOptionsDialog
     end
     object Options: TTabSheet
       Caption = 'Options'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object gbOptions: TGroupBox
         Left = 8
         Top = 0
@@ -608,13 +615,12 @@ object fmEditorOptionsDialog: TfmEditorOptionsDialog
           Width = 186
           Height = 21
           Style = csDropDownList
-          ItemHeight = 13
+          TabOrder = 0
           Items.Strings = (
             'Vertical Line'
             'Horizontal Line'
             'Half Block'
             'Block')
-          TabOrder = 0
         end
         object cOverwriteCaret: TComboBox
           Left = 120
@@ -622,18 +628,21 @@ object fmEditorOptionsDialog: TfmEditorOptionsDialog
           Width = 186
           Height = 21
           Style = csDropDownList
-          ItemHeight = 13
+          TabOrder = 1
           Items.Strings = (
             'Vertical Line'
             'Horizontal Line'
             'Half Block'
             'Block')
-          TabOrder = 1
         end
       end
     end
     object Keystrokes: TTabSheet
       Caption = 'Keystrokes'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object btnAddKey: TButton
         Left = 96
         Top = 152
@@ -685,7 +694,6 @@ object fmEditorOptionsDialog: TfmEditorOptionsDialog
           Top = 23
           Width = 186
           Height = 21
-          ItemHeight = 0
           TabOrder = 0
           OnExit = cKeyCommandExit
           OnKeyPress = cKeyCommandKeyPress
@@ -717,7 +725,6 @@ object fmEditorOptionsDialog: TfmEditorOptionsDialog
           Height = 128
           Align = alClient
           BorderStyle = bsNone
-          ColumnClick = False
           Columns = <
             item
               Caption = 'Command'
@@ -727,12 +734,13 @@ object fmEditorOptionsDialog: TfmEditorOptionsDialog
               Caption = 'Keystroke'
               Width = 142
             end>
-          ReadOnly = True
+          ColumnClick = False
           HideSelection = False
+          ReadOnly = True
           RowSelect = True
-          OnChanging = KeyListChanging
           TabOrder = 0
           ViewStyle = vsReport
+          OnChanging = KeyListChanging
         end
       end
     end
@@ -757,7 +765,6 @@ object fmEditorOptionsDialog: TfmEditorOptionsDialog
     TabOrder = 2
   end
   object ColorDialog: TColorDialog
-    Ctl3D = True
     Left = 8
     Top = 368
   end
@@ -904,8 +911,6 @@ object fmEditorOptionsDialog: TfmEditorOptionsDialog
     Font.Height = -11
     Font.Name = 'MS Sans Serif'
     Font.Style = []
-    MinFontSize = 0
-    MaxFontSize = 0
     Options = [fdEffects, fdFixedPitchOnly]
     Left = 104
     Top = 368

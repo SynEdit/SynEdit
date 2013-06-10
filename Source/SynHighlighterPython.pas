@@ -44,26 +44,17 @@ Known Issues:
 The SynHighlighterPython implements a highlighter for Python for the SynEdit projects.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERPYTHON}
 unit SynHighlighterPython;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  QGraphics,
-  QSynEditHighlighter,
-  QSynEditTypes,
-  QSynUnicode,  
-{$ELSE}
   Graphics,
   SynEditHighlighter,
   SynEditTypes,
   SynUnicode,
-{$ENDIF}
   SysUtils,
   Classes;
 
@@ -172,11 +163,7 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditStrConst;
-{$ELSE}
   SynEditStrConst;
-{$ENDIF}
 
 var
   GlobalKeywords: TUnicodeStringList;

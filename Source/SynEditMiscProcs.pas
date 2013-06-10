@@ -36,29 +36,18 @@ located at http://SynEdit.SourceForge.net
 Known Issues:
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNEDITMISCPROCS}
 unit SynEditMiscProcs;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  Types,
-  kTextDrawer,
-  QGraphics,
-  QSynEditTypes,
-  QSynEditHighlighter,
-  QSynUnicode,
-{$ELSE}
   Windows,
   Graphics,
   SynEditTypes,
   SynEditHighlighter,
   SynUnicode,
-{$ENDIF}
 {$IFDEF SYN_COMPILER_4_UP}
   Math,
 {$ENDIF}
@@ -83,9 +72,7 @@ function MinPoint(const P1, P2: TPoint): TPoint;
 
 function GetIntArray(Count: Cardinal; InitialValue: integer): PIntArray;
 
-{$IFNDEF SYN_CLX}
 procedure InternalFillRect(dc: HDC; const rcPaint: TRect);
-{$ENDIF}
 
 // Converting tabs to spaces: To use the function several times it's better
 // to use a function pointer that is set to the fastest conversion function.
@@ -149,13 +136,6 @@ function StringReplace(const S, OldPattern, NewPattern: UnicodeString;
   Flags: TReplaceFlags): UnicodeString;
 {$ENDIF}
 
-{$IFDEF SYN_CLX}
-function GetRValue(RGBValue: TColor): byte;
-function GetGValue(RGBValue: TColor): byte;
-function GetBValue(RGBValue: TColor): byte;
-function RGB(r, g, b: Byte): Cardinal;
-{$ENDIF}
-
 type
   THighlighterAttriProc = function (Highlighter: TSynCustomHighlighter;
     Attri: TSynHighlighterAttributes; UniqueAttriName: string;
@@ -182,11 +162,7 @@ implementation
 
 uses
   SysUtils,
-  {$IFDEF SYN_CLX}
-  QSynHighlighterMulti;
-  {$ELSE}
   SynHighlighterMulti;
-  {$ENDIF}
 
 {$IFNDEF SYN_COMPILER_4_UP}
 function Max(x, y: Integer): Integer;
@@ -248,12 +224,10 @@ begin
   end;
 end;
 
-{$IFNDEF SYN_CLX}
 procedure InternalFillRect(dc: HDC; const rcPaint: TRect);
 begin
   ExtTextOut(dc, 0, 0, ETO_OPAQUE, @rcPaint, nil, 0, nil);
 end;
-{$ENDIF}
 
 // Please don't change this function; no stack frame and efficient register use.
 function GetHasTabs(pLine: PWideChar; var CharsBefore: Integer): Boolean;
@@ -765,36 +739,6 @@ begin
     end;
     SearchStr := Copy(SearchStr, Offset + Length(Patt), MaxInt);
   end;
-end;
-{$ENDIF}
-
-{$IFDEF SYN_CLX}
-type
-  TColorRec = packed record
-    Blue: Byte;
-    Green: Byte;
-    Red: Byte;
-    Unused: Byte;
-  end;
-
-function GetRValue(RGBValue: TColor): byte;
-begin
-  Result := TColorRec(RGBValue).Red;
-end;
-
-function GetGValue(RGBValue: TColor): byte;
-begin
-  Result := TColorRec(RGBValue).Green;
-end;
-
-function GetBValue(RGBValue: TColor): byte;
-begin
-  Result := TColorRec(RGBValue).Blue;
-end;
-
-function RGB(r, g, b: Byte): Cardinal;
-begin
-  Result := (r or (g shl 8) or (b shl 16));
 end;
 {$ENDIF}
 

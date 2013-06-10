@@ -43,25 +43,17 @@ This highlighter can be used to highlight text in which several languages are pr
 For example, in HTML as well as HTML tags there can also be JavaScript and/or VBScript present.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERMULTI}
 unit SynHighlighterMulti;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditTypes,
-  QSynEditHighlighter,
-  QSynUnicode,  
-{$ELSE}
   Windows,
   SynEditTypes,
   SynEditHighlighter,
   SynUnicode,
-{$ENDIF}
   Classes;
 
 type
@@ -241,10 +233,8 @@ type
     function UpdateRangeProcs: Boolean;
     property CurrScheme: Integer read fCurrScheme write fCurrScheme;
     property CurrLine: UnicodeString read fLineStr;
-{$IFNDEF SYN_CLX}
     function LoadFromRegistry(RootKey: HKEY; Key: string): Boolean; override;
     function SaveToRegistry(RootKey: HKEY; Key: string): Boolean; override;
-{$ENDIF}
     function IsIdentChar(AChar: WideChar): Boolean; override;
   published
     property Schemes: TSchemes read fSchemes write SetSchemes;
@@ -258,17 +248,10 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QGraphics,
-  QSynEditMiscProcs,
-  QSynRegExpr,
-  QSynEditStrConst,
-{$ELSE}
   Graphics,
   SynEditMiscProcs,
   SynRegExpr,
   SynEditStrConst,
-{$ENDIF}
   SysUtils;
 
 procedure CheckExpression(const Expr: UnicodeString);
@@ -705,7 +688,6 @@ begin
   fSampleSource := Value;
 end;
 
-{$IFNDEF SYN_CLX}
 function TSynMultiSyn.LoadFromRegistry(RootKey: HKEY;
   Key: string): Boolean;
 var
@@ -764,7 +746,6 @@ begin
     r.Free;
   end;
 end;
-{$ENDIF}
 
 function TSynMultiSyn.GetRange: Pointer;
 begin

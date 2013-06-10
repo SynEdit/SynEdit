@@ -42,26 +42,17 @@ The  SynEditPythonBehaviour unit provides a simple component implements editing 
 to a python source file. Python has a unusual way to mark blocks (like begin/end in pascal) : it
 uses indentation. So the rule is after a ":" and a line break, we have to indent once.
 }
-{$IFNDEF QSYNEDITPYTHONBEHAVIOUR}
 unit SynEditPythonBehaviour;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-  {$IFDEF SYN_CLX}
-  Qt, QGraphics, QControls, QForms, QDialogs,
-  QSynEdit,
-  QSynEditKeyCmds,
-  QSynUnicode,  
-  {$ELSE}
   Windows, Messages, Graphics, Controls, Forms, Dialogs,
   SynEdit,
   SynEditKeyCmds,
-  SynUnicode,  
-  {$ENDIF}
+  SynUnicode,
   SysUtils,
   Classes;
 
@@ -85,11 +76,7 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditStrConst;
-{$ELSE}
   SynEditStrConst;
-{$ENDIF}
 
 procedure TSynEditPythonBehaviour.SetEditor(Value: TSynEdit);
 begin

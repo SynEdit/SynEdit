@@ -48,27 +48,18 @@ Two extra properties included (DelphiVersion, PackageSource):
   PackageSource - Allows you to enable/disable the highlighting of package keywords
 }
 
-{$IFNDEF QSYNHIGHLIGHTERPAS}
 unit SynHighlighterPas;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  QGraphics,
-  QSynEditTypes,
-  QSynEditHighlighter,
-  QSynUnicode,
-{$ELSE}
   Windows,
   Graphics,
   SynEditTypes,
   SynEditHighlighter,
   SynUnicode,
-{$ENDIF}
   SysUtils,
   Classes;
 
@@ -224,11 +215,7 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditStrConst;
-{$ELSE}
   SynEditStrConst;
-{$ENDIF}
 
 const
   // if the language is case-insensitive keywords *must* be in lowercase
@@ -1119,14 +1106,11 @@ procedure TSynPasSyn.EnumUserSettings(DelphiVersions: TStrings);
 
 begin
   { returns the user settings that exist in the registry }
-{$IFNDEF SYN_CLX}
   // See UseUserSettings below where these strings are used
   LoadKeyVersions('\SOFTWARE\Borland\Delphi', '');
   LoadKeyVersions('\SOFTWARE\Borland\BDS', BDSVersionPrefix);
   LoadKeyVersions('\SOFTWARE\CodeGear\BDS', BDSVersionPrefix);
   LoadKeyVersions('\SOFTWARE\Embarcadero\BDS', BDSVersionPrefix);
-
-{$ENDIF}
 end;
 
 function TSynPasSyn.UseUserSettings(VersionIndex: Integer): Boolean;
@@ -1137,7 +1121,6 @@ function TSynPasSyn.UseUserSettings(VersionIndex: Integer): Boolean;
 //   False: problem reading settings or invalid version specified - old settings
 //          were preserved
 
-{$IFNDEF SYN_CLX}
   function ReadDelphiSettings(settingIndex: Integer): Boolean;
 
     function ReadDelphiSetting(settingTag: string; attri: TSynHighlighterAttributes; key: string): Boolean;
@@ -1272,17 +1255,12 @@ function TSynPasSyn.UseUserSettings(VersionIndex: Integer): Boolean;
     tmpStringAttri.Free;
     tmpSymbolAttri.Free;
   end;
-{$ENDIF}
 
 begin
-{$IFNDEF SYN_CLX}
   Result := ReadDelphiSettings(VersionIndex);
-{$ELSE}
-  Result := False;
-{$ENDIF}
 end;
 
-function TSynPasSyn.GetSampleSource: UnicodeString;                                   
+function TSynPasSyn.GetSampleSource: UnicodeString;
 begin
   Result := '{ Syntax highlighting }'#13#10 +
              'procedure TForm1.Button1Click(Sender: TObject);'#13#10 +

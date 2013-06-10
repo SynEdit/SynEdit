@@ -6,7 +6,9 @@ object SynEditPrintMarginsDlg: TSynEditPrintMarginsDlg
   Caption = 'Margins'
   ClientHeight = 344
   ClientWidth = 506
+  Color = clBtnFace
   ParentFont = True
+  OldCreateOrder = True
   Position = poScreenCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -1050,14 +1052,14 @@ object SynEditPrintMarginsDlg: TSynEditPrintMarginsDlg
   object Label1: TLabel
     Left = 10
     Top = 44
-    Width = 21
+    Width = 23
     Height = 13
     Caption = 'Left:'
   end
   object Label2: TLabel
     Left = 10
     Top = 69
-    Width = 28
+    Width = 29
     Height = 13
     Caption = 'Right:'
   end
@@ -1071,56 +1073,56 @@ object SynEditPrintMarginsDlg: TSynEditPrintMarginsDlg
   object Label4: TLabel
     Left = 10
     Top = 119
-    Width = 36
+    Width = 38
     Height = 13
     Caption = 'Bottom:'
   end
   object Label5: TLabel
     Left = 10
     Top = 14
-    Width = 27
+    Width = 28
     Height = 13
     Caption = 'Units:'
   end
   object Label6: TLabel
     Left = 10
     Top = 174
-    Width = 38
+    Width = 39
     Height = 13
     Caption = 'Header:'
   end
   object Label7: TLabel
     Left = 10
     Top = 199
-    Width = 33
+    Width = 36
     Height = 13
     Caption = 'Footer:'
   end
   object Label8: TLabel
     Left = 10
     Top = 224
-    Width = 84
+    Width = 87
     Height = 13
     Caption = 'HFInternalMargin:'
   end
   object Label9: TLabel
     Left = 10
     Top = 249
-    Width = 86
+    Width = 90
     Height = 13
     Caption = 'LeftHFTextIndent:'
   end
   object Label10: TLabel
     Left = 10
     Top = 274
-    Width = 93
+    Width = 96
     Height = 13
     Caption = 'RightHFTextIndent:'
   end
   object Label11: TLabel
     Left = 10
     Top = 144
-    Width = 29
+    Width = 31
     Height = 13
     Caption = 'Gutter'
   end
@@ -1228,13 +1230,12 @@ object SynEditPrintMarginsDlg: TSynEditPrintMarginsDlg
     Width = 151
     Height = 21
     Style = csDropDownList
-    ItemHeight = 13
+    TabOrder = 0
+    OnChange = CBUnitsChange
     Items.Strings = (
       'mm'
       'cm'
       'Inches'
       'Thousandths Of Inches')
-    TabOrder = 0
-    OnChange = CBUnitsChange
   end
 end
