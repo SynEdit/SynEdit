@@ -1,4 +1,0 @@
-SynEdit
-=======
-
-SynEdit main project

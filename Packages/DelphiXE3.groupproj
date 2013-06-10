@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{2F95E7A1-2A4E-443E-9E31-C93E3D8E882D}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="SynEdit_RXE3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="SynEdit_DXE3.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="SynEdit_RXE3">
+        <MSBuild Projects="SynEdit_RXE3.dproj"/>
+    </Target>
+    <Target Name="SynEdit_RXE3:Clean">
+        <MSBuild Projects="SynEdit_RXE3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SynEdit_RXE3:Make">
+        <MSBuild Projects="SynEdit_RXE3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="SynEdit_DXE3">
+        <MSBuild Projects="SynEdit_DXE3.dproj"/>
+    </Target>
+    <Target Name="SynEdit_DXE3:Clean">
+        <MSBuild Projects="SynEdit_DXE3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SynEdit_DXE3:Make">
+        <MSBuild Projects="SynEdit_DXE3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="SynEdit_RXE3;SynEdit_DXE3"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="SynEdit_RXE3:Clean;SynEdit_DXE3:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="SynEdit_RXE3:Make;SynEdit_DXE3:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
