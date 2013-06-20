@@ -135,8 +135,8 @@ var
   SynEditClipboardFormat: UINT;
 
 type
-	TBufferCoord = SynEditTypes.TBufferCoord;
-	TDisplayCoord = SynEditTypes.TDisplayCoord;
+  TBufferCoord = SynEditTypes.TBufferCoord;
+  TDisplayCoord = SynEditTypes.TDisplayCoord;
 
 {$IFDEF SYN_CLX}
   TSynBorderStyle = bsNone..bsSingle;
@@ -7145,9 +7145,9 @@ begin
           MoveCaretAndSelection(CaretXY, CaretNew, Command = ecSelWordRight);
         end;
       ecSelWord:
-      	begin
-      	  SetSelWord;
-      	end;
+        begin
+          SetSelWord;
+        end;
       ecSelectAll:
         begin
           SelectAll;
@@ -8311,7 +8311,7 @@ begin
   if csDesigning in ComponentState then
     exit;
 
-	Msg.Result := 1;
+  Msg.Result := 1;
 
 {$IFDEF SYN_COMPILER_4_UP}
   // In some occasions Windows will not properly initialize mouse wheel, but
