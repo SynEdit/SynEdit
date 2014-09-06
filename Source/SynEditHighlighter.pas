@@ -96,6 +96,7 @@ type
     function SaveToFile(Ini: TIniFile): Boolean;
 {$ENDIF}
   public
+    procedure SetColors(Foreground, Background: TColor);
     property FriendlyName: UnicodeString read fFriendlyName;
     property IntegerStyle: Integer read GetStyleFromInt write SetStyleFromInt;
     property Name: string read fName;
@@ -643,6 +644,16 @@ begin
   if fBackGround <> Value then
   begin
     fBackGround := Value;
+    Changed;
+  end;
+end;
+
+procedure TSynHighlighterAttributes.SetColors(Foreground, Background: TColor);
+begin
+  if (fForeGround <> Foreground) or (fBackground <> Background) then
+  begin
+    fForeGround := Foreground;
+    fBackground := Background;
     Changed;
   end;
 end;
