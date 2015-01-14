@@ -1,9 +1,9 @@
 object SearchReplaceDemoForm: TSearchReplaceDemoForm
   Left = 100
   Top = 122
-  Width = 562
-  Height = 372
   Caption = 'Search and replace demo'
+  ClientHeight = 345
+  ClientWidth = 554
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,13 +11,14 @@ object SearchReplaceDemoForm: TSearchReplaceDemoForm
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object SynEditor: TSynEdit
     Left = 0
     Top = 26
     Width = 554
-    Height = 293
+    Height = 300
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -31,6 +32,7 @@ object SearchReplaceDemoForm: TSearchReplaceDemoForm
     Gutter.Font.Name = 'Terminal'
     Gutter.Font.Style = []
     OnReplaceText = SynEditorReplaceText
+    FontSmoothing = fsmNone
     RemovedKeystrokes = <
       item
         Command = ecDeleteLastChar
@@ -46,7 +48,7 @@ object SearchReplaceDemoForm: TSearchReplaceDemoForm
       end>
     AddedKeystrokes = <>
   end
-  object tbMain: TToolBar
+  object ToolBarMain: TToolBar
     Left = 0
     Top = 0
     Width = 554
@@ -54,60 +56,58 @@ object SearchReplaceDemoForm: TSearchReplaceDemoForm
     AutoSize = True
     BorderWidth = 1
     Caption = 'Standard'
-    EdgeBorders = []
-    Flat = True
-    Images = imglMain
+    Images = ImageListMain
     TabOrder = 1
-    object tbtnFileOpen: TToolButton
+    object ToolButtonFileOpen: TToolButton
       Left = 0
       Top = 0
-      Action = actFileOpen
+      Action = ActionFileOpen
     end
-    object tbtnSep1: TToolButton
+    object ToolButtonSeparator1: TToolButton
       Left = 23
       Top = 0
       Width = 8
       ImageIndex = 1
       Style = tbsSeparator
     end
-    object tbtnSearch: TToolButton
+    object ToolButtonSearch: TToolButton
       Left = 31
       Top = 0
-      Action = actSearch
+      Action = ActionSearch
     end
-    object tbtnSearchReplace: TToolButton
+    object ToolButtonSearchNext: TToolButton
       Left = 54
       Top = 0
-      Action = actSearchNext
+      Action = ActionSearchNext
     end
-    object ToolButton1: TToolButton
+    object ToolButtonSearchPrev: TToolButton
       Left = 77
       Top = 0
-      Action = actSearchPrev
+      Action = ActionSearchPrev
     end
-    object tbtnSep2: TToolButton
+    object ToolButtonSeparator2: TToolButton
       Left = 100
       Top = 0
       Width = 8
-      Caption = 'tbtnSep2'
+      Caption = 'ToolButtonSeparator2'
       ImageIndex = 4
       Style = tbsSeparator
     end
-    object ToolButton4: TToolButton
+    object ToolButtonSearchReplace: TToolButton
       Left = 108
       Top = 0
-      Action = actSearchReplace
+      Action = ActionSearchReplace
     end
   end
   object Statusbar: TStatusBar
     Left = 0
-    Top = 319
+    Top = 326
     Width = 554
     Height = 19
     Panels = <>
     SimplePanel = True
   end
-  object imglMain: TImageList
+  object ImageListMain: TImageList
     Left = 404
     Top = 56
     Bitmap = {
@@ -382,55 +382,55 @@ object SearchReplaceDemoForm: TSearchReplaceDemoForm
       FF8FE38FF9CDB39FFFFFFFFFFC1FF83F00000000000000000000000000000000
       000000000000}
   end
-  object dlgFileOpen: TOpenDialog
+  object OpenDialogFile: TOpenDialog
     Options = [ofPathMustExist, ofFileMustExist, ofEnableSizing]
     Left = 460
     Top = 56
   end
-  object actlMain: TActionList
-    Images = imglMain
+  object ActionListMain: TActionList
+    Images = ImageListMain
     Left = 344
     Top = 56
-    object actFileOpen: TAction
+    object ActionFileOpen: TAction
       Caption = '&Open...'
       ImageIndex = 0
       ShortCut = 16463
-      OnExecute = actFileOpenExecute
+      OnExecute = ActionFileOpenExecute
     end
-    object actSearch: TAction
+    object ActionSearch: TAction
       Caption = '&Find...'
       ImageIndex = 1
       ShortCut = 16454
-      OnExecute = actSearchExecute
+      OnExecute = ActionSearchExecute
     end
-    object actSearchNext: TAction
+    object ActionSearchNext: TAction
       Caption = 'Find &next'
       Enabled = False
       ImageIndex = 2
       ShortCut = 114
-      OnExecute = actSearchNextExecute
+      OnExecute = ActionSearchNextExecute
       OnUpdate = actSearchUpdate
     end
-    object actSearchPrev: TAction
+    object ActionSearchPrev: TAction
       Caption = 'Find &previous'
       Enabled = False
       ImageIndex = 3
       ShortCut = 8306
-      OnExecute = actSearchPrevExecute
+      OnExecute = ActionSearchPrevExecute
       OnUpdate = actSearchUpdate
     end
-    object actSearchReplace: TAction
+    object ActionSearchReplace: TAction
       Caption = '&Replace...'
       Enabled = False
       ImageIndex = 4
       ShortCut = 16456
-      OnExecute = actSearchReplaceExecute
-      OnUpdate = actSearchReplaceUpdate
+      OnExecute = ActionSearchReplaceExecute
+      OnUpdate = ActionSearchReplaceUpdate
     end
   end
   object SynEditSearch: TSynEditSearch
     Left = 188
-    Top = 128
+    Top = 112
   end
   object SynEditRegexSearch: TSynEditRegexSearch
     Left = 188

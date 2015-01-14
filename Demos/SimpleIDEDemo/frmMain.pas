@@ -47,62 +47,62 @@ uses
 
 type
   TSimpleIDEMainForm = class(TForm)
-    tbDebug: TToolBar;
-    tbtnRun: TToolButton;
-    tbtnStep: TToolButton;
-    tbtnGotoCursor: TToolButton;
-    tbtnPause: TToolButton;
-    tbtnStop: TToolButton;
-    imglActions: TImageList;
-    actlMain: TActionList;
-    actDebugRun: TAction;
-    actDebugStep: TAction;
-    actDebugGotoCursor: TAction;
-    actDebugPause: TAction;
-    actDebugStop: TAction;
-    ToolButton1: TToolButton;
-    tbtnToggleBreakpoint: TToolButton;
-    tbtnClearAllBreakpoints: TToolButton;
-    actToggleBreakpoint: TAction;
-    actClearAllBreakpoints: TAction;
-    SynEditor: TSynEdit;
-    SynPasSyn1: TSynPasSyn;
-    imglGutterGlyphs: TImageList;
-    MainMenu1: TMainMenu;
-    mDebug: TMenuItem;
-    miDebugRun: TMenuItem;
-    miDebugStep: TMenuItem;
+    ActionClearAllBreakpoints: TAction;
+    ActionDebugGotoCursor: TAction;
+    ActionDebugPause: TAction;
+    ActionDebugRun: TAction;
+    ActionDebugStep: TAction;
+    ActionDebugStop: TAction;
+    ActionListMain: TActionList;
+    ActionToggleBreakpoint: TAction;
+    ImageListActions: TImageList;
+    ImageListGutterGlyphs: TImageList;
+    MainMenu: TMainMenu;
+    MenuItemDebug: TMenuItem;
+    miClearBreakpoints: TMenuItem;
     miDebugGotoCursor: TMenuItem;
     miDebugPause: TMenuItem;
+    miDebugRun: TMenuItem;
+    miDebugStep: TMenuItem;
     miDebugStop: TMenuItem;
-    N1: TMenuItem;
     miToggleBreakpoint: TMenuItem;
-    miClearBreakpoints: TMenuItem;
+    N1: TMenuItem;
     Statusbar: TStatusBar;
+    SynEditor: TSynEdit;
+    SynPasSyn: TSynPasSyn;
+    ToolBarDebug: TToolBar;
+    ToolButtonClearAllBreakpoints: TToolButton;
+    ToolButtonGotoCursor: TToolButton;
+    ToolButtonPause: TToolButton;
+    ToolButtonRun: TToolButton;
+    ToolButtonStep: TToolButton;
+    ToolButtonStop: TToolButton;
+    ToolButtonToggleBreakpoint: TToolButton;
+    ToolButtonSeparator: TToolButton;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure SynEditorSpecialLineColors(Sender: TObject; Line: Integer;
       var Special: Boolean; var FG, BG: TColor);
-    procedure actDebugRunExecute(Sender: TObject);
-    procedure actDebugRunUpdate(Sender: TObject);
-    procedure actDebugStepExecute(Sender: TObject);
-    procedure actDebugStepUpdate(Sender: TObject);
-    procedure actDebugGotoCursorExecute(Sender: TObject);
-    procedure actDebugGotoCursorUpdate(Sender: TObject);
-    procedure actDebugPauseExecute(Sender: TObject);
-    procedure actDebugPauseUpdate(Sender: TObject);
-    procedure actDebugStopExecute(Sender: TObject);
-    procedure actDebugStopUpdate(Sender: TObject);
-    procedure actToggleBreakpointExecute(Sender: TObject);
-    procedure actToggleBreakpointUpdate(Sender: TObject);
-    procedure actClearAllBreakpointsExecute(Sender: TObject);
-    procedure actClearAllBreakpointsUpdate(Sender: TObject);
+    procedure ActionDebugRunExecute(Sender: TObject);
+    procedure ActionDebugRunUpdate(Sender: TObject);
+    procedure ActionDebugStepExecute(Sender: TObject);
+    procedure ActionDebugStepUpdate(Sender: TObject);
+    procedure ActionDebugGotoCursorExecute(Sender: TObject);
+    procedure ActionDebugGotoCursorUpdate(Sender: TObject);
+    procedure ActionDebugPauseExecute(Sender: TObject);
+    procedure ActionDebugPauseUpdate(Sender: TObject);
+    procedure ActionDebugStopExecute(Sender: TObject);
+    procedure ActionDebugStopUpdate(Sender: TObject);
+    procedure ActionToggleBreakpointExecute(Sender: TObject);
+    procedure ActionToggleBreakpointUpdate(Sender: TObject);
+    procedure ActionClearAllBreakpointsExecute(Sender: TObject);
+    procedure ActionClearAllBreakpointsUpdate(Sender: TObject);
     procedure SynEditorGutterClick(Sender: TObject; Button: TMouseButton;
       X, Y, Line: Integer; Mark: TSynEditMark);
   private
-    fCurrentLine: integer;
-    fDebugger: TSampleDebugger;
+    FCurrentLine: integer;
+    FDebugger: TSampleDebugger;
     procedure DebuggerBreakpointChange(Sender: TObject; ALine: integer);
     procedure DebuggerCurrentLineChange(Sender: TObject);
     procedure DebuggerStateChange(Sender: TObject; OldState,
@@ -164,9 +164,9 @@ procedure TSimpleIDEMainForm.FormCreate(Sender: TObject);
 var
   Settings: TStringList;
 begin
-  fCurrentLine := -1;
-  fDebugger := TSampleDebugger.Create;
-  with fDebugger do begin
+  FCurrentLine := -1;
+  FDebugger := TSampleDebugger.Create;
+  with FDebugger do begin
     OnBreakpointChange := DebuggerBreakpointChange;
     OnCurrentLineChange := DebuggerCurrentLineChange;
     OnStateChange := DebuggerStateChange;
@@ -177,9 +177,9 @@ begin
 
   Settings := TStringList.Create;
   try
-    SynPasSyn1.EnumUserSettings(Settings);
+    SynPasSyn.EnumUserSettings(Settings);
     if Settings.Count > 0 then
-      SynPasSyn1.UseUserSettings(Settings.Count - 1);
+      SynPasSyn.UseUserSettings(Settings.Count - 1);
   finally
     Settings.Free;
   end;
@@ -188,14 +188,14 @@ end;
 
 procedure TSimpleIDEMainForm.FormDestroy(Sender: TObject);
 begin
-  fDebugger.Free;
+  FDebugger.Free;
 end;
 
 procedure TSimpleIDEMainForm.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
-  if fDebugger.IsRunning then begin
-    fDebugger.Stop;
+  if FDebugger.IsRunning then begin
+    FDebugger.Stop;
     CanClose := FALSE;
   end;
 end;
@@ -205,8 +205,8 @@ procedure TSimpleIDEMainForm.SynEditorSpecialLineColors(Sender: TObject;
 var
   LI: TDebuggerLineInfos;
 begin
-  if fDebugger <> nil then begin
-    LI := fDebugger.GetLineInfos(Line);
+  if FDebugger <> nil then begin
+    LI := FDebugger.GetLineInfos(Line);
     if dlCurrentLine in LI then begin
       Special := TRUE;
       FG := clWhite;
@@ -236,8 +236,8 @@ end;
 
 procedure TSimpleIDEMainForm.DebuggerCurrentLineChange(Sender: TObject);
 begin
-  if (fDebugger <> nil) and not fDebugger.IsRunning then
-    SetCurrentLine(fDebugger.CurrentLine)
+  if (FDebugger <> nil) and not FDebugger.IsRunning then
+    SetCurrentLine(FDebugger.CurrentLine)
   else
     SetCurrentLine(-1);
 end;
@@ -269,7 +269,7 @@ var
   LI: TDebuggerLineInfos;
   ImgIndex: integer;
 begin
-  if fDebugger <> nil then
+  if FDebugger <> nil then
   begin
     FirstLine := SynEditor.RowToLine(FirstLine);
     LastLine := SynEditor.RowToLine(LastLine);
@@ -277,9 +277,9 @@ begin
     LH := SynEditor.LineHeight;
     while FirstLine <= LastLine do
     begin
-      Y := (LH - imglGutterGlyphs.Height) div 2
+      Y := (LH - ImageListGutterGlyphs.Height) div 2
            + LH * (SynEditor.LineToRow(FirstLine) - SynEditor.TopLine);
-      LI := fDebugger.GetLineInfos(FirstLine);
+      LI := FDebugger.GetLineInfos(FirstLine);
       if dlCurrentLine in LI then begin
         if dlBreakpointLine in LI then
           ImgIndex := 2
@@ -297,7 +297,7 @@ begin
           ImgIndex := -1;
       end;
       if ImgIndex >= 0 then
-        imglGutterGlyphs.Draw(ACanvas, X, Y, ImgIndex);
+        ImageListGutterGlyphs.Draw(ACanvas, X, Y, ImgIndex);
       Inc(FirstLine);
     end;
   end;
@@ -305,96 +305,96 @@ end;
 
 procedure TSimpleIDEMainForm.SetCurrentLine(ALine: integer);
 begin
-  if fCurrentLine <> ALine then
+  if FCurrentLine <> ALine then
   begin
-    SynEditor.InvalidateGutterLine(fCurrentLine);
-    SynEditor.InvalidateLine(fCurrentLine);
-    fCurrentLine := ALine;
-    if (fCurrentLine > 0) and (SynEditor.CaretY <> fCurrentLine) then
-      SynEditor.CaretXY := BufferCoord(1, fCurrentLine);
-    SynEditor.InvalidateGutterLine(fCurrentLine);
-    SynEditor.InvalidateLine(fCurrentLine);
+    SynEditor.InvalidateGutterLine(FCurrentLine);
+    SynEditor.InvalidateLine(FCurrentLine);
+    FCurrentLine := ALine;
+    if (FCurrentLine > 0) and (SynEditor.CaretY <> FCurrentLine) then
+      SynEditor.CaretXY := BufferCoord(1, FCurrentLine);
+    SynEditor.InvalidateGutterLine(FCurrentLine);
+    SynEditor.InvalidateLine(FCurrentLine);
   end;
 end;
 
-procedure TSimpleIDEMainForm.actDebugRunExecute(Sender: TObject);
+procedure TSimpleIDEMainForm.ActionDebugRunExecute(Sender: TObject);
 begin
-  fDebugger.Run;
+  FDebugger.Run;
 end;
 
-procedure TSimpleIDEMainForm.actDebugRunUpdate(Sender: TObject);
+procedure TSimpleIDEMainForm.ActionDebugRunUpdate(Sender: TObject);
 begin
-  (Sender as TAction).Enabled := (fDebugger <> nil) and fDebugger.CanRun;
+  (Sender as TAction).Enabled := (FDebugger <> nil) and FDebugger.CanRun;
 end;
 
-procedure TSimpleIDEMainForm.actDebugStepExecute(Sender: TObject);
+procedure TSimpleIDEMainForm.ActionDebugStepExecute(Sender: TObject);
 begin
-  fDebugger.Step;
+  FDebugger.Step;
 end;
 
-procedure TSimpleIDEMainForm.actDebugStepUpdate(Sender: TObject);
+procedure TSimpleIDEMainForm.ActionDebugStepUpdate(Sender: TObject);
 begin
-  (Sender as TAction).Enabled := (fDebugger <> nil) and fDebugger.CanStep;
+  (Sender as TAction).Enabled := (FDebugger <> nil) and FDebugger.CanStep;
 end;
 
-procedure TSimpleIDEMainForm.actDebugGotoCursorExecute(Sender: TObject);
+procedure TSimpleIDEMainForm.ActionDebugGotoCursorExecute(Sender: TObject);
 begin
-  fDebugger.GotoCursor(SynEditor.CaretY);
+  FDebugger.GotoCursor(SynEditor.CaretY);
 end;
 
-procedure TSimpleIDEMainForm.actDebugGotoCursorUpdate(Sender: TObject);
+procedure TSimpleIDEMainForm.ActionDebugGotoCursorUpdate(Sender: TObject);
 begin
-  (Sender as TAction).Enabled := (fDebugger <> nil)
-    and fDebugger.CanGotoCursor(SynEditor.CaretY);
+  (Sender as TAction).Enabled := (FDebugger <> nil)
+    and FDebugger.CanGotoCursor(SynEditor.CaretY);
 end;
 
-procedure TSimpleIDEMainForm.actDebugPauseExecute(Sender: TObject);
+procedure TSimpleIDEMainForm.ActionDebugPauseExecute(Sender: TObject);
 begin
-  fDebugger.Pause;
+  FDebugger.Pause;
 end;
 
-procedure TSimpleIDEMainForm.actDebugPauseUpdate(Sender: TObject);
+procedure TSimpleIDEMainForm.ActionDebugPauseUpdate(Sender: TObject);
 begin
-  (Sender as TAction).Enabled := (fDebugger <> nil) and fDebugger.CanPause;
+  (Sender as TAction).Enabled := (FDebugger <> nil) and FDebugger.CanPause;
 end;
 
-procedure TSimpleIDEMainForm.actDebugStopExecute(Sender: TObject);
+procedure TSimpleIDEMainForm.ActionDebugStopExecute(Sender: TObject);
 begin
-  fDebugger.Stop;
+  FDebugger.Stop;
 end;
 
-procedure TSimpleIDEMainForm.actDebugStopUpdate(Sender: TObject);
+procedure TSimpleIDEMainForm.ActionDebugStopUpdate(Sender: TObject);
 begin
-  (Sender as TAction).Enabled := (fDebugger <> nil) and fDebugger.CanStop;
+  (Sender as TAction).Enabled := (FDebugger <> nil) and FDebugger.CanStop;
 end;
 
-procedure TSimpleIDEMainForm.actToggleBreakpointExecute(Sender: TObject);
+procedure TSimpleIDEMainForm.ActionToggleBreakpointExecute(Sender: TObject);
 begin
-  fDebugger.ToggleBreakpoint(SynEditor.CaretY);
+  FDebugger.ToggleBreakpoint(SynEditor.CaretY);
 end;
 
-procedure TSimpleIDEMainForm.actToggleBreakpointUpdate(Sender: TObject);
+procedure TSimpleIDEMainForm.ActionToggleBreakpointUpdate(Sender: TObject);
 begin
-  (Sender as TAction).Enabled := fDebugger <> nil;
+  (Sender as TAction).Enabled := FDebugger <> nil;
 end;
 
-procedure TSimpleIDEMainForm.actClearAllBreakpointsExecute(
+procedure TSimpleIDEMainForm.ActionClearAllBreakpointsExecute(
   Sender: TObject);
 begin
-  fDebugger.ClearAllBreakpoints;
+  FDebugger.ClearAllBreakpoints;
 end;
 
-procedure TSimpleIDEMainForm.actClearAllBreakpointsUpdate(Sender: TObject);
+procedure TSimpleIDEMainForm.ActionClearAllBreakpointsUpdate(Sender: TObject);
 begin
-  (Sender as TAction).Enabled := (fDebugger <> nil)
-    and fDebugger.HasBreakpoints;
+  (Sender as TAction).Enabled := (FDebugger <> nil)
+    and FDebugger.HasBreakpoints;
 end;
 
 procedure TSimpleIDEMainForm.SynEditorGutterClick(Sender: TObject;
   Button: TMouseButton; X, Y, Line: Integer; Mark: TSynEditMark);
 begin
-  if fDebugger <> nil then
-    fDebugger.ToggleBreakpoint(SynEditor.RowToLine(Line));
+  if FDebugger <> nil then
+    FDebugger.ToggleBreakpoint(SynEditor.RowToLine(Line));
 end;
 
 end.

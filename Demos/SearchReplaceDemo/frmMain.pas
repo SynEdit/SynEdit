@@ -42,43 +42,44 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ComCtrls, ToolWin, SynEdit, ImgList, ActnList, SynEditRegexSearch,
+  ComCtrls, ToolWin, ImgList, ActnList, SynEdit, SynEditRegexSearch,
   SynEditMiscClasses, SynEditSearch, SynUnicode;
 
 type
   TSearchReplaceDemoForm = class(TForm)
-    SynEditor: TSynEdit;
-    tbMain: TToolBar;
-    tbtnFileOpen: TToolButton;
-    tbtnSep1: TToolButton;
-    tbtnSearch: TToolButton;
-    tbtnSearchReplace: TToolButton;
-    imglMain: TImageList;
-    dlgFileOpen: TOpenDialog;
-    actlMain: TActionList;
-    actFileOpen: TAction;
-    ToolButton1: TToolButton;
-    tbtnSep2: TToolButton;
-    ToolButton4: TToolButton;
-    actSearch: TAction;
-    actSearchNext: TAction;
-    actSearchPrev: TAction;
-    actSearchReplace: TAction;
+    ActionFileOpen: TAction;
+    ActionListMain: TActionList;
+    ActionSearch: TAction;
+    ActionSearchNext: TAction;
+    ActionSearchPrev: TAction;
+    ActionSearchReplace: TAction;
+    OpenDialogFile: TOpenDialog;
+    ImageListMain: TImageList;
     Statusbar: TStatusBar;
-    SynEditSearch: TSynEditSearch;
+    SynEditor: TSynEdit;
     SynEditRegexSearch: TSynEditRegexSearch;
-    procedure actFileOpenExecute(Sender: TObject);
-    procedure actSearchExecute(Sender: TObject);
-    procedure actSearchNextExecute(Sender: TObject);
-    procedure actSearchPrevExecute(Sender: TObject);
-    procedure actSearchReplaceExecute(Sender: TObject);
+    SynEditSearch: TSynEditSearch;
+    ToolBarMain: TToolBar;
+    ToolButtonFileOpen: TToolButton;
+    ToolButtonSearch: TToolButton;
+    ToolButtonSearchNext: TToolButton;
+    ToolButtonSeparator1: TToolButton;
+    ToolButtonSeparator2: TToolButton;
+    ToolButtonSearchPrev: TToolButton;
+    ToolButtonSearchReplace: TToolButton;
+    procedure ActionFileOpenExecute(Sender: TObject);
+    procedure ActionSearchExecute(Sender: TObject);
+    procedure ActionSearchNextExecute(Sender: TObject);
+    procedure ActionSearchPrevExecute(Sender: TObject);
+    procedure ActionSearchReplaceExecute(Sender: TObject);
     procedure actSearchUpdate(Sender: TObject);
+    procedure ActionSearchReplaceUpdate(Sender: TObject);
     procedure SynEditorReplaceText(Sender: TObject; const ASearch,
       AReplace: UnicodeString; Line, Column: Integer;
       var Action: TSynReplaceAction);
-    procedure actSearchReplaceUpdate(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
-    fSearchFromCaret: boolean;
+    FSearchFromCaret: Boolean;
     procedure DoSearchReplaceText(AReplace: boolean; ABackwards: boolean);
     procedure ShowSearchReplaceDialog(AReplace: boolean);
   end;
@@ -91,17 +92,18 @@ implementation
 {$R *.DFM}
 
 uses
-  dlgSearchText, dlgReplaceText, dlgConfirmReplace, SynEditTypes, SynEditMiscProcs;
+  dlgSearchText, dlgReplaceText, dlgConfirmReplace, plgSearchHighlighter,
+  SynEditTypes, SynEditMiscProcs;
 
   // options - to be saved to the registry
 var
-  gbSearchBackwards: boolean;
-  gbSearchCaseSensitive: boolean;
-  gbSearchFromCaret: boolean;
-  gbSearchSelectionOnly: boolean;
-  gbSearchTextAtCaret: boolean;
-  gbSearchWholeWords: boolean;
-  gbSearchRegex: boolean;
+  gbSearchBackwards: Boolean;
+  gbSearchCaseSensitive: Boolean;
+  gbSearchFromCaret: Boolean;
+  gbSearchSelectionOnly: Boolean;
+  gbSearchTextAtCaret: Boolean;
+  gbSearchWholeWords: Boolean;
+  gbSearchRegex: Boolean;
 
   gsSearchText: string;
   gsSearchTextHistory: string;
@@ -113,8 +115,16 @@ resourcestring
 
 { TSearchReplaceDemoForm }
 
-procedure TSearchReplaceDemoForm.DoSearchReplaceText(AReplace: boolean;
-  ABackwards: boolean);
+procedure TSearchReplaceDemoForm.FormCreate(Sender: TObject);
+begin
+  with TSearchTextHightlighterSynEditPlugin.Create(SynEditor) do
+  begin
+    Attribute.Background := $0078AAFF;
+  end;
+end;
+
+procedure TSearchReplaceDemoForm.DoSearchReplaceText(AReplace: Boolean;
+  ABackwards: Boolean);
 var
   Options: TSynSearchOptions;
 begin
@@ -127,7 +137,7 @@ begin
     Include(Options, ssoBackwards);
   if gbSearchCaseSensitive then
     Include(Options, ssoMatchCase);
-  if not fSearchFromCaret then
+  if not FSearchFromCaret then
     Include(Options, ssoEntireScope);
   if gbSearchSelectionOnly then
     Include(Options, ssoSelectedOnly);
@@ -152,7 +162,7 @@ begin
     ConfirmReplaceDialog.Free;
 end;
 
-procedure TSearchReplaceDemoForm.ShowSearchReplaceDialog(AReplace: boolean);
+procedure TSearchReplaceDemoForm.ShowSearchReplaceDialog(AReplace: Boolean);
 var
   dlg: TTextSearchDialog;
 begin
@@ -196,10 +206,10 @@ begin
         gsReplaceText := ReplaceText;
         gsReplaceTextHistory := ReplaceTextHistory;
       end;
-      fSearchFromCaret := gbSearchFromCaret;
+      FSearchFromCaret := gbSearchFromCaret;
       if gsSearchText <> '' then begin
         DoSearchReplaceText(AReplace, gbSearchBackwards);
-        fSearchFromCaret := TRUE;
+        FSearchFromCaret := TRUE;
       end;
     end;
   finally
@@ -209,30 +219,30 @@ end;
 
 { event handler }
 
-procedure TSearchReplaceDemoForm.actFileOpenExecute(Sender: TObject);
+procedure TSearchReplaceDemoForm.ActionFileOpenExecute(Sender: TObject);
 begin
-  if dlgFileOpen.Execute then begin
-    SynEditor.Lines.LoadFromFile(dlgFileOpen.FileName);
-    SynEditor.ReadOnly := ofReadOnly in dlgFileOpen.Options;
+  if OpenDialogFile.Execute then begin
+    SynEditor.Lines.LoadFromFile(OpenDialogFile.FileName);
+    SynEditor.ReadOnly := ofReadOnly in OpenDialogFile.Options;
   end;
 end;
 
-procedure TSearchReplaceDemoForm.actSearchExecute(Sender: TObject);
+procedure TSearchReplaceDemoForm.ActionSearchExecute(Sender: TObject);
 begin
   ShowSearchReplaceDialog(FALSE);
 end;
 
-procedure TSearchReplaceDemoForm.actSearchNextExecute(Sender: TObject);
+procedure TSearchReplaceDemoForm.ActionSearchNextExecute(Sender: TObject);
 begin
   DoSearchReplaceText(FALSE, FALSE);
 end;
 
-procedure TSearchReplaceDemoForm.actSearchPrevExecute(Sender: TObject);
+procedure TSearchReplaceDemoForm.ActionSearchPrevExecute(Sender: TObject);
 begin
   DoSearchReplaceText(FALSE, TRUE);
 end;
 
-procedure TSearchReplaceDemoForm.actSearchReplaceExecute(Sender: TObject);
+procedure TSearchReplaceDemoForm.ActionSearchReplaceExecute(Sender: TObject);
 begin
   ShowSearchReplaceDialog(TRUE);
 end;
@@ -242,7 +252,7 @@ begin
   (Sender as TAction).Enabled := gsSearchText <> '';
 end;
 
-procedure TSearchReplaceDemoForm.actSearchReplaceUpdate(Sender: TObject);
+procedure TSearchReplaceDemoForm.ActionSearchReplaceUpdate(Sender: TObject);
 begin
   (Sender as TAction).Enabled := (gsSearchText <> '')
     and not SynEditor.ReadOnly;
@@ -280,5 +290,3 @@ begin
 end;
 
 end.
-
-

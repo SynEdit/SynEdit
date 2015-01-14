@@ -1,81 +1,81 @@
 object SimpleIDEMainForm: TSimpleIDEMainForm
   Left = 108
   Top = 107
-  Width = 498
-  Height = 400
   Caption = 'Simple IDE Demo'
+  ClientHeight = 354
+  ClientWidth = 490
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
-  Menu = MainMenu1
+  Menu = MainMenu
   OldCreateOrder = False
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
-  object tbDebug: TToolBar
+  object ToolBarDebug: TToolBar
     Left = 0
     Top = 0
     Width = 490
+    Height = 30
     AutoSize = True
     BorderWidth = 2
     Caption = 'Debug'
-    Flat = True
-    Images = imglActions
+    Images = ImageListActions
     TabOrder = 0
-    object tbtnRun: TToolButton
+    object ToolButtonRun: TToolButton
       Left = 0
       Top = 0
-      Action = actDebugRun
+      Action = ActionDebugRun
     end
-    object tbtnStep: TToolButton
+    object ToolButtonStep: TToolButton
       Left = 23
       Top = 0
-      Action = actDebugStep
+      Action = ActionDebugStep
     end
-    object tbtnGotoCursor: TToolButton
+    object ToolButtonGotoCursor: TToolButton
       Left = 46
       Top = 0
-      Action = actDebugGotoCursor
+      Action = ActionDebugGotoCursor
     end
-    object tbtnPause: TToolButton
+    object ToolButtonPause: TToolButton
       Left = 69
       Top = 0
-      Action = actDebugPause
+      Action = ActionDebugPause
     end
-    object tbtnStop: TToolButton
+    object ToolButtonStop: TToolButton
       Left = 92
       Top = 0
-      Action = actDebugStop
+      Action = ActionDebugStop
     end
-    object ToolButton1: TToolButton
+    object ToolButtonSeparator: TToolButton
       Left = 115
       Top = 0
       Width = 8
-      Caption = 'ToolButton1'
+      Caption = 'ToolButtonSeparator'
       ImageIndex = 5
       Style = tbsSeparator
     end
-    object tbtnToggleBreakpoint: TToolButton
+    object ToolButtonToggleBreakpoint: TToolButton
       Left = 123
       Top = 0
-      Action = actToggleBreakpoint
+      Action = ActionToggleBreakpoint
     end
-    object tbtnClearAllBreakpoints: TToolButton
+    object ToolButtonClearAllBreakpoints: TToolButton
       Left = 146
       Top = 0
-      Action = actClearAllBreakpoints
+      Action = ActionClearAllBreakpoints
     end
   end
   object SynEditor: TSynEdit
     Left = 0
-    Top = 32
+    Top = 30
     Width = 490
-    Height = 295
+    Height = 305
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -88,24 +88,25 @@ object SimpleIDEMainForm: TSimpleIDEMainForm
     Gutter.Font.Height = -11
     Gutter.Font.Name = 'Courier New'
     Gutter.Font.Style = []
-    Highlighter = SynPasSyn1
+    Highlighter = SynPasSyn
     Options = [eoAutoIndent, eoKeepCaretX, eoScrollByOneLess, eoSmartTabs, eoTabsToSpaces, eoTrimTrailingSpaces]
     ReadOnly = True
     OnGutterClick = SynEditorGutterClick
     OnSpecialLineColors = SynEditorSpecialLineColors
+    FontSmoothing = fsmNone
   end
   object Statusbar: TStatusBar
     Left = 0
-    Top = 327
+    Top = 335
     Width = 490
     Height = 19
     Panels = <>
     SimplePanel = True
     SimpleText = ' Ready'
   end
-  object imglActions: TImageList
-    Left = 124
-    Top = 100
+  object ImageListActions: TImageList
+    Left = 100
+    Top = 156
     Bitmap = {
       494C010107000900040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
@@ -378,76 +379,79 @@ object SimpleIDEMainForm: TSimpleIDEMainForm
       001FBFF3FFFF001F001F8007FFFF001F00000000000000000000000000000000
       000000000000}
   end
-  object actlMain: TActionList
-    Images = imglActions
-    Left = 88
+  object ActionListMain: TActionList
+    Images = ImageListActions
+    Left = 104
     Top = 100
-    object actDebugRun: TAction
+    object ActionDebugRun: TAction
       Category = 'Debug'
       Caption = 'Run'
       ImageIndex = 0
       ShortCut = 120
-      OnExecute = actDebugRunExecute
-      OnUpdate = actDebugRunUpdate
+      OnExecute = ActionDebugRunExecute
+      OnUpdate = ActionDebugRunUpdate
     end
-    object actDebugStep: TAction
+    object ActionDebugStep: TAction
       Category = 'Debug'
       Caption = 'Step'
       ImageIndex = 1
       ShortCut = 119
-      OnExecute = actDebugStepExecute
-      OnUpdate = actDebugStepUpdate
+      OnExecute = ActionDebugStepExecute
+      OnUpdate = ActionDebugStepUpdate
     end
-    object actDebugGotoCursor: TAction
+    object ActionDebugGotoCursor: TAction
       Category = 'Debug'
       Caption = 'Goto Cursor'
       ImageIndex = 2
       ShortCut = 115
-      OnExecute = actDebugGotoCursorExecute
-      OnUpdate = actDebugGotoCursorUpdate
+      OnExecute = ActionDebugGotoCursorExecute
+      OnUpdate = ActionDebugGotoCursorUpdate
     end
-    object actDebugPause: TAction
+    object ActionDebugPause: TAction
       Category = 'Debug'
       Caption = 'Pause'
       ImageIndex = 3
       ShortCut = 27
-      OnExecute = actDebugPauseExecute
-      OnUpdate = actDebugPauseUpdate
+      OnExecute = ActionDebugPauseExecute
+      OnUpdate = ActionDebugPauseUpdate
     end
-    object actDebugStop: TAction
+    object ActionDebugStop: TAction
       Category = 'Debug'
       Caption = 'Stop'
       ImageIndex = 4
       ShortCut = 16497
-      OnExecute = actDebugStopExecute
-      OnUpdate = actDebugStopUpdate
+      OnExecute = ActionDebugStopExecute
+      OnUpdate = ActionDebugStopUpdate
     end
-    object actToggleBreakpoint: TAction
+    object ActionToggleBreakpoint: TAction
       Category = 'Debug'
       Caption = 'Toggle Breakpoint'
       ImageIndex = 5
       ShortCut = 16503
-      OnExecute = actToggleBreakpointExecute
-      OnUpdate = actToggleBreakpointUpdate
+      OnExecute = ActionToggleBreakpointExecute
+      OnUpdate = ActionToggleBreakpointUpdate
     end
-    object actClearAllBreakpoints: TAction
+    object ActionClearAllBreakpoints: TAction
       Category = 'Debug'
       Caption = 'Clear All Breakpoints'
       ImageIndex = 6
       ShortCut = 24695
-      OnExecute = actClearAllBreakpointsExecute
-      OnUpdate = actClearAllBreakpointsUpdate
+      OnExecute = ActionClearAllBreakpointsExecute
+      OnUpdate = ActionClearAllBreakpointsUpdate
     end
   end
-  object SynPasSyn1: TSynPasSyn
-    Left = 196
+  object SynPasSyn: TSynPasSyn
+    Options.AutoDetectEnabled = False
+    Options.AutoDetectLineLimit = 0
+    Options.Visible = False
+    Left = 172
     Top = 100
   end
-  object imglGutterGlyphs: TImageList
+  object ImageListGutterGlyphs: TImageList
     Height = 14
     Width = 11
-    Left = 256
-    Top = 100
+    Left = 224
+    Top = 156
     Bitmap = {
       494C01010600090004000B000E00FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       00000000000036000000280000002C0000001C00000001002000000000004013
@@ -617,34 +621,34 @@ object SimpleIDEMainForm: TSimpleIDEMainForm
       FFFFFFFFFFF00000FFFFFFFFFFF0000000000000000000000000000000000000
       000000000000}
   end
-  object MainMenu1: TMainMenu
+  object MainMenu: TMainMenu
     Left = 36
     Top = 100
-    object mDebug: TMenuItem
+    object MenuItemDebug: TMenuItem
       Caption = '&Debug'
       object miDebugRun: TMenuItem
-        Action = actDebugRun
+        Action = ActionDebugRun
       end
       object miDebugStep: TMenuItem
-        Action = actDebugStep
+        Action = ActionDebugStep
       end
       object miDebugGotoCursor: TMenuItem
-        Action = actDebugGotoCursor
+        Action = ActionDebugGotoCursor
       end
       object miDebugPause: TMenuItem
-        Action = actDebugPause
+        Action = ActionDebugPause
       end
       object miDebugStop: TMenuItem
-        Action = actDebugStop
+        Action = ActionDebugStop
       end
       object N1: TMenuItem
         Caption = '-'
       end
       object miToggleBreakpoint: TMenuItem
-        Action = actToggleBreakpoint
+        Action = ActionToggleBreakpoint
       end
       object miClearBreakpoints: TMenuItem
-        Action = actClearAllBreakpoints
+        Action = ActionClearAllBreakpoints
       end
     end
   end
