@@ -178,7 +178,7 @@ type
   TGutterPaintEvent = procedure(Sender: TObject; aLine: Integer;
     X, Y: Integer) of object;
 
-  TSynEditCaretType = (ctVerticalLine, ctHorizontalLine, ctHalfBlock, ctBlock);
+  TSynEditCaretType = (ctVerticalLine, ctHorizontalLine, ctHalfBlock, ctBlock, ctVerticalLine2);
 
   TSynStateFlag = (sfCaretChanged, sfScrollbarChanged, sfLinesChanging,
     sfIgnoreNextChar, sfCaretVisible, sfDblClicked, sfPossibleGutterClick,
@@ -6808,6 +6808,12 @@ begin
         cw := fCharWidth;
         ch := fTextHeight - 2;
         FCaretOffset := Point(0, 0);
+      end;
+    ctVerticalLine2:
+      begin
+      cw := 2;
+      ch := fTextHeight + 1;
+      FCaretOffset := Point(0, 0);
       end;
     else
     begin // ctVerticalLine
