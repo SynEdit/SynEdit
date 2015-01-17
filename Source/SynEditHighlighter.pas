@@ -1119,12 +1119,10 @@ end;
 
 function TSynCustomHighlighter.IsIdentChar(AChar: WideChar): Boolean;
 begin
-  case AChar of
-    '_', '0'..'9', 'A'..'Z', 'a'..'z':
-      Result := True;
+  if IsWordBreakChar(Achar) then
+      Result := False
     else
-      Result := False;
-  end;
+      Result := True;
 end;
 
 function TSynCustomHighlighter.IsKeyword(const AKeyword: UnicodeString): Boolean;
