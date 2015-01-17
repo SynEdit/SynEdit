@@ -1119,12 +1119,7 @@ end;
 
 function TSynCustomHighlighter.IsIdentChar(AChar: WideChar): Boolean;
 begin
-  case AChar of
-    '_', '0'..'9', 'A'..'Z', 'a'..'z':
-      Result := True;
-    else
-      Result := False;
-  end;
+  Result := AChar >= #33;
 end;
 
 function TSynCustomHighlighter.IsKeyword(const AKeyword: UnicodeString): Boolean;
