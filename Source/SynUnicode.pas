@@ -954,7 +954,15 @@ begin
         System.Move(ByteOrderMask[0], SA[1], BytesRead); // max 6 bytes = 6 chars
         if Size > BytesRead then
           Stream.Read(SA[7], Size - BytesRead); // first 6 chars were copied by System.Move
+          SW := UTF8Decode(SA);
+          if SW <> '' then
+           begin
+           FSaveFormat := sfUTF8;
+           SetTextStr(SW);
+           Loaded := True;
+           end;
       end;
+      if not Loaded then
       SetTextStr(SA);
     end;
   finally
