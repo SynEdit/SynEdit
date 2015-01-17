@@ -214,18 +214,6 @@ end;
 
 procedure TSynJSON.NumberProc;
 
-(*
-  function IsNumberChar: Boolean;
-  begin
-    case FLine[Run] of
-      '0'..'9', '.', '+', '-', 'e', 'E':
-        Result := True;
-      else
-        Result := False;
-    end;
-  end;
-*)
-
   function ExpectDigit: Boolean;
   begin
     Result := CharInSet(FLine[Run], ['0'..'9']);
@@ -303,36 +291,49 @@ begin
 end;
 
 procedure TSynJSON.ReservedWordProc;
+
+  procedure SkipToken;
+  begin
+    while (FLine[Run] <> #32) and (FLine[Run] <> ',') and not IsLineEnd(Run) do
+      Inc(Run);
+  end;
+
 begin
   FTokenID := tkUnknown;
   case FLine[Run] of
-   'n':
-     if (FLine[Run + 1] = 'u') and
-        (FLine[Run + 2] = 'l') and
-        (FLine[Run + 3] = 'l') then
-     begin
-       FTokenID := tkReserved;
-       Inc(Run, 4);
-     end;
-   't':
-     if (FLine[Run + 1] = 'r') and
-        (FLine[Run + 2] = 'u') and
-        (FLine[Run + 3] = 'e') then
-     begin
-       FTokenID := tkReserved;
-       Inc(Run, 4);
-     end;
-   'f':
-     if (FLine[Run + 1] = 'a') and
-        (FLine[Run + 2] = 'l') and
-        (FLine[Run + 3] = 's') and
-        (FLine[Run + 4] = 'e') then
-     begin
-       FTokenID := tkReserved;
-       Inc(Run, 5);
-     end;
+    'n':
+      if (FLine[Run + 1] = 'u') and
+         (FLine[Run + 2] = 'l') and
+         (FLine[Run + 3] = 'l') then
+      begin
+        FTokenID := tkReserved;
+        Inc(Run, 4);
+      end
+      else
+        SkipToken;
+    't':
+      if (FLine[Run + 1] = 'r') and
+         (FLine[Run + 2] = 'u') and
+         (FLine[Run + 3] = 'e') then
+      begin
+        FTokenID := tkReserved;
+        Inc(Run, 4);
+      end
+      else
+        SkipToken;
+    'f':
+      if (FLine[Run + 1] = 'a') and
+         (FLine[Run + 2] = 'l') and
+         (FLine[Run + 3] = 's') and
+         (FLine[Run + 4] = 'e') then
+      begin
+        FTokenID := tkReserved;
+        Inc(Run, 5);
+      end
+      else
+        SkipToken;
     else
-      while (FLine[Run] <> #32) and not IsLineEnd(Run) do Inc(Run);
+      SkipToken;
   end;
 end;
 
@@ -425,10 +426,10 @@ function TSynJSON.GetDefaultAttribute(Index: integer): TSynHighlighterAttributes
 begin
   case Index of
     SYN_ATTR_KEYWORD: Result := FReservedAttri;
-    SYN_ATTR_IDENTIFIER: Result := FValueAttri;
+    SYN_ATTR_IDENTIFIER: Result := FAttributeAttri;
     SYN_ATTR_WHITESPACE: Result := FSpaceAttri;
     SYN_ATTR_SYMBOL: Result := FSymbolAttri;
-    SYN_ATTR_STRING: Result := FAttributeAttri;
+    SYN_ATTR_STRING: Result := FValueAttri;
   else
     Result := nil;
   end;
