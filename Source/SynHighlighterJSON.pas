@@ -136,16 +136,19 @@ begin
   // Attribute
   FAttributeAttri := TSynHighlighterAttributes.Create(SYNS_AttrAttribute,
     SYNS_FriendlyAttrAttribute);
+  FAttributeAttri.Foreground := clNavy;
   AddAttribute(FAttributeAttri);
 
   // reserved words ("true", "false", "null")
   FReservedAttri := TSynHighlighterAttributes.Create(SYNS_AttrReservedWord,
     SYNS_FriendlyAttrReservedWord);
+  FReservedAttri.Style := [fsBold];
   AddAttribute(FReservedAttri);
 
   // numbers
   FNumberAttri := TSynHighlighterAttributes.Create(SYNS_AttrNumber,
     SYNS_FriendlyAttrNumber);
+  FNumberAttri.Foreground := clRed;
   AddAttribute(FNumberAttri);
 
   // spaces
@@ -156,11 +159,13 @@ begin
   // symbols
   FSymbolAttri := TSynHighlighterAttributes.Create(SYNS_AttrSymbol,
     SYNS_FriendlyAttrSymbol);
+  FSymbolAttri.Foreground := clGreen;
   AddAttribute(FSymbolAttri);
 
   // Value
   FValueAttri := TSynHighlighterAttributes.Create(SYNS_AttrValue,
     SYNS_FriendlyAttrValue);
+  FValueAttri.Foreground := clBlue;
   AddAttribute(FValueAttri);
 
   SetAttributesOnChange(DefHighlightChange);
