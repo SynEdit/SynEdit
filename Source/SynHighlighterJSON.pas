@@ -59,7 +59,7 @@ type
   TRangeState = (rsUnknown, rsAttribute, rsObjectValue, rsArrayValue);
 
 type
-  TSynJSON = class(TSynCustomHighLighter)
+  TSynJSONSyn = class(TSynCustomHighLighter)
   private
     FRange: TRangeState;
     FTokenID: TtkTokenKind;
@@ -127,7 +127,9 @@ uses
 {$ENDIF}
 
 
-constructor TSynJSON.Create(AOwner: TComponent);
+{ TSynJSONSyn }
+
+constructor TSynJSONSyn.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
 
@@ -173,51 +175,51 @@ begin
   FRange := rsUnknown;
 end;
 
-procedure TSynJSON.CloseArrayProc;
+procedure TSynJSONSyn.CloseArrayProc;
 begin
   SymbolProc;
   FRange := rsUnknown;
 end;
 
-procedure TSynJSON.CloseObjectProc;
+procedure TSynJSONSyn.CloseObjectProc;
 begin
   SymbolProc;
   FRange := rsUnknown;
 end;
 
-procedure TSynJSON.ColonProc;
+procedure TSynJSONSyn.ColonProc;
 begin
   SymbolProc;
   FRange := rsObjectValue;
 end;
 
-procedure TSynJSON.CommaProc;
+procedure TSynJSONSyn.CommaProc;
 begin
   SymbolProc;
   if FRange = rsObjectValue then
     FRange := rsAttribute;
 end;
 
-procedure TSynJSON.CRProc;
+procedure TSynJSONSyn.CRProc;
 begin
   FTokenID := tkSpace;
   Inc(Run);
   if FLine[Run] = #10 then Inc(Run);
 end;
 
-procedure TSynJSON.LFProc;
+procedure TSynJSONSyn.LFProc;
 begin
   FTokenID := tkSpace;
   Inc(Run);
 end;
 
-procedure TSynJSON.NullProc;
+procedure TSynJSONSyn.NullProc;
 begin
   FTokenID := tkNull;
   Inc(Run);
 end;
 
-procedure TSynJSON.NumberProc;
+procedure TSynJSONSyn.NumberProc;
 
   function ExpectDigit: Boolean;
   begin
@@ -283,19 +285,19 @@ begin
   end;
 end;
 
-procedure TSynJSON.OpenArrayProc;
+procedure TSynJSONSyn.OpenArrayProc;
 begin
   SymbolProc;
   FRange := rsArrayValue;
 end;
 
-procedure TSynJSON.OpenObjectProc;
+procedure TSynJSONSyn.OpenObjectProc;
 begin
   SymbolProc;
   FRange := rsAttribute;
 end;
 
-procedure TSynJSON.ReservedWordProc;
+procedure TSynJSONSyn.ReservedWordProc;
 
   procedure SkipToken;
   begin
@@ -342,14 +344,14 @@ begin
   end;
 end;
 
-procedure TSynJSON.SpaceProc;
+procedure TSynJSONSyn.SpaceProc;
 begin
   Inc(Run);
   FTokenID := tkSpace;
   while (FLine[Run] <= #32) and not IsLineEnd(Run) do Inc(Run);
 end;
 
-procedure TSynJSON.StringProc;
+procedure TSynJSONSyn.StringProc;
 
   function IsHex(Digit: Char): Boolean;
   begin
@@ -390,19 +392,19 @@ begin
   until IsLineEnd(Run);
 end;
 
-procedure TSynJSON.SymbolProc;
+procedure TSynJSONSyn.SymbolProc;
 begin
   Inc(Run);
   FTokenID := tkSymbol;
 end;
 
-procedure TSynJSON.UnknownProc;
+procedure TSynJSONSyn.UnknownProc;
 begin
   Inc(Run);
   FTokenID := tkUnknown;
 end;
 
-procedure TSynJSON.Next;
+procedure TSynJSONSyn.Next;
 begin
   fTokenPos := Run;
   case FLine[Run] of
@@ -427,7 +429,7 @@ begin
   inherited;
 end;
 
-function TSynJSON.GetDefaultAttribute(Index: integer): TSynHighlighterAttributes;
+function TSynJSONSyn.GetDefaultAttribute(Index: integer): TSynHighlighterAttributes;
 begin
   case Index of
     SYN_ATTR_KEYWORD: Result := FReservedAttri;
@@ -440,22 +442,22 @@ begin
   end;
 end;
 
-function TSynJSON.GetEol: Boolean;
+function TSynJSONSyn.GetEol: Boolean;
 begin
   Result := Run = fLineLen + 1;
 end;
 
-function TSynJSON.GetRange: Pointer;
+function TSynJSONSyn.GetRange: Pointer;
 begin
   Result := Pointer(FRange);
 end;
 
-function TSynJSON.GetTokenID: TtkTokenKind;
+function TSynJSONSyn.GetTokenID: TtkTokenKind;
 begin
   Result := FTokenID;
 end;
 
-function TSynJSON.GetTokenAttribute: TSynHighlighterAttributes;
+function TSynJSONSyn.GetTokenAttribute: TSynHighlighterAttributes;
 begin
   case GetTokenID of
     tkString:
@@ -472,32 +474,32 @@ begin
   end;
 end;
 
-function TSynJSON.GetTokenKind: integer;
+function TSynJSONSyn.GetTokenKind: integer;
 begin
   Result := Ord(FTokenID);
 end;
 
-procedure TSynJSON.ResetRange;
+procedure TSynJSONSyn.ResetRange;
 begin
   FRange := rsUnknown;
 end;
 
-procedure TSynJSON.SetRange(Value: Pointer);
+procedure TSynJSONSyn.SetRange(Value: Pointer);
 begin
   FRange := TRangeState(Value);
 end;
 
-function TSynJSON.IsFilterStored: Boolean;
+function TSynJSONSyn.IsFilterStored: Boolean;
 begin
   Result := FDefaultFilter <> SYNS_FilterJSON;
 end;
 
-class function TSynJSON.GetLanguageName: string;
+class function TSynJSONSyn.GetLanguageName: string;
 begin
   Result := SYNS_LangJSON;
 end;
 
-function TSynJSON.GetSampleSource: UnicodeString;
+function TSynJSONSyn.GetSampleSource: UnicodeString;
 begin
   Result :=
     '{'#13#10 +
@@ -528,13 +530,13 @@ begin
     '}';
 end;
 
-class function TSynJSON.GetFriendlyLanguageName: UnicodeString;
+class function TSynJSONSyn.GetFriendlyLanguageName: UnicodeString;
 begin
   Result := SYNS_FriendlyLangJSON;
 end;
 
 initialization
 {$IFNDEF SYN_CPPB_1}
-  RegisterPlaceableHighlighter(TSynJSON);
+  RegisterPlaceableHighlighter(TSynJSONSyn);
 {$ENDIF}
 end.
