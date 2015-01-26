@@ -756,14 +756,26 @@ end;
 procedure TSynDWSSyn.StringQuoteProc;
 begin
   fTokenID := tkString;
-  if (Run>0) or IsLineEnd(Run+1) then
-     Inc(Run);
-  fRange := rsHereDocDouble;
+  if fRange <> rsHereDocDouble then
+  begin
+    fRange := rsHereDocDouble;
+    Inc(Run);
+  end else
+  begin
+    if IsLineEnd(Run) then
+    begin
+      Inc(Run);
+      Exit;
+    end;
+  end;
+
   while not IsLineEnd(Run) do
   begin
-    if fLine[Run] = '"' then begin
+    if fLine[Run] = '"' then
+    begin
       Inc(Run);
-      if fLine[Run] <> '"' then begin
+      if fLine[Run] <> '"' then
+      begin
         fRange := rsUnknown;
         break;
       end;
