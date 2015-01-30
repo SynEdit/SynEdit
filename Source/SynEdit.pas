@@ -1145,6 +1145,10 @@ uses
 {$IFDEF SYN_COMPILER_6_UP}
   Consts,
 {$ENDIF}
+{$IFDEF SYN_COMPILER_16_UP}
+  Vcl.Themes,
+{$ENDIF}
+
 {$IFDEF SYN_COMPILER_18_UP}
   AnsiStrings,
 {$ENDIF}
@@ -1157,7 +1161,8 @@ uses
   Clipbrd,
   ShellAPI,
   SynEditWordWrap,
-  SynEditStrConst;
+  SynEditStrConst,
+  SynVCLStyleHooks;
 {$ENDIF}
 
 {$IFDEF SYN_CLX}
@@ -11311,8 +11316,13 @@ initialization
   else
     GetMsgHook := 0;
 {$ENDIF}
+
+{$IFDEF SYN_COMPILER_16_UP}
+  TCustomStyleEngine.RegisterStyleHook(TSynEdit, TSynEditVclStyleScrollBarsHook);
+{$ENDIF}
   SynEditClipboardFormat := RegisterClipboardFormat(SYNEDIT_CLIPBOARD_FORMAT);
 {$ENDIF}
+
 
 finalization
 {$IFNDEF SYN_CLX}
