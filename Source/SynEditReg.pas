@@ -127,6 +127,7 @@ uses
   // SynEdit components
   SynEdit,
   SynMemo,
+  SynEditDocumentManager,
   {$IFNDEF SYN_DELPHI_PE}
   SynDBEdit,
   {$ENDIF}
@@ -137,7 +138,7 @@ uses
   SynEditExport,
   SynExportHTML,
   SynExportRTF,
-  SynExportTeX,      
+  SynExportTeX,
   SynHighlighterMulti,
   SynCompletionProposal,
   SynEditPythonBehaviour,
@@ -249,7 +250,8 @@ begin
     TSynExporterTeX, TSynEditPythonBehaviour, TSynMultiSyn,
     TSynCompletionProposal, TSynAutoComplete, TSynMacroRecorder,
     TSynEditPrint, TSynEditPrintPreview, TSynAutoCorrect,
-    TSynEditSearch, TSynEditRegexSearch, TSynEditOptionsDialog, TSynURIOpener]);
+    TSynEditSearch, TSynEditRegexSearch, TSynEditOptionsDialog, TSynURIOpener,
+    TSynEditDocumentManager]);
 {$IFDEF SYN_COMPILER_4_UP}
   RegisterComponents(SYNS_ComponentsPage, [TSynHighlighterManager]);
 {$ENDIF}
