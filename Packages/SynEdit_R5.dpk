@@ -51,6 +51,7 @@ contains
   SynMacroRecorder in '..\Source\SynMacroRecorder.pas',
   SynRegExpr in '..\Source\SynRegExpr.pas',
   SynEditAutoComplete in '..\Source\SynEditAutoComplete.pas',
+  SynEditDocumentManager in '..\Source\SynEditDocumentManager.pas',
   SynEditExport in '..\Source\SynEditExport.pas',
   SynEditKeyCmdEditor in '..\Source\SynEditKeyCmdEditor.pas' {SynEditKeystrokeEditorForm},
   SynEditKeyCmds in '..\Source\SynEditKeyCmds.pas',
