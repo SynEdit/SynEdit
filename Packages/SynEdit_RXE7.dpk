@@ -100,6 +100,7 @@ contains
   SynHighlighterInno in '..\Source\SynHighlighterInno.pas',
   SynHighlighterJava in '..\Source\SynHighlighterJava.pas',
   SynHighlighterJScript in '..\Source\SynHighlighterJScript.pas',
+  SynHighlighterJSON in '..\Source\SynHighlighterJSON.pas',
   SynHighlighterKix in '..\Source\SynHighlighterKix.pas',
   SynHighlighterM3 in '..\Source\SynHighlighterM3.pas',
   SynHighlighterModelica in '..\Source\SynHighlighterModelica.pas',
