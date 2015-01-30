@@ -213,6 +213,7 @@ uses
   SynHighlighterLDraw,   
   SynURIOpener,
 {$ENDIF}
+  SynEditDocumentManager,
   Classes;
 
 procedure Register;

@@ -132,6 +132,7 @@ contains
   SynHighlighterVrml97 in '..\Source\SynHighlighterVrml97.pas',
   SynHighlighterEiffel in '..\Source\SynHighlighterEiffel.pas',
   SynUnicode in '..\Source\SynUnicode.pas',
-  SynUsp10 in '..\Source\SynUsp10.pas';
+  SynUsp10 in '..\Source\SynUsp10.pas',
+  SynEditHighlighterOptions in '..\Source\SynEditHighlighterOptions.pas';
 
 end.

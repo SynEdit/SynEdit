@@ -166,6 +166,7 @@
         <DCCReference Include="..\Source\SynHighlighterInno.pas"/>
         <DCCReference Include="..\Source\SynHighlighterJava.pas"/>
         <DCCReference Include="..\Source\SynHighlighterJScript.pas"/>
+        <DCCReference Include="..\Source\SynHighlighterJSON.pas"/>
         <DCCReference Include="..\Source\SynHighlighterKix.pas"/>
         <DCCReference Include="..\Source\SynHighlighterM3.pas"/>
         <DCCReference Include="..\Source\SynHighlighterModelica.pas"/>
