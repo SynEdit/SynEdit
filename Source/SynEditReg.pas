@@ -127,6 +127,7 @@ uses
   // SynEdit components
   SynEdit,
   SynMemo,
+  SynEditDocumentManager,
   {$IFNDEF SYN_DELPHI_PE}
   SynDBEdit,
   {$ENDIF}
@@ -137,7 +138,7 @@ uses
   SynEditExport,
   SynExportHTML,
   SynExportRTF,
-  SynExportTeX,      
+  SynExportTeX,
   SynHighlighterMulti,
   SynCompletionProposal,
   SynEditPythonBehaviour,
@@ -212,7 +213,6 @@ uses
   SynHighlighterLDraw,   
   SynURIOpener,
 {$ENDIF}
-  SynEditDocumentManager,
   Classes;
 
 procedure Register;
