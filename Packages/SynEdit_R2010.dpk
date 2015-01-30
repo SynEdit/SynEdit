@@ -40,6 +40,7 @@ contains
   SynDBEdit in '..\Source\SynDBEdit.pas',
   SynEdit in '..\Source\SynEdit.pas',
   SynEditAutoComplete in '..\Source\SynEditAutoComplete.pas',
+  SynEditDocumentManager in '..\Source\SynEditDocumentManager.pas',
   SynEditExport in '..\Source\SynEditExport.pas',
   SynEditHighlighter in '..\Source\SynEditHighlighter.pas',
   SynEditKbdHandler in '..\Source\SynEditKbdHandler.pas',
