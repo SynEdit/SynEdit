@@ -198,7 +198,7 @@ type
     function IndexOfObject(AObject: TObject): Integer;
     procedure Insert(Index: Integer; const S: UnicodeString); virtual; abstract;
     procedure InsertObject(Index: Integer; const S: UnicodeString; AObject: TObject);
-    procedure LoadFromFile(const FileName: TFileName); virtual;
+    procedure LoadFromFile(const FileName: WideString); virtual;
     procedure LoadFromStream(Stream: TStream); virtual;
     procedure Move(CurIndex, NewIndex: Integer); virtual;
     procedure SaveToFile(const FileName: TFileName); virtual;
@@ -859,11 +859,11 @@ begin
   PutObject(Index, AObject);
 end;
 
-procedure TUnicodeStrings.LoadFromFile(const FileName: TFileName);
+procedure TUnicodeStrings.LoadFromFile(const FileName: WideString);
 var
   Stream: TStream;
 begin
-  Stream := TFileStream.Create(FileName, fmOpenRead or fmShareDenyNone);
+  Stream := TWideFileStream.Create(FileName, fmOpenRead or fmShareDenyNone);
   try
     LoadFromStream(Stream);
   finally
