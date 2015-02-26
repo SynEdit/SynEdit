@@ -2649,24 +2649,7 @@ end;
 
 function TSynUnrealSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '//----Comment-----------------------------------------------------------'#13#10+
-            'class TestObject expands Object native;'#13#10+
-            #13#10+
-            '#exec MESH    IMPORT     MESH=Something ANIVFILE=MODELS\Something.3D DATAFILE=MODELS\Something.3D X=0 Y=0 Z=0 MLOD=0'#13#10+
-            #13#10+
-            'var() Sound HitSound;'#13#10+
-            'function Cast()'#13#10+
-            '{'#13#10+
-            '  Super.Cast();'#13#10+
-            '  CastTime = 50;'#13#10+
-            '  GatherEffect = Spawn( class''SomethingCorona'',,, GetStartLoc(), Pawn(Owner).ViewRotation );'#13#10+
-            '  GatherEffect.SetFollowPawn( Pawn(Owner) );'#13#10+
-            '}'#13#10+
-            #13#10+
-            'defaultproperties'#13#10+
-            '{'#13#10+
-            '  PickupMessage="You have picked up a thing."'#13#10+
-            '}';
+  Result := '';
 end;
 
 class function TSynUnrealSyn.GetFriendlyLanguageName: UnicodeString;

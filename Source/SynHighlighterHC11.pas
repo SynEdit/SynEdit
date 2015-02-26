@@ -489,17 +489,7 @@ end;
 
 function TSynHC11Syn.GetSampleSource: UnicodeString;
 begin
-  Result :=
-    '* TX.ASM'#13#10 +
-    'MAINORG EQU_    $F800'#13#10 +
-    '        ORG     $F800'#13#10 +
-    'MAIN    EQU     *        ;Start assembling here'#13#10 +
-    '        STAA    SCCR2'#13#10 +
-    'loop:'#13#10 +
-    '        LDAA    #$05'#13#10 +
-    '	BRA	loop		;Do it again'#13#10 +
-    '	ORG	$FFFE		;Reset vector interrupt setup'#13#10 +
-    '	END';
+  Result :='';
 end;
 
 class function TSynHC11Syn.GetFriendlyLanguageName: UnicodeString;

@@ -506,33 +506,7 @@ end;
 
 function TSynJSONSyn.GetSampleSource: UnicodeString;
 begin
-  Result :=
-    '{'#13#10 +
-    '  "firstName": "John",'#13#10 +
-    '  "lastName": "Smith",'#13#10 +
-    '  "isAlive": true,'#13#10 +
-    '  "age": 25,'#13#10 +
-    '  "height_cm": 167.6,'#13#10 +
-    '  "address": {'#13#10 +
-    '    "streetAddress": "21 2nd Street",'#13#10 +
-    '    "city": "New York",'#13#10 +
-    '    "state": "NY",'#13#10 +
-    '    "postalCode": "10021-3100"'#13#10 +
-    '  },'#13#10 +
-    '  "phoneNumbers": ['#13#10 +
-    '    {'#13#10 +
-    '      "type": "home",'#13#10 +
-    '      "number": "212 555-1234"'#13#10 +
-    '    },'#13#10 +
-    '    {'#13#10 +
-    '      "type": "office",'#13#10 +
-    '      "number": "646 555-4567"'#13#10 +
-    '    }'#13#10 +
-    '  ],'#13#10 +
-    '  "face": "\uD83D\uDE02",'#13#10 +
-    '  "children": [],'#13#10 +
-    '  "spouse": null'#13#10 +
-    '}';
+  Result := '';
 end;
 
 class function TSynJSONSyn.GetFriendlyLanguageName: UnicodeString;

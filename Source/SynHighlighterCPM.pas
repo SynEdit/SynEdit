@@ -1981,26 +1981,7 @@ end; { LFProc }
 
 function TSynCPMSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '{ COAS Product Manager report (RDF) }'#13#10 +
-            'PARAM'#13#10 +
-            '  LANGUAGE;'#13#10 +
-            '  CONTINUE;'#13#10 +
-            'END; { Param }'#13#10 +
-            #13#10 +
-            'GLOBALS'#13#10 +
-            '  LANGUAGE = LOCAL;'#13#10 +
-            'END; { Globals }'#13#10 +
-            #13#10 +
-            'DEFINITION BLOCK "MAIN"'#13#10 +
-            'VARIABLES'#13#10 +
-            '  S_Query = "";'#13#10 +
-            '  V_OraErr = -1;'#13#10 +
-            '  V_Count;'#13#10 +
-            'BEGIN'#13#10 +
-            '  ASSIGN(S_Query, "SELECT * FROM DUAL");'#13#10 +
-            '  SQL_CREATE(V_OraErr, S_Query);'#13#10 +
-            '  ASSIGN(V_Count, V_NoneReal);'#13#10 +
-            'END;';
+  Result := '';
 end; { GetSampleSource }
 
 function TSynCPMSyn.IsFilterStored: Boolean;

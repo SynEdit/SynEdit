@@ -1057,17 +1057,7 @@ end;
 
 function TSynLLVMIRSyn.GetSampleSource: UnicodeString;
 begin
-  Result :=
-    '; Declare the string constant as global constant' + #10#13 + '@.msg = ' +
-    'internal constant [13 x i8] c"Hello World!\00"' + #10#13 + #10#13 +
-    '; External declaration of puts function' + #10#13 + 'declare i32 ' +
-    '@puts(i8*)' + #10#13 + #10#13 + '; Definition of main function' + #10#13 +
-    'define i32 @main() {' + #10#13 + 'entry:' + #10#13 + #9 +
-    '; Convert [13 x i8]* to i8 *...' + #10#13 + #9 +
-    '%cast210 = getelementptr inbounds ([13 x i8]* @.msg, i32 0, i32 0)' +
-    #10#13 + #10#13 + #9 + '; Call puts function to write out the string to ' +
-    'stdout' + #10#13 + #9 + 'call i32 @puts(i8* %cast210)' + #10#13 +
-    #9 + 'ret i32 0' + #10#13 + '}';
+  Result := '';
 
 end;
 

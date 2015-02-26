@@ -1996,9 +1996,7 @@ end; { TSynCSSyn.UseUserSettings }
 
 function TSynCSSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '/* Syntax Highlighting */'#13#10 +
-				'int num = 12345;'#13#10 +
-				'string str = "Hello World";'#13#10;
+  Result := '';
 
 end; { GetSampleSource }
 

@@ -1483,41 +1483,7 @@ end;
 
 function TSynEiffelSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '-- Eiffel sample source from SmartEiffel'#13#10 +
-    'class FIBONACCI'#13#10 +
-    '-- Eiffel comment'#13#10 +
-    'creation make'#13#10 +
-    #13#10 +
-    'feature'#13#10 +
-    #13#10 +
-    '   make is'#13#10 +
-    '      do'#13#10 +
-    '         if argument_count /= 1 or else'#13#10 +
-    '            not argument(1).is_integer'#13#10 +
-    '          then'#13#10 +
-    '            io.put_string("Usage: ");'#13#10 +
-    '            io.put_string(argument(0));'#13#10 +
-    '            io.put_string(" <Integer_value>%N");'#13#10 +
-    '            die_with_code(exit_failure_code);'#13#10 +
-    '         end;'#13#10 +
-    '         io.put_integer(fibonacci(argument(1).to_integer));'#13#10 +
-    '         io.put_new_line;'#13#10 +
-    '      end;'#13#10 +
-    '   -- Eiffel comment'#13#10 +
-    '   fibonacci(i: INTEGER): INTEGER is'#13#10 +
-    '      require -- Eiffel comment'#13#10 +
-    '         i >= 0'#13#10 +
-    '      do'#13#10 +
-    '         if i = 0 then'#13#10 +
-    '            Result := 1;'#13#10 +
-    '         elseif i = 1 then'#13#10 +
-    '            Result := 1;'#13#10 +
-    '         else'#13#10 +
-    '            Result := fibonacci(i - 1) + fibonacci(i - 2) ;'#13#10 +
-    '         end;'#13#10 +
-    '      end;'#13#10 +
-    #13#10 +
-    'end';
+  Result := '';
 end;
 
 function TSynEiffelSyn.IsFilterStored: Boolean;

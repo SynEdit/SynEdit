@@ -1009,17 +1009,7 @@ end;
 
 function TSynIdlSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '/* CORBA IDL sample source */'#13#10 +
-            '#include <sample.idl>'#13#10 +
-            #13#10 +
-            'const string TestString = "Hello World";'#13#10 +
-            'const long TestLong = 10;'#13#10 +
-            #13#10 +
-            'module TestModule {'#13#10 +
-            '  interface DemoInterface {'#13#10 +
-            '    boolean HelloWorld(in string Message);'#13#10 +
-            '  }'#13#10 +
-            '}';
+  Result := '';
 end;
 
 function TSynIdlSyn.IsFilterStored: Boolean;

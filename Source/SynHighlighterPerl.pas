@@ -3813,17 +3813,7 @@ end;
 
 function TSynPerlSyn.GetSampleSource: UnicodeString;
 begin
-  Result :=
-    '#!/bin/perl'#13#10 +
-    'require "cgi-lib.pl";'#13#10 +
-    'use sigtrap;'#13#10 +
-    'do ''envars.pl'';'#13#10 +
-    '$_ = $password1;'#13#10 +
-    'sub WriteBack {'#13#10 +
-    '        while ($_ ne "fred")    {'#13#10 +
-    '                sleep 5;'#13#10 +
-    '        }'#13#10 +
-    '}';
+  Result := '';
 end;
 
 function TSynPerlSyn.IsFilterStored: Boolean;

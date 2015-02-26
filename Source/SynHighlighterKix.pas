@@ -523,13 +523,7 @@ end;
 
 function TSynKixSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '; KiXtart sample source'#13#10 +
-            'break on'#13#10 +
-            'color b/n'#13#10 +
-            #13#10 +
-            'AT(1, 30) "Hello World!"'#13#10 +
-            '$USERID = @USERID'#13#10 +
-            'AT(1, 30) $USERID';
+  Result := '';
 end;
 
 class function TSynKixSyn.GetFriendlyLanguageName: UnicodeString;

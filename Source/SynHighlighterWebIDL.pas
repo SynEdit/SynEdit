@@ -1009,19 +1009,7 @@ end;
 
 function TSynWebIDLSyn.GetSampleSource: UnicodeString;
 begin
-  Result :=
-    '/* WEB IDL sample source */'#13#10 +
-    '[Constructor]'#13#10 +
-    'interface GraphicalWindow {'#13#10 +
-    '  readonly attribute unsigned long width;'#13#10 +
-    '  readonly attribute unsigned long height;'#13#10 +
-    #13#10 +
-    '  attribute Paint currentPaint;'#13#10 +
-    #13#10 +
-    '  void drawRectangle(float x, float y, float width, float height);' +
-    #13#10#13#10 +
-    '  void drawText(float x, float y, DOMString text);'#13#10 +
-    '};';
+  Result := '';
 end;
 
 function TSynWebIDLSyn.IsFilterStored: Boolean;

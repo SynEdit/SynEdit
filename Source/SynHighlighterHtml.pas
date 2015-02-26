@@ -1211,17 +1211,7 @@ end;
 
 function TSynHTMLSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '<!-- Syntax highlighting -->'#13#10 +
-            #13#10 +
-            '<html>'#13#10 +
-            '<body bgcolor="red">'#13#10 +
-            '  <form name="frmLogin" action="doSomething.asp">'#13#10 +
-            '    <input name="user" value=''any'#13#10 +
-            '      value''>'#13#10 +
-            '  </form>'#13#10 +
-            '  <invalid>Sample HTML code &copy; 2001</invalid>'#13#10 +
-            '</body>'#13#10 +
-            '</html>';
+  Result := '';
 end;
 
 class function TSynHTMLSyn.GetFriendlyLanguageName: UnicodeString;

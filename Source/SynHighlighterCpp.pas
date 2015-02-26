@@ -1526,27 +1526,7 @@ end;
 
 function TSynCppSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '// Syntax Highlighting'#13#10+
-            'void __fastcall TForm1::Button1Click(TObject *Sender)'#13#10+
-            '{'#13#10+
-            '  int number = 123456;'#13#10+
-            '  char c = ''a'';'#13#10+
-            '  Caption = "The number is " + IntToStr(i);'#13#10+
-            '  for (int i = 0; i <= number; i++)'#13#10+
-            '  {'#13#10+
-            '    x -= 0xff;'#13#10+
-            '    x -= 023;'#13#10+
-            '    x += 1.0;'#13#10+
-            '    x += @; /* illegal character */'#13#10+
-            '  }'#13#10+
-            '  #ifdef USE_ASM'#13#10+
-            '    asm'#13#10+
-            '    {'#13#10+
-            '      ASM MOV AX, 0x1234'#13#10+
-            '      ASM MOV i, AX'#13#10+
-            '    }'#13#10+
-            '  #endif'#13#10+
-            '}';
+  Result := '';
 
 end;
 

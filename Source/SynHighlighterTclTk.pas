@@ -800,12 +800,7 @@ end;
 
 function TSynTclTkSyn.GetSampleSource: UnicodeString;
 begin
-  Result :=
-    '#!/usr/local/tclsh8.0'#13#10 +
-    'if {$argc < 2} {'#13#10 +
-    '	puts stderr "Usage: $argv0 parameter"'#13#10 +
-    '	exit 1'#13#10 +
-    '}';
+  Result := '';
 end;
 
 class function TSynTclTkSyn.GetFriendlyLanguageName: UnicodeString;

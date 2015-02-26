@@ -604,16 +604,7 @@ end;
 
 function TSynBatSyn.GetSampleSource: UnicodeString;
 begin
-  Result := 'rem MS-DOS batch file'#13#10 +
-            'rem'#13#10 +
-            '@echo off'#13#10 +
-            'cls'#13#10 +
-            'echo The command line is: %1 %2 %3 %4 %5'#13#10 +
-            'rem'#13#10 +
-            'rem now wait for the user ...'#13#10 +
-            'pause'#13#10 +
-            'copy c:\*.pas d:\'#13#10 +
-            'if errorlevel 1 echo Error in copy action!';
+  Result := '';
 end;
 
 class function TSynBatSyn.GetFriendlyLanguageName: UnicodeString;

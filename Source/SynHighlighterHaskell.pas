@@ -960,10 +960,7 @@ end;
 
 function TSynHaskellSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '-- Haskell Sample Source'#13#10 +
-            'tail :: [a] -> [a]'#13#10 +
-            'tail (x:xs) = xs'#13#10 +
-            '';
+  Result := '';
 end;
 
 class function TSynHaskellSyn.GetFriendlyLanguageName: UnicodeString;

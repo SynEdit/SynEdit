@@ -546,22 +546,7 @@ end;
 
 function TSynVBSyn.GetSampleSource: UnicodeString;
 begin
-  Result := ''' Syntax highlighting'#13#10+
-            'Function PrintNumber'#13#10+
-            '  Dim Number'#13#10+
-            '  Dim X'#13#10+
-            ''#13#10+
-            '  Number = 123456'#13#10+
-            '  Response.Write "The number is " & number'#13#10+
-            ''#13#10+
-            '  For I = 0 To Number'#13#10+
-            '    X = X + &h4c'#13#10+
-            '    X = X - &o8'#13#10+
-            '    X = X + 1.0'#13#10+
-            '  Next'#13#10+
-            ''#13#10+
-            '  I = I + @;  '' illegal character'#13#10+
-            'End Function';
+  Result := '';
 end;
 
 class function TSynVBSyn.GetFriendlyLanguageName: UnicodeString;

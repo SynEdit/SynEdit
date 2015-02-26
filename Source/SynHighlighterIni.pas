@@ -423,11 +423,7 @@ end;
 
 function TSynIniSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '; Syntax highlighting'#13#10+
-            '[Section]'#13#10+
-            'Key=value'#13#10+
-            'String="Arial"'#13#10+
-            'Number=123456';
+  Result := '';
 end;
 
 {$IFNDEF SYN_CPPB_1}

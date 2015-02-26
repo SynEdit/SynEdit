@@ -469,23 +469,7 @@ end;
 
 function TSynAsmSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '; x86 assembly sample source'#13#10 +
-            '  CODE	SEGMENT	BYTE PUBLIC'#13#10 +
-            '    ASSUME	CS:CODE'#13#10 +
-            #13#10 +
-            '    PUSH SS'#13#10 +
-            '    POP DS'#13#10 +
-            '    MOV AX, AABBh'#13#10 +
-            '    MOV	BYTE PTR ES:[DI], 255'#13#10 +
-            '    JMP SHORT AsmEnd'#13#10 +
-            #13#10 +
-            '  welcomeMsg DB ''Hello World'', 0'#13#10 +
-            #13#10 +
-            '  AsmEnd:'#13#10 +
-            '    MOV AX, 0'#13#10 +
-            #13#10 +
-            '  CODE	ENDS'#13#10 +
-            'END';
+  Result := '';
 end;
 
 class function TSynAsmSyn.GetFriendlyLanguageName: UnicodeString;

@@ -1150,63 +1150,7 @@ end;
 
 function TSynVrml97Syn.GetSampleSource: UnicodeString;
 begin
-  Result :=
-    '#VRML V2.0 utf8'#13#10 +
-    'Transform {'#13#10 +
-    '  children ['#13#10 +
-    '    NavigationInfo { headlight FALSE } # We''ll add our own light'#13#10 +
-    ''#13#10 +
-    '    DirectionalLight {        # First child'#13#10 +
-    '        direction 0 0 -1      # Light illuminating the scene'#13#10 +
-    '    }'#13#10 +
-    ''#13#10 +
-    '    Transform {               # Second child - a red sphere'#13#10 +
-    '      translation 3 0 1'#13#10 +
-    '      children ['#13#10 +
-    '        Shape {'#13#10 +
-    '          geometry Sphere { radius 2.3 }'#13#10 +
-    '          appearance Appearance {'#13#10 +
-    '            material Material { diffuseColor 1 0 0 }   # Red'#13#10 +
-    '         }'#13#10 +
-    '        }'#13#10 +
-    '      ]'#13#10 +
-    '    }'#13#10 +
-    ''#13#10 +
-    '    Transform {               # Third child - a blue box '#13#10 +
-    '      translation -2.4 .2 1'#13#10 +
-    '      rotation     0 1 1  .9'#13#10 +
-    '      children ['#13#10 +
-    '        Shape {'#13#10 +
-    '          geometry Box {}'#13#10 +
-    '          appearance Appearance {'#13#10 +
-    '            material Material { diffuseColor 0 0 1 }  # Blue'#13#10 +
-    '         }'#13#10 +
-    '        }'#13#10 +
-    '      ]'#13#10 +
-    '    }'#13#10 +
-    ''#13#10 +
-    '  ] # end of children for world'#13#10 +
-    '}'#13#10 +
-    'DEF Example_2 Script {'#13#10 +
-    '    field   SFNode myself USE Example_2'#13#10 +
-    '    field   SFNode root USE ROOT_TRANSFORM'#13#10 +
-    '    field   MFString url "foo.wrl"'#13#10 +
-    '    eventIn MFNode   nodesLoaded'#13#10 +
-    '    eventIn SFBool   trigger_event'#13#10 +
-    ''#13#10 +
-    '    url "javascript:'#13#10 +
-    '        function trigger_event(value, ts){'#13#10 +
-    '            // do something and then fetch values'#13#10 +
-    '            Browser.createVRMLFromURL(url, myself, ''nodesLoaded'');'#13#10 +
-    '        }'#13#10 +
-    ''#13#10 +
-    '        function nodesLoaded(value, timestamp){'#13#10 +
-    '            if (value.length > 5) {'#13#10 +
-    '                 // do something more than 5 nodes in this MFNode...'#13#10 +
-    '            }'#13#10 +
-    '            root.addChildren = value;'#13#10 +
-    '        }"'#13#10 +
-    '}';
+  Result := '';
 end;
 
 class function TSynVrml97Syn.GetFriendlyLanguageName: UnicodeString;

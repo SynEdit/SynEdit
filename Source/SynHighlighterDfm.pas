@@ -627,12 +627,7 @@ end;
 
 function TSynDfmSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '{ Delphi/C++ Builder Form Definitions }'#13#10 +
-            'object TestForm: TTestForm'#13#10 +
-            '  Left = 273'#13#10 +
-            '  Top = 103'#13#10 +
-            '  Caption = ''SynEdit sample source'''#13#10 +
-            'end';
+  Result := '';
 end; { GetSampleSource }
 
 class function TSynDfmSyn.GetFriendlyLanguageName: UnicodeString;

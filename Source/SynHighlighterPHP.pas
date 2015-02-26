@@ -1202,18 +1202,7 @@ end;
 
 function TSynPHPSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '// Syntax highlighting'#13#10+
-            'function printNumber()'#13#10+
-            '{'#13#10+
-            '  $number = 1234;'#13#10+
-            '  print "The number is $number";'#13#10+
-            '  for ($i = 0; $i <= $number; $i++)'#13#10+
-            '  {'#13#10+
-            '    $x++;'#13#10+
-            '    $x--;'#13#10+
-            '    $x += 1.0;'#13#10+
-            '  }'#13#10+
-            '}';
+  Result := '';
 
 end;
 

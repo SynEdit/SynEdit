@@ -4754,21 +4754,7 @@ end;
 
 function TSynJScriptSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '// Syntax highlighting'#13#10+
-            'function printNumber()'#13#10+
-            '{'#13#10+
-            '  var number = 1234;'#13#10+
-            '  var x;'#13#10+
-            '  document.write("The number is " + number);'#13#10+
-            '  for (var i = 0; i <= number; i++)'#13#10+
-            '  {'#13#10+
-            '    x++;'#13#10+
-            '    x--;'#13#10+
-            '    x += 1.0;'#13#10+
-            '  }'#13#10+
-            '  i += @; // illegal character'#13#10+
-            '}'#13#10+
-            'body.onLoad = printNumber;';
+  Result := '';
 end;
 
 class function TSynJScriptSyn.GetFriendlyLanguageName: UnicodeString;

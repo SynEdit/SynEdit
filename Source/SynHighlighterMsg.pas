@@ -481,13 +481,7 @@ end;
 
 function TSynMsgSyn.GetSampleSource: UnicodeString;
 begin
-  Result := 'TSynSampleSyn   {first identifier is the class name }'#13#10 +
-            'tk              {second identifier is the prefix }'#13#10 +
-            'IdentStart ''a''..''z'':: ''a''..''z''::'#13#10 +
-            'KEYS'#13#10 +
-            'Sample'#13#10 +
-            'Source'#13#10 +
-            '|><|';
+  Result := '';
 end;
 
 function TSynMsgSyn.IsFilterStored: Boolean;

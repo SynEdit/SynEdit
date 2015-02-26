@@ -1167,13 +1167,7 @@ end;
 
 function TSynPythonSyn.GetSampleSource: UnicodeString;
 begin
-  Result :=
-    '#!/usr/local/bin/python'#13#10 +
-    'import string, sys'#13#10 +
-    '""" If no arguments were given, print a helpful message """'#13#10 +
-    'if len(sys.argv)==1:'#13#10 +
-    '    print ''Usage: celsius temp1 temp2 ...'''#13#10 +
-    '    sys.exit(0)';
+  Result := '';
 end;
 
 class function TSynPythonSyn.GetFriendlyLanguageName: UnicodeString;

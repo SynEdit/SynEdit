@@ -594,18 +594,7 @@ end; { LFProc }
 
 function TSynSDDSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '{ Semanta data dictionary }'#13#10 +
-            'database Sample.001;'#13#10 +
-            'owner = COAS;'#13#10 +
-            #13#10 +
-            'objects'#13#10 +
-            '  Test = object'#13#10 +
-            '    Code : string[4];'#13#10 +
-            '    Name : string[80];'#13#10 +
-            '  end;'#13#10 +
-            'keys'#13#10 +
-            '  primary Test.Index = [Code];'#13#10 +
-            'end.';
+  Result := '';
 end; { GetSampleSource }
 
 function TSynSDDSyn.GetDefaultAttribute(Index: Integer): TSynHighLighterAttributes;

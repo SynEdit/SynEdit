@@ -411,13 +411,7 @@ end;
 
 function TSynURISyn.GetSampleSource: UnicodeString;
 begin
-  Result := 'Universal Resource Identifier highlighting'#13#10#13#10 +
-            'http://www.somewhere.org'#13#10 +
-            'ftp://superhost.org/downloads/gems.zip'#13#10 +
-            'www.w3c.org'#13#10 +
-            'mailto:big@lebowski.edu'#13#10 +
-            'douglas@adams.lod'#13#10 +
-            'news:comp.lang.pascal.borland';
+  Result := '';
 end;
 
 function TSynURISyn.IsFilterStored: Boolean;

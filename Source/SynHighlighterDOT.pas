@@ -2022,47 +2022,7 @@ end;
 
 function TSynDOTSyn.GetSampleSource: UnicodeString;
 begin
-  Result :=
-    '// ATT DOT Graphic description language'#13#10 +
-    'digraph asde91 {'#13#10 +
-    '  ranksep=.75; size = "7.5,7.5";'#13#10 +
-    '  {'#13#10 +
-    '      node [shape=plaintext, fontsize=16];'#13#10 +
-    '      /* the time-line graph */'#13#10 +
-    '      past -> 1978 -> 1980 -> 1982 -> 1983 -> 1985 -> 1986 ->'#13#10 +
-    '      1987 -> 1988 -> 1989 -> 1990 -> "future";'#13#10 +
-    '      /* ancestor programs */'#13#10 +
-    '      "Bourne sh"; "make"; "SCCS"; "yacc"; "cron"; "Reiser cpp";'#13#10 +
-    '      "Cshell"; "emacs"; "build"; "vi"; "<curses>"; "RCS"; "C*";'#13#10 +
-    '  }'#13#10 +
-    '      { rank = same;'#13#10 +
-    '      "Software IS"; "Configuration Mgt"; "Architecture & Libraries";'#13#10 +
-    '      "Process";'#13#10 +
-    '  };'#13#10 +
-    '    node [shape=box];'#13#10 +
-    '    { rank = same; "past"; "SCCS"; "make"; "Bourne sh"; "yacc"; "cron"; }'#13#10 +
-    '    { rank = same; 1978; "Reiser cpp"; "Cshell"; }'#13#10 +
-    '    { rank = same; 1980; "build"; "emacs"; "vi"; }'#13#10 +
-    '    { rank = same; 1982; "RCS"; "<curses>"; "IMX"; "SYNED"; }'#13#10 +
-    '    { rank = same; 1983; "ksh"; "IFS"; "TTU"; }'#13#10 +
-    '    { rank = same; 1985; "nmake"; "Peggy"; }'#13#10 +
-    '    { rank = same; 1986; "C*"; "ncpp"; "ksh-i"; "<curses-i>"; "PG2"; }'#13#10 +
-    '    { rank = same; 1987; "Ansi cpp"; "nmake 2.0"; "3D File System"; "fdelta";'#13#10 +
-    '        "DAG"; "CSAS";}'#13#10 +
-    '    { rank = same; 1988; "CIA"; "SBCS"; "ksh-88"; "PEGASUS/PML"; "PAX";'#13#10 +
-    '        "backtalk"; }'#13#10 +
-    '    { rank = same; 1989; "CIA++"; "APP"; "SHIP"; "DataShare"; "ryacc";'#13#10 +
-    '        "Mosaic"; }'#13#10 +
-    '    { rank = same; 1990; "libft"; "CoShell"; "DIA"; "IFS-i"; "kyacc"; "sfio";'#13#10 +
-    '        "yeast"; "ML-X"; "DOT"; }'#13#10 +
-    '    { rank = same; "future"; "Adv. Software Technology"; }'#13#10 +
-    '    "PEGASUS/PML" -> "ML-X";'#13#10 +
-    '    "SCCS" -> "nmake";'#13#10 +
-    '    "SCCS" -> "3D File System";'#13#10 +
-    '    "SCCS" -> "RCS";'#13#10 +
-    '    "make" -> "nmake";'#13#10 +
-    '    "make" -> "build";'#13#10 +
-    '}';
+  Result :='';
 end;
 
 function TSynDOTSyn.IsFilterStored: Boolean;

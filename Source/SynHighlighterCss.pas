@@ -1048,9 +1048,7 @@ end;
 
 function TSynCssSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '/* Syntax Highlighting */'#13#10 +
-        'body { font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif; font-size: 8pt }'#13#10 +
-        'H1 { font-size: 18pt; color: #000099; made-up-property: 1 }';
+  Result := '';
 end; { GetSampleSource }
 
 class function TSynCssSyn.GetLanguageName: string;

@@ -648,16 +648,7 @@ end;
 
 function TSynSMLSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '(* Syntax highlighting *)'#13#10 +
-            'load "Real";'#13#10 +
-            'fun PrintNumber(x: int) ='#13#10 +
-            '  let'#13#10 +
-            '    val Number = real(x) / 10.0;'#13#10 +
-            '    val Text = "The Number is " ^ Real.toString(~Number) ^ "\n";'#13#10 +
-            '  in'#13#10 +
-            '    print Text;'#13#10 +
-            '    if x = 0 then () else PrintNumber(x-1)'#13#10+
-            '  end;' 
+  Result := ''; 
 end;
 
 procedure TSynSMLSyn.ResetRange;

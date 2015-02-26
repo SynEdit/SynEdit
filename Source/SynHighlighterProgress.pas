@@ -1056,26 +1056,7 @@ end;
 
 function TSynProgressSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '&scoped-define FirstChar 65'#13#10+
-            '&scoped-define LastChar  90'#13#10+
-            #13#10+
-            'def var i as int no-undo.'#13#10+
-            'def var s as char no-undo.'#13#10+
-            #13#10+
-            'function GetRandomChar returns char (input SomeValue as int):'#13#10+
-            '  return chr(random({&FirstChar}, {&LastChar})).'#13#10+
-            'end.'#13#10+
-            #13#10+
-            'procedure ClearString:'#13#10+
-            '  def input-output param str as char no-undo.'#13#10+
-            '  str = "".'#13#10+
-            'end.'#13#10+
-            #13#10+
-            'run ClearString(input-output s).'#13#10+
-            'do i = 1 to 100:'#13#10+
-            '  s = s + GetRandomChar(17).'#13#10+
-            'end.'#13#10+
-            'display s.';
+  Result := '';
 end;
 
 class function TSynProgressSyn.GetFriendlyLanguageName: UnicodeString;

@@ -992,17 +992,7 @@ end;
 
 function TSynJavaSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '/* Java syntax highlighting */'#13#10 +
-            'import java.util.*;'#13#10 +
-            #13#10 +
-            '/** Example class */'#13#10 +
-            'public class Sample {'#13#10 +
-            '  public static void main(String[] args) {'#13#10 +
-            '    int i = 0;'#13#10 +
-            '    for(i = 0; i < 10; i++)'#13#10 +
-            '      System.out.println("Hello world");'#13#10 +
-            '  }'#13#10 +
-            '}';
+  Result := '';
 end;
 
 class function TSynJavaSyn.GetFriendlyLanguageName: UnicodeString;

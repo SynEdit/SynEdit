@@ -758,21 +758,7 @@ end;
 
 function TSynUNIXShellScriptSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '######################################'#13#10 +
-            '# Here is a comment about some stuff #'#13#10 +
-            '######################################'#13#10 +
-            ''#13#10 +
-            'case $BUILD_MODE in'#13#10 +
-            '  full )'#13#10 +
-            '      MyFirstFunction'#13#10 +
-            '      ;;'#13#10 +
-            '  rekit)'#13#10 +
-            '      MySecondFunction'#13#10 +
-            '    ;;'#13#10 +
-            '  installer)'#13#10 +
-            '      MyThirdFunction'#13#10 +
-            '    ;;'#13#10 +
-            'esac';
+  Result := '';
 end;
 
 class function TSynUNIXShellScriptSyn.GetFriendlyLanguageName: UnicodeString;

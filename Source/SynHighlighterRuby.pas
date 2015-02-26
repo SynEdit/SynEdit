@@ -721,16 +721,7 @@ end;
 
 function TSynRubySyn.GetSampleSource: UnicodeString;
 begin
-  Result :=
-    '# Factorial'+#13#10+
-    'def fact(n)'+#13#10+
-    '  if n == 0'+#13#10+
-    '    1'+#13#10+
-    '  else'+#13#10+
-    '    n * fact(n-1)'+#13#10+
-    '  end'+#13#10+
-    'end'+#13#10+
-    'print fact(ARGV[0].to_i), "\n"';
+  Result := '';
 end;
 
 class function TSynRubySyn.GetFriendlyLanguageName: UnicodeString;

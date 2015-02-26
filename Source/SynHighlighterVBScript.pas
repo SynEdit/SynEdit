@@ -456,14 +456,7 @@ end;
 
 function TSynVBScriptSyn.GetSampleSource: UnicodeString;
 begin
-  Result := ''' Syntax highlighting'#13#10 +
-            'function printNumber()'#13#10 +
-            '  number = 12345'#13#10 +
-            '  document.write("The number is " + number)'#13#10 +
-            '  for i = 0 to 10'#13#10 +
-            '    x = x + 1.0'#13#10 +
-            '  next'#13#10 +
-            'end function';
+  Result := '';
 end;
 
 class function TSynVBScriptSyn.GetFriendlyLanguageName: UnicodeString;

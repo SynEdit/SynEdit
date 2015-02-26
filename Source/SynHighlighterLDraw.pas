@@ -462,15 +462,7 @@ end;
 
 function TSynLDRSyn.GetSampleSource: UnicodeString;
 begin
-  Result := #13#10 +
-            'Sample source for: '#13#10 +
-            'Ldraw Parser/Highlighter'#13#10 +
-            '0 Comment'#13#10 +
-            '1 16 0 0 0 1 0 0 0 1 0 0 0 1 stud.dat'#13#10 +
-            '2 16 0 0 0 1 1 1'#13#10 +
-            '3 16 0 0 0 1 1 1 2 2 2'#13#10 +
-            '4 16 0 0 0 1 1 1 2 2 2 3 3 3'#13#10 +
-            '5 16 0 0 0 1 1 1 2 2 2 3 3 3';
+  Result := '';
 end;
 
 function TSynLDRSyn.IsFilterStored: Boolean;
