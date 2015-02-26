@@ -201,7 +201,7 @@ type
     procedure LoadFromFile(const FileName: WideString); virtual;
     procedure LoadFromStream(Stream: TStream); virtual;
     procedure Move(CurIndex, NewIndex: Integer); virtual;
-    procedure SaveToFile(const FileName: TFileName); virtual;
+    procedure SaveToFile(const FileName: WideString); virtual;
     procedure SaveToStream(Stream: TStream; WithBOM: Boolean = True); virtual;
     procedure SetTextStr(const Value: UnicodeString); virtual;
 
@@ -999,11 +999,11 @@ begin
   end;
 end;
 
-procedure TUnicodeStrings.SaveToFile(const FileName: TFileName);
+procedure TUnicodeStrings.SaveToFile(const FileName: WideString);
 var
   Stream: TStream;
 begin
-  Stream := TFileStream.Create(FileName, fmCreate);
+  Stream := TWideFileStream.Create(FileName, fmCreate);
   try
     SaveToStream(Stream);
   finally
