@@ -201,7 +201,8 @@ type
     procedure LoadFromFile(const FileName: WideString); virtual;
     procedure LoadFromStream(Stream: TStream); virtual;
     procedure Move(CurIndex, NewIndex: Integer); virtual;
-    procedure SaveToFile(const FileName: WideString); virtual;
+    procedure SaveToFile(const FileName: WideString); overload; virtual;
+    procedure SaveToFile(const FileName: WideString; WithBOM: Boolean); overload; virtual;
     procedure SaveToStream(Stream: TStream; WithBOM: Boolean = True); virtual;
     procedure SetTextStr(const Value: UnicodeString); virtual;
 
@@ -1006,6 +1007,18 @@ begin
   Stream := TWideFileStream.Create(FileName, fmCreate);
   try
     SaveToStream(Stream);
+  finally
+    Stream.Free;
+  end;
+end;
+
+procedure TUnicodeStrings.SaveToFile(const FileName: WideString; WithBOM: Boolean);
+var
+  Stream: TStream;
+begin
+  Stream := TWideFileStream.Create(FileName, fmCreate);
+  try
+    SaveToStream(Stream, WithBOM);
   finally
     Stream.Free;
   end;
