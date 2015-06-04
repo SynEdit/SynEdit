@@ -137,6 +137,7 @@ contains
   SynHighlighterEiffel in '..\Source\SynHighlighterEiffel.pas',
   SynUnicode in '..\Source\SynUnicode.pas' {$IFNDEF CPUX64},
   SynUsp10 in '..\Source\SynUsp10.pas' {$ENDIF},
-  SynEditHighlighterOptions in '..\Source\SynEditHighlighterOptions.pas';
+  SynEditHighlighterOptions in '..\Source\SynEditHighlighterOptions.pas',
+  SynVCLStyleHooks in '..\Source\SynVCLStyleHooks.pas';
 
 end.
