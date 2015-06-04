@@ -127,7 +127,6 @@
 			<DCCReference Include="..\Source\SynHighlighterInno.pas"/>
 			<DCCReference Include="..\Source\SynHighlighterJava.pas"/>
 			<DCCReference Include="..\Source\SynHighlighterJScript.pas"/>
-			<DCCReference Include="..\Source\SynHighlighterJSON.pas"/>
 			<DCCReference Include="..\Source\SynHighlighterKix.pas"/>
 			<DCCReference Include="..\Source\SynHighlighterM3.pas"/>
 			<DCCReference Include="..\Source\SynHighlighterModelica.pas"/>
@@ -159,7 +158,6 @@
 			<DCCReference Include="..\Source\SynHighlighterURI.pas"/>
 			<DCCReference Include="..\Source\SynURIOpener.pas"/>
 			<DCCReference Include="..\Source\SynHighlighterDOT.pas"/>
-			<DCCReference Include="..\Source\SynHighlighterDWS.pas"/>
 			<DCCReference Include="..\Source\SynHighlighterVrml97.pas"/>
 			<DCCReference Include="..\Source\SynHighlighterEiffel.pas"/>
 			<DCCReference Include="..\Source\SynUnicode.pas"/>

@@ -123,16 +123,12 @@ contains
   SynMacroRecorder in '..\Source\SynMacroRecorder.pas',
   SynMemo in '..\Source\SynMemo.pas',
   SynRegExpr in '..\Source\SynRegExpr.pas',
-  SynHighlighterCss in '..\Source\SynHighlighterCss.pas',
+  SynHighlighterCSS in '..\Source\SynHighlighterCss.pas',
   SynHighlighterLDraw in '..\Source\SynHighlighterLDraw.pas',
   SynHighlighterURI in '..\Source\SynHighlighterURI.pas',
   SynURIOpener in '..\Source\SynURIOpener.pas',
   SynHighlighterDOT in '..\Source\SynHighlighterDOT.pas',
-  SynHighlighterDWS in '..\Source\SynHighlighterDWS.pas',
   SynHighlighterVrml97 in '..\Source\SynHighlighterVrml97.pas',
-  SynHighlighterEiffel in '..\Source\SynHighlighterEiffel.pas',
-  SynUnicode in '..\Source\SynUnicode.pas',
-  SynUsp10 in '..\Source\SynUsp10.pas',
-  SynEditHighlighterOptions in '..\Source\SynEditHighlighterOptions.pas';
+  SynHighlighterEiffel in '..\Source\SynHighlighterEiffel.pas';
 
 end.
