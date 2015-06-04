@@ -178,7 +178,7 @@ type
   TGutterPaintEvent = procedure(Sender: TObject; aLine: Integer;
     X, Y: Integer) of object;
 
-  TSynEditCaretType = (ctVerticalLine, ctHorizontalLine, ctHalfBlock, ctBlock);
+  TSynEditCaretType = (ctVerticalLine, ctHorizontalLine, ctHalfBlock, ctBlock, ctVerticalLine2);
 
   TSynStateFlag = (sfCaretChanged, sfScrollbarChanged, sfLinesChanging,
     sfIgnoreNextChar, sfCaretVisible, sfDblClicked, sfPossibleGutterClick,
@@ -6809,6 +6809,12 @@ begin
         ch := fTextHeight - 2;
         FCaretOffset := Point(0, 0);
       end;
+    ctVerticalLine2:
+      begin
+      cw := 2;
+      ch := fTextHeight + 1;
+      FCaretOffset := Point(0, 0);
+      end;
     else
     begin // ctVerticalLine
       cw := 2;
@@ -7711,7 +7717,8 @@ begin
       ecTitleCase,
       ecUpperCaseBlock,
       ecLowerCaseBlock,
-      ecToggleCaseBlock:
+      ecToggleCaseBlock,
+      ecTitleCaseBlock:
         if not ReadOnly then DoCaseChange(Command);
       ecUndo:
         begin
@@ -8991,12 +8998,21 @@ procedure TCustomSynEdit.DoCaseChange(const Cmd: TSynEditorCommand);
     end;
   end;
 
+  function TitleCase(const aStr: UnicodeString): UnicodeString;
+  var
+    i: Integer;
+  begin
+   Result:=SynWideLowerCase(aStr);
+   for i := 1 to Length(Result) do
+   if (i = 1) or IsWordBreakChar(Result[i-1]) then Result[i] := SynWideUpperCase(Result[i])[1];
+  end;
+
 var
   w: UnicodeString;
   oldCaret, oldBlockBegin, oldBlockEnd: TBufferCoord;
   bHadSel : Boolean;
 begin
-  Assert((Cmd >= ecUpperCase) and (Cmd <= ecToggleCaseBlock));
+  Assert((Cmd >= ecUpperCase) and (Cmd <= ecTitleCaseBlock));
   if SelAvail then
   begin
     bHadSel := True;
@@ -9048,8 +9064,8 @@ begin
           w := SynWideLowerCase(w);
         ecToggleCase, ecToggleCaseBlock:
           w := ToggleCase(w);
-        ecTitleCase:
-          w := SynWideUpperCase(w[1]) + SynWideLowerCase(Copy(w, 2, Length(w)));
+        ecTitleCase, ecTitleCaseBlock:
+          w := TitleCase(w);
       end;
       BeginUndoBlock;
       try

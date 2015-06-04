@@ -353,7 +353,7 @@ end;
 
 procedure TSynJSONSyn.StringProc;
 
-  function IsHex(Digit: Char): Boolean; overload; 
+  function IsHex(Digit: AnsiChar): Boolean; overload;
   begin 
     Result := CharInSet(Digit, ['0'..'9', 'A'..'F', 'a'..'f']); 
   end; 
