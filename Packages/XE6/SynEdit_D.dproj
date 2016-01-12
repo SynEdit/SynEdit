@@ -88,7 +88,7 @@
 			<DelphiCompile Include="$(MainSource)">
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
-			<DCCReference Include="..\Source\SynEditReg.dcr"/>
+			<DCCReference Include="..\..\Source\SynEditReg.dcr"/>
 			<DCCReference Include="designide.dcp"/>
 			<DCCReference Include="SynEdit_R.dcp"/>
 			<DCCReference Include="..\..\Source\SynEditReg.pas"/>
