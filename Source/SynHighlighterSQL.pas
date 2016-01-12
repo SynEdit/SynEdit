@@ -1885,7 +1885,11 @@ procedure TSynSQLSyn.InitializeKeywordLists;
 var
   I: Integer;
 begin
+{$IFDEF LIST_CLEAR_NOT_VIRTUAL}
   fKeywords.DeleteEntries;
+{$ELSE}
+  fKeywords.Clear;
+{$ENDIF}
 
   for I := 0 to Ord(High(TtkTokenKind)) - 1 do
     EnumerateKeywords(I, GetKeywords(I), IsIdentChar, DoAddKeyword);
