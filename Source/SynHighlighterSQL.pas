@@ -1906,7 +1906,7 @@ end;
 
 procedure TSynSQLSyn.SetFunctionNames(const Value: TUnicodeStrings);
 begin
-  fFunctionNames := Value;
+  fFunctionNames.Assign(Value);
 end;
 
 function TSynSQLSyn.GetSampleSource: UnicodeString;
