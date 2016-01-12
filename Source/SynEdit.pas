@@ -4320,6 +4320,7 @@ var
   var
     x, MarkOffset, MarkOffset2: Integer;
     UpdateMarks: Boolean;
+    Count: Integer;
   begin
     UpdateMarks := False;
     MarkOffset := 0;
@@ -4381,9 +4382,14 @@ var
           MarkOffset := 1;
         end;
     end;
+
     // Update marks
     if UpdateMarks then
-      DoLinesDeleted(BB.Line + MarkOffset2, BE.Line - BB.Line + MarkOffset);
+    begin
+      Count := BE.Line - BB.Line + MarkOffset;
+      if Count > 0 then
+        DoLinesDeleted(BB.Line + MarkOffset2, Count);
+    end;
   end;
 
   procedure InsertText;
