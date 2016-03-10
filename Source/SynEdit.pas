@@ -10299,23 +10299,25 @@ end;
 function TCustomSynEdit.GetWordAtRowCol(XY: TBufferCoord): UnicodeString;
 var
   Line: UnicodeString;
-  Len, Stop: Integer;
+  Start, Stop: Integer;
 begin
   Result := '';
   if (XY.Line >= 1) and (XY.Line <= Lines.Count) then
   begin
     Line := Lines[XY.Line - 1];
-    Len := Length(Line);
-    if Len = 0 then Exit;
-    if (XY.Char >= 1) and (XY.Char <= Len + 1) and IsIdentChar(Line[XY.Char]) then
+    if (Length(Line) > 0) and
+       ((XY.Char >= Low(Line)) and (XY.Char <= High(Line))) and
+       IsIdentChar(Line[XY.Char]) then
     begin
-      Stop := XY.Char;
-      while (Stop <= Len) and IsIdentChar(Line[Stop]) do
-        Inc(Stop);
-      while (XY.Char > 1) and IsIdentChar(Line[XY.Char - 1]) do
-        Dec(XY.Char);
-      if Stop > XY.Char then
-        Result := Copy(Line, XY.Char, Stop - XY.Char);
+       Start := XY.Char;
+       while (Start > Low(Line)) and IsIdentChar(Line[Start - 1]) do
+          Dec(Start);
+
+       Stop := XY.Char + 1;
+       while (Stop <= High(Line)) and IsIdentChar(Line[Stop]) do
+          Inc(Stop);
+
+       Result := Copy(Line, Start, Stop - Start);
     end;
   end;
 end;
