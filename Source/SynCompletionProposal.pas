@@ -2458,7 +2458,20 @@ begin
     exit;
   end;
 
+{$IFDEF SYN_DELPHI_XE_UP}
+  if Assigned(Application.MainForm) then
+  begin
+    Form.PopupMode := pmExplicit;
+    Form.PopupParent := Application.MainForm;
+  end
+  else
+  begin
+    Form.PopupMode := pmNone;
+    Form.FormStyle := fsStayOnTop;
+  end;
+{$ELSE}
   Form.FormStyle := fsStayOnTop;
+{$ENDIF}
 
   if Assigned(Form.CurrentEditor) then
   begin
