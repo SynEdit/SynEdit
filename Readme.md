@@ -21,3 +21,7 @@ Therefore this is now called SynEdit, and it is an Open Source project under the
 There would however be no such project if Martin had not started to develop
 mwEdit, so we would like to thank Martin Waldenburg for his efforts, and of
 course all the other developers of the mwEdit project.
+
+Misc.
+-----
+Delphinus support added
