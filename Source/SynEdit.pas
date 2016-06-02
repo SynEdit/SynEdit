@@ -10638,7 +10638,7 @@ function TCustomSynEdit.RowColToCharIndex(RowCol: TBufferCoord): Integer;
 var
   synEditStringList : TSynEditStringList;
 begin
-  RowCol.Line := Min(Lines.Count, RowCol.Line) - 1;
+  RowCol.Line := Max(0, Min(Lines.Count, RowCol.Line) - 1);
   synEditStringList := (FLines as TSynEditStringList);
   // CharIndexToRowCol assumes a line break size of two
   Result :=  synEditStringList.LineCharIndex(RowCol.Line)
