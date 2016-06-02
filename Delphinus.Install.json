@@ -2,15 +2,15 @@
         "search_pathes": 
     [
         {
-            "pathes": "Source",
-            "platforms": "Win32;Win64;OSX32"
+            "pathes": ".",
+            "platforms": "Win32;Win64"
         }
     ],
     "browsing_pathes": 
     [
         {
-            "pathes": "Source",
-            "platforms": "Win32;Win64;OSX32"
+            "pathes": ".",
+            "platforms": "Win32;Win64"
         }
     ],
 
