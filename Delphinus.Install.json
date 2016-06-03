@@ -2,14 +2,14 @@
         "search_pathes": 
     [
         {
-            "pathes": ".",
+            "pathes": "Source",
             "platforms": "Win32;Win64"
         }
     ],
     "browsing_pathes": 
     [
         {
-            "pathes": ".",
+            "pathes": "Source",
             "platforms": "Win32;Win64"
         }
     ],
@@ -18,9 +18,9 @@
     [
         {
             "folder": "Source",
-            "base": "Source",
+            "base": ".",
             "recursive": true,
-            "filter": "*;*.*"
+            "filter": "*"
         }
     ],
 
