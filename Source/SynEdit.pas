@@ -10300,6 +10300,20 @@ begin
 end;
 
 function TCustomSynEdit.GetWordAtRowCol(XY: TBufferCoord): UnicodeString;
+
+// TODO: consider removing the use of Low/High(string) since this code is anyway not zero-based strings ready
+{$IFNDEF SYN_COMPILER_17_UP}
+  function Low(AStr: UnicodeString): Integer; {$IFDEF SYN_COMPILER_9_UP}inline;{$ENDIF}
+  begin
+    Result := 1;
+  end;
+
+  function High(AStr: UnicodeString): Integer; {$IFDEF SYN_COMPILER_9_UP}inline;{$ENDIF}
+  begin
+    Result := Length(AStr);
+  end;
+{$ENDIF}
+
 var
   Line: UnicodeString;
   Start, Stop: Integer;
