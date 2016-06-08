@@ -117,6 +117,9 @@ uses
   SynUnicode,
   Graphics,
 {$ENDIF}
+{$IFDEF SYN_DELPHI_XE3_UP}
+  System.UITypes,
+{$ENDIF}
   Classes,
   SysUtils;
 

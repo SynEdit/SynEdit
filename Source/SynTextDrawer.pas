@@ -73,6 +73,10 @@ uses
   Classes,
   Windows,
   Graphics,
+{$IFDEF SYN_DELPHI_XE3_UP}
+  System.Types,
+  System.UITypes,
+{$ENDIF}
   Math;
 
 const

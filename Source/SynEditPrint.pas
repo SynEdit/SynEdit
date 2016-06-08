@@ -120,6 +120,9 @@ uses
   SynEditHighlighter,
   SynUnicode,
 {$ENDIF}
+{$IFDEF SYN_DELPHI_XE3_UP}
+  System.UITypes,
+{$ENDIF}
   SysUtils,
   Classes;
 

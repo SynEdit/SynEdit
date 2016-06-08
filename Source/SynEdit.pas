@@ -112,6 +112,9 @@ uses
 {$IFDEF UNICODE}
   WideStrUtils,
 {$ENDIF}
+{$IFDEF SYN_DELPHI_XE3_UP}
+  System.Types,
+{$ENDIF}
   Math,
   SysUtils,
   Classes;
@@ -5091,8 +5094,11 @@ end;
 procedure TCustomSynEdit.WMDropFiles(var Msg: TMessage);
 var
   i, iNumberDropped: Integer;
-  FileNameA: array[0..MAX_PATH - 1] of AnsiChar;
+{$IFDEF UNICODE}
   FileNameW: array[0..MAX_PATH - 1] of WideChar;
+{$ELSE}
+  FileNameA: array[0..MAX_PATH - 1] of AnsiChar;
+{$ENDIF}
   Point: TPoint;
   FilesList: TUnicodeStringList;
 begin
