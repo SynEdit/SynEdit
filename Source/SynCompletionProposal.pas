@@ -84,7 +84,8 @@ uses
   SynEdit,
   SynUnicode,
 {$ENDIF}
-{$IFDEF SYN_DELPHI_XE3_UP}
+{$IFDEF SYN_COMPILER_INLINING}
+  System.Types,
   System.UITypes,
 {$ENDIF}
   SysUtils,

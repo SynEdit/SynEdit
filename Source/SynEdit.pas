@@ -112,7 +112,7 @@ uses
 {$IFDEF UNICODE}
   WideStrUtils,
 {$ENDIF}
-{$IFDEF SYN_DELPHI_XE3_UP}
+{$IFDEF SYN_COMPILER_INLINING}
   System.Types,
 {$ENDIF}
   Math,
