@@ -165,6 +165,8 @@ type
 
   TSpecialLineColorsEvent = procedure(Sender: TObject; Line: Integer;
     var Special: Boolean; var FG, BG: TColor) of object;
+  TSpecialTokenAttributesEvent = procedure(Sender: TObject; ALine, APos: Integer; const AToken: string;
+    var ASpecial: Boolean; var FG, BG: TColor; var AStyle: TFontStyles) of object;
 
   TTransientType = (ttBefore, ttAfter);
   TPaintTransient = procedure(Sender: TObject; Canvas: TCanvas;
@@ -473,6 +475,7 @@ type
     fOnProcessUserCommand: TProcessCommandEvent;
     fOnReplaceText: TReplaceTextEvent;
     fOnSpecialLineColors: TSpecialLineColorsEvent;
+    fOnSpecialTokenAttributes: TSpecialTokenAttributesEvent;
     fOnContextHelp: TContextHelpEvent;
     fOnPaintTransient: TPaintTransient;
     fOnScroll: TScrollEvent;
@@ -741,6 +744,8 @@ type
       Line, Column: Integer): TSynReplaceAction; virtual;
     function DoOnSpecialLineColors(Line: Integer;
       var Foreground, Background: TColor): Boolean; virtual;
+    procedure DoOnSpecialTokenAttributes(ALine, APos: Integer; const AToken: string; var FG, BG: TColor;
+      var AStyle: TFontStyles);
     procedure DoOnStatusChange(Changes: TSynStatusChanges); virtual;
     function GetSelEnd: integer;
     function GetSelStart: integer;
@@ -1014,6 +1019,8 @@ type
       write fOnReplaceText;
     property OnSpecialLineColors: TSpecialLineColorsEvent
       read fOnSpecialLineColors write fOnSpecialLineColors;
+    property OnSpecialTokenAttributes: TSpecialTokenAttributesEvent
+      read fOnSpecialTokenAttributes write fOnSpecialTokenAttributes;
     property OnStatusChange: TStatusChangeEvent
       read fOnStatusChange write fOnStatusChange;
     property OnPaintTransient: TPaintTransient
@@ -3437,6 +3444,8 @@ var
     vLastChar: Integer;
     vStartRow: Integer;
     vEndRow: Integer;
+    TokenFG, TokenBG: TColor;
+    TokenStyle: TFontStyles;
   begin
     // Initialize rcLine for drawing. Note that Top and Bottom are updated
     // inside the loop. Get only the starting point for this.
@@ -3617,11 +3626,19 @@ var
               // It's at least partially visible. Get the token attributes now.
               attr := fHighlighter.GetTokenAttribute;
               if Assigned(attr) then
-                AddHighlightToken(sToken, nTokenPos, nTokenLen, attr.Foreground,
-                  attr.Background, attr.Style)
+              begin
+                TokenFG := attr.Foreground;
+                TokenBG := attr.Background;
+                TokenStyle := attr.Style;
+              end
               else
-                AddHighlightToken(sToken, nTokenPos, nTokenLen, colFG, colBG,
-                  Font.Style);
+              begin
+                TokenFG := colFG;
+                TokenBG := colBG;
+                TokenStyle := Font.Style;
+              end;
+              DoOnSpecialTokenAttributes(nLine, nTokenPos, sToken, TokenFG, TokenBG, TokenStyle);
+              AddHighlightToken(sToken, nTokenPos, nTokenLen, TokenFG, TokenBG, TokenStyle);
             end;
             // Let the highlighter scan the next token.
             fHighlighter.Next;
@@ -9911,6 +9928,18 @@ begin
     fOnSpecialLineColors(Self, Line, Result, Foreground, Background);
 end;
 
+procedure TCustomSynEdit.DoOnSpecialTokenAttributes(ALine, APos: Integer; const AToken: string; var FG, BG: TColor;
+  var AStyle: TFontStyles);
+var
+  Special: Boolean;
+begin
+  if Assigned(fOnSpecialTokenAttributes) then
+  begin
+    Special := False;
+    fOnSpecialTokenAttributes(Self, ALine, APos, AToken, Special, FG, BG, AStyle);
+  end;
+end;
+
 procedure TCustomSynEdit.InvalidateLine(Line: Integer);
 var
   rcInval: TRect;
@@ -10310,6 +10339,20 @@ begin
 end;
 
 function TCustomSynEdit.GetWordAtRowCol(XY: TBufferCoord): UnicodeString;
+
+// TODO: consider removing the use of Low/High(string) since this code is anyway not zero-based strings ready
+{$IFNDEF SYN_COMPILER_17_UP}
+  function Low(AStr: UnicodeString): Integer; {$IFDEF SYN_COMPILER_9_UP}inline;{$ENDIF}
+  begin
+    Result := 1;
+  end;
+
+  function High(AStr: UnicodeString): Integer; {$IFDEF SYN_COMPILER_9_UP}inline;{$ENDIF}
+  begin
+    Result := Length(AStr);
+  end;
+{$ENDIF}
+
 var
   Line: UnicodeString;
   Start, Stop: Integer;
