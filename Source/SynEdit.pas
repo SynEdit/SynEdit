@@ -2564,6 +2564,7 @@ begin
   nL1 := Max(TopLine + rcClip.Top div fTextHeight, TopLine);
   nL2 := MinMax(TopLine + (rcClip.Bottom + fTextHeight - 1) div fTextHeight,
     1, DisplayLineCount);
+
   // Now paint everything while the caret is hidden.
   HideCaret;
   try
@@ -2581,14 +2582,19 @@ begin
       rcDraw.Left := Max(rcDraw.Left, fGutterWidth);
       PaintTextLines(rcDraw, nL1, nL2, nC1, nC2);
     end;
-    PluginsAfterPaint(Canvas, rcClip, nL1, nL2);
+
+    // consider paint lock (inserted by CWBudde, 30th of July 2015)
+    if PaintLock = 0 then
+      PluginsAfterPaint(Canvas, rcClip, nL1, nL2);
 {$IFDEF SYN_CLX}
     if iRestoreViewPort then
       QPainter_setViewport(Canvas.Handle, 0, 0, Width, Height);
 {$ENDIF}
     // If there is a custom paint handler call it.
-    DoOnPaint;
-    DoOnPaintTransient(ttAfter);
+    if PaintLock = 0 then
+      DoOnPaint;
+    if PaintLock = 0 then
+      DoOnPaintTransient(ttAfter);
   finally
     UpdateCaret;
   end;
@@ -5116,12 +5122,15 @@ begin
           nil, 0);
         DragQueryPoint(THandle(Msg.wParam), Point);
 
+{$IFNDEF UNICODE}
         if Win32PlatformIsUnicode then
+{$ENDIF}
           for i := 0 to iNumberDropped - 1 do
           begin
             DragQueryFileW(THandle(Msg.wParam), i, FileNameW,
               sizeof(FileNameW) div 2);
             FilesList.Add(FileNameW)
+{$IFNDEF UNICODE}
           end
         else
           for i := 0 to iNumberDropped - 1 do
@@ -5129,6 +5138,7 @@ begin
             DragQueryFileA(THandle(Msg.wParam), i, FileNameA,
               sizeof(FileNameA));
             FilesList.Add(UnicodeString(FileNameA))
+{$ENDIF}
           end;
         fOnDropFiles(Self, Point.X, Point.Y, FilesList);
       finally
@@ -10671,7 +10681,7 @@ function TCustomSynEdit.RowColToCharIndex(RowCol: TBufferCoord): Integer;
 var
   synEditStringList : TSynEditStringList;
 begin
-  RowCol.Line := Min(Lines.Count, RowCol.Line) - 1;
+  RowCol.Line := Max(0, Min(Lines.Count, RowCol.Line) - 1);
   synEditStringList := (FLines as TSynEditStringList);
   // CharIndexToRowCol assumes a line break size of two
   Result :=  synEditStringList.LineCharIndex(RowCol.Line)

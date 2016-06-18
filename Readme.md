@@ -16,8 +16,11 @@ Historical Note
 SynEdit had been started as an attempt to continue the no longer maintained
 sources of the mwEdit project. The last public version 0.92a of mwEdit can be
 found at the SynEdit website in the download section.
+
 The mwEdit project was started in 1998 by Martin Waldenburg, aim was to produce a syntax highlighting editor component for an Open Source IDE. In the 15 months that mwEdit was developed in public Martin was increasingly dissatisfied with the direction the development of mwEdit took, so he finally requested that his name and initials had to be removed from the project.
 Therefore this is now called SynEdit, and it is an Open Source project under the MPL (Mozilla Public License, but see the individual source files for the terms).
-There would however be no such project if Martin had not started to develop
-mwEdit, so we would like to thank Martin Waldenburg for his efforts, and of
-course all the other developers of the mwEdit project.
+There would however be no such project if Martin had not started to develop mwEdit, so we would like to thank Martin Waldenburg for his efforts, and of course all the other developers of the mwEdit project.
+
+Misc.
+-----
+Delphinus support added
