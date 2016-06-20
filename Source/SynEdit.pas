@@ -83,7 +83,7 @@ uses
   Themes,
   {$ENDIF}
   {$IFDEF SYN_COMPILER_17_UP}
-  UITypes,
+  Types, UITypes,
   {$ENDIF}
   SynUnicode,
 {$ENDIF}
@@ -5108,7 +5108,9 @@ end;
 procedure TCustomSynEdit.WMDropFiles(var Msg: TMessage);
 var
   i, iNumberDropped: Integer;
+  {$IFNDEF UNICODE}
   FileNameA: array[0..MAX_PATH - 1] of AnsiChar;
+  {$ENDIF}
   FileNameW: array[0..MAX_PATH - 1] of WideChar;
   Point: TPoint;
   FilesList: TUnicodeStringList;
