@@ -83,7 +83,7 @@ uses
   Themes,
   {$ENDIF}
   {$IFDEF SYN_COMPILER_17_UP}
-  UITypes,
+  Types, UITypes,
   {$ENDIF}
   SynUnicode,
 {$ENDIF}
@@ -111,9 +111,6 @@ uses
 {$ENDIF}
 {$IFDEF UNICODE}
   WideStrUtils,
-{$ENDIF}
-{$IFDEF SYN_COMPILER_INLINING}
-  System.Types,
 {$ENDIF}
   Math,
   SysUtils,
@@ -5111,11 +5108,10 @@ end;
 procedure TCustomSynEdit.WMDropFiles(var Msg: TMessage);
 var
   i, iNumberDropped: Integer;
-{$IFDEF UNICODE}
-  FileNameW: array[0..MAX_PATH - 1] of WideChar;
-{$ELSE}
+  {$IFNDEF UNICODE}
   FileNameA: array[0..MAX_PATH - 1] of AnsiChar;
-{$ENDIF}
+  {$ENDIF}
+  FileNameW: array[0..MAX_PATH - 1] of WideChar;
   Point: TPoint;
   FilesList: TUnicodeStringList;
 begin
