@@ -123,9 +123,6 @@ uses
   SynEditHighlighter,
   SynUnicode,
 {$ENDIF}
-{$IFDEF SYN_COMPILER_INLINING}
-  System.UITypes,
-{$ENDIF}
   SysUtils,
   Classes;
 

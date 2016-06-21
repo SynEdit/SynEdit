@@ -87,10 +87,6 @@ uses
   SynEdit,
   SynUnicode,
 {$ENDIF}
-{$IFDEF SYN_COMPILER_INLINING}
-  System.Types,
-  System.UITypes,
-{$ENDIF}
   SysUtils,
   Classes;
 

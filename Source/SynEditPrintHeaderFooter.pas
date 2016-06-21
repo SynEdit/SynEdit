@@ -120,9 +120,6 @@ uses
   SynUnicode,
   Graphics,
 {$ENDIF}
-{$IFDEF SYN_COMPILER_INLINING}
-  System.UITypes,
-{$ENDIF}
   Classes,
   SysUtils;
 

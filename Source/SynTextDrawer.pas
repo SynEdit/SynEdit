@@ -76,10 +76,6 @@ uses
   Classes,
   Windows,
   Graphics,
-{$IFDEF SYN_COMPILER_INLINING}
-  System.Types,
-  System.UITypes,
-{$ENDIF}
   Math;
 
 const
