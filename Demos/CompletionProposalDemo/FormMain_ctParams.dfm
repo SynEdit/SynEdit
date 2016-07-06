@@ -33,12 +33,19 @@ object Form1: TForm1
     Gutter.Font.Name = 'Terminal'
     Gutter.Font.Style = []
     Gutter.Visible = False
-    Lines.WideStrings = 
-      'This is a Demo to show you how the '#13#10'Code Completion component w' +
-      'orks '#13#10'when the default kind is ctParams.'#13#10#13#10'Everything really d' +
-      'epends on the'#13#10'code you put in the execute event.'#13#10'This determin' +
-      'es what the parameters'#13#10'are and what index should be'#13#10'highlighte' +
-      'd.'#13#10#13#10'See the source file execute event'#13#10'for more information.'#13#10
+    Lines.Strings = (
+      'This is a Demo to show you how the '
+      'Code Completion component works '
+      'when the default kind is ctParams.'
+      ''
+      'Everything really depends on the'
+      'code you put in the execute event.'
+      'This determines what the parameters'
+      'are and what index should be'
+      'highlighted.'
+      ''
+      'See the source file execute event'
+      'for more information.')
     RemovedKeystrokes = <
       item
         Command = ecContextHelp
@@ -66,13 +73,24 @@ object Form1: TForm1
     Gutter.Font.Height = -11
     Gutter.Font.Name = 'Terminal'
     Gutter.Font.Style = []
-    Lines.WideStrings = 
-      'Use Shift+Ctrl+Space to activate Parameter'#13#10'completion, or type ' +
-      'the function name'#13#10'and the '#39'('#39' (open paren) to start it with'#13#10'th' +
-      'e timer.'#13#10#13#10'The valid functions for this example are'#13#10#13#10'TestFunc' +
-      'tion'#13#10'Min'#13#10'Max'#13#10#13#10'Below is an example using paren Counting:'#13#10'Max' +
-      '(a + b(1 + 2), (3 + 4) * c)'#13#10#13#10'Here is an example of embeded fun' +
-      'ctions'#13#10#13#10'TestFunction(Min(a, b), SomeVar, Another)'#13#10
+    Lines.Strings = (
+      'Use Shift+Ctrl+Space to activate Parameter'
+      'completion, or type the function name'
+      'and the '#39'('#39' (open paren) to start it with'
+      'the timer.'
+      ''
+      'The valid functions for this example are'
+      ''
+      'TestFunction'
+      'Min'
+      'Max'
+      ''
+      'Below is an example using paren Counting:'
+      'Max(a + b(1 + 2), (3 + 4) * c)'
+      ''
+      'Here is an example of embeded functions'
+      ''
+      'TestFunction(Min(a, b), SomeVar, Another)')
     RemovedKeystrokes = <
       item
         Command = ecContextHelp
@@ -116,8 +134,6 @@ object Form1: TForm1
     Editor = SynEdit1
     TimerInterval = 1200
     Left = 8
-    EndOfTokenChrW = '()[]. '
-    TriggerCharsW = '('
   end
   object FontDialog1: TFontDialog
     Font.Charset = DEFAULT_CHARSET

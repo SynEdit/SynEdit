@@ -138,7 +138,8 @@ end;
 
 procedure TForm1.edBiggestWordChange(Sender: TObject);
 begin
-  scpDemo.Columns[0].BiggestWord := edBiggestWord.Text;
+//TODO: set column width based on word length
+//  scpDemo.Columns[0].BiggestWord := edBiggestWord.Text;
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);

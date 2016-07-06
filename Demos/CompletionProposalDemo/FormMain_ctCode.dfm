@@ -55,26 +55,47 @@ object Form1: TForm1
         Gutter.Font.Name = 'Terminal'
         Gutter.Font.Style = []
         Gutter.Visible = False
-        Lines.WideStrings = 
-          'This is a Demo to show you how the'#13#10'Code Completion component wo' +
-          'rks'#13#10'when the default kind is ctCode.'#13#10#13#10'BiggestWord: If you are' +
-          ' using'#13#10'  PrettyText then this is the biggest'#13#10'  word that will ' +
-          'show up before the'#13#10'  *bold* words'#13#10#13#10'CaseSensitive: makes the t' +
-          'ext you'#13#10'  type and the matching in the'#13#10'  dropdown list case se' +
-          'nsitive'#13#10#13#10'AnsiStrings  : Use Ansi string'#13#10'  comparisons instead' +
-          ' of default'#13#10'  string comparisons'#13#10#13#10'UsePrettyText: Allows you t' +
-          'o format'#13#10'  the text displayed in the dropdown.'#13#10'  Please refer ' +
-          'to the tsyncompletion-'#13#10'  proposal.html file for a description'#13#10 +
-          '  of the available commands.'#13#10#13#10'UseInsertList: Lets you display ' +
-          'one'#13#10'  thing in the dropdown and insert'#13#10'  another thing when th' +
-          'ey choose an'#13#10'  item.  Like in Delphi, the'#13#10'  dropdown might dis' +
-          'play'#13#10'  "procedure foo(AVariable: Integer)"'#13#10'  and only insert f' +
-          'oo when you'#13#10'  select it.  The InsertList must'#13#10'  have as many i' +
-          'tems as the ItemList'#13#10'  or you will get a list index out'#13#10'  of b' +
-          'ounds error when you select'#13#10'  an item outside of the range.'#13#10#13#10 +
-          'LimitToMatchedText: Limits the'#13#10'  dropdown to the items matching' +
-          ' the'#13#10'  text you have typed, similar to the'#13#10'  way the D6 does i' +
-          't.'#13#10
+        Lines.Strings = (
+          'This is a Demo to show you how the'
+          'Code Completion component works'
+          'when the default kind is ctCode.'
+          ''
+          'BiggestWord: If you are using'
+          '  PrettyText then this is the biggest'
+          '  word that will show up before the'
+          '  *bold* words'
+          ''
+          'CaseSensitive: makes the text you'
+          '  type and the matching in the'
+          '  dropdown list case sensitive'
+          ''
+          'AnsiStrings  : Use Ansi string'
+          '  comparisons instead of default'
+          '  string comparisons'
+          ''
+          'UsePrettyText: Allows you to format'
+          '  the text displayed in the dropdown.'
+          '  Please refer to the tsyncompletion-'
+          '  proposal.html file for a description'
+          '  of the available commands.'
+          ''
+          'UseInsertList: Lets you display one'
+          '  thing in the dropdown and insert'
+          '  another thing when they choose an'
+          '  item.  Like in Delphi, the'
+          '  dropdown might display'
+          '  "procedure foo(AVariable: Integer)"'
+          '  and only insert foo when you'
+          '  select it.  The InsertList must'
+          '  have as many items as the ItemList'
+          '  or you will get a list index out'
+          '  of bounds error when you select'
+          '  an item outside of the range.'
+          ''
+          'LimitToMatchedText: Limits the'
+          '  dropdown to the items matching the'
+          '  text you have typed, similar to the'
+          '  way the D6 does it.')
         RemovedKeystrokes = <
           item
             Command = ecContextHelp
@@ -157,9 +178,12 @@ object Form1: TForm1
         Gutter.Font.Height = -11
         Gutter.Font.Name = 'Terminal'
         Gutter.Font.Style = []
-        Lines.WideStrings = 
-          'Use Ctrl+Space to activate Code Completion'#13#10'with a shortcut, or ' +
-          'use the '#39'.'#39' key'#13#10'to activate it with a timer'#13#10#13#10#13#10
+        Lines.Strings = (
+          'Use Ctrl+Space to activate Code Completion'
+          'with a shortcut, or use the '#39'.'#39' key'
+          'to activate it with a timer'
+          ''
+          '')
         RemovedKeystrokes = <
           item
             Command = ecContextHelp
@@ -297,15 +321,10 @@ object Form1: TForm1
     TitleFont.Style = [fsBold]
     Columns = <
       item
-        BiggestWord = 'constructor'
-        BiggestWordW = 'constructor'
       end>
     ShortCut = 16416
     Editor = SynEdit1
     Left = 216
-    EndOfTokenChrW = '()[]. '
-    TriggerCharsW = '.'
-    TitleW = 'Completion Proposal Demo'
   end
   object FontDialog1: TFontDialog
     Font.Charset = DEFAULT_CHARSET
