@@ -39,7 +39,8 @@ object frmMain: TfrmMain
     Gutter.ShowLineNumbers = True
     Gutter.Width = 10
     Highlighter = SynMultiSyn1
-    Lines.WideStrings = 'SynEdit1'
+    Lines.Strings = (
+      'SynEdit1')
     Options = [eoAutoIndent, eoKeepCaretX, eoShowScrollHint, eoSmartTabs, eoTabsToSpaces, eoTrimTrailingSpaces]
     WantTabs = True
     OnStatusChange = SynEdit1StatusChange
@@ -112,7 +113,7 @@ object frmMain: TfrmMain
   object SynCssSyn1: TSynCssSyn
     CommentAttri.Foreground = clGray
     NumberAttri.Foreground = clFuchsia
-    KeyAttri.Foreground = clNavy
+    AttributeAttri.Foreground = clNavy
     StringAttri.Foreground = clBlue
     StringAttri.Style = [fsBold]
     SymbolAttri.Foreground = clNavy
@@ -129,8 +130,6 @@ object frmMain: TfrmMain
         MarkerAttri.Background = clNone
         MarkerAttri.Foreground = clPurple
         SchemeName = 'CSS Full'
-        StartExprW = '<style type="text/css">'
-        EndExprW = '</style>'
       end
       item
         StartExpr = '<style>'
@@ -139,8 +138,6 @@ object frmMain: TfrmMain
         MarkerAttri.Background = clNone
         MarkerAttri.Foreground = clFuchsia
         SchemeName = 'CSS Style'
-        StartExprW = '<style>'
-        EndExprW = '</style>'
       end
       item
         StartExpr = '<script language="JavaScript" type="text/javascript">'
@@ -149,8 +146,6 @@ object frmMain: TfrmMain
         MarkerAttri.Background = clNone
         MarkerAttri.Foreground = clMaroon
         SchemeName = 'JS Full'
-        StartExprW = '<script language="JavaScript" type="text/javascript">'
-        EndExprW = '</script>'
       end
       item
         StartExpr = '<script>'
@@ -159,8 +154,6 @@ object frmMain: TfrmMain
         MarkerAttri.Background = clNone
         MarkerAttri.Foreground = clRed
         SchemeName = 'JS Script'
-        StartExprW = '<script>'
-        EndExprW = '</script>'
       end>
     DefaultHighlighter = SynHTMLSyn1
     Left = 208
@@ -209,8 +202,6 @@ object frmMain: TfrmMain
     Editor = SynEdit1
     Left = 208
     Top = 96
-    EndOfTokenChrW = '()[].'
-    TriggerCharsW = '.'
   end
   object SynAutoComplete1: TSynAutoComplete
     EndOfTokenChr = '()[].'
