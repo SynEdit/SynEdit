@@ -2048,7 +2048,6 @@ object DemoMainForm: TDemoMainForm
     UseBackground = False
     Left = 300
     Top = 164
-    TitleW = 'Untitled'
   end
   object SynExporterRTF1: TSynExporterRTF
     Color = clWindow
@@ -2062,13 +2061,15 @@ object DemoMainForm: TDemoMainForm
     UseBackground = False
     Left = 332
     Top = 164
-    TitleW = 'Untitled'
   end
   object SynCompletionProposal1: TSynCompletionProposal
     Options = [scoLimitToMatchedText, scoEndCharCompletion]
-    ItemList.WideStrings = 
-      'SynEdit'#13#10'SynCompletionProposal demo'#13#10#13#10'Select line, then press E' +
-      'nter.'#13#10'Line will be copied to the editor.'
+    ItemList.Strings = (
+      'SynEdit'
+      'SynCompletionProposal demo'
+      ''
+      'Select line, then press Enter.'
+      'Line will be copied to the editor.')
     NbLinesInWindow = 6
     Width = 262
     EndOfTokenChr = '()[].'
@@ -2088,14 +2089,22 @@ object DemoMainForm: TDemoMainForm
     Editor = SynEditor
     Left = 392
     Top = 164
-    EndOfTokenChrW = '()[].'
-    TriggerCharsW = '.'
   end
   object SynAutoComplete1: TSynAutoComplete
-    AutoCompleteList.WideStrings = 
-      'bg'#13#10'=begin'#13#10'=  |'#13#10'=end;'#13#10'findfirst'#13#10'=err := FindFirst('#39'*.*'#39',0,S)' +
-      ';'#13#10'=if err = 0 then begin'#13#10'=  repeat'#13#10'=    |'#13#10'=    err := FindNe' +
-      'xt(S);'#13#10'=  until err <> 0;'#13#10'=  FindClose(S);'#13#10'=end;'
+    AutoCompleteList.Strings = (
+      'bg'
+      '=begin'
+      '=  |'
+      '=end;'
+      'findfirst'
+      '=err := FindFirst('#39'*.*'#39',0,S);'
+      '=if err = 0 then begin'
+      '=  repeat'
+      '=    |'
+      '=    err := FindNext(S);'
+      '=  until err <> 0;'
+      '=  FindClose(S);'
+      '=end;')
     EndOfTokenChr = '()[].'
     Editor = SynEditor
     ShortCut = 8224
@@ -2157,14 +2166,65 @@ object DemoMainForm: TDemoMainForm
   end
   object SynGalaxySyn1: TSynGalaxySyn
     DefaultFilter = 'Galaxy files (*.gtv,*.galrep,*.txt)|*.gtv;*.galrep;*.txt'
-    KeyWords.WideStrings = 
-      '#END'#13#10'#GALAXY'#13#10'A'#13#10'ANONYMOUS'#13#10'AUTOUNLOAD'#13#10'B'#13#10'BATTLEPROTOCOL'#13#10'C'#13#10'C' +
-      'AP'#13#10'CARGO'#13#10'COL'#13#10'COMPRESS'#13#10'D'#13#10'DRIVE'#13#10'E'#13#10'EMP'#13#10'F'#13#10'FLEET'#13#10'FLEETTABLE' +
-      'S'#13#10'G'#13#10'GALAXYTV'#13#10'GPLUS'#13#10'GROUPFORECAST'#13#10'H'#13#10'I'#13#10'J'#13#10'L'#13#10'M'#13#10'MACHINEREPO' +
-      'RT'#13#10'MAT'#13#10'N'#13#10'NAMECASE'#13#10'NO'#13#10'O'#13#10'OPTIONS'#13#10'P'#13#10'PLANETFORECAST'#13#10'PRODTAB' +
-      'LE'#13#10'PRODUCE'#13#10'Q'#13#10'R'#13#10'ROUTESFORECAST'#13#10'S'#13#10'SEND'#13#10'SHIELDS'#13#10'SHIPTYPEFOR' +
-      'ECAST'#13#10'SORTGROUPS'#13#10'T'#13#10'TWOCOL'#13#10'U'#13#10'UNDERSCORES'#13#10'V'#13#10'W'#13#10'WAR'#13#10'WEAPONS' +
-      #13#10'X'#13#10'Y'#13#10'Z'
+    KeyWords.Strings = (
+      '#END'
+      '#GALAXY'
+      'A'
+      'ANONYMOUS'
+      'AUTOUNLOAD'
+      'B'
+      'BATTLEPROTOCOL'
+      'C'
+      'CAP'
+      'CARGO'
+      'COL'
+      'COMPRESS'
+      'D'
+      'DRIVE'
+      'E'
+      'EMP'
+      'F'
+      'FLEET'
+      'FLEETTABLES'
+      'G'
+      'GALAXYTV'
+      'GPLUS'
+      'GROUPFORECAST'
+      'H'
+      'I'
+      'J'
+      'L'
+      'M'
+      'MACHINEREPORT'
+      'MAT'
+      'N'
+      'NAMECASE'
+      'NO'
+      'O'
+      'OPTIONS'
+      'P'
+      'PLANETFORECAST'
+      'PRODTABLE'
+      'PRODUCE'
+      'Q'
+      'R'
+      'ROUTESFORECAST'
+      'S'
+      'SEND'
+      'SHIELDS'
+      'SHIPTYPEFORECAST'
+      'SORTGROUPS'
+      'T'
+      'TWOCOL'
+      'U'
+      'UNDERSCORES'
+      'V'
+      'W'
+      'WAR'
+      'WEAPONS'
+      'X'
+      'Y'
+      'Z')
     Left = 424
     Top = 240
   end
@@ -2179,7 +2239,6 @@ object DemoMainForm: TDemoMainForm
     IdentifierChars = '_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
     Left = 520
     Top = 240
-    IdentifierCharsW = '_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
   end
   object SynHTMLSyn1: TSynHTMLSyn
     DefaultFilter = 'HTML Document (*.htm,*.html)|*.htm;*.html'

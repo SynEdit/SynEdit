@@ -470,7 +470,6 @@ object Form1: TForm1
     UseBackground = True
     Left = 40
     Top = 184
-    TitleW = 'Untitled'
   end
   object SynExporterRTF1: TSynExporterRTF
     Color = clWindow
@@ -484,7 +483,6 @@ object Form1: TForm1
     UseBackground = True
     Left = 76
     Top = 184
-    TitleW = 'Untitled'
   end
   object SynCppSyn1: TSynCppSyn
     DefaultFilter = 'C++ files (*.cpp,*.h,*.hpp)|*.cpp;*.h;*.hpp'

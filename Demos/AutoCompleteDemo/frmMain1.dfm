@@ -35,9 +35,12 @@ object Form1: TForm1
     Gutter.Font.Name = 'Courier New'
     Gutter.Font.Style = []
     Highlighter = SynPasSyn1
-    Lines.WideStrings = 
-      '// Press <Ctrl+J> to invoke autocompletion, and <Ctrl+Z> to undo' +
-      #13#10#13#10'arrayc'#13#10'classf'#13#10'pro'#13#10
+    Lines.Strings = (
+      '// Press <Ctrl+J> to invoke autocompletion, and <Ctrl+Z> to undo'
+      ''
+      'arrayc'
+      'classf'
+      'pro')
     RemovedKeystrokes = <
       item
         Command = ecLineBreak

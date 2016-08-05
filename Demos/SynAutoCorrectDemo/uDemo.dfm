@@ -256,7 +256,8 @@ object frmDemo: TfrmDemo
         Gutter.Font.Height = -11
         Gutter.Font.Name = 'Courier New'
         Gutter.Font.Style = []
-        Lines.WideStrings = 'edtEditor'
+        Lines.Strings = (
+          'edtEditor')
         RemovedKeystrokes = <
           item
             Command = ecLineBreak
