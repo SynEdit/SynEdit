@@ -1018,6 +1018,7 @@
   {$DEFINE SYN_WIN32}
 {$ENDIF}
 
+
 {------------------------------------------------------------------------------}
 {  Please change this to suit your needs (to activate an option remove the dot }
 {  in front of a DEFINE)                                                       }
