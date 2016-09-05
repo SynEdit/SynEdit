@@ -2451,6 +2451,9 @@ procedure TSynBaseCompletionProposal.ExecuteEx(s: UnicodeString; x, y: integer; 
 
 var
   TmpOffset: Integer;
+  {$IFDEF SYN_DELPHI_XE_UP}
+  ParentForm: TCustomForm;
+  {$ENDIF}
 begin
   DisplayType := Kind;
 
@@ -2466,10 +2469,11 @@ begin
   end;
 
 {$IFDEF SYN_DELPHI_XE_UP}
-  if Assigned(Application.MainForm) then
+  ParentForm := GetParentForm(Form.CurrentEditor);
+  if Assigned(ParentForm) then
   begin
     Form.PopupMode := pmExplicit;
-    Form.PopupParent := Application.MainForm;
+    Form.PopupParent := ParentForm;
   end
   else
   begin
