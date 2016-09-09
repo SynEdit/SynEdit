@@ -63,6 +63,7 @@ const
   SYNS_AttrAsmComment           =  'AsmComment';
   SYNS_AttrAsmKey               =  'AsmKey';
   SYNS_AttrAssembler            =  'Assembler';
+  SYNS_AttrAtRules              =  'AtRules';
   SYNS_AttrAttribute            =  'Attribute';
   SYNS_AttrAttributeName        =  'AttributeName';
   SYNS_AttrAttributeValue       =  'AttributeValue';
@@ -276,6 +277,7 @@ resourcestring
   SYNS_FriendlyAttrAsmComment           =  'Asm Comment';
   SYNS_FriendlyAttrAsmKey               =  'Asm Key';
   SYNS_FriendlyAttrAssembler            =  'Assembler';
+  SYNS_FriendlyAttrAtRules              =  '@-Rules';
   SYNS_FriendlyAttrAttribute            =  'Attribute';
   SYNS_FriendlyAttrAttributeName        =  'Attribute Name';
   SYNS_FriendlyAttrAttributeValue       =  'Attribute Value';
