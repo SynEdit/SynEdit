@@ -133,6 +133,7 @@ type
     procedure PlusProc;
     procedure TildeProc;
     procedure PipeProc;
+    procedure CircumflexProc;
     procedure EqualProc;
     procedure ExclamProc;
   protected
@@ -666,6 +667,7 @@ begin
       '~': TildeProc;
       '|': PipeProc;
       '=': EqualProc;
+      '^': CircumflexProc;
     end;
     Exit;
   end;
@@ -701,6 +703,16 @@ begin
   Inc(Run);
   fRange := rsAttrib;
   fTokenID := tkSymbol;
+end;
+
+procedure TSynCssSyn.CircumflexProc;
+begin
+  Inc(Run);
+  if fLine[Run] = '=' then
+  begin
+    Inc(Run);
+    fTokenID := tkSymbol;
+  end;
 end;
 
 procedure TSynCssSyn.CommentProc;
