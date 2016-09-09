@@ -190,6 +190,11 @@ type
 
   TScrollHintFormat = (shfTopLineOnly, shfTopToBottom);
 
+  TSynHintMode = (shmDefault, shmToken);
+
+  TGetTokenHintEvent = procedure(Sender: TObject; Coords: TBufferCoord; const Token: string;
+    TokenType: Integer; Attri: TSynHighlighterAttributes; var HintText: string) of object;
+
   TSynEditorOption = (
     eoAltSetsColumnMode,       //Holding down the Alt Key will put the selection mode into columnar format
     eoAutoIndent,              //Will indent the caret on new lines with the same amount of leading white space as the preceding line
@@ -361,6 +366,7 @@ type
   TCustomSynEdit = class(TCustomControl)
   private
 {$IFNDEF SYN_CLX}
+    procedure CMHintShow(var Msg: TMessage); message CM_HINTSHOW;
     procedure WMCancelMode(var Message: TMessage); message WM_CANCELMODE;
     procedure WMCaptureChanged(var Msg: TMessage); message WM_CAPTURECHANGED;
     procedure WMChar(var Msg: TWMChar); message WM_CHAR;
@@ -400,6 +406,7 @@ type
     fCharWidth: Integer;
     fFontDummy: TFont;
     fFontSmoothing: TSynFontSmoothMethod;
+    fHintMode: TSynHintMode;
     fInserting: Boolean;
     fLines: TUnicodeStrings;
     fOrigLines: TUnicodeStrings;
@@ -479,6 +486,7 @@ type
     fOnContextHelp: TContextHelpEvent;
     fOnPaintTransient: TPaintTransient;
     fOnScroll: TScrollEvent;
+    fOnTokenHint: TGetTokenHintEvent;
     fOnGutterGetText: TGutterGetTextEvent;
     fOnGutterPaint: TGutterPaintEvent;
 
@@ -924,6 +932,7 @@ type
     property Font: TFont read GetFont write SetFont;
     property Highlighter: TSynCustomHighlighter
       read fHighlighter write SetHighlighter;
+    property HintMode: TSynHintMode read fHintMode write fHintMode default shmDefault;
     property LeftChar: Integer read fLeftChar write SetLeftChar;
     property LineHeight: Integer read fTextHeight;
     property LinesInWindow: Integer read fLinesInWindow;
@@ -1027,6 +1036,7 @@ type
       read fOnPaintTransient write fOnPaintTransient;
     property OnScroll: TScrollEvent
       read fOnScroll write fOnScroll;
+    property OnTokenHint: TGetTokenHintEvent read fOnTokenHint write fOnTokenHint;
   published
     property Cursor default crIBeam;
 {$IFDEF SYN_COMPILER_6_UP}
@@ -1095,6 +1105,7 @@ type
     property Gutter;
     property HideSelection;
     property Highlighter;
+    property HintMode;
 {$IFNDEF SYN_CLX}
     property ImeMode;
     property ImeName;
@@ -1139,6 +1150,7 @@ type
     property OnScroll;
     property OnSpecialLineColors;
     property OnStatusChange;
+    property OnTokenHint;
     property OnPaintTransient;
 
     property FontSmoothing;
@@ -1472,6 +1484,7 @@ begin
   fMaxScrollWidth := 1024;
   fScrollBars := ssBoth;
   fBorderStyle := bsSingle;
+  fHintMode := shmDefault;
   fInsertCaret := ctVerticalLine;
   fOverwriteCaret := ctBlock;
   FSelectionMode := smNormal;
@@ -5070,6 +5083,60 @@ end;
 {$ENDIF SYN_CLX}
 
 {$IFNDEF SYN_CLX}
+{$IFDEF SYN_COMPILER_12_UP}
+type
+  PHintInfo = Controls.PHintInfo;
+{$ENDIF}
+
+procedure TCustomSynEdit.CMHintShow(var Msg: TMessage);
+var
+  FoundHint: Boolean;
+  MouseCoords, TokenCoords: TBufferCoord;
+  TokenStr: UnicodeString;
+  TokenHint: string;
+  TokenType, Start: Integer;
+  Attri: TSynHighlighterAttributes;
+  D: TDisplayCoord;
+  P1, P2: TPoint;
+  TokenRect: TRect;
+begin
+  if fHintMode = shmToken then
+  begin
+    FoundHint := False;
+    if Assigned(fOnTokenHint) and GetPositionOfMouse(MouseCoords) and
+      GetHighlighterAttriAtRowColEx(MouseCoords, TokenStr, TokenType, Start, Attri) then
+    begin
+      TokenCoords.Char := Start;
+      TokenCoords.Line := MouseCoords.Line;
+      fOnTokenHint(Self, TokenCoords, TokenStr, TokenType, Attri, TokenHint);
+      FoundHint := TokenHint <> '';
+    end;
+
+    if FoundHint then
+    begin
+      D := BufferToDisplayPos(TokenCoords);
+      P1 := RowColumnToPixels(D);
+      P2.X := P1.X + Length(TokenStr) * CharWidth;
+      P2.Y := P1.Y + fTextHeight;
+      TokenRect.TopLeft := P1;
+      TokenRect.BottomRight := P2;
+
+      InflateRect(TokenRect, 2, 2);
+      with PHintInfo(Msg.LParam)^ do
+      begin
+        HintStr := TokenHint;
+        CursorRect := TokenRect;
+        HintData := nil;
+      end;
+      Msg.Result := 0;
+    end
+    else
+      Msg.Result := 1;
+  end
+  else
+    inherited;
+end;
+
 procedure TCustomSynEdit.WMCaptureChanged(var Msg: TMessage);
 begin
   fScrollTimer.Enabled := False;
