@@ -39,7 +39,7 @@ end;
 procedure TSearchTextHightlighterSynEditPlugin.AfterPaint(ACanvas: TCanvas;
   const AClip: TRect; FirstLine, LastLine: Integer);
 var
-  SearchText: string;
+  SearchText, SearchResultText: string;
   Pt: TPoint;
   Rct: TRect;
   OldFont: TFont;
@@ -84,12 +84,15 @@ begin
         if CurrCoord = Editor.BlockBegin then
           Continue;
 
+        SearchResultText := Copy(Editor.Lines[LineIndex - 1], Editor.SearchEngine.Results[ItemIndex],
+          Editor.SearchEngine.Lengths[ItemIndex]);
+
         Pt := Editor.RowColumnToPixels(Editor.BufferToDisplayPos(CurrCoord));
-        Rct := Rect(Pt.X, Pt.Y, Pt.X + Editor.CharWidth * Length(SearchText),
+        Rct := Rect(Pt.X, Pt.Y, Pt.X + Editor.CharWidth * Length(SearchResultText),
           Pt.Y + Editor.LineHeight);
 
         ACanvas.FillRect(Rct);
-        ACanvas.TextRect(Rct, Pt.X, Pt.Y, SearchText);
+        ACanvas.TextRect(Rct, Pt.X, Pt.Y, SearchResultText);
       end
     end;
 
