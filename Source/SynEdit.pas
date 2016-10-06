@@ -12,7 +12,7 @@ The Original Code is: SynEdit.pas, released 2000-04-07.
 The Original Code is based on mwCustomEdit.pas by Martin Waldenburg, part of
 the mwEdit component suite.
 Portions created by Martin Waldenburg are Copyright (C) 1998 Martin Waldenburg.
-Unicode translation by Maël Hörz.
+Unicode translation by MaÃ«l HÃ¶rz.
 All Rights Reserved.
 
 Contributors to the SynEdit and mwEdit projects are listed in the
@@ -10642,8 +10642,8 @@ begin
     Result := Highlighter.IsWordBreakChar(AChar)
   else
     case AChar of
-      #0..#32, '.', ',', ';', ':', '"', '''', '´', '`', '°', '^', '!', '?', '&',
-      '$', '@', '§', '%', '#', '~', '[', ']', '(', ')', '{', '}', '<', '>',
+      #0..#32, '.', ',', ';', ':', '"', '''', 'Â´', '`', 'Â°', '^', '!', '?', '&',
+      '$', '@', 'Â§', '%', '#', '~', '[', ']', '(', ')', '{', '}', '<', '>',
       '-', '=', '+', '*', '/', '\', '|':
         Result := True;
       else

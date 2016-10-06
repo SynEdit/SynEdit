@@ -12,7 +12,7 @@ The Original Code is: SynHighlighterJava.pas, released 2000-04-10.
 The Original Code is based on the DcjSynJava.pas file from the
 mwEdit component suite by Martin Waldenburg and other developers, the Initial
 Author of this file is Michael Trier.
-Unicode translation by Maël Hörz.
+Unicode translation by MaÃ«l HÃ¶rz.
 All Rights Reserved.
 
 Contributors to the SynEdit and mwEdit projects are listed in the
@@ -873,7 +873,7 @@ begin
         ',': CommaProc;
         '=': EqualProc;
         '>': GreaterProc;
-        'A'..'Z', 'a'..'z', '_', '$', 'À'..'Ö', 'Ø'..'ö', 'ø'..'ÿ': IdentProc;
+        'A'..'Z', 'a'..'z', '_', '$', 'Ã€'..'Ã–', 'Ã˜'..'Ã¶', 'Ã¸'..'Ã¿': IdentProc;
         #10: LFProc;
         '<': LowerProc;
         '-': MinusProc;
@@ -978,7 +978,7 @@ end;
 function TSynJavaSyn.IsIdentChar(AChar: WideChar): Boolean;
 begin
   case AChar of
-    '_', '$', '0'..'9', 'a'..'z', 'A'..'Z', 'À'..'Ö', 'Ø'..'ö', 'ø'..'ÿ':
+    '_', '$', '0'..'9', 'a'..'z', 'A'..'Z', 'Ã€'..'Ã–', 'Ã˜'..'Ã¶', 'Ã¸'..'Ã¿':
       Result := True;
     else
       Result := False;
