@@ -1217,7 +1217,10 @@ begin
     inc(Str);
   end;
   Result := Result and $FF; // 255
-  fStringLen := Str - fToIdent;
+  if Assigned(fToIdent) then
+    fStringLen := Str - fToIdent
+  else
+    fStringLen := 0;
 end;
 
 function TSynSQLSyn.IdentKind(MayBe: PWideChar): TtkTokenKind;
@@ -1965,6 +1968,7 @@ begin
   {$IFDEF USE_TABLE_DICTIONARY}
   fTableDict.Clear;
   {$ENDIF}
+  fToIdent := nil;
 
   for I := 0 to Ord(High(TtkTokenKind)) - 1 do
     EnumerateKeywords(I, GetKeywords(I), IsIdentChar, DoAddKeyword);
