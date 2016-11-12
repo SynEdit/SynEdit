@@ -85,7 +85,8 @@ type
   public
     procedure Assign(Source: TPersistent); override;
     procedure AssignColorAndStyle(Source: TSynHighlighterAttributes);
-    constructor Create(AName: string; AFriendlyName: UnicodeString);
+    constructor Create(AName: string); overload;
+    constructor Create(AName: string; AFriendlyName: UnicodeString); overload;
     procedure InternalSaveDefaultValues;
 {$IFNDEF SYN_CLX}
     function LoadFromBorlandRegistry(RootKey: HKEY; AttrKey, AttrName: string;
@@ -416,6 +417,11 @@ procedure TSynHighlighterAttributes.Changed;
 begin
   if Assigned(fOnChange) then
     fOnChange(Self);
+end;
+
+constructor TSynHighlighterAttributes.Create(AName: string);
+begin
+  Create(AName, AName);
 end;
 
 constructor TSynHighlighterAttributes.Create(AName: string; AFriendlyName: UnicodeString);
