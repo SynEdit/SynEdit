@@ -13,7 +13,7 @@ The Original Code is based on mwCompletionProposal.pas by Cyrille de Brebisson,
 part of the mwEdit component suite.
 Portions created by Cyrille de Brebisson are Copyright (C) 1999
 Cyrille de Brebisson.
-Unicode translation by Maël Hörz.
+Unicode translation by MaÃ«l HÃ¶rz.
 All Rights Reserved.
 
 Contributors to the SynEdit and mwEdit projects are listed in the
@@ -120,16 +120,18 @@ type
 
   TCompletionChange = procedure(Sender: TObject; AIndex: Integer) of object;
 
-  TSynCompletionOption = (scoCaseSensitive,         //Use case sensitivity to do matches
-                          scoLimitToMatchedText,    //Limit the matched text to only what they have typed in
-                          scoTitleIsCentered,       //Center the title in the box if you choose to use titles
-                          scoUseInsertList,         //Use the InsertList to insert text instead of the ItemList (which will be displayed)
-                          scoUsePrettyText,         //Use the PrettyText function to output the words
-                          scoUseBuiltInTimer,       //Use the built in timer and the trigger keys to execute the proposal as well as the shortcut
-                          scoEndCharCompletion,     //When an end char is pressed, it triggers completion to occur (like the Delphi IDE)
-                          scoConsiderWordBreakChars,//Use word break characters as additional end characters
-                          scoCompleteWithTab,       //Use the tab character for completion
-                          scoCompleteWithEnter);    //Use the Enter character for completion
+  TSynCompletionOption = (scoCaseSensitive,             //Use case sensitivity to do matches
+                          scoLimitToMatchedText,        //Limit the matched text to only what they have typed in
+                          scoTitleIsCentered,           //Center the title in the box if you choose to use titles
+                          scoUseInsertList,             //Use the InsertList to insert text instead of the ItemList (which will be displayed)
+                          scoUsePrettyText,             //Use the PrettyText function to output the words
+                          scoUseBuiltInTimer,           //Use the built in timer and the trigger keys to execute the proposal as well as the shortcut
+                          scoEndCharCompletion,         //When an end char is pressed, it triggers completion to occur (like the Delphi IDE)
+                          scoConsiderWordBreakChars,    //Use word break characters as additional end characters
+                          scoCompleteWithTab,           //Use the tab character for completion
+                          scoCompleteWithEnter,         //Use the Enter character for completion
+                          scoLimitToMatchedTextAnywhere //Filter the list to typed value matched anywhere in text
+                          );
 
   TSynCompletionOptions = set of TSynCompletionOption;
 
@@ -286,6 +288,7 @@ type
     property CaseSensitive: Boolean read fCase write fCase default False;
     property CurrentEditor: TCustomSynEdit read fCurrentEditor write fCurrentEditor;
     property MatchText: Boolean read fMatchText write fMatchText;
+    property MatchTextAnywhere: Boolean read fMatchTextAnywhere write fMatchTextAnywhere;
     property EndOfTokenChr: UnicodeString read FEndOfTokenChr write FEndOfTokenChr;
     property TriggerChars: UnicodeString read FTriggerChars write FTriggerChars;
     property CompleteWithTab: Boolean read FCompleteWithTab write FCompleteWithTab;
@@ -1244,6 +1247,7 @@ begin
   FInsertList := TUnicodeStringList.Create;
   FAssignedList := TUnicodeStringList.Create;
   FMatchText := False;
+  FMatchTextAnywhere:= False;
 {$IFDEF SYN_CLX}
   BorderStyle := fbsNone;
 {$ELSE}
@@ -1847,6 +1851,7 @@ begin
 end;
 
 procedure TSynBaseCompletionProposalForm.SetCurrentString(const Value: UnicodeString);
+Var MinPoz, Poz, MinIdx: Integer;
 
   function MatchItem(AIndex: Integer; UseItemList: Boolean): Boolean;
   var
@@ -1876,12 +1881,35 @@ procedure TSynBaseCompletionProposalForm.SetCurrentString(const Value: UnicodeSt
     end;
 
 
-    CompareString := Copy(CompareString, 1, Length(Value));
+    if fMatchTextAnywhere then
+      begin
+        if Value<>'' then
+          begin
+            if FCase then
+              begin
+                Poz:= Pos(Value, CompareString);
+                Result:= Poz>0
+              end else
+              begin
+                Poz:= Pos(AnsiUpperCase(Value), AnsiUpperCase(CompareString));
+                Result:= Poz>0;
+              end;
+            if (Poz>0) and (Poz<MinPoz) then
+              begin
+                MinPoz:= Poz;
+                MinIdx:= FAssignedList.Count;
+              end;
+          end else
+          Result:= true;
+      end else
+      begin
+        CompareString := Copy(CompareString, 1, Length(Value));
 
-    if FCase then
-      Result := WideCompareStr(CompareString, Value) = 0
-    else
-      Result := WideCompareText(CompareString, Value) = 0;
+        if FCase then
+          Result := WideCompareStr(CompareString, Value) = 0
+        else
+          Result := WideCompareText(CompareString, Value) = 0;
+      end;
   end;
 
   procedure RecalcList;
@@ -1889,11 +1917,19 @@ procedure TSynBaseCompletionProposalForm.SetCurrentString(const Value: UnicodeSt
     i: Integer;
   begin
     FAssignedList.Clear;
+    MinPoz:= MaxInt;
+    MinIdx:= -1;
     for i := 0 to FItemList.Count -1 do
-    begin
-      if MatchItem(i, True) then
-        FAssignedList.AddObject(FItemList[i], TObject(i));
-    end;
+
+      begin
+        if MatchItem(i, True) then
+          FAssignedList.AddObject(FItemList[i], TObject(i));
+
+      end;
+    if MinIdx<>-1 then
+      begin
+        Position:= MinIdx;
+      end;
   end;
 
 var
@@ -1904,9 +1940,12 @@ begin
     exit;
   if FMatchText then
   begin
+    if fMatchTextAnywhere then
+      Position := 0;
     RecalcList;
     AdjustScrollBarPosition;
-    Position := 0;
+    if not fMatchTextAnywhere then
+      Position := 0;
     
     if Visible and Assigned(FOnChangePosition) and (DisplayType = ctCode) then
       FOnChangePosition(Owner as TSynBaseCompletionProposal,
