@@ -1,4 +1,4 @@
-{-------------------------------------------------------------------------------
+﻿{-------------------------------------------------------------------------------
 The contents of this file are subject to the Mozilla Public License
 Version 1.1 (the "License"); you may not use this file except in compliance
 with the License. You may obtain a copy of the License at
@@ -873,7 +873,7 @@ begin
         ',': CommaProc;
         '=': EqualProc;
         '>': GreaterProc;
-        'A'..'Z', 'a'..'z', '_', '$', 'À'..'Ö', 'Ø'..'ö', 'ø'..'ÿ': IdentProc;
+        'A'..'Z', 'a'..'z', '_', '$', WideChar(#$C0)..WideChar(#$D6), WideChar(#$D8)..WideChar(#$F6), WideChar(#$F8)..WideChar(#$FF): IdentProc;
         #10: LFProc;
         '<': LowerProc;
         '-': MinusProc;
