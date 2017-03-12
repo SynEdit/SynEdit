@@ -15,7 +15,7 @@ Initial Author of these files is Willo van der Merwe. Initial Author of
 SynHighlighterSQL.pas is Michael Hieke.
 Portions created by Willo van der Merwe are Copyright 1999 Willo van der Merwe.
 Portions created by Michael Hieke are Copyright 2000 Michael Hieke.
-Unicode translation by Maël Hörz.
+Unicode translation by MaÃ«l HÃ¶rz.
 All Rights Reserved.
 
 Contributors to the SynEdit and mwEdit projects are listed in the
@@ -927,47 +927,67 @@ const
 //---MySQL----------------------------------------------------------------------
   // keywords
   MySqlKW: UnicodeString =
-    'ACTION,AFTER,AGAINST,AGGREGATE,ALGORITHM,ALL,ALTER,ANALYZE,AND,ANY,AS,' +
-    'ASC,AT,AUTO_INCREMENT,AVG_ROW_LENGTH,BACKUP,BEFORE,BEGIN,BENCHMARK,BETWEEN,BINLOG,BIT,' +
-    'BOOL,BOTH,BY,CACHE,CALL,CASCADE,CASCADED,CHANGE,CHARACTER,CHARSET,CHECK,' +
-    'CHECKSUM,CLIENT,COLLATE,COLLATION,COLUMN,COLUMNS,COMMENT,COMMIT,' +
-    'COMMITTED,COMPLETION,CONCURRENT,CONNECTION,CONSISTENT,CONSTRAINT,' +
-    'CONVERT,CONTAINS,CONTENTS,CREATE,CROSS,DATA,DATABASE,DATABASES,' +
-    'DEALLOCATE,DEC,DEFAULT,DEFINER,DELAYED,DELAY_KEY_WRITE,DELETE,DESC,' +
-    'DETERMINISTIC,DIRECTORY,DISABLE,DISCARD,DESCRIBE,DISTINCT,DISTINCTROW,' +
-    'DIV,DROP,DUAL,DUMPFILE,DUPLICATE,EACH,ELSE,ENABLE,ENCLOSED,END,ENDS,' +
-    'ENGINE,ENGINES,ESCAPE,ESCAPED,ERRORS,EVENT,EVENTS,EVERY,EXECUTE,EXISTS,' +
-    'EXPANSION,EXPLAIN,FALSE,FIELDS,FILE,FIRST,FLUSH,FOR,FORCE,FOREIGN,FROM,' +
-    'FULL,FULLTEXT,FUNCTION,FUNCTIONS,GLOBAL,GRANT,GRANTS,GROUP,HAVING,HELP,' +
-    'HIGH_PRIORITY,HOSTS,IDENTIFIED,IGNORE,INDEX,INFILE,INNER,INSERT,' +
-    'INSERT_METHOD,INSTALL,INT1,INT2,INT3,INT4,INT8,INTO,IO_THREAD,IS,' +
-    'ISOLATION,INVOKER,JOIN,KEY,KEYS,KILL,LAST,LEADING,LEAVES,LEVEL,LESS,' +
-    'LIKE,LIMIT,LINEAR,LINES,LIST,LOAD,LOCAL,LOCK,LOGS,LONG,LOW_PRIORITY,' +
-    'MASTER,MASTER_HOST,MASTER_LOG_FILE,MASTER_LOG_POS,MASTER_CONNECT_RETRY,' +
-    'MASTER_PASSWORD,MASTER_PORT,MASTER_SSL,MASTER_SSL_CA,MASTER_SSL_CAPATH,' +
-    'MASTER_SSL_CERT,MASTER_SSL_CIPHER,MASTER_SSL_KEY,MASTER_USER,MATCH,' +
-    'MAX_ROWS,MAXVALUE,MIDDLEINT,MIN_ROWS,MOD,MODE,MODIFY,MODIFIES,NAMES,' +
-    'NATURAL,NEW,NO,NODEGROUP,NOT,NULL,OJ,OFFSET,OLD,ON,OPTIMIZE,OPTION,' +
-    'OPTIONALLY,OPEN,OR,ORDER,OUTER,OUTFILE,PACK_KEYS,PARTIAL,PARTITION,' +
-    'PARTITIONS,PLUGIN,PLUGINS,PREPARE,PRESERVE,PRIMARY,PRIVILEGES,PROCEDURE,' +
-    'PROCESS,PROCESSLIST,QUERY,RAID_CHUNKS,RAID_CHUNKSIZE,RAID_TYPE,RANGE,' +
-    'READ,REBUILD,REFERENCES,REGEXP,RELAY_LOG_FILE,RELAY_LOG_POS,RELOAD,' +
-    'RENAME,REORGANIZE,REPAIR,REPEATABLE,REPLACE,REPLICATION,RESTRICT,RESET,' +
-    'RESTORE,RETURN,RETURNS,REVOKE,RLIKE,ROLLBACK,ROLLUP,ROUTINE,ROW,' +
-    'ROW_FORMAT,ROWS,SAVEPOINT,SCHEDULE,SCHEMA,SCHEMAS,SECURITY,SELECT,' +
-    'SERIALIZABLE,SESSION,SET,SHARE,SHOW,SHUTDOWN,SIMPLE,SLAVE,SNAPSHOT,' +
-    'SONAME,SQL,SQL_BIG_RESULT,SQL_BUFFER_RESULT,SQL_CACHE,' +
-    'SQL_CALC_FOUND_ROWS,SQL_NO_CACHE,SQL_SMALL_RESULT,SQL_THREAD,START,' +
-    'STARTING,STARTS,STATUS,STOP,STORAGE,STRAIGHT_JOIN,SUBPARTITION,' +
-    'SUBPARTITIONS,SUPER,TABLE,TABLES,TABLESPACE,TEMPORARY,TERMINATED,THAN,' +
-    'THEN,TO,TRAILING,TRANSACTION,TRIGGER,TRIGGERS,TRUE,TYPE,UNCOMMITTED,' +
-    'UNINSTALL,UNIQUE,UNLOCK,UPDATE,UPGRADE,UNION,USAGE,USE,USING,VALUES,' +
-    'VARIABLES,VARYING,VIEW,WARNINGS,WHERE,WITH,WORK,WRITE';
+    'ACCOUNT,ACTION,ADD,AFTER,AGAINST,ALGORITHM,ALL,ALTER,ALWAYS,ANALYZE,AND,' +
+    'AS,ASC,AT,AUTHORS,AUTO_INCREMENT,AVG_ROW_LENGTH,BEFORE,BEGIN,BETWEEN,' +
+    'BINLOG,BLOCK,BOTH,BY,CACHE,CALL,CASCADE,CASCADED,CATALOG_NAME,CHAIN,' +
+    'CHANGE,CHANGED,CHANNEL,CHARACTER,CHARSET,CHECK,CHECKSUM,CLASS_ORIGIN,' +
+    'CLIENT,CODE,COLLATE,COLLATION,COLUMN,COLUMN_FORMAT,COLUMN_NAME,COLUMNS,' +
+    'COMMENT,COMMIT,COMMITTED,COMPLETION,CONCURRENT,CONDITION,CONNECTION,' +
+    'CONSISTENT,CONSTRAINT,CONSTRAINT_CATALOG,CONSTRAINT_NAME,' +
+    'CONSTRAINT_SCHEMA,CONTAINS,CONTEXT,CONTRIBUTORS,CONVERT,COPY,CPU,CREATE,' +
+    'CROSS,CURRENT,CURSOR,CURSOR_NAME,DATA,DATABASE,DATABASES,DATAFILE,' +
+    'DAY_HOUR,DAY_MICROSECOND,DAY_MINUTE,DAY_SECOND,DEALLOCATE,DECLARE,' +
+    'DEFAULT,DEFINER,DELAY_KEY_WRITE,DELAYED,DELETE,DESC,DESCRIBE,' +
+    'DETERMINISTIC,DIAGNOSTICS,DIRECTORY,DISABLE,DISCARD,DISTINCT,' +
+    'DISTINCTROW,DIV,DO,DROP,DUMPFILE,DUPLICATE,EACH,ELSE,ELSEIF,ENABLE,' +
+    'ENCLOSED,END,ENDS,ENGINE,ENGINES,ERRORS,ESCAPE,ESCAPED,EVENT,EVENTS,' +
+    'EVERY,EXCHANGE,EXCLUSIVE,EXECUTE,EXISTS,EXPANSION,EXPIRE,EXPLAIN,' +
+    'EXTENDED,FALSE,FAST,FAULTS,FIELDS,FILE,FILE_BLOCK_SIZE,FIRST,FLUSH,' +
+    'FOLLOWS,FOR,FORCE,FOREIGN,FOUND,FROM,FULL,FULLTEXT,FUNCTION,GENERATED,' +
+    'GET,GLOBAL,GRANT,GRANTS,GROUP,HAVING,HELP,HIGH_PRIORITY,HOST,HOSTS,' +
+    'HOUR_MICROSECOND,HOUR_MINUTE,HOUR_SECOND,IDENTIFIED,IGNORE,' +
+    'IGNORE_SERVER_IDS,IMPORT,IN,INDEX,INDEXES,INFILE,INITIAL_SIZE,INNER,' +
+    'INOUT,INPLACE,INSERT,INSERT_METHOD,INSTANCE,INTO,INVOKER,IO,IPC,IS,' +
+    'ISOLATION,JOIN,JSON,KEY,KEY_BLOCK_SIZE,KEYS,KILL,LANGUAGE,LAST,LEADING,' +
+    'LESS,LEVEL,LIKE,LIMIT,LINEAR,LINES,LIST,LOAD,LOCAL,LOCK,LOGS,' +
+    'LOW_PRIORITY,MASTER,MASTER_AUTO_POSITION,MASTER_BIND,' +
+    'MASTER_CONNECT_RETRY,MASTER_DELAY,MASTER_HEARTBEAT_PERIOD,MASTER_HOST,' +
+    'MASTER_LOG_FILE,MASTER_LOG_POS,MASTER_PASSWORD,MASTER_PORT,' +
+    'MASTER_RETRY_COUNT,MASTER_SSL,MASTER_SSL_CA,MASTER_SSL_CAPATH,' +
+    'MASTER_SSL_CERT,MASTER_SSL_CIPHER,MASTER_SSL_CRL,MASTER_SSL_CRLPATH,' +
+    'MASTER_SSL_KEY,MASTER_SSL_VERIFY_SERVER_CERT,MASTER_TLS_VERSION,' +
+    'MASTER_USER,MATCH,MAX_CONNECTIONS_PER_HOUR,MAX_QUERIES_PER_HOUR,' +
+    'MAX_ROWS,MAX_STATEMENT_TIME,MAX_UPDATES_PER_HOUR,MAX_USER_CONNECTIONS,' +
+    'MAXVALUE,MEDIUM,MESSAGE_TEXT,MIGRATE,MIN_ROWS,MINUTE_MICROSECOND,' +
+    'MINUTE_SECOND,MOD,MODE,MODIFIES,MODIFY,MUTEX,MYSQL_ERRNO,NAME,NAMES,' +
+    'NATURAL,NEVER,NEXT,NO,NO_WRITE_TO_BINLOG,NONE,NOT,NULL,NUMBER,OFFSET,OJ,' +
+    'ON,ONE,ONLY,OPEN,OPTIMIZE,OPTION,OPTIONALLY,OPTIONS,OR,ORDER,OUT,OUTER,' +
+    'OUTFILE,OWNER,PACK_KEYS,PAGE,PAGE_CHECKSUM,PARSER,PARTIAL,PARTITION,' +
+    'PARTITIONING,PARTITIONS,PERSISTENT,PHASE,PLUGINS,PORT,PRECEDES,PREPARE,' +
+    'PRESERVE,PRIMARY,PRIVILEGES,PROCEDURE,PROCESS,PROCESSLIST,PROFILE,' +
+    'PROFILES,PROXY,PURGE,QUERY,QUICK,RANGE,READ,READS,REBUILD,RECOVER,' +
+    'REFERENCES,REGEXP,RELAY_LOG_FILE,RELAY_LOG_POS,RELAYLOG,RELEASE,RELOAD,' +
+    'REMOVE,RENAME,REORGANIZE,REPAIR,REPEATABLE,REPLACE,REPLICATION,REQUIRE,' +
+    'RESET,RESIGNAL,RESTRICT,RESUME,RETURN,RETURNED_SQLSTATE,RETURNS,REVOKE,' +
+    'RLIKE,ROLLBACK,ROLLUP,ROTATE,ROUTINE,ROW,ROW_FORMAT,ROWS,SAVEPOINT,' +
+    'SCHEDULE,SCHEMA,SCHEMA_NAME,SECOND_MICROSECOND,SECURITY,SELECT,' +
+    'SEPARATOR,SERIALIZABLE,SERVER,SESSION,SET,SHARE,SHARED,SHOW,SHUTDOWN,' +
+    'SIGNAL,SIMPLE,SLAVE,SNAPSHOT,SOCKET,SONAME,SOUNDS,SOURCE,SPATIAL,SQL,' +
+    'SQL_BIG_RESULT,SQL_BUFFER_RESULT,SQL_CACHE,SQL_CALC_FOUND_ROWS,' +
+    'SQL_NO_CACHE,SQL_SMALL_RESULT,SQLEXCEPTION,SQLSTATE,SQLWARNINGS,STACKED,' +
+    'START,STARTING,STARTS,STATS_AUTO_RECALC,STATS_PERSISTENT,STATUS,STOP,' +
+    'STORAGE,STORED,STRAIGHT_JOIN,SUBCLASS_ORIGIN,SUBPARTITION,SUBPARTITIONS,' +
+    'SUPER,SUSPEND,SWAPS,SWITCHES,TABLE,TABLE_NAME,TABLES,TABLESPACE,' +
+    'TEMPORARY,TERMINATED,THAN,TO,TRADITIONAL,TRAILING,TRANSACTION,' +
+    'TRANSACTIONAL,TRIGGER,TRIGGERS,TRUE,TYPE,UNCOMMITTED,UNDO,UNION,UNIQUE,' +
+    'UNKNOWN,UNLOCK,UPDATE,UPGRADE,USAGE,USE,USE_FRM,USING,VALIDATION,VALUE,' +
+    'VALUES,VARIABLES,VIEW,VIRTUAL,WAIT,WARNINGS,WHERE,WITH,WITHOUT,WORK,' +
+    'WRAPPER,WRITE,XA,XID,XML,XOR,YEAR_MONTH';
 
   // PLSQL keywords
   MySQLPLSQLKW: UnicodeString =
-    'CLOSE,CONDITION,CONTINUE,CURSOR,DECLARE,DO,EXIT,FETCH,FOUND,GOTO,' +
-    'HANDLER,ITERATE,LANGUAGE,LEAVE,LOOP,UNTIL,WHILE';
+    'CASE,CLOSE,EXIT,FETCH,GOTO,HANDLER,ITERATE,IF,LEAVE,LOOP,REPEAT,THEN,' +
+    'UNTIL,WHEN,WHILE';
 
   MySQLTypes: UnicodeString =
 
@@ -979,15 +999,15 @@ const
     'BTREE,HASH,' +
 
     // Column Types
-    'bigint,blob,char,date,datetime,decimal,double,enum,float,' +
-    'geometry,geometrycollection,int,integer,linestring,longblob,longtext,' +
-    'mediumblob,mediumint,mediumtext,multilinestring,multipoint,multipolygon,' +
-    'national,numeric,point,polygon,precision,real,serial,signed,smallint,' +
-    'string,text,time,timestamp,tinyblob,tinyint,tinytext,unicode,unsigned,' +
-    'varbinary,varchar,year,zerofill,' +
+    'bigint,blob,bool,boolean,byte,char,date,datetime,decimal,double,enum,' +
+    'float,geometry,geometrycollection,int,integer,linestring,longblob,' +
+    'longtext,mediumblob,mediumint,mediumtext,multilinestring,multipoint,' +
+    'multipolygon,national,numeric,point,polygon,precision,real,serial,' +
+    'signed,smallint,string,text,time,timestamp,tinyblob,tinyint,tinytext,' +
+    'unicode,unsigned,varbinary,varchar,year,zerofill,' +
 
     // Row Formats
-    'COMPACT,COMPRESSED,DYNAMIC,FIXED,REDUNDANT,' +
+    'COMPACT,COMPRESSED,DISK,DYNAMIC,FIXED,REDUNDANT,' +
 
     // Raid Types
     'RAID0,STRIPED,' +
@@ -996,76 +1016,147 @@ const
     'UNDEFINED,TEMPTABLE,' +
 
     // Charsets
-    'armscii8,big5,binary,cp1250,cp1251,cp1256,cp1257,cp850,cp852,cp866,' +
-    'cp932,croat,czech,danish,dec8,dos,estonia,eucjpms,euckr,euc_kr,gb2312,' +
-    'gbk,geostd8,german1,greek,hp8,hebrew,hungarian,keybcs2,koi8_ru,koi8_ukr,' +
-    'koi8r,koi8u,latin1,latin1_de,latin2,latin5,latin7,macce,macroman,sjis,' +
-    'swe7,tis620,ucs2,ujis,usa7,utf8,win1250,win1251,win1251ukr,' +
+    'armscii8,big5,cp1250,cp1251,cp1256,cp1257,cp850,cp852,' +
+    'cp866,cp932,dec8,eucjpms,euckr,gb18030,gb2312,gbk,geostd8,greek,hebrew,' +
+    'hp8,keybcs2,koi8r,koi8u,latin1,latin2,latin5,latin7,macce,macroman,sjis,' +
+    'swe7,tis620,ucs2,ujis,utf16,utf16le,utf32,utf8,utf8mb4,' +
 
-    '_armscii8,_big5,_binary,_cp1250,_cp1251,_cp1256,_cp1257,_cp850,_cp852,' +
-    '_cp866,_cp932,_croat,_czech,_danish,_dec8,_dos,_estonia,_eucjpms,_euckr,' +
-    '_euc_kr,_gb2312,_gbk,_geostd8,_german1,_greek,_hp8,_hebrew,_hungarian,' +
-    '_keybcs2,_koi8_ru,_koi8_ukr,_koi8r,_koi8u,_latin1,_latin1_de,_latin2,' +
-    '_latin5,_latin7,_macce,_macroman,_sjis,_swe7,_tis620,_ucs2,_ujis,_usa7,' +
-    '_utf8,_win1250,_win1251,_win1251ukr,' +
+    '_armscii8,_big5,_cp1250,_cp1251,_cp1256,_cp1257,_cp850,' +
+    '_cp852,_cp866,_cp932,_dec8,_eucjpms,_euckr,_gb18030,_gb2312,_gbk,' +
+    '_geostd8,_greek,_hebrew,_hp8,_keybcs2,_koi8r,_koi8u,_latin1,_latin2,' +
+    '_latin5,_latin7,_macce,_macroman,_sjis,_swe7,_tis620,_ucs2,_ujis,_utf16,' +
+    '_utf16le,_utf32,_utf8,_utf8mb4,' +
 
     // Collations
     'armscii8_bin,armscii8_general_ci,ascii_bin,ascii_general_ci,big5_bin,' +
-    'big5_chinese_ci,cp1250_bin,cp1250_croatian_ci,cp1250_czech_cs,' +
+    'big5_chinese_ci,binary,cp1250_bin,cp1250_croatian_ci,cp1250_czech_cs,' +
     'cp1250_general_ci,cp1250_polish_ci,cp1251_bin,cp1251_bulgarian_ci,' +
     'cp1251_general_ci,cp1251_general_cs,cp1251_ukrainian_ci,cp1256_bin,' +
     'cp1256_general_ci,cp1257_bin,cp1257_general_ci,cp1257_lithuanian_ci,' +
     'cp850_bin,cp850_general_ci,cp852_bin,cp852_general_ci,cp866_bin,' +
     'cp866_general_ci,cp932_bin,cp932_japanese_ci,dec8_bin,dec8_swedish_ci,' +
-    'eucjpms_bin,eucjpms_japanese_ci,euckr_bin,euckr_korean_ci,gb2312_bin,' +
-    'gb2312_chinese_ci,gbk_bin,gbk_chinese_ci,geostd8_bin,geostd8_general_ci,' +
-    'greek_bin,greek_general_ci,hebrew_bin,hebrew_general_ci,hp8_bin,' +
-    'hp8_english_ci,keybcs2_bin,keybcs2_general_ci,koi8r_bin,' +
-    'koi8r_general_ci,koi8u_bin,koi8u_general_ci,latin1_bin,latin1_danish_ci,' +
-    'latin1_general_ci,latin1_general_cs,latin1_german1_ci,latin1_german2_ci,' +
-    'latin1_spanish_ci,latin1_swedish_ci,latin2_bin,latin2_croatian_ci,' +
-    'latin2_czech_cs,latin2_general_ci,latin2_hungarian_ci,latin5_bin,' +
-    'latin5_turkish_ci,latin7_bin,latin7_estonian_cs,latin7_general_ci,' +
-    'latin7_general_cs,macce_bin,macce_general_ci,macroman_bin,' +
-    'macroman_general_ci,sjis_bin,sjis_japanese_ci,swe7_bin,swe7_swedish_ci,' +
-    'tis620_bin,tis620_thai_ci,ucs2_bin,ucs2_czech_ci,ucs2_danish_ci,' +
-    'ucs2_esperanto_ci,ucs2_estonian_ci,ucs2_general_ci,ucs2_hungarian_ci,' +
+    'eucjpms_bin,eucjpms_japanese_ci,euckr_bin,euckr_korean_ci,gb18030_bin,' +
+    'gb18030_chinese_ci,gb18030_unicode_520_ci,gb2312_bin,gb2312_chinese_ci,' +
+    'gbk_bin,gbk_chinese_ci,geostd8_bin,geostd8_general_ci,greek_bin,' +
+    'greek_general_ci,hebrew_bin,hebrew_general_ci,hp8_bin,hp8_english_ci,' +
+    'keybcs2_bin,keybcs2_general_ci,koi8r_bin,koi8r_general_ci,koi8u_bin,' +
+    'koi8u_general_ci,latin1_bin,latin1_danish_ci,latin1_general_ci,' +
+    'latin1_general_cs,latin1_german1_ci,latin1_german2_ci,latin1_spanish_ci,' +
+    'latin1_swedish_ci,latin2_bin,latin2_croatian_ci,latin2_czech_cs,' +
+    'latin2_general_ci,latin2_hungarian_ci,latin5_bin,latin5_turkish_ci,' +
+    'latin7_bin,latin7_estonian_cs,latin7_general_ci,latin7_general_cs,' +
+    'macce_bin,macce_general_ci,macroman_bin,macroman_general_ci,sjis_bin,' +
+    'sjis_japanese_ci,swe7_bin,swe7_swedish_ci,tis620_bin,tis620_thai_ci,' +
+    'ucs2_bin,ucs2_croatian_ci,ucs2_czech_ci,ucs2_danish_ci,' +
+    'ucs2_esperanto_ci,ucs2_estonian_ci,ucs2_general_ci,' +
+    'ucs2_general_mysql500_ci,ucs2_german2_ci,ucs2_hungarian_ci,' +
     'ucs2_icelandic_ci,ucs2_latvian_ci,ucs2_lithuanian_ci,ucs2_persian_ci,' +
-    'ucs2_polish_ci,ucs2_romanian_ci,ucs2_roman_ci,ucs2_slovak_ci,' +
-    'ucs2_slovenian_ci,ucs2_spanish2_ci,ucs2_spanish_ci,ucs2_swedish_ci,' +
-    'ucs2_turkish_ci,ucs2_unicode_ci,ujis_bin,ujis_japanese_ci,utf8_bin,' +
-    'utf8_czech_ci,utf8_danish_ci,utf8_esperanto_ci,utf8_estonian_ci,' +
-    'utf8_general_ci,utf8_hungarian_ci,utf8_icelandic_ci,utf8_latvian_ci,' +
-    'utf8_lithuanian_ci,utf8_persian_ci,utf8_polish_ci,utf8_romanian_ci,' +
-    'utf8_roman_ci,utf8_slovak_ci,utf8_slovenian_ci,utf8_spanish2_ci,' +
-    'utf8_spanish_ci,utf8_swedish_ci,utf8_turkish_ci,utf8_unicode_ci,';
+    'ucs2_polish_ci,ucs2_romanian_ci,ucs2_roman_ci,ucs2_sinhala_ci,' +
+    'ucs2_slovak_ci,ucs2_slovenian_ci,ucs2_spanish2_ci,ucs2_spanish_ci,' +
+    'ucs2_swedish_ci,ucs2_turkish_ci,ucs2_unicode_520_ci,ucs2_unicode_ci,' +
+    'ucs2_vietnamese_ci,ujis_bin,ujis_japanese_ci,utf16le_bin,' +
+    'utf16le_general_ci,utf16_bin,utf16_croatian_ci,utf16_czech_ci,' +
+    'utf16_danish_ci,utf16_esperanto_ci,utf16_estonian_ci,utf16_general_ci,' +
+    'utf16_german2_ci,utf16_hungarian_ci,utf16_icelandic_ci,utf16_latvian_ci,' +
+    'utf16_lithuanian_ci,utf16_persian_ci,utf16_polish_ci,utf16_romanian_ci,' +
+    'utf16_roman_ci,utf16_sinhala_ci,utf16_slovak_ci,utf16_slovenian_ci,' +
+    'utf16_spanish2_ci,utf16_spanish_ci,utf16_swedish_ci,utf16_turkish_ci,' +
+    'utf16_unicode_520_ci,utf16_unicode_ci,utf16_vietnamese_ci,utf32_bin,' +
+    'utf32_croatian_ci,utf32_czech_ci,utf32_danish_ci,utf32_esperanto_ci,' +
+    'utf32_estonian_ci,utf32_general_ci,utf32_german2_ci,utf32_hungarian_ci,' +
+    'utf32_icelandic_ci,utf32_latvian_ci,utf32_lithuanian_ci,' +
+    'utf32_persian_ci,utf32_polish_ci,utf32_romanian_ci,utf32_roman_ci,' +
+    'utf32_sinhala_ci,utf32_slovak_ci,utf32_slovenian_ci,utf32_spanish2_ci,' +
+    'utf32_spanish_ci,utf32_swedish_ci,utf32_turkish_ci,utf32_unicode_520_ci,' +
+    'utf32_unicode_ci,utf32_vietnamese_ci,utf8mb4_bin,utf8mb4_croatian_ci,' +
+    'utf8mb4_czech_ci,utf8mb4_danish_ci,utf8mb4_esperanto_ci,' +
+    'utf8mb4_estonian_ci,utf8mb4_general_ci,utf8mb4_german2_ci,' +
+    'utf8mb4_hungarian_ci,utf8mb4_icelandic_ci,utf8mb4_latvian_ci,' +
+    'utf8mb4_lithuanian_ci,utf8mb4_persian_ci,utf8mb4_polish_ci,' +
+    'utf8mb4_romanian_ci,utf8mb4_roman_ci,utf8mb4_sinhala_ci,' +
+    'utf8mb4_slovak_ci,utf8mb4_slovenian_ci,utf8mb4_spanish2_ci,' +
+    'utf8mb4_spanish_ci,utf8mb4_swedish_ci,utf8mb4_turkish_ci,' +
+    'utf8mb4_unicode_520_ci,utf8mb4_unicode_ci,utf8mb4_vietnamese_ci,' +
+    'utf8_bin,utf8_croatian_ci,utf8_czech_ci,utf8_danish_ci,' +
+    'utf8_esperanto_ci,utf8_estonian_ci,utf8_general_ci,' +
+    'utf8_general_mysql500_ci,utf8_german2_ci,utf8_hungarian_ci,' +
+    'utf8_icelandic_ci,utf8_latvian_ci,utf8_lithuanian_ci,utf8_persian_ci,' +
+    'utf8_polish_ci,utf8_romanian_ci,utf8_roman_ci,utf8_sinhala_ci,' +
+    'utf8_slovak_ci,utf8_slovenian_ci,utf8_spanish2_ci,utf8_spanish_ci,' +
+    'utf8_swedish_ci,utf8_turkish_ci,utf8_unicode_520_ci,utf8_unicode_ci,' +
+    'utf8_vietnamese_ci';
 
   // functions
   MySQLFunctions: UnicodeString =
-    'ABS,ACOS,ADD,ADDDATE,ADDTIME,ASCII,ASIN,ATAN,ATAN2,AVG,BIN,BIT_AND,' +
-    'BIT_COUNT,BIT_LENGTH,BIT_OR,BIT_XOR,CASE,CAST,CHARACTER_LENGTH,CEILING,' +
-    'CHAR_LENGTH,COALESCE,COERCIBILITY,COMPRESS,CONCAT,CONCAT_WS,' +
-    'CONNECTION_ID,CONV,CONVERT_TZ,COS,COT,COUNT,CRC32,CURDATE,CURRENT_DATE,' +
-    'CURRENT_TIME,CURRENT_TIMESTAMP,CURRENT_USER,CURTIME,DATE_ADD,' +
-    'DATE_FORMAT,DATE_SUB,DATEDIFF,DAY,DAYNAME,DAYOFMONTH,DAYOFWEEK,' +
-    'DAYOFYEAR,DAY_HOUR,DAY_MINUTE,DAY_SECOND,DECODE,DEGREES,ELT,ENCODE,' +
-    'ENCRYPT,EXP,EXPORT_SET,EXTRACT,EXTRACTVALUE,FIELD,FIND_IN_SET,FLOOR,' +
-    'FORMAT,FOUND_ROWS,FROM_DAYS,FROM_UNIXTIME,GET_FORMAT,GET_LOCK,GREATEST,' +
-    'GROUP_CONCAT,HEX,HOUR,HOUR_MINUTE,HOUR_SECOND,IF,IFNULL,IN,INET_ATON,' +
-    'INSERT_ID,INSTR,INTERVAL,ISNULL,IS_FREE_LOCK,IS_USED_LOCK,LAST_DAY,' +
-    'LAST_INSERT_ID,LCASE,LEAST,LEFT,LENGTH,LN,LOAD_FILE,LOCALTIME,' +
-    'LOCALTIMESTAMP,LOCATE,LOG,LOG10,LOG2,LOWER,LPAD,LTRIM,MAKEDATE,MAKETIME,' +
-    'MAKE_SET,MASTER_POS_LOG,MASTER_POS_WAIT,MAX,MD5,MICROSECOND,MID,MIN,' +
-    'MINUTE,MINUTE_SECOND,MONTH,MONTHNAME,NOW,NULLIF,OCT,OCTET_LENGTH,ORD,' +
-    'PASSWORD,PERIOD_ADD,PERIOD_DIFF,PI,POSITION,POW,POWER,QUARTER,QUOTE,' +
-    'RADIANS,RAND,RELEASE_LOCK,REPEAT,REVERSE,RIGHT,ROUND,ROW_COUNT,' +
-    'RPAD,RTRIM,SECOND,SEC_TO_TIME,SESSION_USER,SIGN,SIN,SOUNDEX,SLEEP,SPACE,' +
-    'SPATIAL,SQRT,STD,STDDEV,STDDEV_POP,STDDEV_SAMP,STRCMP,STR_TO_DATE,' +
-    'SUBDATE,SUBSTRING,SUBSTRING_INDEX,SUBTIME,SUM,SYSDATE,SYSTEM_USER,TAN,' +
-    'TIMEDIFF,TIMESTAMPADD,TIMESTAMPDIFF,TIME_FORMAT,TIME_TO_SEC,TO_DAYS,' +
-    'TRIM,TRUNCATE,UCASE,UNCOMPRESS,UNCOMPRESSED_LENGTH,UNHEX,UNIX_TIMESTAMP,' +
-    'UPDATEXML,UPPER,USER,UTC_DATE,UTC_TIME,UTC_TIMESTAMP,UUID,VARIANCE,' +
-    'VAR_POP,VAR_SAMP,VERSION,WEEK,WEEKDAY,WEEKOFYEAR,WHEN,YEARWEEK,YEAR_MONTH';
+    'ABS,ACOS,ADDDATE,ADDTIME,AES_DECRYPT,AES_ENCRYPT,ANY_VALUE,AREA,' +
+    'ASBINARY,ASCII,ASIN,ASTEXT,ASWKBASWKT,ASYMMETRIC_DECRYPT,' +
+    'ASYMMETRIC_DERIVE,ASYMMETRIC_ENCRYPT,ASYMMETRIC_SIGN,ASYMMETRIC_VERIFY,' +
+    'ATAN,ATAN2,AVG,BIN,BIT_AND,BIT_COUNT,BIT_LENGTH,BIT_OR,BIT_XOR,BUFFER,' +
+    'CAST,CEIL,CEILING,CENTROID,CHAR_LENGTH,CHARACTER_LENGTH,COALESCE,' +
+    'COERCIBILITY,COMPRESS,CONCAT,CONCAT_WS,CONNECTION_ID,CONV,CONVERT_TZ,' +
+    'CONVEXHULL,COS,COT,COUNT,CRC32,CREATE_ASYMMETRIC_PRIV_KEY,' +
+    'CREATE_ASYMMETRIC_PUB_KEY,CREATE_DH_PARAMETERS,CREATE_DIGEST,CROSSES,' +
+    'CURDATE,CURRENT_DATE,CURRENT_TIME,CURRENT_TIMESTAMP,CURRENT_USER,' +
+    'CURTIME,DATE_ADD,DATE_FORMAT,DATE_SUB,DATEDIFF,DAY,DAYNAME,DAYOFMONTH,' +
+    'DAYOFWEEK,DAYOFYEAR,DECODE,DEGREES,DES_DECRYPT,DES_ENCRYPT,DIMENSION,' +
+    'DISJOINT,DISTANCE,ELT,ENCODE,ENCRYPT,ENDPOINT,ENVELOPE,EQUALS,EXP,' +
+    'EXPORT_SET,EXTERIORRING,EXTRACT,EXTRACTVALUE,FIELD,FIND_IN_SET,FLOOR,' +
+    'FORMAT,FOUND_ROWS,FROM_BASE64,FROM_DAYS,FROM_UNIXTIME,GEOMCOLLFROMTEXT,' +
+    'GEOMCOLLFROMWKB,GEOMETRYCOLLECTIONFROMTEXT,GEOMETRYCOLLECTIONFROMWKB,' +
+    'GEOMETRYFROMTEXT,GEOMETRYFROMWKB,GEOMETRYN,GEOMETRYTYPE,GEOMFROMTEXT,' +
+    'GEOMFROMWKB,GET_FORMAT,GET_LOCK,GLENGTH,GREATEST,GROUP_CONCAT,' +
+    'GTID_SUBSET,GTID_SUBTRACT,HEX,HOUR,IFNULL,INET_ATON,INET_NTOA,' +
+    'INET6_ATON,INET6_NTOA,INSTR,INTERIORRINGN,INTERSECTS,INTERVAL,' +
+    'IS_FREE_LOCK,IS_IPV4,IS_IPV4_COMPAT,IS_IPV4_MAPPED,IS_IPV6,IS_USED_LOCK,' +
+    'ISCLOSED,ISEMPTY,ISNULL,ISSIMPLE,JSON_APPEND,JSON_ARRAY,' +
+    'JSON_ARRAY_APPEND,JSON_ARRAY_INSERT,JSON_CONTAINS,JSON_CONTAINS_PATH,' +
+    'JSON_DEPTH,JSON_EXTRACT,JSON_INSERT,JSON_KEYS,JSON_LENGTH,JSON_MERGE,' +
+    'JSON_OBJECT,JSON_QUOTE,JSON_REMOVE,JSON_REPLACE,JSON_SEARCH,JSON_SET,' +
+    'JSON_TYPE,JSON_UNQUOTE,JSON_VALID,LAST_DAY,LAST_INSERT_ID,LCASE,LEAST,' +
+    'LEFT,LENGTH,LINEFROMTEXT,LINEFROMWKB,LINESTRINGFROMTEXT,' +
+    'LINESTRINGFROMWKB,LN,LOAD_FILE,LOCALTI,LOCALTIME,LOCALTIMESTAMP,LOCATE,' +
+    'LOG,LOG10,LOG2,LOWER,LPAD,LTRIM,MAKE_SET,MAKEDATE,MAKETIME,' +
+    'MASTER_POS_WAIT,MAX,MBRCONTAINS,MBRCOVEREDBY,MBRCOVERS,MBRDISJOINT,' +
+    'MBREQUAL,MBREQUALS,MBRINTERSECTS,MBROVERLAPS,MBRTOUCHES,MBRWITHIN,MD5,' +
+    'MICROSECOND,MID,MIN,MINUTE,MLINEFROMTEXT,MLINEFROMWKB,MONTH,' +
+    'MONTHNAME,MPOINTFROMTEXT,MPOINTFROMWKB,MPOLYFROMTEXT,MPOLYFROMWKB,' +
+    'MULTILINESTRINGFROMTEXT,MULTILINESTRINGFROMWKB,MULTIPOINTFROMTEXT,' +
+    'MULTIPOINTFROMWKB,MULTIPOLYGONFROMTEXT,MULTIPOLYGONFROMWKB,NAME_CONST,' +
+    'NOW,NULLIF,NUMGEOMETRIES,NUMINTERIORRINGS,NUMPOINTS,OCT,OCTET_LENGTH,' +
+    'OLD_PASSWORD,ORD,OVERLAPS,PASSWORD,PERIOD_ADD,PERIOD_DIFF,PI,' +
+    'POINTFROMTEXT,POINTFROMWKB,POINTN,POLYFROMTEXT,POLYFROMWKB,' +
+    'POLYGONFROMTEXT,POLYGONFROMWKB,POSITION,POW,POWER,QUARTER,QUOTE,RADIANS,' +
+    'RAND,RANDOM_BYTES,RELEASE_ALL_LOCKS,RELEASE_LOCK,REVERSE,RIGHT,ROUND,' +
+    'ROW_COUNT,RPAD,RTRIM,SEC_TO_TIME,SECOND,SESSION_USER,SHA,SHA1,SHA2,SIGN,' +
+    'SIN,SLEEP,SOUNDEX,SPACE,SQRT,SRID,ST_AREA,ST_ASBINARY,ST_ASGEOJSON,' +
+    'ST_ASTEXT,ST_ASWKB,ST_ASWKT,ST_BUFFER,ST_BUFFER_STRATEGY,ST_CENTROID,' +
+    'ST_CONTAINS,ST_CONVEXHULL,ST_CROSSES,ST_DIFFERENCE,ST_DIMENSION,' +
+    'ST_DISJOINT,ST_DISTANCE,ST_DISTANCE_SPHERE,ST_ENDPOINT,ST_ENVELOPE,' +
+    'ST_EQUALS,ST_EXTERIORRING,ST_GEOHASH,ST_GEOMCOLLFROMTEXT,' +
+    'ST_GEOMCOLLFROMTXT,ST_GEOMCOLLFROMWKB,ST_GEOMETRYCOLLECTIONFROMTEXT,' +
+    'ST_GEOMETRYCOLLECTIONFROMWKB,ST_GEOMETRYFROMTEXT,ST_GEOMETRYFROMWKB,' +
+    'ST_GEOMETRYN,ST_GEOMETRYTYPE,ST_GEOMFROMGEOJSON,ST_GEOMFROMTEXT,' +
+    'ST_GEOMFROMWKB,ST_INTERIORRINGN,ST_INTERSECTION,ST_INTERSECTS,' +
+    'ST_ISCLOSED,ST_ISEMPTY,ST_ISSIMPLE,ST_ISVALID,ST_LATFROMGEOHASH,' +
+    'ST_LENGTH,ST_LINEFROMTEXT,ST_LINEFROMWKB,ST_LINESTRINGFROMTEXT,' +
+    'ST_LINESTRINGFROMWKB,ST_LONGFROMGEOHASH,ST_MAKEENVELOPE,' +
+    'ST_MLINEFROMTEXT,ST_MLINEFROMWKB,ST_MPOINTFROMTEXT,ST_MPOINTFROMWKB,' +
+    'ST_MPOLYFROMTEXT,ST_MPOLYFROMWKB,ST_MULTILINESTRINGFROMTEXT,' +
+    'ST_MULTILINESTRINGFROMWKB,ST_MULTIPOINTFROMTEXT,ST_MULTIPOINTFROMWKB,' +
+    'ST_MULTIPOLYGONFROMTEXT,ST_MULTIPOLYGONFROMWKB,ST_NUMGEOMETRIES,' +
+    'ST_NUMINTERIORRING,ST_NUMINTERIORRINGS,ST_NUMPOINTS,ST_OVERLAPS,' +
+    'ST_POINTFROMGEOHASH,ST_POINTFROMTEXT,ST_POINTFROMWKB,ST_POINTN,' +
+    'ST_POLYFROMTEXT,ST_POLYFROMWKB,ST_POLYGONFROMTEXT,ST_POLYGONFROMWKB,' +
+    'ST_SIMPLIFY,ST_SRID,ST_STARTPOINT,ST_SYMDIFFERENCE,ST_TOUCHES,ST_UNION,' +
+    'ST_VALIDATE,ST_WITHIN,ST_X,ST_Y,STARTPOINT,STD,STDDEV,STDDEV_POP,' +
+    'STDDEV_SAMP,STR_TO_DATE,STRCMP,SUBDATE,SUBSTR,SUBSTRING,SUBSTRING_INDEX,' +
+    'SUBTIME,SUM,SYSDATE,SYSTEM_USER,TAN,TIME_FORMAT,TIME_TO_SEC,TIMEDIFF,' +
+    'TIMESTAMPADD,TIMESTAMPDIFF,TO_BASE64,TO_DAYS,TO_SECONDS,TOUCHES,TRIM,' +
+    'TRUNCATE,UCASE,UNCOMPRESS,UNCOMPRESSED_LENGTH,UNHEX,UNIX_TIMESTAMP,' +
+    'UPDATEXML,UPPER,USER,UTC_DATE,UTC_TIME,UTC_TIMESTAMP,UUID,UUID_SHORT,' +
+    'VALIDATE_PASSWORD_STRENGTH,VAR_POP,VAR_SAMP,VARIANCE,VERSION,' +
+    'WAIT_FOR_EXECUTED_GTID_SET,WAIT_UNTIL_SQL_THREAD_AFTER_GTIDS,WEEK,' +
+    'WEEKDAY,WEEKOFYEAR,WEIGHT_STRING,WITHIN,X,Y,YEARWEEK';
 
 //---Ingres---------------------------------------------------------------------
   // keywords
