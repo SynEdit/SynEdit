@@ -139,6 +139,7 @@
         <DCCReference Include="..\..\Source\SynExportTeX.pas"/>
         <DCCReference Include="..\..\Source\SynHighlighterADSP21xx.pas"/>
         <DCCReference Include="..\..\Source\SynHighlighterAsm.pas"/>
+        <DCCReference Include="..\..\Source\SynHighlighterAsmMASM.pas"/>
         <DCCReference Include="..\..\Source\SynHighlighterAWK.pas"/>
         <DCCReference Include="..\..\Source\SynHighlighterBaan.pas"/>
         <DCCReference Include="..\..\Source\SynHighlighterBat.pas"/>
@@ -256,9 +257,6 @@
                 </VersionInfoKeys>
             </Delphi.Personality>
             <Platforms>
-                <Platform value="Android">False</Platform>
-                <Platform value="iOSDevice">False</Platform>
-                <Platform value="iOSSimulator">False</Platform>
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">True</Platform>
             </Platforms>
