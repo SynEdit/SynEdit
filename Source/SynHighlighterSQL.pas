@@ -85,9 +85,9 @@ type
   TtkTokenKind = (tkComment, tkDatatype, tkDefaultPackage, tkException,
     tkFunction, tkIdentifier, tkKey, tkNull, tkNumber, tkSpace, tkPLSQL,
     tkSQLPlus, tkString, tkSymbol, tkTableName, tkUnknown, tkVariable,
-    tkConditionalComment, tkDelimitedIdentifier, tkProcName);
+    tkConditionalComment, tkDelimitedIdentifier, tkProcName, tkConsoleOutput);
 
-  TRangeState = (rsUnknown, rsComment, rsString, rsConditionalComment);
+  TRangeState = (rsUnknown, rsComment, rsString, rsConditionalComment, rsConsoleOutput);
 
   TSQLDialect = (sqlStandard, sqlInterbase6, sqlMSSQL7, sqlMySQL, sqlOracle,
     sqlSybase, sqlIngres, sqlMSSQL2K, sqlPostgres, sqlNexus);
@@ -107,6 +107,7 @@ type
     fDialect: TSQLDialect;
     fCommentAttri: TSynHighlighterAttributes;
     fConditionalCommentAttri: TSynHighlighterAttributes;
+    fConsoleOutputAttri: TSynHighlighterAttributes;
     fDataTypeAttri: TSynHighlighterAttributes;
     fDefaultPackageAttri: TSynHighlighterAttributes;
     fDelimitedIdentifierAttri: TSynHighlighterAttributes;
@@ -189,6 +190,8 @@ type
       write fCommentAttri;
     property ConditionalCommentAttri: TSynHighlighterAttributes
       read fConditionalCommentAttri write fConditionalCommentAttri;
+    property ConsoleOutputAttri: TSynHighlighterAttributes
+      read fConsoleOutputAttri write fConsoleOutputAttri;
     property DataTypeAttri: TSynHighlighterAttributes read fDataTypeAttri
       write fDataTypeAttri;
     property DefaultPackageAttri: TSynHighlighterAttributes
@@ -761,6 +764,9 @@ const
 
   OracleCommentKW: UnicodeString =
     'REM,REMA,REMAR,REMARK';
+
+  OracleConsoleOutputKW: UnicodeString =
+    'PROMPT';
 
 //---MS-SQL 7-------------------------------------------------------------------
   // keywords
@@ -1366,7 +1372,9 @@ begin
   fConditionalCommentAttri := TSynHighlighterAttributes.Create(SYNS_AttrConditionalComment, SYNS_FriendlyAttrConditionalComment);
   fConditionalCommentAttri.Style := [fsItalic];
   AddAttribute(fConditionalCommentAttri);
-  
+  fConsoleOutputAttri := TSynHighlighterAttributes.Create(SYNS_AttrConsoleOutput, SYNS_FriendlyAttrConsoleOutput);
+  fConsoleOutputAttri.Style := [fsBold, fsUnderline];
+  AddAttribute(fConsoleOutputAttri);
   fDataTypeAttri := TSynHighlighterAttributes.Create(SYNS_AttrDataType, SYNS_FriendlyAttrDataType);
   fDataTypeAttri.Style := [fsBold];
   AddAttribute(fDataTypeAttri);
@@ -1514,7 +1522,7 @@ var
 begin
   fTokenID := IdentKind((fLine + Run));
   inc(Run, fStringLen);
-  if fTokenID = tkComment then
+  if fTokenID in [tkComment, tkConsoleOutput] then
   begin
     while not IsLineEnd(Run) do
       Inc(Run);
@@ -1834,6 +1842,11 @@ begin
   case fRange of
     rsComment, rsConditionalComment:
       AnsiCProc;
+    rsConsoleOutput:
+      begin
+        while not IsLineEnd(Run) do
+          Inc(Run);
+      end;
     rsString:
       AsciiCharProc;
   else
@@ -1901,6 +1914,7 @@ begin
   case GetTokenID of
     tkComment: Result := fCommentAttri;
     tkConditionalComment: Result := fConditionalCommentAttri;
+    tkConsoleOutput: Result := fConsoleOutputAttri;
     tkDatatype: Result := fDataTypeAttri;
     tkDefaultPackage: Result := fDefaultPackageAttri;
     tkDelimitedIdentifier: Result := fDelimitedIdentifierAttri;
@@ -2276,6 +2290,7 @@ begin
         tkException: Result := OracleExceptions;
         tkFunction: Result := OracleFunctions;
         tkComment: Result := OracleCommentKW;
+        tkConsoleOutput: Result := OracleConsoleOutputKW;
         tkDefaultPackage: Result := OracleDefaultPackages;
         tkPLSQL: Result := OraclePLSQLKW;
         tkSQLPlus: Result := OracleSQLPlusCommands;
