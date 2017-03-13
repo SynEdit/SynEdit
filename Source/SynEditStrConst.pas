@@ -79,6 +79,7 @@ const
   SYNS_AttrComment              =  'Comment';
   SYNS_AttrCondition            =  'Condition';
   SYNS_AttrConditionalComment   =  'ConditionalComment';
+  SYNS_AttrConsoleOutput        =  'ConsoleOutput';
   SYNS_AttrDataType             =  'DataType';
   SYNS_AttrDebugLines           =  'DebuggingLines';
   SYNS_AttrDefaultPackage       =  'DefaultPackages';
@@ -293,6 +294,7 @@ resourcestring
   SYNS_FriendlyAttrComment              =  'Comment';
   SYNS_FriendlyAttrCondition            =  'Condition';
   SYNS_FriendlyAttrConditionalComment   =  'Conditional Comment';
+  SYNS_FriendlyAttrConsoleOutput        =  'Console output';
   SYNS_FriendlyAttrConstant             =  'Constant';
   SYNS_FriendlyAttrDataType             =  'Data Type';
   SYNS_FriendlyAttrDebugLines           =  'Debugging Lines';
