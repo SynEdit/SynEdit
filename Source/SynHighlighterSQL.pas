@@ -85,9 +85,9 @@ type
   TtkTokenKind = (tkComment, tkDatatype, tkDefaultPackage, tkException,
     tkFunction, tkIdentifier, tkKey, tkNull, tkNumber, tkSpace, tkPLSQL,
     tkSQLPlus, tkString, tkSymbol, tkTableName, tkUnknown, tkVariable,
-    tkConditionalComment, tkDelimitedIdentifier, tkProcName);
+    tkConditionalComment, tkDelimitedIdentifier, tkProcName, tkConsoleOutput);
 
-  TRangeState = (rsUnknown, rsComment, rsString, rsConditionalComment);
+  TRangeState = (rsUnknown, rsComment, rsString, rsConditionalComment, rsConsoleOutput);
 
   TSQLDialect = (sqlStandard, sqlInterbase6, sqlMSSQL7, sqlMySQL, sqlOracle,
     sqlSybase, sqlIngres, sqlMSSQL2K, sqlPostgres, sqlNexus);
@@ -107,6 +107,7 @@ type
     fDialect: TSQLDialect;
     fCommentAttri: TSynHighlighterAttributes;
     fConditionalCommentAttri: TSynHighlighterAttributes;
+    fConsoleOutputAttri: TSynHighlighterAttributes;
     fDataTypeAttri: TSynHighlighterAttributes;
     fDefaultPackageAttri: TSynHighlighterAttributes;
     fDelimitedIdentifierAttri: TSynHighlighterAttributes;
@@ -189,6 +190,8 @@ type
       write fCommentAttri;
     property ConditionalCommentAttri: TSynHighlighterAttributes
       read fConditionalCommentAttri write fConditionalCommentAttri;
+    property ConsoleOutputAttri: TSynHighlighterAttributes
+      read fConsoleOutputAttri write fConsoleOutputAttri;
     property DataTypeAttri: TSynHighlighterAttributes read fDataTypeAttri
       write fDataTypeAttri;
     property DefaultPackageAttri: TSynHighlighterAttributes
@@ -372,7 +375,7 @@ const
     'LOG_CHECKPOINT_TIMEOUT,LOG_CHECKPOINTS_TO_ALERT,LOG_FILE_NAME_CONVERT,' +
     'LOG_PARALLELISM,LOGFILE,LOGGING,LOGICAL_READS_PER_CALL,' +
     'LOGICAL_READS_PER_SESSION,LOGMNR_MAX_PERSISTENT_SESSIONS,MANAGE,MANAGED,' +
-    'MANUAL,MAP,MASTER,MATCHED,MATERIALIZED,MAX_COMMIT_PROPAGATION_DELAY,' +
+    'MANAGEMENT,MANUAL,MAP,MASTER,MATCHED,MATERIALIZED,MAX_COMMIT_PROPAGATION_DELAY,' +
     'MAX_DISPATCHERS,MAX_DUMP_FILE_SIZE,MAX_ENABLED_ROLES,' +
     'MAX_ROLLBACK_SEGMENTS,MAX_SHARED_SERVERS,MAXDATAFILES,MAXEXTENTS,' +
     'MAXINSTANCES,MAXLOGFILES,MAXLOGHISTORY,MAXLOGMEMBERS,MAXSIZE,MAXTRANS,' +
@@ -383,7 +386,7 @@ const
     'NLS_LENGTH_SEMANTICS,NLS_NCHAR_CONV_EXCP,NLS_NUMERIC_CHARACTERS,' +
     'NLS_TERRITORY,NLS_TIMESTAMP_FORMAT,NLS_TIMESTAMP_TZ_FORMAT,NO,' +
     'NOARCHIVELOG,NOAUDIT,NOCACHE,NOCOMPRESS,NOCOPY,NOCYCLE,NOFORCE,' +
-    'NOLOGGING,NOMAXVALUE,NOMINIMIZE,NOMINVALUE,NOMONITORING,NONE,' +
+    'NOLOGGING,NOMAXVALUE,NOMINIMIZE,NOMINVALUE,NOMONITORING,NOMOUNT,NONE,' +
     'NOORDER,NORELY,NORESETLOGS,NOREVERSE,NORMAL,NOROWDEPENDENCIES,NOSORT,' +
     'NOT,NOTHING,NOVALIDATE,NOWAIT,NULL,O7_DICTIONARY_ACCESSIBILITY,' +
     'OBJECT_CACHE_MAX_SIZE_PERCENT,OBJECT_CACHE_OPTIMAL_SIZE,OF,OFFLINE,OID,' +
@@ -720,7 +723,7 @@ const
     'DBMS_RESOURCE_MANAGER,DBMS_RESOURCE_MANAGER_PRIVS,DBMS_RESUMABLE,' +
     'DBMS_RLS,DBMS_RMGR_GROUP_EXPORT,DBMS_RMGR_PACT_EXPORT,' +
     'DBMS_RMGR_PLAN_EXPORT,DBMS_RMIN,DBMS_ROWID,DBMS_RULE,DBMS_RULE_ADM,' +
-    'DBMS_RULE_EXIMP,DBMS_SESSION,DBMS_SHARED_POOL,DBMS_SNAP_INTERNAL,' +
+    'DBMS_RULE_EXIMP,DBMS_SCHEDULER,DBMS_SESSION,DBMS_SHARED_POOL,DBMS_SNAP_INTERNAL,' +
     'DBMS_SNAP_REPAPI,DBMS_SNAPSHOT,DBMS_SNAPSHOT_UTL,DBMS_SPACE,' +
     'DBMS_SPACE_ADMIN,DBMS_SQL,DBMS_STANDARD,DBMS_STATS,DBMS_STORAGE_MAP,' +
     'DBMS_STREAMS,DBMS_STREAMS_ADM,DBMS_SUMADV,DBMS_SUMMARY,' +
@@ -750,7 +753,7 @@ const
     'INVISIBLE,LIN,LINESIZE,LO,LOBOF,LOBOFFSET,LOGON,LOGSOURCE,LONGC,' +
     'LONGCHUNKSIZE,MARKUP,MAXDATA,MIX,MIXED,NATIVE,NEWP,NEWPAGE,NUM,' +
     'NUMF,NUMFORMAT,NUMWIDTH,OFF,OSERROR,PAGES,PAGESIZE,PASSW,PAU,PAUSE,' +
-    'PPRINT,PRI,PRINT,PROMPT,RECSEP,RECSEPCHAR,REPF,REPFOOTER,REPH,REPHEADER,' +
+    'PPRINT,PRI,PRINT,RECSEP,RECSEPCHAR,REPF,REPFOOTER,REPH,REPHEADER,' +
     'RUN,SAVE,SCAN,SERVEROUTPUT,SET,SHIFT,SHIFTINOUT,SHO,SHOW,SHUTDOWN,' +
     'SILENT,SPOOL,SQLBL,SQLBLANKLINES,SQLC,SQLCASE,SQLCO,SQLCONTINUE,SQLN,' +
     'SQLNUMBER,SQLP,SQLPRE,SQLPREFIX,SQLPROMPT,SQLT,SQLTERMINATOR,STA,' +
@@ -761,6 +764,9 @@ const
 
   OracleCommentKW: UnicodeString =
     'REM,REMA,REMAR,REMARK';
+
+  OracleConsoleOutputKW: UnicodeString =
+    'PROMPT';
 
 //---MS-SQL 7-------------------------------------------------------------------
   // keywords
@@ -1366,7 +1372,9 @@ begin
   fConditionalCommentAttri := TSynHighlighterAttributes.Create(SYNS_AttrConditionalComment, SYNS_FriendlyAttrConditionalComment);
   fConditionalCommentAttri.Style := [fsItalic];
   AddAttribute(fConditionalCommentAttri);
-  
+  fConsoleOutputAttri := TSynHighlighterAttributes.Create(SYNS_AttrConsoleOutput, SYNS_FriendlyAttrConsoleOutput);
+  fConsoleOutputAttri.Style := [fsBold, fsUnderline];
+  AddAttribute(fConsoleOutputAttri);
   fDataTypeAttri := TSynHighlighterAttributes.Create(SYNS_AttrDataType, SYNS_FriendlyAttrDataType);
   fDataTypeAttri.Style := [fsBold];
   AddAttribute(fDataTypeAttri);
@@ -1514,7 +1522,7 @@ var
 begin
   fTokenID := IdentKind((fLine + Run));
   inc(Run, fStringLen);
-  if fTokenID = tkComment then
+  if fTokenID in [tkComment, tkConsoleOutput] then
   begin
     while not IsLineEnd(Run) do
       Inc(Run);
@@ -1834,6 +1842,11 @@ begin
   case fRange of
     rsComment, rsConditionalComment:
       AnsiCProc;
+    rsConsoleOutput:
+      begin
+        while not IsLineEnd(Run) do
+          Inc(Run);
+      end;
     rsString:
       AsciiCharProc;
   else
@@ -1901,6 +1914,7 @@ begin
   case GetTokenID of
     tkComment: Result := fCommentAttri;
     tkConditionalComment: Result := fConditionalCommentAttri;
+    tkConsoleOutput: Result := fConsoleOutputAttri;
     tkDatatype: Result := fDataTypeAttri;
     tkDefaultPackage: Result := fDefaultPackageAttri;
     tkDelimitedIdentifier: Result := fDelimitedIdentifierAttri;
@@ -2276,6 +2290,7 @@ begin
         tkException: Result := OracleExceptions;
         tkFunction: Result := OracleFunctions;
         tkComment: Result := OracleCommentKW;
+        tkConsoleOutput: Result := OracleConsoleOutputKW;
         tkDefaultPackage: Result := OracleDefaultPackages;
         tkPLSQL: Result := OraclePLSQLKW;
         tkSQLPlus: Result := OracleSQLPlusCommands;
