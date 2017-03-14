@@ -263,9 +263,9 @@ begin
     '{': Result := '\{';
     '}': Result := '\}';
   end;
-  if AChar > #127 then
+  if Ord(AChar) > 127 then
   begin
-    if AChar <= #255 then
+    if Ord(AChar) <= 255 then
       Result := '\''' + LowerCase(IntToHex(Ord(AChar), 2))
     else
       // SmallInt type-cast is necessary because RTF
