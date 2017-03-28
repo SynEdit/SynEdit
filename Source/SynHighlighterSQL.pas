@@ -1,4 +1,4 @@
-{-------------------------------------------------------------------------------
+﻿{-------------------------------------------------------------------------------
 The contents of this file are subject to the Mozilla Public License
 Version 1.1 (the "License"); you may not use this file except in compliance
 with the License. You may obtain a copy of the License at
@@ -778,7 +778,7 @@ const
     'REM,REMA,REMAR,REMARK';
 
   OracleConsoleOutputKW: UnicodeString =
-    'PROMPT';
+    'PRO,PROM,PROMP,PROMPT';
 
 //---MS-SQL 7-------------------------------------------------------------------
   // keywords
@@ -2087,7 +2087,7 @@ begin
   {$ENDIF}
   fToIdent := nil;
 
-  for I := 0 to Ord(High(TtkTokenKind)) - 1 do
+  for I := 0 to Ord(High(TtkTokenKind)) do
     EnumerateKeywords(I, GetKeywords(I), IsIdentChar, DoAddKeyword);
 
   PutProcNamesInKeywordList;
