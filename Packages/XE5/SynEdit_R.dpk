@@ -74,6 +74,7 @@ contains
   SynExportTeX in '..\..\Source\SynExportTeX.pas',
   SynHighlighterADSP21xx in '..\..\Source\SynHighlighterADSP21xx.pas',
   SynHighlighterAsm in '..\..\Source\SynHighlighterAsm.pas',
+  SynHighlighterAsmMASM in '..\..\Source\SynHighlighterAsmMASM.pas',
   SynHighlighterAWK in '..\..\Source\SynHighlighterAWK.pas',
   SynHighlighterBaan in '..\..\Source\SynHighlighterBaan.pas',
   SynHighlighterBat in '..\..\Source\SynHighlighterBat.pas',
