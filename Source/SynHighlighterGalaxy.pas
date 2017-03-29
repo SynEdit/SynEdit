@@ -435,7 +435,9 @@ begin
     r.RootKey := RootKey;
     if r.OpenKey(Key,true) then
     begin
+      {$IFNDEF SYN_COMPILER_25_UP}
       Result := true;
+      {$ENDIF}
       r.WriteString('KeyWords', KeyWords.Text);
       Result := inherited SaveToRegistry(RootKey, Key);
     end
