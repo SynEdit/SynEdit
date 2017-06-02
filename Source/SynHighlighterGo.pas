@@ -61,8 +61,10 @@ type
   TtkTokenKind = (
     tkComment,
     tkIdentifier,
+    tkFloat,
     tkKey,
     tkNull,
+    tkNumber,
     tkSpace,
     tkString,
     tkSymbol,
@@ -82,6 +84,7 @@ type
     fTokenID: TtkTokenKind;
     fIdentFuncTable: array[0..88] of TIdentFuncTableFunc;
     fCommentAttri: TSynHighlighterAttributes;
+    fNumberAttri: TSynHighlighterAttributes;
     fIdentifierAttri: TSynHighlighterAttributes;
     fKeyAttri: TSynHighlighterAttributes;
     fSpaceAttri: TSynHighlighterAttributes;
@@ -137,14 +140,16 @@ type
     function AltFunc(Index: Integer): TtkTokenKind;
     procedure InitIdent;
     function IdentKind(MayBe: PWideChar): TtkTokenKind;
-    procedure NullProc;
-    procedure SpaceProc;
+    procedure BlockCommentProc;
     procedure CRProc;
     procedure LFProc;
-    procedure SlashProc;
     procedure LineCommentProc;
-    procedure BlockCommentProc;
+    procedure NullProc;
+    procedure NumberProc;
+    procedure SlashProc;
+    procedure SpaceProc;
     procedure StringProc;
+    procedure SymbolProc;
   protected
     function GetSampleSource: UnicodeString; override;
     function IsFilterStored: Boolean; override;
@@ -165,6 +170,7 @@ type
     procedure Next; override;
   published
     property CommentAttri: TSynHighlighterAttributes read fCommentAttri write fCommentAttri;
+    property NumberAttri: TSynHighlighterAttributes read fNumberAttri write fNumberAttri;
     property IdentifierAttri: TSynHighlighterAttributes read fIdentifierAttri write fIdentifierAttri;
     property KeyAttri: TSynHighlighterAttributes read fKeyAttri write fKeyAttri;
     property SpaceAttri: TSynHighlighterAttributes read fSpaceAttri write fSpaceAttri;
@@ -769,17 +775,23 @@ begin
   fIdentifierAttri := TSynHighLighterAttributes.Create(SYNS_AttrIdentifier, SYNS_FriendlyAttrIdentifier);
   AddAttribute(fIdentifierAttri);
 
+  fNumberAttri := TSynHighLighterAttributes.Create(SYNS_AttrNumber, SYNS_FriendlyAttrNumber);
+  fNumberAttri.Foreground := $666666;
+  AddAttribute(fNumberAttri);
+
   fKeyAttri := TSynHighLighterAttributes.Create(SYNS_AttrReservedWord, SYNS_FriendlyAttrReservedWord);
-  fKeyAttri.Style := [fsBold];
+  fKeyAttri.Foreground := $214195;
   AddAttribute(fKeyAttri);
 
   fSpaceAttri := TSynHighLighterAttributes.Create(SYNS_AttrSpace, SYNS_FriendlyAttrSpace);
   AddAttribute(fSpaceAttri);
 
   fStringAttri := TSynHighLighterAttributes.Create(SYNS_AttrString, SYNS_FriendlyAttrString);
+  fStringAttri.Foreground := $619121;
   AddAttribute(fStringAttri);
 
   fSymbolAttri := TSynHighLighterAttributes.Create(SYNS_AttrSymbol, SYNS_FriendlyAttrSymbol);
+  fSymbolAttri.Foreground := $666666;
   AddAttribute(fSymbolAttri);
 
   SetAttributesOnChange(DefHighlightChange);
@@ -788,11 +800,53 @@ begin
   fRange := rsUnknown;
 end;
 
+procedure TSynGoSyn.NumberProc;
+
+  function IsNumberChar: Boolean;
+  begin
+    case fLine[Run] of
+      '0'..'9', '.', 'e', 'E', '-', '+':
+        Result := True;
+      else
+        Result := False;
+    end;
+  end;
+
+begin
+  Inc(Run);
+  fTokenID := tkNumber;
+  while IsNumberChar do
+  begin
+    case fLine[Run] of
+      '.':
+        if fLine[Run + 1] = '.' then
+          Break
+        else
+          fTokenID := tkFloat;
+      'e', 'E': fTokenID := tkFloat;
+      '-', '+':
+        begin
+          if fTokenID <> tkFloat then // arithmetic
+            Break;
+          if (FLine[Run - 1] <> 'e') and (FLine[Run - 1] <> 'E') then
+            Break; //float, but it ends here
+        end;
+    end;
+    Inc(Run);
+  end;
+end;
+
 procedure TSynGoSyn.IdentProc;
 begin
   fTokenID := IdentKind((fLine + Run));
   inc(Run, fStringLen);
   while IsIdentChar(fLine[Run]) do inc(Run);
+end;
+
+procedure TSynGoSyn.SymbolProc;
+begin
+  inc(Run);
+  fTokenID := tkSymbol;
 end;
 
 procedure TSynGoSyn.UnknownProc;
@@ -821,8 +875,14 @@ begin
       StringProc;
     #1..#9, #11, #12, #14..#32:
       SpaceProc;
+    '0'..'9':
+      NumberProc;
     'A'..'Z', 'a'..'z', '_':
       IdentProc;
+    ':', '=', '+', '-', '.', ',':
+      SymbolProc;
+    '(', ')', '[', ']', '{', '}':
+      UnknownProc;
   else
     UnknownProc;
   end;
@@ -870,6 +930,8 @@ begin
       Result := fCommentAttri;
     tkIdentifier:
       Result := fIdentifierAttri;
+    tkNumber, tkFloat:
+      Result := fNumberAttri;
     tkKey:
       Result := fKeyAttri;
     tkSpace:
