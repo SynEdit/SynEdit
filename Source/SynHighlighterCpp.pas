@@ -85,8 +85,8 @@ type
     xtkXorAssign);
 
   TRangeState = (rsUnknown, rsAnsiC, rsAnsiCAsm, rsAnsiCAsmBlock, rsAsm,
-    rsAsmBlock, rsDirective, rsDirectiveComment, rsString34, rsString39,
-    rsMultiLineString, rsMultiLineDirective);
+    rsAsmBlock, rsDirective, rsDirectiveComment, rsMultiLineString,
+    rsMultiLineDirective);
 
   PIdentFuncTableFunc = ^TIdentFuncTableFunc;
   TIdentFuncTableFunc = function (Index: Integer): TtkTokenKind of object;
