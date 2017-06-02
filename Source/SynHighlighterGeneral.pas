@@ -76,7 +76,7 @@ type
     csCPPStyle);
   TCommentStyles = set of TCommentStyle;
 
-  TRangeState = (rsANil, rsAnsi, rsPasStyle, rsCStyle, rsUnKnown);
+  TRangeState = (rsANil, rsAnsi, rsPasStyle, rsCStyle, rsString, rsUnknown);
 
   TStringDelim = (sdSingleQuote, sdDoubleQuote, sdSingleAndDoubleQuote);
 
@@ -105,7 +105,8 @@ type
     fStringDelim: TStringDelim;
     fDetectPreprocessor: Boolean;
     fOnGetTokenAttribute: TGetTokenAttributeEvent;
-    FStringMultiLine : Boolean;
+    fStringMultiLine : Boolean;
+    fStringDelimChar: WideChar;
     procedure AsciiCharProc;
     procedure BraceOpenProc;
     procedure PointCommaProc;
@@ -131,6 +132,7 @@ type
     procedure SetIdentifierChars(const Value: UnicodeString);
     function StoreIdentChars : Boolean;
     procedure SetDetectPreprocessor(Value: boolean);
+    procedure SetStringMultiLine(const Value: Boolean);
   public
     class function GetLanguageName: string; override;
     class function GetFriendlyLanguageName: UnicodeString; override;
@@ -158,31 +160,21 @@ type
     function LoadFromRegistry(RootKey: HKEY; Key: string): boolean; override;
     {$ENDIF}
     property OnGetTokenAttribute : TGetTokenAttributeEvent read fOnGetTokenAttribute write fOnGetTokenAttribute;
-    property StringMultiLine : Boolean read FStringMultiLine write FStringMultiLine;
   published
-    property CommentAttri: TSynHighlighterAttributes read fCommentAttri
-      write fCommentAttri;
+    property CommentAttri: TSynHighlighterAttributes read fCommentAttri write fCommentAttri;
     property Comments: TCommentStyles read fComments write SetComments default [];
-    property DetectPreprocessor: boolean read fDetectPreprocessor
-      write SetDetectPreprocessor;
-    property IdentifierAttri: TSynHighlighterAttributes read fIdentifierAttri
-      write fIdentifierAttri;
-    property IdentifierChars: UnicodeString read GetIdentifierChars
-      write SetIdentifierChars stored StoreIdentChars;
+    property DetectPreprocessor: boolean read fDetectPreprocessor write SetDetectPreprocessor;
+    property IdentifierAttri: TSynHighlighterAttributes read fIdentifierAttri write fIdentifierAttri;
+    property IdentifierChars: UnicodeString read GetIdentifierChars write SetIdentifierChars stored StoreIdentChars;
     property KeyAttri: TSynHighlighterAttributes read fKeyAttri write fKeyAttri;
     property KeyWords: TUnicodeStrings read fKeyWords write SetKeyWords;
-    property NumberAttri: TSynHighlighterAttributes read fNumberAttri
-      write fNumberAttri;
-    property PreprocessorAttri: TSynHighlighterAttributes
-      read fPreprocessorAttri write fPreprocessorAttri;
-    property SpaceAttri: TSynHighlighterAttributes read fSpaceAttri
-      write fSpaceAttri;
-    property StringAttri: TSynHighlighterAttributes read fStringAttri
-      write fStringAttri;
-    property SymbolAttri: TSynHighlighterAttributes read fSymbolAttri
-      write fSymbolAttri;
-    property StringDelim: TStringDelim read GetStringDelim write SetStringDelim
-      default sdSingleQuote;
+    property NumberAttri: TSynHighlighterAttributes read fNumberAttri write fNumberAttri;
+    property PreprocessorAttri: TSynHighlighterAttributes read fPreprocessorAttri write fPreprocessorAttri;
+    property SpaceAttri: TSynHighlighterAttributes read fSpaceAttri write fSpaceAttri;
+    property StringAttri: TSynHighlighterAttributes read fStringAttri write fStringAttri;
+    property SymbolAttri: TSynHighlighterAttributes read fSymbolAttri write fSymbolAttri;
+    property StringDelim: TStringDelim read GetStringDelim write SetStringDelim default sdSingleQuote;
+    property StringMultiLine: Boolean read FStringMultiLine write SetStringMultiLine;
   end;
 
 implementation
@@ -193,6 +185,43 @@ uses
 {$ELSE}
   SynEditStrConst;
 {$ENDIF}
+
+constructor TSynGeneralSyn.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  fKeyWords := TUnicodeStringList.Create;
+  TUnicodeStringList(fKeyWords).Sorted := True;
+  TUnicodeStringList(fKeyWords).Duplicates := dupIgnore;
+  fCommentAttri := TSynHighlighterAttributes.Create(SYNS_AttrComment, SYNS_FriendlyAttrComment);
+  fCommentAttri.Style := [fsItalic];
+  AddAttribute(fCommentAttri);
+  fIdentifierAttri := TSynHighlighterAttributes.Create(SYNS_AttrIdentifier, SYNS_FriendlyAttrIdentifier);
+  AddAttribute(fIdentifierAttri);
+  fKeyAttri := TSynHighlighterAttributes.Create(SYNS_AttrReservedWord, SYNS_FriendlyAttrReservedWord);
+  fKeyAttri.Style := [fsBold];
+  AddAttribute(fKeyAttri);
+  fNumberAttri := TSynHighlighterAttributes.Create(SYNS_AttrNumber, SYNS_FriendlyAttrNumber);
+  AddAttribute(fNumberAttri);
+  fSpaceAttri := TSynHighlighterAttributes.Create(SYNS_AttrSpace, SYNS_FriendlyAttrSpace);
+  AddAttribute(fSpaceAttri);
+  fStringAttri := TSynHighlighterAttributes.Create(SYNS_AttrString, SYNS_FriendlyAttrString);
+  AddAttribute(fStringAttri);
+  fSymbolAttri := TSynHighlighterAttributes.Create(SYNS_AttrSymbol, SYNS_FriendlyAttrSymbol);
+  AddAttribute(fSymbolAttri);
+  fPreprocessorAttri := TSynHighlighterAttributes.Create(SYNS_AttrPreprocessor, SYNS_FriendlyAttrPreprocessor);
+  AddAttribute(fPreprocessorAttri);
+  SetAttributesOnChange(DefHighlightChange);
+
+  fStringDelim := sdSingleQuote;
+  fIdentChars := cDefaultIdentChars;
+  fRange := rsUnknown;
+end; { Create }
+
+destructor TSynGeneralSyn.Destroy;
+begin
+  fKeyWords.Free;
+  inherited Destroy;
+end; { Destroy }
 
 function TSynGeneralSyn.IsIdentChar(AChar: WideChar): Boolean;
 var
@@ -237,43 +266,6 @@ begin
   Result := inherited IsWordBreakChar(AChar) and not IsIdentChar(AChar);
 end;
 
-constructor TSynGeneralSyn.Create(AOwner: TComponent);
-begin
-  inherited Create(AOwner);
-  fKeyWords := TUnicodeStringList.Create;
-  TUnicodeStringList(fKeyWords).Sorted := True;
-  TUnicodeStringList(fKeyWords).Duplicates := dupIgnore;
-  fCommentAttri := TSynHighlighterAttributes.Create(SYNS_AttrComment, SYNS_FriendlyAttrComment);
-  fCommentAttri.Style := [fsItalic];
-  AddAttribute(fCommentAttri);
-  fIdentifierAttri := TSynHighlighterAttributes.Create(SYNS_AttrIdentifier, SYNS_FriendlyAttrIdentifier);
-  AddAttribute(fIdentifierAttri);
-  fKeyAttri := TSynHighlighterAttributes.Create(SYNS_AttrReservedWord, SYNS_FriendlyAttrReservedWord);
-  fKeyAttri.Style := [fsBold];
-  AddAttribute(fKeyAttri);
-  fNumberAttri := TSynHighlighterAttributes.Create(SYNS_AttrNumber, SYNS_FriendlyAttrNumber);
-  AddAttribute(fNumberAttri);
-  fSpaceAttri := TSynHighlighterAttributes.Create(SYNS_AttrSpace, SYNS_FriendlyAttrSpace);
-  AddAttribute(fSpaceAttri);
-  fStringAttri := TSynHighlighterAttributes.Create(SYNS_AttrString, SYNS_FriendlyAttrString);
-  AddAttribute(fStringAttri);
-  fSymbolAttri := TSynHighlighterAttributes.Create(SYNS_AttrSymbol, SYNS_FriendlyAttrSymbol);
-  AddAttribute(fSymbolAttri);
-  fPreprocessorAttri := TSynHighlighterAttributes.Create(SYNS_AttrPreprocessor, SYNS_FriendlyAttrPreprocessor);
-  AddAttribute(fPreprocessorAttri);
-  SetAttributesOnChange(DefHighlightChange);
-
-  fStringDelim := sdSingleQuote;
-  fIdentChars := cDefaultIdentChars;
-  fRange := rsUnknown;
-end; { Create }
-
-destructor TSynGeneralSyn.Destroy;
-begin
-  fKeyWords.Free;
-  inherited Destroy;
-end; { Destroy }
-
 procedure TSynGeneralSyn.AnsiProc;
 begin
   case fLine[Run] of
@@ -285,7 +277,7 @@ begin
     repeat
       if (fLine[Run] = '*') and (fLine[Run + 1] = ')') then
       begin
-        fRange := rsUnKnown;
+        fRange := rsUnknown;
         Inc(Run, 2);
         break;
       end;
@@ -305,7 +297,7 @@ begin
     repeat
       if fLine[Run] = '}' then
       begin
-        fRange := rsUnKnown;
+        fRange := rsUnknown;
         Inc(Run);
         break;
       end;
@@ -325,7 +317,7 @@ begin
     repeat
       if (fLine[Run] = '*') and (fLine[Run + 1] = '/') then
       begin
-        fRange := rsUnKnown;
+        fRange := rsUnknown;
         Inc(Run, 2);
         break;
       end;
@@ -363,7 +355,7 @@ begin
       case FLine[Run] of
         '}':
           begin
-            fRange := rsUnKnown;
+            fRange := rsUnknown;
             inc(Run);
             break;
           end;
@@ -492,7 +484,7 @@ begin
               '*':
                 if fLine[Run + 1] = ')' then
                 begin
-                  fRange := rsUnKnown;
+                  fRange := rsUnknown;
                   inc(Run, 2);
                   break;
                 end else inc(Run);
@@ -547,7 +539,7 @@ begin
               '*':
                 if fLine[Run + 1] = '/' then
                 begin
-                  fRange := rsUnKnown;
+                  fRange := rsUnknown;
                   inc(Run, 2);
                   break;
                 end else inc(Run);
@@ -573,21 +565,37 @@ begin
 end;
 
 procedure TSynGeneralSyn.StringProc;
-var
-   delim : WideChar;
 begin
   fTokenID := tkString;
+  fRange := rsString;
   if IsStringDelim(fLine[Run + 1]) and IsStringDelim(fLine[Run + 2]) then
     Inc(Run, 2);
-  delim:=fLine[Run];
-  repeat
-    case FLine[Run] of
-      #0 :  break;
-      #10, #13: if not StringMultiLine then break;
+
+  // eventualy store the string delimiter
+  if fStringDelimChar = #0 then
+    fStringDelimChar := fLine[Run];
+
+  Inc(Run);
+  while not IsLineEnd(Run) do
+  begin
+    if fLine[Run] = fStringDelimChar then
+    begin
+      Inc(Run);
+      if fLine[Run] <> fStringDelimChar then
+      begin
+        fRange := rsUnknown;
+        fStringDelimChar := #0;
+        break;
+      end;
     end;
-    inc(Run);
-  until FLine[Run] = delim;
-  if FLine[Run] <> #0 then inc(Run);
+    Inc(Run);
+  end;
+
+  if IsLineEnd(Run) and (not fStringMultiLine) then
+  begin
+    fRange := rsUnknown;
+    fStringDelimChar := #0;
+  end;
 end;
 
 procedure TSynGeneralSyn.UnknownProc;
@@ -603,6 +611,7 @@ begin
     rsAnsi: AnsiProc;
     rsPasStyle: PasStyleProc;
     rsCStyle: CStyleProc;
+    rsString: StringProc;
   else
     if IsStringDelim(fLine[Run]) then
       StringProc
@@ -657,18 +666,19 @@ end;
 
 // GetCharBeforeToken
 //
-function TSynGeneralSyn.GetCharBeforeToken(offset : Integer = -1) : WideChar;
+function TSynGeneralSyn.GetCharBeforeToken(offset: Integer = -1): WideChar;
 begin
-   if fTokenPos+offset>=0 then
-      Result:=FLine[fTokenPos+offset]
-   else Result:=#0;
+  if fTokenPos + offset >= 0 then
+    Result := FLine[fTokenPos + offset]
+  else
+    Result := #0;
 end;
 
 // GetCharAfterToken
 //
-function TSynGeneralSyn.GetCharAfterToken(offset : Integer = 1) : WideChar;
+function TSynGeneralSyn.GetCharAfterToken(offset: Integer = 1): WideChar;
 begin
-   Result:=FLine[fTokenPos+offset];
+  Result := FLine[fTokenPos + offset];
 end;
 
 function TSynGeneralSyn.GetTokenAttribute: TSynHighlighterAttributes;
@@ -710,16 +720,16 @@ var
   i: Integer;
 begin
   if Value <> nil then
-    begin 
-      Value.BeginUpdate;
-      for i := 0 to Value.Count - 1 do
-        Value[i] := SynWideUpperCase(Value[i]);
-      Value.EndUpdate;
-    end;
+  begin
+    Value.BeginUpdate;
+    for i := 0 to Value.Count - 1 do
+      Value[i] := SynWideUpperCase(Value[i]);
+    Value.EndUpdate;
+  end;
 
-  TUnicodeStringList(fKeyWords).Sorted:=False;
+  TUnicodeStringList(fKeyWords).Sorted := False;
   fKeyWords.Assign(Value);
-  TUnicodeStringList(fKeyWords).Sorted:=True;
+  TUnicodeStringList(fKeyWords).Sorted := True;
 
   DefHighLightChange(nil);
 end;
@@ -775,12 +785,25 @@ end;
 
 function TSynGeneralSyn.GetStringDelim: TStringDelim;
 begin
-  Result:=fStringDelim;
+  Result := fStringDelim;
 end;
 
 procedure TSynGeneralSyn.SetStringDelim(const Value: TStringDelim);
 begin
-   fStringDelim:=Value;
+  if fStringDelim <> Value then
+  begin
+    fStringDelim := Value;
+    DefHighLightChange(Self);
+  end;
+end;
+
+procedure TSynGeneralSyn.SetStringMultiLine(const Value: Boolean);
+begin
+  if FStringMultiLine <> Value then
+  begin
+    FStringMultiLine := Value;
+    DefHighLightChange(Self);
+  end;
 end;
 
 function TSynGeneralSyn.GetIdentifierChars: UnicodeString;
@@ -795,7 +818,7 @@ end;
 
 function TSynGeneralSyn.StoreIdentChars : Boolean;
 begin
-   Result := (fIdentChars<>cDefaultIdentChars);
+  Result := (fIdentChars <> cDefaultIdentChars);
 end;
 
 procedure TSynGeneralSyn.SetDetectPreprocessor(Value: boolean);
@@ -814,14 +837,16 @@ end;
 
 // IsStringDelim
 //
-function TSynGeneralSyn.IsStringDelim(aChar : WideChar) : Boolean;
+function TSynGeneralSyn.IsStringDelim(aChar : WideChar): Boolean;
 begin
-   case fStringDelim of
-      sdSingleQuote : Result:=(aChar='''');
-      sdDoubleQuote : Result:=(aChar='"');
-   else
-      Result:=(aChar='''') or (aChar='"');
-   end;
+  case fStringDelim of
+    sdSingleQuote:
+      Result := (aChar = '''');
+    sdDoubleQuote:
+      Result := (aChar = '"');
+  else
+    Result := (aChar = '''') or (aChar = '"');
+  end;
 end;
 
 initialization
