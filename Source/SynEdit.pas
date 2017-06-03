@@ -2655,9 +2655,7 @@ procedure TCustomSynEdit.PaintGutter(const AClip: TRect;
 
   procedure DrawModification(Color: TColor; Top, Bottom: Integer);
   begin
-    Canvas.Pen.Style := psSolid;
-    Canvas.Pen.Color := clLime;
-    Canvas.Pen.Width := 4;
+    Canvas.Pen.Color := Color;
     Canvas.MoveTo(fGutterWidth - fGutter.RightOffset - 2, Top);
     Canvas.LineTo(fGutterWidth - fGutter.RightOffset - 2, Bottom);
   end;
@@ -2699,6 +2697,8 @@ begin
       fGutter.GradientSteps, Rect(0, 0, fGutterWidth, ClientHeight), True);
 
   Canvas.Brush.Color := fGutter.Color;
+  Canvas.Pen.Style := psSolid;
+  Canvas.Pen.Width := 4;
 
   if fGutter.ShowLineNumbers then
   begin
@@ -11026,7 +11026,7 @@ end;
 
 procedure TCustomSynEdit.ResetModificationIndicator;
 begin
-  TSynEditStringList(fLines).ResetModifications;
+  TSynEditStringList(fLines).ResetModificationIndicator;
 end;
 
 procedure TCustomSynEdit.AddMouseCursorHandler(aHandler: TMouseCursorEvent);

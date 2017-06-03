@@ -9,34 +9,36 @@ uses
 
 type
   TFormMain = class(TForm)
-    SynEdit: TSynEdit;
-    SynDWSSyn: TSynDWSSyn;
-    Panel: TPanel;
-    CheckBoxShowLineNumbers: TCheckBox;
-    CheckBoxCustomPaint: TCheckBox;
-    CheckBoxVisible: TCheckBox;
-    CheckBoxCustomLineNumbers: TCheckBox;
-    CheckBoxLeadingZeroes: TCheckBox;
-    CheckBoxUseFontStyle: TCheckBox;
     CheckBoxAutoSize: TCheckBox;
-    CheckBoxZeroStart: TCheckBox;
-    ShapeColorBackground: TShape;
-    LabelColor: TLabel;
-    ColorDialog: TColorDialog;
-    ShapeColorBorder: TShape;
-    LabelBorderColor: TLabel;
-    CheckBoxShowModifications: TCheckBox;
-    LabelGradientStart: TLabel;
-    Label2: TLabel;
-    ShapeGradientStopColor: TShape;
-    ShapeGradientStartColor: TShape;
+    CheckBoxCustomLineNumbers: TCheckBox;
+    CheckBoxCustomPaint: TCheckBox;
     CheckBoxGradient: TCheckBox;
+    CheckBoxLeadingZeroes: TCheckBox;
+    CheckBoxShowLineNumbers: TCheckBox;
+    CheckBoxShowModifications: TCheckBox;
+    CheckBoxUseFontStyle: TCheckBox;
+    CheckBoxVisible: TCheckBox;
+    CheckBoxZeroStart: TCheckBox;
+    ColorDialog: TColorDialog;
+    LabelBorderColor: TLabel;
+    LabelColor: TLabel;
+    LabelGradientStart: TLabel;
+    LabelGradientStop: TLabel;
+    Panel: TPanel;
+    ShapeColorBackground: TShape;
+    ShapeColorBorder: TShape;
+    ShapeGradientStartColor: TShape;
+    ShapeGradientStopColor: TShape;
+    SynDWSSyn: TSynDWSSyn;
+    SynEdit: TSynEdit;
     procedure FormCreate(Sender: TObject);
     procedure CheckBoxAutoSizeClick(Sender: TObject);
     procedure CheckBoxCustomLineNumbersClick(Sender: TObject);
     procedure CheckBoxCustomPaintClick(Sender: TObject);
+    procedure CheckBoxGradientClick(Sender: TObject);
     procedure CheckBoxLeadingZeroesClick(Sender: TObject);
     procedure CheckBoxShowLineNumbersClick(Sender: TObject);
+    procedure CheckBoxShowModificationsClick(Sender: TObject);
     procedure CheckBoxUseFontStyleClick(Sender: TObject);
     procedure CheckBoxVisibleClick(Sender: TObject);
     procedure CheckBoxZeroStartClick(Sender: TObject);
@@ -44,15 +46,13 @@ type
       Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ShapeColorBorderMouseDown(Sender: TObject;
       Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure SynEditGutterGetText(Sender: TObject; aLine: Integer;
-      var aText: string);
-    procedure SynEditGutterPaint(Sender: TObject; aLine, X, Y: Integer);
-    procedure CheckBoxShowModificationsClick(Sender: TObject);
-    procedure CheckBoxGradientClick(Sender: TObject);
     procedure ShapeGradientStartColorMouseDown(Sender: TObject;
       Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ShapeGradientStopColorMouseDown(Sender: TObject;
       Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure SynEditGutterGetText(Sender: TObject; aLine: Integer;
+      var aText: string);
+    procedure SynEditGutterPaint(Sender: TObject; aLine, X, Y: Integer);
   end;
 
 var

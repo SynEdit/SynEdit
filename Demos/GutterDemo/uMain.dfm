@@ -195,7 +195,7 @@ object FormMain: TFormMain
       Height = 13
       Caption = 'Gradient Start Color:'
     end
-    object Label2: TLabel
+    object LabelGradientStop: TLabel
       Left = 513
       Top = 56
       Width = 95
