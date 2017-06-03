@@ -1009,7 +1009,7 @@ begin
 //This would be better if componentized, but oh well...
   WorkStr := Uppercase(Copy(cKeyCommand.Text, 1, cKeyCommand.SelStart) + Key);
   i := 0;
-  While i < cKeyCommand.Items.Count do
+  while i < cKeyCommand.Items.Count do
   begin
     if pos(WorkStr, Uppercase(cKeyCommand.Items[i])) = 1 then
     begin

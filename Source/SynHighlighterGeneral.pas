@@ -617,19 +617,32 @@ begin
       StringProc
     else
       case fLine[Run] of
-        '#': AsciiCharProc;
-        '{': BraceOpenProc;
-        ';': PointCommaProc;
-        #13: CRProc;
-        'A'..'Z', 'a'..'z', '_': IdentProc;
-        '$': IntegerProc;
-        #10: LFProc;
-        #0: NullProc;
-        '0'..'9': NumberProc;
-        '(': RoundOpenProc;
-        '/': SlashProc;
-        #1..#9, #11, #12, #14..#32: SpaceProc;
-        else UnknownProc;
+        '#':
+          AsciiCharProc;
+        '{':
+          BraceOpenProc;
+        ';':
+          PointCommaProc;
+        #13:
+          CRProc;
+        'A'..'Z', 'a'..'z', '_':
+          IdentProc;
+        '$':
+          IntegerProc;
+        #10:
+          LFProc;
+        #0:
+          NullProc;
+        '0'..'9':
+          NumberProc;
+        '(':
+          RoundOpenProc;
+        '/':
+          SlashProc;
+        #1..#9, #11, #12, #14..#32:
+          SpaceProc;
+        else
+          UnknownProc;
       end;
   end;
   inherited;

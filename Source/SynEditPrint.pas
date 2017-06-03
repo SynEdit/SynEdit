@@ -323,7 +323,7 @@ begin
       begin
         TmpString := ConvertTabsProc(Value[i], FTabWidth);
         j := Pos(#9, TmpString);
-        While j > 0 do
+        while j > 0 do
         begin
           TmpString[j] := ' ';
           j := Pos(#9, TmpString);

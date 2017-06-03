@@ -70,7 +70,7 @@ type
   TtkTokenKind = (tkComment, tkIdentifier, tkKey, tkNull, tkSpace, tkMessage,
     tkUnknown);
 
-  TRangeState = (rsUnKnown, rsMessageStyle);
+  TRangeState = (rsUnknown, rsMessageStyle);
 
 type
   TSynGalaxySyn = class(TSynCustomHighlighter)
@@ -236,7 +236,7 @@ begin
   end;
 
   if (Run = 0) and (FLine[Run] = '@') then begin
-    fRange := rsUnKnown;
+    fRange := rsUnknown;
     inc(Run);
   end else
     while FLine[Run] <> #0 do

@@ -67,7 +67,7 @@ type
     tkSpace, tkString, tkSymbol, tkUnknown);
 
   TRangeState = (rsANil, rsAnsi, rsAnsiAsm, rsAsm, rsBor, rsBorAsm, rsProperty,
-    rsUnKnown);
+    rsUnknown);
 
   PIdentFuncTableFunc = ^TIdentFuncTableFunc;
   TIdentFuncTableFunc = function (Index: Integer): TtkTokenKind of object;
@@ -296,7 +296,7 @@ begin
           if fRange = rsBorAsm then
             fRange := rsAsm
           else
-            fRange := rsUnKnown;
+            fRange := rsUnknown;
           break;
         end;
         Inc(Run);
@@ -418,7 +418,7 @@ begin
         if fRange = rsAnsiAsm then
           fRange := rsAsm
         else
-          fRange := rsUnKnown;
+          fRange := rsUnknown;
         break;
       end;
       Inc(Run);

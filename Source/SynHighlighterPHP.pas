@@ -75,7 +75,7 @@ type
     tkNumber, tkSpace, tkString, tkSymbol, tkUnknown, tkVariable);
 
 {$IFDEF SYN_HEREDOC}
-  TRangeState = (rsUnKnown, rsString39, rsString34, rsComment, rsVarExpansion,
+  TRangeState = (rsUnknown, rsString39, rsString34, rsComment, rsVarExpansion,
     rsHeredoc);
 
   TRangePointer = packed record
@@ -84,7 +84,7 @@ type
       False: (Range: Byte; Length: Byte; Checksum: Word);
     end;
 {$ELSE}
-  TRangeState = (rsUnKnown, rsString39, rsString34, rsComment, rsVarExpansion);
+  TRangeState = (rsUnknown, rsString39, rsString34, rsComment, rsVarExpansion);
 {$ENDIF}
 
   PIdentFuncTableFunc = ^TIdentFuncTableFunc;
@@ -357,9 +357,10 @@ end;
 procedure TSynPHPSyn.CRProc;
 begin
   fTokenID := tkSpace;
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     #10: inc(Run, 2);
-  else inc(Run);
+  else
+    inc(Run);
   end;
 end;
 
@@ -693,7 +694,7 @@ begin
           begin
             if fLine[Run + 1] = '/' then
             begin
-              fRange := rsUnKnown;
+              fRange := rsUnknown;
               inc(Run, 2);
               break;
             end
@@ -781,7 +782,7 @@ begin
     Inc(Run);
   end;
   if (FLine[Run] = iCloseChar) then
-    fRange := rsUnKnown;
+    fRange := rsUnknown;
   if not IsLineEnd(Run) then inc(Run);
 end;
 
@@ -900,7 +901,7 @@ end;
 
 procedure TSynPHPSyn.XOrSymbolProc;
 begin
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     '=':                               {xor assign}
       begin
         inc(Run, 2);
@@ -947,7 +948,7 @@ begin
       if fLine[Run + 1] = '/' then
       begin
         inc(Run, 2);
-        fRange := rsUnKnown;
+        fRange := rsUnknown;
         break;
       end
       else

@@ -317,9 +317,10 @@ end;
 procedure TSynSMLSyn.CRProc;
 begin
   fTokenID := tkSpace;
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     #10: inc(Run, 2);
-  else inc(Run);
+  else
+    inc(Run);
   end;
 end;
 

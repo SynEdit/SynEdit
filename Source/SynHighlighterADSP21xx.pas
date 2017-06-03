@@ -70,7 +70,7 @@ type
   TtkTokenKind = (tkComment, tkCondition, tkIdentifier, tkKey, tkNull, tkNumber,
     tkRegister, tkSpace, tkString, tkSymbol, tkUnknown);
 
-  TRangeState = (rsUnKnown, rsPascalComment, rsCComment, rsHexNumber,
+  TRangeState = (rsUnknown, rsPascalComment, rsCComment, rsHexNumber,
     rsBinaryNumber, rsInclude);
 
   PIdentFuncTableFunc = ^TIdentFuncTableFunc;
@@ -2182,7 +2182,7 @@ begin
     case FLine[Run] of
       '}':
         begin
-          fRange := rsUnKnown;
+          fRange := rsUnknown;
           inc(Run);
           break;
         end;
@@ -2238,7 +2238,7 @@ begin
     case FLine[Run] of
       '}':
         begin
-          fRange := rsUnKnown;
+          fRange := rsUnknown;
           inc(Run);
           break;
         end;
@@ -2258,9 +2258,10 @@ end;
 procedure TSynADSP21xxSyn.CRProc;
 begin
   fTokenID := tkSpace;
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     #10: inc(Run, 2);
-  else inc(Run);
+  else
+    inc(Run);
   end;
 end;
 
@@ -2350,7 +2351,7 @@ procedure TSynADSP21xxSyn.HexNumber;
 begin
   inc(Run);
   fTokenID := tkNumber;
-  fRange := rsUnKnown;
+  fRange := rsUnknown;
   while IsHexChar do
   begin
     inc(Run);
@@ -2360,7 +2361,7 @@ end;
 procedure TSynADSP21xxSyn.BinaryNumber;
 begin
   inc(Run);
-  fRange := rsUnKnown;
+  fRange := rsUnknown;
   while CharInSet(FLine[Run], ['0'..'1']) do
   begin
     inc(Run);

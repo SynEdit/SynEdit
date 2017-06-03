@@ -71,7 +71,7 @@ type
   TtkTokenKind = (tkComment, tkIdentifier, tkKey, tkNull, tkNumber, tkSpace,
     tkString, tkSymbol, tkUnknown);
 
-  TRangeState = (rsANil, rsComment, rsUnKnown);
+  TRangeState = (rsANil, rsComment, rsUnknown);
 
 type
   TSynDfmSyn = class(TSynCustomHighlighter)

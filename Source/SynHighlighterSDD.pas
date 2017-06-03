@@ -72,7 +72,7 @@ type
   PIdentFuncTableFunc = ^TIdentFuncTableFunc;
   TIdentFuncTableFunc = function (Index: Integer): TtkTokenKind of object;
 
-  TRangeState = (rsComment, rsUnKnown);
+  TRangeState = (rsComment, rsUnknown);
 
 type
   TSynSDDSyn = class(TSynCustomHighlighter)
@@ -544,7 +544,7 @@ begin
         if fLine[Run] = '}' then
         begin
           Inc(Run);
-          fRange := rsUnKnown;
+          fRange := rsUnknown;
           Break;
         end;
         Inc(Run);

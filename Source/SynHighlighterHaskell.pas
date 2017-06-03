@@ -324,7 +324,7 @@ begin
           else if fRange = rsDirectiveComment then
             fRange := rsDirective
           else
-            fRange := rsUnKnown;
+            fRange := rsUnknown;
           break;
         end else
           inc(Run);
@@ -406,7 +406,7 @@ end;
 procedure TSynHaskellSyn.ColonProc;
 begin
   fTokenID := tkSymbol;
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     ':':                               {scope resolution operator}
       begin
         inc(Run, 2);
@@ -447,7 +447,7 @@ end;
 procedure TSynHaskellSyn.GreaterProc;
 begin
   fTokenID := tkSymbol;
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     '=':                               {greater than or equal to}
       begin
         inc(Run, 2);
@@ -778,7 +778,7 @@ end;
 procedure TSynHaskellSyn.XOrSymbolProc;
 begin
   fTokenID := tkSymbol;
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     '=':                               {xor assign}
       begin
         inc(Run, 2);

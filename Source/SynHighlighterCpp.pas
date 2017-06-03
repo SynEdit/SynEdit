@@ -404,7 +404,7 @@ begin
             not IsLineEnd(Run) then
               fRange := rsMultiLineDirective
           else
-            fRange := rsUnKnown;
+            fRange := rsUnknown;
           break;
         end else
           inc(Run);
@@ -1043,7 +1043,7 @@ begin
                   if fRange = rsAnsiCAsmBlock then
                     fRange := rsAsmBlock
                   else
-                    fRange := rsUnKnown;
+                    fRange := rsUnknown;
                   end;
                 break;
               end else inc(Run);

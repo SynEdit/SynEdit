@@ -3278,7 +3278,7 @@ end;
 procedure TSynPerlSyn.CRProc;
 begin
   fTokenID := tkSpace;
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     #10: inc(Run, 2);
   else inc(Run);
   end;
@@ -3286,7 +3286,7 @@ end;
 
 procedure TSynPerlSyn.ColonProc;
 begin
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     ':':                               {double colon}
       begin
         inc(Run, 2);
@@ -3339,7 +3339,7 @@ end;
 
 procedure TSynPerlSyn.GreaterProc;
 begin
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     '=':                               {greater than or equal to}
       begin
         inc(Run, 2);
@@ -3366,7 +3366,7 @@ begin
   case FLine[Run] of
     '$':
       begin
-        Case FLine[Run + 1] of
+        case FLine[Run + 1] of
           '!'..'+', '-'..'@', '['..']', '_', '`', '|', '~':
             begin                      {predefined variables}
               inc(Run, 2);
@@ -3375,7 +3375,7 @@ begin
             end;
           '^':
             begin
-              Case FLine[Run + 2] of
+              case FLine[Run + 2] of
                 'A', 'D', 'F', 'I', 'L', 'P', 'T', 'W', 'X':
                   begin                {predefined variables}
                     inc(Run, 3);
@@ -3394,7 +3394,7 @@ begin
       end;
     '%':
       begin
-        Case FLine[Run + 1] of
+        case FLine[Run + 1] of
           '=':                         {mod assign}
             begin
               inc(Run, 2);
@@ -3411,7 +3411,7 @@ begin
       end;
     'x':
       begin
-        Case FLine[Run + 1] of
+        case FLine[Run + 1] of
           '=':                         {repetition assign}
             begin
               inc(Run, 2);
@@ -3713,7 +3713,7 @@ end;
 
 procedure TSynPerlSyn.XOrSymbolProc;
 begin
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     '=':                               {xor assign}
       begin
         inc(Run, 2);

@@ -400,7 +400,7 @@ begin
     begin
       if fLine[Run + 1] = ')' then
       begin
-        fRange := rsUnKnown;
+        fRange := rsUnknown;
         inc(Run, 2);
         break;
       end
@@ -436,7 +436,7 @@ begin
   while not IsLineEnd(Run) do
     if FLine[Run] = '}' then
     begin
-      fRange := rsUnKnown;
+      fRange := rsUnknown;
       inc(Run);
       break;
     end
@@ -471,7 +471,7 @@ begin
     begin
       if fLine[Run + 1] = '/' then
       begin
-        fRange := rsUnKnown;
+        fRange := rsUnknown;
         inc(Run, 2);
         break;
       end

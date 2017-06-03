@@ -85,7 +85,7 @@ type
     tkValue,
     tkSymbol);
 
-  TRangeState = (rsUnKnown, rsCStyleComment, rsString);
+  TRangeState = (rsUnknown, rsCStyleComment, rsString);
 
   PIdentFuncTableFunc = ^TIdentFuncTableFunc;
   TIdentFuncTableFunc = function (Index: Integer): TtkTokenKind of object;
@@ -1814,7 +1814,7 @@ begin
         if (fLine[Run] = '*') and (fLine[Run + 1] = '/') then
         begin
           Inc(Run, 2);
-          fRange := rsUnKnown;
+          fRange := rsUnknown;
           Break;
         end;
         if not IsLineEnd(Run) then
@@ -1839,7 +1839,7 @@ begin
     if fLine[Run] = '''' then
     begin
       Inc(Run, 1);
-      fRange := rsUnKnown;
+      fRange := rsUnknown;
       Break;
     end;
     if not IsLineEnd(Run) then

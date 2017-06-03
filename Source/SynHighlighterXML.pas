@@ -853,22 +853,23 @@ end;
 
 function TSynXMLSyn.GetSampleSource: UnicodeString;
 begin
-  Result:= '<?xml version="1.0"?>'#13#10+
-           '<!DOCTYPE root ['#13#10+
-           '  ]>'#13#10+
-           '<!-- Comment -->'#13#10+
-           '<root version="&test;">'#13#10+
-           '  <![CDATA[ **CDATA section** ]]>'#13#10+
-           '</root>';
+  Result :=
+    '<?xml version="1.0"?>'#13#10+
+    '<!DOCTYPE root ['#13#10+
+    '  ]>'#13#10+
+    '<!-- Comment -->'#13#10+
+    '<root version="&test;">'#13#10+
+    '  <![CDATA[ **CDATA section** ]]>'#13#10+
+    '</root>';
 end;
 
-{$IFNDEF SYN_CPPB_1}
 class function TSynXMLSyn.GetFriendlyLanguageName: UnicodeString;
 begin
   Result := SYNS_FriendlyLangXML;
 end;
 
 initialization
+{$IFNDEF SYN_CPPB_1}
   RegisterPlaceableHighlighter(TSynXMLSyn);
 {$ENDIF}
 end.

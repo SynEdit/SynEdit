@@ -5,11 +5,13 @@ object SynEditKeystrokeEditorForm: TSynEditKeystrokeEditorForm
   Caption = 'Edit Keystroke'
   ClientHeight = 129
   ClientWidth = 269
+  Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
+  OldCreateOrder = True
   Position = poScreenCenter
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
@@ -68,7 +70,6 @@ object SynEditKeystrokeEditorForm: TSynEditKeystrokeEditorForm
       Top = 10
       Width = 186
       Height = 21
-      ItemHeight = 13
       TabOrder = 0
       OnExit = cmbCommandExit
       OnKeyPress = cmbCommandKeyPress

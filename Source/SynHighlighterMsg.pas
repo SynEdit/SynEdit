@@ -70,7 +70,7 @@ type
     tkTerminator,
     tkUnknown);
 
-  TRangeState = (rsUnKnown, rsBraceComment, rsString);
+  TRangeState = (rsUnknown, rsBraceComment, rsString);
 
   PIdentFuncTableFunc = ^TIdentFuncTableFunc;
   TIdentFuncTableFunc = function (Index: Integer): TtkTokenKind of object;
@@ -308,7 +308,7 @@ begin
         if (fLine[Run] = '}') then
         begin
           Inc(Run, 1);
-          fRange := rsUnKnown;
+          fRange := rsUnknown;
           Break;
         end;
         if not IsLineEnd(Run) then
@@ -333,7 +333,7 @@ begin
     if (fLine[Run] = '''') then
     begin
       Inc(Run, 1);
-      fRange := rsUnKnown;
+      fRange := rsUnknown;
       Break;
     end;
     if not IsLineEnd(Run) then

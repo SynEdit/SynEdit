@@ -81,7 +81,7 @@ type
     tkTriangle,
     tkUnknown);
 
-  TRangeState = (rsUnKnown);
+  TRangeState = (rsUnknown);
 
   PIdentFuncTableFunc = ^TIdentFuncTableFunc;
   TIdentFuncTableFunc = function (Index: Integer): TtkTokenKind of object;

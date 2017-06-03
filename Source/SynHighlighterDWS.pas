@@ -498,7 +498,7 @@ begin
           if fRange in [rsBorAsm, rsDirectiveAsm] then
             fRange := rsAsm
           else
-            fRange := rsUnKnown;
+            fRange := rsUnknown;
           break;
         end;
         Inc(Run);
@@ -695,7 +695,7 @@ begin
         if fRange = rsAnsiAsm then
           fRange := rsAsm
         else
-          fRange := rsUnKnown;
+          fRange := rsUnknown;
         break;
       end;
       Inc(Run);

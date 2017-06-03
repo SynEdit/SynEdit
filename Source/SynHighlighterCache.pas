@@ -72,7 +72,7 @@ type
     tkNumber, tkDirective, tkSpace, tkString, tkSymbol, tkIndirect, tkLabel,
     tkMacro, tkUserFunction, tkEmbedSQL, tkEmbedText, tkUnknown);
 
-  TRangeState = (rsUnKnown, rsSQL, rsHTML, rsCommand);
+  TRangeState = (rsUnknown, rsSQL, rsHTML, rsCommand);
 
   PIdentFuncTableFunc = ^TIdentFuncTableFunc;
   TIdentFuncTableFunc = function (Index: Integer): TtkTokenKind of object;

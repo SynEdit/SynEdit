@@ -93,7 +93,7 @@ type
     xtkSquareOpen, xtkStar, xtkSubtract, xtkSubtractAssign, xtkXor,
     xtkXorAssign);
 
-  TRangeState = (rsANil, rsAnsiC, rsDirective, rsDirectiveComment, rsUnKnown);
+  TRangeState = (rsANil, rsAnsiC, rsDirective, rsDirectiveComment, rsUnknown);
 
   PIdentFuncTableFunc = ^TIdentFuncTableFunc;
   TIdentFuncTableFunc = function (Index: Integer): TtkTokenKind of object;
@@ -1824,7 +1824,7 @@ begin
           if fRange = rsDirectiveComment then                              
             fRange := rsDirective
           else
-            fRange := rsUnKnown;
+            fRange := rsUnknown;
           break;
         end else
           inc(Run);
@@ -1893,7 +1893,7 @@ end;
 procedure TSynUnrealSyn.ColonProc;
 begin
   fTokenID := tkSymbol;
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     ':':                               {scope resolution operator}
       begin
         inc(Run, 2);
@@ -2243,7 +2243,7 @@ begin
                 if fRange = rsDirectiveComment then
                   fRange := rsDirective
                 else
-                  fRange := rsUnKnown;
+                  fRange := rsUnknown;
                 break;
               end else inc(Run);
             #10, #13:
@@ -2344,7 +2344,7 @@ end;
 procedure TSynUnrealSyn.XOrSymbolProc;
 begin
   fTokenID := tkSymbol;
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
   	'=':                               {xor assign}
       begin
         inc(Run, 2);

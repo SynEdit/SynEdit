@@ -397,9 +397,10 @@ end;
 procedure TSynJavaSyn.CRProc;
 begin
   fTokenID := tkSpace;
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     #10: inc(Run, 2);
-  else inc(Run);
+  else
+    inc(Run);
   end;
 end;
 
@@ -437,7 +438,7 @@ end;
 
 procedure TSynJavaSyn.GreaterProc;
 begin
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     '=':                               {greater than or equal to}
       begin
         inc(Run, 2);
@@ -446,7 +447,7 @@ begin
       end;
     '>':
       begin
-        Case FLine[Run + 2] of
+        case FLine[Run + 2] of
           '=':                         {shift right assign}
             begin
             inc(Run, 3);
@@ -831,7 +832,7 @@ end;
 
 procedure TSynJavaSyn.XOrSymbolProc;
 begin
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     '=':                               {xor assign}
       begin
         inc(Run, 2);

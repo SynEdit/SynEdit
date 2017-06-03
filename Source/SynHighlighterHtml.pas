@@ -331,7 +331,7 @@ type
     tkSpace, tkSymbol, tkText, tkUndefKey, tkValue);
 
   TRangeState = (rsAmpersand, rsComment, rsKey, rsParam, rsText,
-    rsUnKnown, rsValue, rsQuoteValue, rsDoubleQuoteValue);
+    rsUnknown, rsValue, rsQuoteValue, rsDoubleQuoteValue);
 
   PIdentFuncTableFunc = ^TIdentFuncTableFunc;
   TIdentFuncTableFunc = function (Index: Integer): TtkTokenKind of object;

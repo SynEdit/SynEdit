@@ -4458,7 +4458,7 @@ begin
     repeat
       if (fLine[Run] = '*') and (fLine[Run + 1] = '/') then
       begin
-        fRange := rsUnKnown;
+        fRange := rsUnknown;
         inc(Run, 2);
         break;
       end;
@@ -4596,7 +4596,7 @@ begin
            repeat
              Inc(Run);
              if (fLine[Run] = '*') and (fLine[Run + 1] = '/') then begin
-               fRange := rsUnKnown;
+               fRange := rsUnknown;
                Inc(Run, 2);
                break;
              end;

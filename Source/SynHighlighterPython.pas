@@ -75,7 +75,7 @@ type
     tkString, tkSymbol, tkNonKeyword, tkTrippleQuotedString,
     tkSystemDefined, tkHex, tkOct, tkFloat, tkUnknown);
 
-  TRangeState = (rsANil, rsComment, rsUnKnown, rsMultilineString, rsMultilineString2,
+  TRangeState = (rsANil, rsComment, rsUnknown, rsMultilineString, rsMultilineString2,
                  rsMultilineString3 //this is to indicate if a string is made multiline by backslash char at line end (as in C++ highlighter)
                 );
 
@@ -825,7 +825,7 @@ begin
 
         '"':
           if (fLine[Run + 1] = '"') and (fLine[Run + 2] = '"') then begin
-            fRange := rsUnKnown;
+            fRange := rsUnknown;
             inc(Run, 3);
             exit;
           end else
@@ -939,7 +939,7 @@ begin
 
         #39:
           if (fLine[Run + 1] = #39) and (fLine[Run + 2] = #39) then begin
-            fRange := rsUnKnown;
+            fRange := rsUnknown;
             inc(Run, 3);
             EXIT;
           end else

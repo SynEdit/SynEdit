@@ -70,7 +70,7 @@ uses
   SynUnicode,
 {$ENDIF}
   SysUtils,
-  System.IOUtils,
+  IOUtils,
   SynMemo,
   Classes;
 
@@ -761,4 +761,3 @@ initialization
   RegisterPlaceableHighlighter(TSynAsmMASMSyn);
 {$ENDIF}
 end.
-

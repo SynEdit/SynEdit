@@ -80,7 +80,7 @@ type
     tkString,
     tkUnknown);
 
-  TRangeState = (rsUnKnown, rsEiffelComment, rsString, rsOperatorAndSymbolProc);
+  TRangeState = (rsUnknown, rsEiffelComment, rsString, rsOperatorAndSymbolProc);
 
   PIdentFuncTableFunc = ^TIdentFuncTableFunc;
   TIdentFuncTableFunc = function (Index: Integer): TtkTokenKind of object;
@@ -1322,7 +1322,7 @@ begin
     if (fLine[Run] = '"') then
       begin
         Inc(Run, 1);
-        fRange := rsUnKnown;
+        fRange := rsUnknown;
         Break;
       end;
     if not IsLineEnd(Run) then

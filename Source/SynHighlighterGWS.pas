@@ -84,7 +84,7 @@ Type
     xtkSquareOpen, xtkStar, xtkSubtract, xtkSubtractAssign, xtkXor,
     xtkXorAssign);
 
-  TRangeState = (rsAnsiC, rsUnKnown);
+  TRangeState = (rsAnsiC, rsUnknown);
 
   PIdentFuncTableFunc = ^TIdentFuncTableFunc;
   TIdentFuncTableFunc = function (Index: Integer): TtkTokenKind of object;
@@ -421,7 +421,7 @@ begin
       '*':
         if fLine[Run + 1] = '/' then begin
           inc(Run, 2);
-          fRange := rsUnKnown;
+          fRange := rsUnknown;
           break;
         end else
           inc(Run);
@@ -498,7 +498,7 @@ end;
 procedure TSynGWScriptSyn.ColonProc;
 begin
   fTokenID := tkSymbol;
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     ':':                               {scope resolution operator}
       begin
         inc(Run, 2);
@@ -539,7 +539,7 @@ end;
 procedure TSynGWScriptSyn.GreaterProc;
 begin
   fTokenID := tkSymbol;
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     '=':                               {greater than or equal to}
       begin
         inc(Run, 2);
@@ -809,7 +809,7 @@ begin
               if fLine[Run + 1] = '/' then
               begin
                 inc(Run, 2);
-                fRange := rsUnKnown;
+                fRange := rsUnknown;
                 break;
               end else inc(Run);
             #10: break;
@@ -898,7 +898,7 @@ end;
 procedure TSynGWScriptSyn.XOrSymbolProc;
 begin
   fTokenID := tkSymbol;
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
   	'=':                               {xor assign}
       begin
         inc(Run, 2);

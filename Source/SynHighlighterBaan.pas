@@ -376,15 +376,16 @@ end;
 procedure TSynBaanSyn.CRProc;
 begin
   fTokenID := tkSpace;
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     #10: inc(Run, 2);
-  else inc(Run);
+  else
+    inc(Run);
   end;
 end;
 
 procedure TSynBaanSyn.ColonProc;
 begin
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     ':':                               {scope resolution operator}
       begin
         inc(Run, 2);
@@ -446,7 +447,7 @@ end;
 
 procedure TSynBaanSyn.GreaterProc;
 begin
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     '=':                               {greater than or equal to}
       begin
         inc(Run, 2);
@@ -707,7 +708,7 @@ end;
 
 procedure TSynBaanSyn.XOrSymbolProc;
 begin
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     '=':                               {xor assign}
       begin
         inc(Run, 2);

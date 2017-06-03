@@ -72,7 +72,7 @@ type
     tkNull, tkNumber, tkQualifier, tkSpace, tkSpecial, tkString, tkSymbol,
     tkUnknown, tkVariable);
 
-  TRangeState = (rsANil, rsAdd, rsFind, rsUnKnown);
+  TRangeState = (rsANil, rsAdd, rsFind, rsUnknown);
 
   PIdentFuncTableFunc = ^TIdentFuncTableFunc;
   TIdentFuncTableFunc = function (Index: Integer): TtkTokenKind of object;
@@ -1814,7 +1814,7 @@ begin
   if IsCurrentToken(KeyWords[Index]) and (fRange = rsFind) then
   begin
     Result := tkKey;
-    fRange := rsUnKnown;
+    fRange := rsUnknown;
   end
   else
     Result := tkIdentifier;
@@ -2979,7 +2979,7 @@ begin
   if IsCurrentToken(KeyWords[Index]) and (fRange = rsAdd) then
   begin
     Result := tkKey;
-    fRange := rsUnKnown;
+    fRange := rsUnknown;
   end
   else
     Result := tkIdentifier;

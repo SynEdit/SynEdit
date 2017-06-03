@@ -341,20 +341,21 @@ end;
 
 function TSynTeXSyn.GetSampleSource: UnicodeString;
 begin
-  Result:='\documentclass[a4paper]{article}'+#13#10+
-          '% LaTeX sample source'+#13#10+
-          '\begin{document}'+#13#10+
-          'Here is a formula: $ (2x + 3)*5y $'+#13#10+
-          '\end{document}';
+  Result :=
+    '\documentclass[a4paper]{article}'+#13#10+
+    '% LaTeX sample source'+#13#10+
+    '\begin{document}'+#13#10+
+    'Here is a formula: $ (2x + 3)*5y $'+#13#10+
+    '\end{document}';
 end;
 
-{$IFNDEF SYN_CPPB_1}
 class function TSynTeXSyn.GetFriendlyLanguageName: UnicodeString;
 begin
   Result := SYNS_FriendlyLangTeX;
 end;
 
 initialization
+{$IFNDEF SYN_CPPB_1}
   RegisterPlaceableHighlighter(TSynTeXSyn);
 {$ENDIF}
 end.

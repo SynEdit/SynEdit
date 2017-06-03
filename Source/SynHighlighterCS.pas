@@ -1100,7 +1100,7 @@ begin
           else if fRange = rsDirectiveComment then
             fRange := rsDirective
           else
-            fRange := rsUnKnown;
+            fRange := rsUnknown;
           break;
         end else
           inc(Run);
@@ -1182,7 +1182,7 @@ end;
 procedure TSynCSSyn.ColonProc;
 begin
   fTokenID := tkSymbol;
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     ':':                               {scope resolution operator}
       begin
         inc(Run, 2);
@@ -1269,7 +1269,7 @@ end;
 procedure TSynCSSyn.GreaterProc;
 begin
   fTokenID := tkSymbol;
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
     '=':                               {greater than or equal to}
       begin
         inc(Run, 2);
@@ -1553,7 +1553,7 @@ begin
                   if fRange = rsAnsiCAsmBlock then
                     fRange := rsAsmBlock
                   else
-                    fRange := rsUnKnown;
+                    fRange := rsUnknown;
                   end;
                 break;
               end else inc(Run);
@@ -1699,7 +1699,7 @@ end;
 procedure TSynCSSyn.XOrSymbolProc;
 begin
   fTokenID := tkSymbol;
-  Case FLine[Run + 1] of
+  case FLine[Run + 1] of
   	'=':                               {xor assign}
       begin
         inc(Run, 2);
