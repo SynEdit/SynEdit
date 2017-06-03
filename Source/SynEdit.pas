@@ -840,6 +840,8 @@ type
     procedure InvalidateLine(Line: integer);
     procedure InvalidateLines(FirstLine, LastLine: integer);
     procedure InvalidateSelection;
+    procedure MarkModifiedLinesAsSaved;
+    procedure ResetModificationIndicator;
     function IsBookmark(BookMark: Integer): Boolean;
     function IsPointInSelection(const Value: TBufferCoord): Boolean;
     procedure LockUndo;
@@ -2773,9 +2775,9 @@ begin
         if fGutter.ShowModification then
           case TSynEditStringList(fLines).Modification[cLine - 1] of
             smModified:
-              DrawModification(clLime, rcLine.Top, rcLine.Bottom);
-            smSaved:
               DrawModification(clYellow, rcLine.Top, rcLine.Bottom);
+            smSaved:
+              DrawModification(clLime, rcLine.Top, rcLine.Bottom);
           end;
       end;
       // now erase the remaining area if any
@@ -2803,9 +2805,9 @@ begin
         vLineTop := (LineToRow(cLine) - TopLine) * fTextHeight;
         case TSynEditStringList(fLines).Modification[cLine - 1] of
           smModified:
-            DrawModification(clLime, vLineTop, vLineTop + fTextHeight);
-          smSaved:
             DrawModification(clYellow, vLineTop, vLineTop + fTextHeight);
+          smSaved:
+            DrawModification(clLime, vLineTop, vLineTop + fTextHeight);
         end;
       end;
   end;
@@ -8283,6 +8285,11 @@ begin
   InvalidateGutter;
 end;
 
+procedure TCustomSynEdit.MarkModifiedLinesAsSaved;
+begin
+  TSynEditStringList(fLines).MarkModifiedLinesAsSaved;
+end;
+
 function TCustomSynEdit.GetSelStart: integer;
 begin
   if GetSelAvail then
@@ -11015,6 +11022,11 @@ end;
 procedure TCustomSynEdit.RemoveMouseUpHandler(aHandler: TMouseEvent);
 begin
   fKbdHandler.RemoveMouseUpHandler(aHandler);
+end;
+
+procedure TCustomSynEdit.ResetModificationIndicator;
+begin
+  TSynEditStringList(fLines).ResetModifications;
 end;
 
 procedure TCustomSynEdit.AddMouseCursorHandler(aHandler: TMouseCursorEvent);

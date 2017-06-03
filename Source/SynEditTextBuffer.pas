@@ -178,6 +178,9 @@ type
     function LineCharLength(Index : Integer) : Integer;
     function LineCharIndex(Index : Integer) : Integer;
 
+    procedure MarkModifiedLinesAsSaved;
+    procedure ResetModificationIndicator;
+
     property AppendNewLineAtEOF: Boolean read fAppendNewLineAtEOF write fAppendNewLineAtEOF;
 
     property FileFormat: TSynEditFileFormat read fFileFormat write SetFileFormat;
@@ -870,6 +873,26 @@ begin
   FStreaming := True;
   inherited;
   FStreaming := False;
+end;
+
+procedure TSynEditStringList.MarkModifiedLinesAsSaved;
+var
+  Index: Integer;
+begin
+  for Index := 0 to fCount - 1 do
+    if sfModified in fList^[Index].fFlags then
+      Include(fList^[Index].fFlags, sfSaved);
+end;
+
+procedure TSynEditStringList.ResetModificationIndicator;
+var
+  Index: Integer;
+begin
+  for Index := 0 to fCount - 1 do
+  begin
+    Exclude(fList^[Index].fFlags, sfModified);
+    Exclude(fList^[Index].fFlags, sfSaved);
+  end;
 end;
 
 {$IFDEF UNICODE}
