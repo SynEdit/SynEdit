@@ -828,9 +828,8 @@ type
     function IsWhiteChar(AChar: WideChar): Boolean; virtual;
     function IsWordBreakChar(AChar: WideChar): Boolean; virtual;
 
-    // Codehunter patch: Make InsertBlock, DoBlockIndent, DoBlockUnindent public
     procedure InsertBlock(const BB, BE: TBufferCoord; ChangeStr: PWideChar; AddToUndoList: Boolean);
-    // Codehunter patch: Added UnifiedSelection
+    procedure InsertLine(const BB, BE: TBufferCoord; ChangeStr: PWideChar; AddToUndoList: Boolean);
     function UnifiedSelection: TBufferBlock;
     procedure DoBlockIndent;
     procedure DoBlockUnindent;
@@ -2652,6 +2651,15 @@ procedure TCustomSynEdit.PaintGutter(const AClip: TRect;
     end;
   end;
 
+  procedure DrawModification(Color: TColor; Top, Bottom: Integer);
+  begin
+    Canvas.Pen.Style := psSolid;
+    Canvas.Pen.Color := clLime;
+    Canvas.Pen.Width := 4;
+    Canvas.MoveTo(fGutterWidth - fGutter.RightOffset - 2, Top);
+    Canvas.LineTo(fGutterWidth - fGutter.RightOffset - 2, Bottom);
+  end;
+
 var
   cLine: Integer;
   cMark: Integer;
@@ -2664,6 +2672,7 @@ var
   vMarkRow: Integer;
   vGutterRow: Integer;
   vLineTop: Integer;
+  vTextOffset: Integer;
 {$IFNDEF SYN_CLX}
   dc: HDC;
   TextSize: TSize;
@@ -2742,19 +2751,32 @@ begin
           Canvas.Brush.Style := bsSolid;
 {$ELSE}
         TextSize := GetTextSize(DC, PWideChar(s), Length(s));
+        vTextOffset := (fGutterWidth - fGutter.RightOffset - 2) - TextSize.cx;
+        if fGutter.ShowModification then
+          vTextOffset := vTextOffset - 4;
+
         if fGutter.Gradient then
         begin
           SetBkMode(DC, TRANSPARENT);
-          Windows.ExtTextOutW(DC, (fGutterWidth - fGutter.RightOffset - 2) - TextSize.cx,
+          Windows.ExtTextOutW(DC, vTextOffset,
             rcLine.Top + ((fTextHeight - Integer(TextSize.cy)) div 2), 0,
             @rcLine, PWideChar(s), Length(s), nil);
           SetBkMode(DC, OPAQUE);
         end
         else
-          Windows.ExtTextOutW(DC, (fGutterWidth - fGutter.RightOffset - 2) - TextSize.cx,
+          Windows.ExtTextOutW(DC, vTextOffset,
             rcLine.Top + ((fTextHeight - Integer(TextSize.cy)) div 2), ETO_OPAQUE,
             @rcLine, PWideChar(s), Length(s), nil);
 {$ENDIF}
+
+        // eventually draw modifications
+        if fGutter.ShowModification then
+          case TSynEditStringList(fLines).Modification[cLine - 1] of
+            smModified:
+              DrawModification(clLime, rcLine.Top, rcLine.Bottom);
+            smSaved:
+              DrawModification(clYellow, rcLine.Top, rcLine.Bottom);
+          end;
       end;
       // now erase the remaining area if any
       if (AClip.Bottom > rcLine.Bottom) and not fGutter.Gradient then
@@ -2770,8 +2792,23 @@ begin
         fTextDrawer.SetBaseFont(Self.Font);
     end;
   end
-  else if not fGutter.Gradient then
-    Canvas.FillRect(AClip);
+  else
+  begin
+    if not fGutter.Gradient then
+      Canvas.FillRect(AClip);
+
+    if fGutter.ShowModification then
+      for cLine := vFirstLine to vLastLine do
+      begin
+        vLineTop := (LineToRow(cLine) - TopLine) * fTextHeight;
+        case TSynEditStringList(fLines).Modification[cLine - 1] of
+          smModified:
+            DrawModification(clLime, vLineTop, vLineTop + fTextHeight);
+          smSaved:
+            DrawModification(clYellow, vLineTop, vLineTop + fTextHeight);
+        end;
+      end;
+  end;
 
 {$IFDEF SYN_WIN32}
   // draw word wrap glyphs transparently over gradient
@@ -5796,6 +5833,15 @@ begin
   SetCaretAndSelection(BB, BB, BE);
   ActiveSelectionMode := smColumn;
   SetSelTextPrimitiveEx(smColumn, ChangeStr, AddToUndoList);
+  StatusChanged([scSelection]);
+end;
+
+procedure TCustomSynEdit.InsertLine(const BB, BE: TBufferCoord; ChangeStr: PWideChar;
+  AddToUndoList: Boolean);
+begin
+  SetCaretAndSelection(BB, BB, BE);
+  ActiveSelectionMode := smLine;
+  SetSelTextPrimitiveEx(smLine, ChangeStr, AddToUndoList);
   StatusChanged([scSelection]);
 end;
 

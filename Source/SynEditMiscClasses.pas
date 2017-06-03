@@ -107,6 +107,7 @@ type
     fBorderColor: TColor;
     fWidth: integer;
     fShowLineNumbers: boolean;
+    fShowModification: boolean;
     fDigitCount: integer;
     fLeadingZeros: boolean;
     fZeroStart: boolean;
@@ -132,6 +133,7 @@ type
     procedure SetLeftOffset(Value: integer);
     procedure SetRightOffset(Value: integer);
     procedure SetShowLineNumbers(const Value: boolean);
+    procedure SetShowModification(const Value: boolean);
     procedure SetUseFontStyle(Value: boolean);
     procedure SetVisible(Value: boolean);
     procedure SetWidth(Value: integer);
@@ -170,6 +172,8 @@ type
       default 2;
     property ShowLineNumbers: boolean read fShowLineNumbers
       write SetShowLineNumbers default FALSE;
+    property ShowModification: boolean read fShowModification
+      write SetShowModification default FALSE;
     property UseFontStyle: boolean read fUseFontStyle write SetUseFontStyle
       default True;
     property Visible: boolean read fVisible write SetVisible default TRUE;
@@ -545,10 +549,17 @@ function TSynGutter.RealGutterWidth(CharWidth: integer): integer;
 begin
   if not fVisible then
     Result := 0
-  else if fShowLineNumbers then
-    Result := fLeftOffset + fRightOffset + fAutoSizeDigitCount * CharWidth + 2
   else
-    Result := fWidth;
+  begin
+    if fShowLineNumbers then
+      Result := fLeftOffset + fRightOffset + fAutoSizeDigitCount * CharWidth + 2
+    else
+      Result := fWidth;
+
+    // take modification indicator into account
+    if fShowModification then
+      Result := Result + 4;
+  end;
 end;
 
 procedure TSynGutter.SetAutoSize(const Value: boolean);
@@ -617,6 +628,14 @@ procedure TSynGutter.SetShowLineNumbers(const Value: boolean);
 begin
   if fShowLineNumbers <> Value then begin
     fShowLineNumbers := Value;
+    if Assigned(fOnChange) then fOnChange(Self);
+  end;
+end;
+
+procedure TSynGutter.SetShowModification(const Value: boolean);
+begin
+  if fShowModification <> Value then begin
+    fShowModification := Value;
     if Assigned(fOnChange) then fOnChange(Self);
   end;
 end;

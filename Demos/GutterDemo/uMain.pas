@@ -25,6 +25,12 @@ type
     ColorDialog: TColorDialog;
     ShapeColorBorder: TShape;
     LabelBorderColor: TLabel;
+    CheckBoxShowModifications: TCheckBox;
+    LabelGradientStart: TLabel;
+    Label2: TLabel;
+    ShapeGradientStopColor: TShape;
+    ShapeGradientStartColor: TShape;
+    CheckBoxGradient: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure CheckBoxAutoSizeClick(Sender: TObject);
     procedure CheckBoxCustomLineNumbersClick(Sender: TObject);
@@ -41,6 +47,12 @@ type
     procedure SynEditGutterGetText(Sender: TObject; aLine: Integer;
       var aText: string);
     procedure SynEditGutterPaint(Sender: TObject; aLine, X, Y: Integer);
+    procedure CheckBoxShowModificationsClick(Sender: TObject);
+    procedure CheckBoxGradientClick(Sender: TObject);
+    procedure ShapeGradientStartColorMouseDown(Sender: TObject;
+      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure ShapeGradientStopColorMouseDown(Sender: TObject;
+      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
   end;
 
 var
@@ -56,6 +68,8 @@ procedure TFormMain.FormCreate(Sender: TObject);
 begin
   ShapeColorBackground.Brush.Color := SynEdit.Gutter.Color;
   ShapeColorBorder.Brush.Color := SynEdit.Gutter.BorderColor;
+  ShapeGradientStartColor.Brush.Color := SynEdit.Gutter.GradientStartColor;
+  ShapeGradientStopColor.Brush.Color := SynEdit.Gutter.GradientEndColor;
 end;
 
 procedure TFormMain.CheckBoxAutoSizeClick(Sender: TObject);
@@ -81,6 +95,11 @@ begin
   SynEdit.InvalidateGutter;
 end;
 
+procedure TFormMain.CheckBoxGradientClick(Sender: TObject);
+begin
+  SynEdit.Gutter.Gradient := TCheckBox(Sender).Checked;
+end;
+
 procedure TFormMain.CheckBoxLeadingZeroesClick(Sender: TObject);
 begin
   SynEdit.Gutter.LeadingZeros := TCheckBox(Sender).Checked;
@@ -89,6 +108,11 @@ end;
 procedure TFormMain.CheckBoxShowLineNumbersClick(Sender: TObject);
 begin
   SynEdit.Gutter.ShowLineNumbers := TCheckBox(Sender).Checked;
+end;
+
+procedure TFormMain.CheckBoxShowModificationsClick(Sender: TObject);
+begin
+  SynEdit.Gutter.ShowModification := TCheckBox(Sender).Checked;
 end;
 
 procedure TFormMain.CheckBoxUseFontStyleClick(Sender: TObject);
@@ -125,6 +149,28 @@ begin
   begin
     ShapeColorBorder.Brush.Color := ColorDialog.Color;
     SynEdit.Gutter.BorderColor := ColorDialog.Color;
+  end;
+end;
+
+procedure TFormMain.ShapeGradientStartColorMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  ColorDialog.Color := ShapeGradientStartColor.Brush.Color;
+  if ColorDialog.Execute then
+  begin
+    ShapeGradientStartColor.Brush.Color := ColorDialog.Color;
+    SynEdit.Gutter.GradientStartColor := ColorDialog.Color;
+  end;
+end;
+
+procedure TFormMain.ShapeGradientStopColorMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  ColorDialog.Color := ShapeGradientStopColor.Brush.Color;
+  if ColorDialog.Execute then
+  begin
+    ShapeGradientStopColor.Brush.Color := ColorDialog.Color;
+    SynEdit.Gutter.GradientEndColor := ColorDialog.Color;
   end;
 end;
 

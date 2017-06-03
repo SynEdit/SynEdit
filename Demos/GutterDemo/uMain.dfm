@@ -2,8 +2,8 @@ object FormMain: TFormMain
   Left = 268
   Top = 107
   Caption = 'Gutter demo'
-  ClientHeight = 526
-  ClientWidth = 592
+  ClientHeight = 801
+  ClientWidth = 916
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,9 +16,9 @@ object FormMain: TFormMain
   TextHeight = 13
   object SynEdit: TSynEdit
     Left = 0
-    Top = 59
-    Width = 592
-    Height = 467
+    Top = 89
+    Width = 916
+    Height = 712
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -31,6 +31,8 @@ object FormMain: TFormMain
     Gutter.Font.Height = -11
     Gutter.Font.Name = 'Courier'
     Gutter.Font.Style = []
+    Gutter.ShowModification = True
+    Gutter.GradientEndColor = 13883354
     Highlighter = SynDWSSyn
     Lines.Strings = (
       '{ Syntax highlighting }'
@@ -150,41 +152,71 @@ object FormMain: TFormMain
   object Panel: TPanel
     Left = 0
     Top = 0
-    Width = 592
-    Height = 59
+    Width = 916
+    Height = 89
     Align = alTop
     BevelOuter = bvNone
     ShowCaption = False
     TabOrder = 1
     object ShapeColorBackground: TShape
-      Left = 543
-      Top = 9
+      Left = 464
+      Top = 32
       Width = 16
       Height = 16
       Brush.Color = clBtnFace
       OnMouseDown = ShapeColorBackgroundMouseDown
     end
     object LabelColor: TLabel
-      Left = 472
-      Top = 10
+      Left = 393
+      Top = 33
       Width = 27
       Height = 13
       Caption = 'Color:'
     end
     object ShapeColorBorder: TShape
-      Left = 543
-      Top = 32
+      Left = 464
+      Top = 55
       Width = 16
       Height = 16
       Brush.Color = clWindow
       OnMouseDown = ShapeColorBorderMouseDown
     end
     object LabelBorderColor: TLabel
-      Left = 472
-      Top = 33
+      Left = 393
+      Top = 56
       Width = 61
       Height = 13
       Caption = 'Border Color:'
+    end
+    object LabelGradientStart: TLabel
+      Left = 513
+      Top = 32
+      Width = 95
+      Height = 13
+      Caption = 'Gradient Start Color:'
+    end
+    object Label2: TLabel
+      Left = 513
+      Top = 56
+      Width = 95
+      Height = 13
+      Caption = 'Gradient Stop Color:'
+    end
+    object ShapeGradientStopColor: TShape
+      Left = 614
+      Top = 55
+      Width = 16
+      Height = 16
+      Brush.Color = clWindow
+      OnMouseDown = ShapeGradientStopColorMouseDown
+    end
+    object ShapeGradientStartColor: TShape
+      Left = 614
+      Top = 32
+      Width = 16
+      Height = 16
+      Brush.Color = clBtnFace
+      OnMouseDown = ShapeGradientStartColorMouseDown
     end
     object CheckBoxShowLineNumbers: TCheckBox
       Left = 8
@@ -243,7 +275,7 @@ object FormMain: TFormMain
       OnClick = CheckBoxUseFontStyleClick
     end
     object CheckBoxAutoSize: TCheckBox
-      Left = 377
+      Left = 393
       Top = 9
       Width = 72
       Height = 17
@@ -252,13 +284,31 @@ object FormMain: TFormMain
       OnClick = CheckBoxAutoSizeClick
     end
     object CheckBoxZeroStart: TCheckBox
-      Left = 377
-      Top = 32
+      Left = 271
+      Top = 55
       Width = 72
       Height = 17
       Caption = 'Zero Start'
       TabOrder = 7
       OnClick = CheckBoxZeroStartClick
+    end
+    object CheckBoxShowModifications: TCheckBox
+      Left = 8
+      Top = 55
+      Width = 129
+      Height = 17
+      Caption = 'Show modifications'
+      TabOrder = 8
+      OnClick = CheckBoxShowModificationsClick
+    end
+    object CheckBoxGradient: TCheckBox
+      Left = 513
+      Top = 9
+      Width = 64
+      Height = 17
+      Caption = 'Gradient'
+      TabOrder = 9
+      OnClick = CheckBoxGradientClick
     end
   end
   object SynDWSSyn: TSynDWSSyn
@@ -271,7 +321,7 @@ object FormMain: TFormMain
   end
   object ColorDialog: TColorDialog
     Options = [cdSolidColor]
-    Left = 424
-    Top = 8
+    Left = 144
+    Top = 56
   end
 end

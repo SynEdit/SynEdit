@@ -65,7 +65,8 @@ uses
 type
   TSynEditRange = pointer;
 
-  TSynEditStringFlag = (sfHasTabs, sfHasNoTabs, sfExpandedLengthUnknown);
+  TSynEditStringFlag = (sfHasTabs, sfHasNoTabs, sfExpandedLengthUnknown,
+    sfModified, sfSaved);
   TSynEditStringFlags = set of TSynEditStringFlag;
 
   PSynEditStringRec = ^TSynEditStringRec;
@@ -104,6 +105,8 @@ type
 
   TSynEditFileFormat = (sffDos, sffUnix, sffMac, sffUnicode); // DOS: CRLF, UNIX: LF, Mac: CR, Unicode: LINE SEPARATOR
 
+  TSynEditModification = (smOriginal, smModified, smSaved);
+
   TSynEditStringList = class(TUnicodeStrings)
   private
     fList: PSynEditStringRecList;
@@ -127,6 +130,7 @@ type
     function GetExpandedStringLength(Index: integer): integer;
     function GetLengthOfLongestLine: Integer;
     function GetRange(Index: integer): TSynEditRange;
+    function GetModification(Index: integer): TSynEditModification;
     procedure Grow;
     procedure InsertItem(Index: integer; const S: UnicodeString);
     procedure PutRange(Index: integer; ARange: TSynEditRange);
@@ -181,6 +185,7 @@ type
     property ExpandedStringLengths[Index: integer]: integer read GetExpandedStringLength;
     property LengthOfLongestLine: Integer read GetLengthOfLongestLine;
     property Ranges[Index: integer]: TSynEditRange read GetRange write PutRange;
+    property Modification[Index: integer]: TSynEditModification read GetModification;
     property TabWidth: integer read fTabWidth write SetTabWidth;
     property OnChange: TNotifyEvent read fOnChange write fOnChange;
     property OnChanging: TNotifyEvent read fOnChanging write fOnChanging;
@@ -628,6 +633,18 @@ begin
     Result := 0;
 end;
 
+function TSynEditStringList.GetModification(
+  Index: integer): TSynEditModification;
+begin
+  Result := smOriginal;
+  if (Index >= 0) and (Index < fCount) then
+    if sfSaved in fList^[Index].fFlags then
+      Result := smSaved
+    else
+    if sfModified in fList^[Index].fFlags then
+      Result := smModified;
+end;
+
 function TSynEditStringList.GetObject(Index: integer): TObject;
 begin
   if (Index >= 0) and (Index < fCount) then
@@ -884,6 +901,7 @@ begin
       Include(fFlags, sfExpandedLengthUnknown);
       Exclude(fFlags, sfHasTabs);
       Exclude(fFlags, sfHasNoTabs);
+      Include(fFlags, sfModified);
       {$IFDEF OWN_UnicodeString_MEMMGR}
         SetListString(Index, S);
       {$ELSE}
