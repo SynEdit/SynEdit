@@ -1,4 +1,4 @@
-﻿{-------------------------------------------------------------------------------
+{-------------------------------------------------------------------------------
 The contents of this file are subject to the Mozilla Public License
 Version 1.1 (the "License"); you may not use this file except in compliance
 with the License. You may obtain a copy of the License at
@@ -1765,7 +1765,7 @@ function TCustomSynEdit.GetSelText: UnicodeString;
       Inc(P, Len);
     end
     else
-      Result:= Len;
+      Result := Len;
   end;
 
 var
@@ -1885,7 +1885,7 @@ end;
 
 function TCustomSynEdit.GetWordAtCursor: UnicodeString;
 begin
-   Result:=GetWordAtRowCol(CaretXY);
+   Result := GetWordAtRowCol(CaretXY);
 end;
 
 procedure TCustomSynEdit.HideCaret;
@@ -4198,9 +4198,9 @@ end;
 
 procedure TCustomSynEdit.SetActiveLineColor(Value: TColor);
 begin
-  if (fActiveLineColor<>Value) then
+  if (fActiveLineColor <> Value) then
   begin
-    fActiveLineColor:=Value;
+    fActiveLineColor := Value;
     InvalidateLine(CaretY);
   end;
 end;
@@ -4341,18 +4341,18 @@ var
   lf: TLogFont;
 begin
   if fFontSmoothing <> AValue then begin
-    fFontSmoothing:= AValue;
+    fFontSmoothing := AValue;
     case fFontSmoothing of
       fsmAntiAlias:
-        bMethod:= ANTIALIASED_QUALITY;
+        bMethod := ANTIALIASED_QUALITY;
       fsmClearType:
-        bMethod:= CLEARTYPE_QUALITY;
+        bMethod := CLEARTYPE_QUALITY;
       else // fsmNone also
-        bMethod:= NONANTIALIASED_QUALITY;
+        bMethod := NONANTIALIASED_QUALITY;
     end;
     GetObject(Font.Handle, SizeOf(TLogFont), @lf);
-    lf.lfQuality:= bMethod;
-    Font.Handle:= CreateFontIndirect(lf);
+    lf.lfQuality := bMethod;
+    Font.Handle := CreateFontIndirect(lf);
   end;
 end;
 
@@ -4869,7 +4869,7 @@ var
             FVScrollBar.Visible := True;
         end
         else
-          FVScrollBar.Visible:=FALSE;
+          FVScrollBar.Visible := False;
       end
       else
       begin
@@ -5903,9 +5903,9 @@ begin
           FKeepGoing := False
         else begin
           if FAutoComplete then
-             FKeepGoing:= (FRedoList.LastChangeReason <> crAutoCompleteEnd)
+             FKeepGoing := (FRedoList.LastChangeReason <> crAutoCompleteEnd)
           else if FPasteAction then
-             FKeepGoing:= (FRedoList.LastChangeReason <> crPasteEnd)
+             FKeepGoing := (FRedoList.LastChangeReason <> crPasteEnd)
           else if FSpecial1 then
              FKeepGoing := (FRedoList.LastChangeReason <> crSpecial1End)
           else if FSpecial2 then
@@ -8454,18 +8454,18 @@ end;
 function TCustomSynEdit.UnifiedSelection: TBufferBlock;
 begin
   if BlockBegin.Line > BlockEnd.Line then begin
-    result.BeginLine:= BlockEnd.Line;
-    result.EndLine:= BlockBegin.Line;
+    result.BeginLine := BlockEnd.Line;
+    result.EndLine := BlockBegin.Line;
   end else begin
-    result.BeginLine:= BlockBegin.Line;
-    result.EndLine:= BlockEnd.Line;
+    result.BeginLine := BlockBegin.Line;
+    result.EndLine := BlockEnd.Line;
   end;
   if BlockBegin.Char > BlockEnd.Char then begin
-    result.BeginChar:= BlockEnd.Char;
-    result.EndChar:= BlockBegin.Char;
+    result.BeginChar := BlockEnd.Char;
+    result.EndChar := BlockBegin.Char;
   end else begin
-    result.BeginChar:= BlockBegin.Char;
-    result.EndChar:= BlockEnd.Char;
+    result.BeginChar := BlockBegin.Char;
+    result.EndChar := BlockEnd.Char;
   end;
 end;
 
@@ -8697,9 +8697,9 @@ begin
               IncPaintLock;
             end;
             bPrompt := False;
-            if bEndUndoBlock = false then
+            if bEndUndoBlock = False then
               BeginUndoBlock;
-            bEndUndoBlock:= true;
+            bEndUndoBlock := true;
           end;
           // Allow advanced substition in the search engine
           SelText := fSearchEngine.Replace(SelText, AReplace);
@@ -9160,7 +9160,7 @@ procedure TCustomSynEdit.DoCaseChange(const Cmd: TSynEditorCommand);
   var
     i: Integer;
   begin
-   Result:=SynWideLowerCase(aStr);
+   Result := SynWideLowerCase(aStr);
    for i := 1 to Length(Result) do
    if (i = 1) or IsWordBreakChar(Result[i-1]) then Result[i] := SynWideUpperCase(Result[i])[1];
   end;
@@ -9740,7 +9740,7 @@ begin
       Spaces := UnicodeStringOfChar(#32, FTabWidth);
     end
     else begin
-      InsertStrLen:= 3 * (e - BB.Line) + 2;
+      InsertStrLen := 3 * (e - BB.Line) + 2;
       //         #9#13#10 * lines-1 + (last line's #9 + null char)
       StrToInsert := WStrAlloc(InsertStrLen);
       Run := StrToInsert;
@@ -10372,14 +10372,14 @@ var
   DoTransient: Boolean;
   i: Integer;
 begin
-  DoTransient:=(FPaintTransientLock=0);
+  DoTransient :=(FPaintTransientLock=0);
   if Lock then
   begin
     if (TransientType=ttBefore) then inc(FPaintTransientLock)
     else
     begin
       dec(FPaintTransientLock);
-      DoTransient:=(FPaintTransientLock=0);
+      DoTransient :=(FPaintTransientLock=0);
     end;
   end;
 
@@ -11105,8 +11105,8 @@ end;
 function TCustomSynEdit.SearchByFindDialog(FindDialog: TFindDialog) : bool;
 var
   Options :TSynSearchOptions;
-  ReplaceText, MessageText :String;
-  OldSelStart, OldSelLength: integer;
+  ReplaceText, MessageText: string;
+  OldSelStart, OldSelLength: Integer;
 begin
   if (frReplaceAll in FindDialog.Options) then Options := [ssoReplaceAll]
   else if (frReplace in FindDialog.Options) then Options := [ssoReplace]
