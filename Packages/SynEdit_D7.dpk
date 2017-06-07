@@ -28,7 +28,7 @@ package SynEdit_D7;
 {$IMPLICITBUILD ON}
 
 requires
-  designide,
+  DesignIDE,
   SynEdit_R7;
 
 contains

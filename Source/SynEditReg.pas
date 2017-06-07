@@ -155,13 +155,12 @@ uses
   SynEditOptionsDialog,
   SynHighlighterADSP21xx,
   SynHighlighterAsm,
-  SynHighlighterAsmMASM,
   SynHighlighterAWK,
-  SynHighlighterBaan, 
+  SynHighlighterBaan,
   SynHighlighterBat,
   SynHighlighterCAC,
   SynHighlighterCache,
-  SynHighlighterCobol,   
+  SynHighlighterCobol,
   SynHighlighterCpp,
   SynHighlighterCS,
   SynHighlighterCss,
@@ -169,6 +168,7 @@ uses
   SynHighlighterDml,
   SynHighlighterDOT,
   {$ifdef SYN_DELPHI_2009_UP}
+  SynHighlighterAsmMASM,
   SynHighlighterDWS,
   {$endif}
   SynHighlighterEiffel,
@@ -278,7 +278,9 @@ begin
     TSynCACSyn, TSynCacheSyn, TSynFoxproSyn, TSynSQLSyn, TSynSDDSyn,
     //assembler
     TSynADSP21xxSyn, TSynAsmSyn, TSynHC11Syn, TSynHP48Syn, TSynSTSyn,
+    {$ifdef SYN_DELPHI_2009_UP}
     TSynAsmMASMSyn,
+    {$endif}
     //data modeling
     TSynDmlSyn, TSynModelicaSyn, TSynSMLSyn,
     //data

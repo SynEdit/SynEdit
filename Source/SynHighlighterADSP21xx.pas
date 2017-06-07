@@ -2196,18 +2196,21 @@ procedure TSynADSP21xxSyn.CCommentProc;
 begin
   fTokenID := tkComment;
   case FLine[Run] of
-    #0: begin
-          NullProc;
-          exit;
-        end;
-    #10:begin
-         LFProc;
-         exit;
-        end;
-    #13:begin
-          CRProc;
-          exit;
-        end;
+    #0: 
+      begin
+        NullProc;
+        exit;
+      end;
+    #10:
+      begin
+        LFProc;
+        exit;
+      end;
+    #13:
+      begin
+        CRProc;
+        exit;
+      end;
   end;
 
   while FLine[Run] <> #0 do

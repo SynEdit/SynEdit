@@ -431,7 +431,7 @@ const
     'WorldInfo';
 
 
-procedure TSynVrml97Syn.DoAddKeyword(AKeyword: UnicodeString; AKind: integer);
+procedure TSynVrml97Syn.DoAddKeyword(AKeyword: UnicodeString; AKind: Integer);
 var
   HashValue: integer;
 begin
@@ -488,7 +488,7 @@ begin
   Result := tkIdentifier;
 end;
 
-constructor TSynVrml97Syn.Create(AOwner :TComponent);
+constructor TSynVrml97Syn.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
 
@@ -1056,7 +1056,7 @@ begin
   inherited;
 end;
 
-function TSynVrml97Syn.GetDefaultAttribute(Index :integer) :TSynHighlighterAttributes;
+function TSynVrml97Syn.GetDefaultAttribute(Index: Integer): TSynHighlighterAttributes;
 begin
   case Index of
     SYN_ATTR_COMMENT: Result := fCommentAttri;
@@ -1070,22 +1070,22 @@ begin
   end;
 end;
 
-function TSynVrml97Syn.GetEol :Boolean;
+function TSynVrml97Syn.GetEol: Boolean;
 begin
   Result := fTokenID = tkNull;
 end;
 
-function TSynVrml97Syn.GetRange :Pointer;
+function TSynVrml97Syn.GetRange: Pointer;
 begin
   Result := Pointer(fRange);
 end;
 
-function TSynVrml97Syn.GetTokenID :TtkTokenKind;
+function TSynVrml97Syn.GetTokenID: TtkTokenKind;
 begin
   Result := fTokenId;
 end;
 
-function TSynVrml97Syn.GetTokenAttribute :TSynHighlighterAttributes;
+function TSynVrml97Syn.GetTokenAttribute: TSynHighlighterAttributes;
 begin
   case GetTokenID of
     tkComment: Result := fCommentAttri;
@@ -1123,7 +1123,7 @@ begin
   end;
 end;
 
-function TSynVrml97Syn.GetTokenKind :integer;
+function TSynVrml97Syn.GetTokenKind: Integer;
 begin
   Result := Ord(fTokenId);
 end;

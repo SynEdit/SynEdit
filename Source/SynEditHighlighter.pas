@@ -1,4 +1,4 @@
-﻿{-------------------------------------------------------------------------------
+{-------------------------------------------------------------------------------
 The contents of this file are subject to the Mozilla Public License
 Version 1.1 (the "License"); you may not use this file except in compliance
 with the License. You may obtain a copy of the License at
@@ -1160,8 +1160,8 @@ function TSynCustomHighlighter.IsWordBreakChar(AChar: WideChar): Boolean;
 begin
   case AChar of
     #0..#32, '.', ',', ';', ':', '"', '''', WideChar(#$B4), WideChar(#$60),
-    '°', '^', '!', '?', '&', '$', '@', '§', '%', '#', '~', '[', ']', '(', ')',
-    '{', '}', '<', '>', '-', '=', '+', '*', '/', '\', '|':
+    WideChar(#$B0), '^', '!', '?', '&', '$', '@', WideChar(#$A7), '%', '#', '~',
+    '[', ']', '(', ')', '{', '}', '<', '>', '-', '=', '+', '*', '/', '\', '|':
       Result := True;
     else
       Result := False;

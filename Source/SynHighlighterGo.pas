@@ -652,7 +652,7 @@ end;
 
 procedure TSynGoSyn.StringProc;
 var
-  StringChar: Char;
+  StringChar: WideChar;
 begin
   fTokenID := tkString;
   StringChar := fLine[Run];

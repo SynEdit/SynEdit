@@ -1,4 +1,4 @@
-﻿{-------------------------------------------------------------------------------
+{-------------------------------------------------------------------------------
 The contents of this file are subject to the Mozilla Public License
 Version 1.1 (the "License"); you may not use this file except in compliance
 with the License. You may obtain a copy of the License at
@@ -806,22 +806,23 @@ begin
     begin
       case fLine[Run] of
 
-        '\':begin
-               { If we're looking at a backslash, and the following character is an
-               end quote, and it's preceeded by an odd number of backslashes, then
-               it shouldn't mark the end of the string.  If it's preceeded by an
-               even number, then it should. !!!THIS RULE DOESNT APPLY IN RAW STRINGS}
-               if FLine[Run + 1] = '"' then
-                 begin
-                   fBackslashCount := 1;
+        '\':
+          begin
+            { If we're looking at a backslash, and the following character is an
+            end quote, and it's preceeded by an odd number of backslashes, then
+            it shouldn't mark the end of the string.  If it's preceeded by an
+            even number, then it should. !!!THIS RULE DOESNT APPLY IN RAW STRINGS}
+            if FLine[Run + 1] = '"' then
+            begin
+              fBackslashCount := 1;
 
-                   while ((Run > fBackslashCount) and (FLine[Run - fBackslashCount] = '\')) do
-                     fBackslashCount := fBackslashCount + 1;
+              while ((Run > fBackslashCount) and (FLine[Run - fBackslashCount] = '\')) do
+                fBackslashCount := fBackslashCount + 1;
 
-                   if (fBackslashCount mod 2 = 1) then inc(Run)
-               end;
-               inc(Run);
-            end;// '\':
+              if (fBackslashCount mod 2 = 1) then inc(Run)
+            end;
+            inc(Run);
+          end;// '\':
 
         '"':
           if (fLine[Run + 1] = '"') and (fLine[Run + 2] = '"') then begin
@@ -850,18 +851,19 @@ begin
           Break;
         end;
       {The same backslash stuff above...}
-      '\':begin
-             if FLine[Run + 1] = '"' then
-               begin
-                 fBackslashCount := 1;
+      '\':
+        begin
+          if FLine[Run + 1] = '"' then
+          begin
+            fBackslashCount := 1;
 
-                 while ((Run > fBackslashCount) and (FLine[Run - fBackslashCount] = '\')) do
-                   fBackslashCount := fBackslashCount + 1;
+            while ((Run > fBackslashCount) and (FLine[Run - fBackslashCount] = '\')) do
+              fBackslashCount := fBackslashCount + 1;
 
-                 if (fBackslashCount mod 2 = 1) then inc(Run)
-             end;
-             inc(Run);
-          end;// '\':
+            if (fBackslashCount mod 2 = 1) then inc(Run)
+          end;
+          inc(Run);
+        end;// '\':
 
       else inc(Run);
     end; //case
@@ -963,18 +965,19 @@ begin
         end;
 
       {The same backslash stuff above...}
-      '\':begin
-             if FLine[Run + 1] = #39 then
-               begin
-                 fBackslashCount := 1;
+      '\':
+        begin
+          if FLine[Run + 1] = #39 then
+          begin
+            fBackslashCount := 1;
 
-                 while ((Run > fBackslashCount) and (FLine[Run - fBackslashCount] = '\')) do
-                   fBackslashCount := fBackslashCount + 1;
+            while ((Run > fBackslashCount) and (FLine[Run - fBackslashCount] = '\')) do
+              fBackslashCount := fBackslashCount + 1;
 
-                 if (fBackslashCount mod 2 = 1) then inc(Run)
-             end;
-             inc(Run);
-          end;// '\':
+            if (fBackslashCount mod 2 = 1) then inc(Run)
+          end;
+          inc(Run);
+        end;// '\':
 
       else inc(Run);
     end; //case

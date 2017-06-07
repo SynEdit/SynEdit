@@ -1,4 +1,4 @@
-﻿{-------------------------------------------------------------------------------
+{-------------------------------------------------------------------------------
 The contents of this file are subject to the Mozilla Public License
 Version 1.1 (the "License"); you may not use this file except in compliance
 with the License. You may obtain a copy of the License at
@@ -979,7 +979,8 @@ end;
 function TSynJavaSyn.IsIdentChar(AChar: WideChar): Boolean;
 begin
   case AChar of
-    '_', '$', '0'..'9', 'a'..'z', 'A'..'Z', 'À'..'Ö', 'Ø'..'ö', 'ø'..'ÿ':
+    '_', '$', '0'..'9', 'a'..'z', 'A'..'Z', WideChar(#$C0)..WideChar(#$D6),
+      WideChar(#$D8)..WideChar(#$F6), WideChar(#$F8)..WideChar(#$FF):
       Result := True;
     else
       Result := False;
