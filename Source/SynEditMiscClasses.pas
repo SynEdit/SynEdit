@@ -125,6 +125,9 @@ type
     fGradientStartColor: TColor;
     fGradientEndColor: TColor;
     fGradientSteps: Integer;
+    fModificationBarWidth: Integer;
+    fModificationColorModified: TColor;
+    fModificationColorSaved: TColor;
     procedure SetAutoSize(const Value: boolean);
     procedure SetBorderColor(const Value: TColor);
     procedure SetColor(const Value: TColor);
@@ -147,6 +150,9 @@ type
     procedure SetGradientEndColor(const Value: TColor);
     procedure SetGradientSteps(const Value: Integer);
     function GetWidth: integer;
+    procedure SetModificationColorModified(const Value: TColor);
+    procedure SetModificationColorSaved(const Value: TColor);
+    procedure SetModificationBarWidth(const Value: Integer);
   public
     constructor Create;
     destructor Destroy; override;
@@ -168,6 +174,12 @@ type
       default FALSE;
     property LeftOffset: integer read fLeftOffset write SetLeftOffset
       default 16;
+    property ModificationBarWidth: Integer read fModificationBarWidth
+      write SetModificationBarWidth default 2;
+    property ModificationColorModified: TColor read fModificationColorModified
+      write SetModificationColorModified default clYellow;
+    property ModificationColorSaved: TColor read fModificationColorSaved
+      write SetModificationColorSaved default clLime;
     property RightOffset: integer read fRightOffset write SetRightOffset
       default 2;
     property ShowLineNumbers: boolean read fShowLineNumbers
@@ -468,6 +480,11 @@ begin
   fGradientStartColor := clWindow;
   fGradientEndColor := clBtnFace;
   fGradientSteps := 48;
+
+  fShowModification := FALSE;
+  fModificationBarWidth := 2;
+  fModificationColorModified := clYellow;
+  fModificationColorSaved := clLime;
 end;
 
 destructor TSynGutter.Destroy;
@@ -694,9 +711,36 @@ begin
   end;
 end;
 
+procedure TSynGutter.SetModificationBarWidth(const Value: Integer);
+begin
+  if fModificationBarWidth <> Value then
+  begin
+    fModificationBarWidth := Value;
+    if Assigned(fOnChange) then fOnChange(Self);
+  end;
+end;
+
+procedure TSynGutter.SetModificationColorModified(const Value: TColor);
+begin
+  if fModificationColorModified <> Value then
+  begin
+    fModificationColorModified := Value;
+    if Assigned(fOnChange) then fOnChange(Self);
+  end;
+end;
+
+procedure TSynGutter.SetModificationColorSaved(const Value: TColor);
+begin
+  if fModificationColorSaved <> Value then
+  begin
+    fModificationColorSaved := Value;
+    if Assigned(fOnChange) then fOnChange(Self);
+  end;
+end;
+
 procedure TSynGutter.SetBorderColor(const Value: TColor);
 begin
-  if fBorderColor <> Value then 
+  if fBorderColor <> Value then
   begin
     fBorderColor := Value;
     if Assigned(fOnChange) then fOnChange(Self);
