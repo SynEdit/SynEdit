@@ -31,7 +31,6 @@ object FormMain: TFormMain
     Gutter.Font.Height = -11
     Gutter.Font.Name = 'Courier'
     Gutter.Font.Style = []
-    Gutter.ShowModification = True
     Gutter.GradientEndColor = 13883354
     Highlighter = SynDWSSyn
     Lines.Strings = (

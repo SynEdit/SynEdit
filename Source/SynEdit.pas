@@ -1,4 +1,4 @@
-{-------------------------------------------------------------------------------
+﻿{-------------------------------------------------------------------------------
 The contents of this file are subject to the Mozilla Public License
 Version 1.1 (the "License"); you may not use this file except in compliance
 with the License. You may obtain a copy of the License at
@@ -454,7 +454,7 @@ type
 
     FGutter: TSynGutter;
     FTabWidth: Integer;
-    FTextDrawer: TheTextDrawer;
+    FTextDrawer: TSynTextDrawer;
     FInvalidateRect: TRect;
     FStateFlags: TSynStateFlags;
     FOptions: TSynEditorOptions;
@@ -732,7 +732,7 @@ type
     procedure UndoItem;
     procedure UpdateMouseCursor; virtual;
   protected
-    fGutterWidth: Integer;
+    FGutterWidth: Integer;
     FInternalImage: TSynInternalImage;
     procedure HideCaret;
     procedure ShowCaret;
@@ -1243,7 +1243,7 @@ begin
     Dec(aY, Y);
   end;
 {$ENDIF}
-  f := (aX - fGutterWidth - 2) / FCharWidth;
+  f := (aX - FGutterWidth - 2) / FCharWidth;
   // don't return a partially visible last line
   if aY >= FLinesInWindow * FTextHeight then
   begin
@@ -1264,7 +1264,7 @@ begin
     Dec(aY, Y);
   end;
 {$ENDIF}
-  Result.Column := Max(1, LeftChar + ((aX - fGutterWidth - 2) div FCharWidth));
+  Result.Column := Max(1, LeftChar + ((aX - FGutterWidth - 2) div FCharWidth));
   Result.Row := Max(1, TopLine + (aY div FTextHeight));
 end;
 
@@ -1303,7 +1303,7 @@ begin
     Exit;
   end;
 
-  iScrollBounds := Bounds(fGutterWidth, 0, FCharsInWindow * FCharWidth,
+  iScrollBounds := Bounds(FGutterWidth, 0, FCharsInWindow * FCharWidth,
     FLinesInWindow * FTextHeight);
   if BorderStyle = bsNone then
     InflateRect(iScrollBounds, -2, -2);
@@ -1445,10 +1445,10 @@ begin
   FRightEdge := 80;
   FGutter := TSynGutter.Create;
   FGutter.OnChange := GutterChanged;
-  fGutterWidth := FGutter.Width;
+  FGutterWidth := FGutter.Width;
   FWordWrapGlyph := TSynGlyph.Create(HINSTANCE, 'SynEditWrapped', clLime);
   FWordWrapGlyph.OnChange := WordWrapGlyphChange;
-  FTextOffset := fGutterWidth + 2;
+  FTextOffset := FGutterWidth + 2;
   ControlStyle := ControlStyle + [csOpaque, csSetCaption];
 {$IFDEF SYN_COMPILER_7_UP}
   {$IFNDEF SYN_CLX}
@@ -1475,7 +1475,7 @@ begin
 {$IFDEF SYN_COMPILER_3_UP}
   FFontDummy.CharSet := DEFAULT_CHARSET;
 {$ENDIF}
-  FTextDrawer := TheTextDrawer.Create([fsBold], FFontDummy);
+  FTextDrawer := TSynTextDrawer.Create([fsBold], FFontDummy);
   Font.Assign(FFontDummy);
   Font.OnChange := SynFontChanged;
   ParentFont := False;
@@ -1925,7 +1925,7 @@ begin
   if Visible and HandleAllocated then
     if (FirstLine = -1) and (LastLine = -1) then
     begin
-      rcInval := Rect(0, 0, fGutterWidth, ClientHeight);
+      rcInval := Rect(0, 0, FGutterWidth, ClientHeight);
 {$IFDEF SYN_CLX}
       with GetClientRect do
         OffsetRect(rcInval, Left, Top);
@@ -1953,7 +1953,7 @@ begin
       if (LastLine >= FirstLine) then
       begin
         rcInval := Rect(0, FTextHeight * (FirstLine - TopLine),
-          fGutterWidth, FTextHeight * (LastLine - TopLine + 1));
+          FGutterWidth, FTextHeight * (LastLine - TopLine + 1));
 {$IFDEF SYN_CLX}
         with GetClientRect do
           OffsetRect(rcInval, Left, Top);
@@ -1975,7 +1975,7 @@ begin
     if (FirstLine = -1) and (LastLine = -1) then
     begin
       rcInval := ClientRect;
-      Inc(rcInval.Left, fGutterWidth);
+      Inc(rcInval.Left, FGutterWidth);
       if sfLinesChanging in FStateFlags then
         UnionRect(FInvalidateRect, FInvalidateRect, rcInval)
       else
@@ -2008,7 +2008,7 @@ begin
       { any line visible? }
       if (LastLine >= FirstLine) then
       begin
-        rcInval := Rect(fGutterWidth, FTextHeight * (FirstLine - TopLine),
+        rcInval := Rect(FGutterWidth, FTextHeight * (FirstLine - TopLine),
           ClientWidth, FTextHeight * (LastLine - TopLine + 1));
 {$IFDEF SYN_CLX}
         with GetClientRect do
@@ -2328,7 +2328,7 @@ begin
     MouseCapture := True;
     //if mousedown occurred in selected block begin drag operation
     Exclude(FStateFlags, sfWaitForDragging);
-    if bWasSel and (eoDragDropEditing in FOptions) and (X >= fGutterWidth + 2)
+    if bWasSel and (eoDragDropEditing in FOptions) and (X >= FGutterWidth + 2)
       and (SelectionMode = smNormal) and IsPointInSelection(DisplayToBufferPos(PixelsToRowColumn(X, Y))) then
     begin
       bStartDrag := True
@@ -2360,7 +2360,7 @@ begin
     end;
   end;
 
-  if (X < fGutterWidth) then
+  if (X < FGutterWidth) then
     Include(FStateFlags, sfPossibleGutterClick);
   if (sfPossibleGutterClick in FStateFlags) and (Button = mbRight) then
   begin
@@ -2473,11 +2473,10 @@ begin
   if (Button = mbRight) and (Shift = [ssRight]) and Assigned(PopupMenu) then
     exit;
   MouseCapture := False;
-  if (sfPossibleGutterClick in FStateFlags) and (X < fGutterWidth) and (Button <> mbRight) then
-  begin
+  if (sfPossibleGutterClick in FStateFlags) and (X < FGutterWidth) and (Button <> mbRight) then
     DoOnGutterClick(Button, X, Y)
-  end
-  else if FStateFlags * [sfDblClicked, sfWaitForDragging] = [sfWaitForDragging] then
+  else
+  if FStateFlags * [sfDblClicked, sfWaitForDragging] = [sfWaitForDragging] then
   begin
     ComputeCaret(X, Y);
     if not(ssShift in Shift) then
@@ -2570,10 +2569,10 @@ begin
 {$ENDIF}
   // columns
   nC1 := LeftChar;
-  if (rcClip.Left > fGutterWidth + 2) then
-    Inc(nC1, (rcClip.Left - fGutterWidth - 2) div CharWidth);
+  if (rcClip.Left > FGutterWidth + 2) then
+    Inc(nC1, (rcClip.Left - FGutterWidth - 2) div CharWidth);
   nC2 := LeftChar +
-    (rcClip.Right - fGutterWidth - 2 + CharWidth - 1) div CharWidth;
+    (rcClip.Right - FGutterWidth - 2 + CharWidth - 1) div CharWidth;
   // lines
   nL1 := Max(TopLine + rcClip.Top div FTextHeight, TopLine);
   nL2 := MinMax(TopLine + (rcClip.Bottom + FTextHeight - 1) div FTextHeight,
@@ -2583,17 +2582,17 @@ begin
   HideCaret;
   try
     // First paint the gutter area if it was (partly) invalidated.
-    if (rcClip.Left < fGutterWidth) then
+    if (rcClip.Left < FGutterWidth) then
     begin
       rcDraw := rcClip;
-      rcDraw.Right := fGutterWidth;
+      rcDraw.Right := FGutterWidth;
       PaintGutter(rcDraw, nL1, nL2);
     end;
     // Then paint the text area if it was (partly) invalidated.
-    if (rcClip.Right > fGutterWidth) then
+    if (rcClip.Right > FGutterWidth) then
     begin
       rcDraw := rcClip;
-      rcDraw.Left := Max(rcDraw.Left, fGutterWidth);
+      rcDraw.Left := Max(rcDraw.Left, FGutterWidth);
       PaintTextLines(rcDraw, nL1, nL2, nC1, nC2);
     end;
 
@@ -2654,10 +2653,21 @@ procedure TCustomSynEdit.PaintGutter(const AClip: TRect;
   end;
 
   procedure DrawModification(Color: TColor; Top, Bottom: Integer);
+  var
+    OldColor: TColor;
+    OldStyle: TBrushStyle;
   begin
-    Canvas.Pen.Color := Color;
-    Canvas.MoveTo(fGutterWidth - fGutter.RightOffset - fGutter.ModificationBarWidth, Top);
-    Canvas.LineTo(fGutterWidth - fGutter.RightOffset - fGutter.ModificationBarWidth, Bottom);
+    OldStyle := Canvas.Brush.Style;
+    OldColor := Canvas.Brush.Color;
+
+    Canvas.Brush.Style := bsSolid;
+    Canvas.Brush.Color := Color;
+
+    Canvas.FillRect(Rect(FGutterWidth - FGutter.RightOffset - FGutter.ModificationBarWidth, Top,
+      FGutterWidth - FGutter.RightOffset, Bottom));
+
+    Canvas.Brush.Style := OldStyle;
+    Canvas.Brush.Color := OldColor;
   end;
 
 var
@@ -2694,11 +2704,9 @@ begin
 
   if FGutter.Gradient then
     SynDrawGradient(Canvas, FGutter.GradientStartColor, FGutter.GradientEndColor,
-      FGutter.GradientSteps, Rect(0, 0, fGutterWidth, ClientHeight), True);
+      FGutter.GradientSteps, Rect(0, 0, FGutterWidth, ClientHeight), True);
 
   Canvas.Brush.Color := FGutter.Color;
-  Canvas.Pen.Style := psSolid;
-  Canvas.Pen.Width := 4;
 
   if FGutter.ShowLineNumbers then
   begin
@@ -2720,7 +2728,7 @@ begin
 
       // prepare the rect initially
       rcLine := AClip;
-      rcLine.Right := Max(rcLine.Right, fGutterWidth - 2);
+      rcLine.Right := Max(rcLine.Right, FGutterWidth - 2);
       rcLine.Bottom := rcLine.Top;
 
       for cLine := vFirstLine to vLastLine do
@@ -2753,9 +2761,9 @@ begin
           Canvas.Brush.Style := bsSolid;
 {$ELSE}
         TextSize := GetTextSize(DC, PWideChar(s), Length(s));
-        vTextOffset := (fGutterWidth - FGutter.RightOffset - 2) - TextSize.cx;
+        vTextOffset := (FGutterWidth - FGutter.RightOffset - 2) - TextSize.cx;
         if FGutter.ShowModification then
-          vTextOffset := vTextOffset - 4;
+          vTextOffset := vTextOffset - FGutter.ModificationBarWidth;
 
         if FGutter.Gradient then
         begin
@@ -2775,9 +2783,9 @@ begin
         if FGutter.ShowModification then
           case TSynEditStringList(FLines).Modification[cLine - 1] of
             smModified:
-              DrawModification(fGutter.ModificationColorModified, rcLine.Top, rcLine.Bottom);
+              DrawModification(FGutter.ModificationColorModified, rcLine.Top, rcLine.Bottom);
             smSaved:
-              DrawModification(fGutter.ModificationColorSaved, rcLine.Top, rcLine.Bottom);
+              DrawModification(FGutter.ModificationColorSaved, rcLine.Top, rcLine.Bottom);
           end;
       end;
       // now erase the remaining area if any
@@ -2805,9 +2813,9 @@ begin
         vLineTop := (LineToRow(cLine) - TopLine) * FTextHeight;
         case TSynEditStringList(FLines).Modification[cLine - 1] of
           smModified:
-            DrawModification(fGutter.ModificationColorModified, vLineTop, vLineTop + fTextHeight);
+            DrawModification(FGutter.ModificationColorModified, vLineTop, vLineTop + fTextHeight);
           smSaved:
-            DrawModification(fGutter.ModificationColorSaved, vLineTop, vLineTop + fTextHeight);
+            DrawModification(FGutter.ModificationColorSaved, vLineTop, vLineTop + fTextHeight);
         end;
       end;
   end;
@@ -2822,7 +2830,7 @@ begin
     for cLine := aFirstRow to aLastRow do
       if LineToRow(RowToLine(cLine)) <> cLine then
         FWordWrapGlyph.Draw(Canvas,
-                            (fGutterWidth - FGutter.RightOffset - 2) - FWordWrapGlyph.Width,
+                            (FGutterWidth - FGutter.RightOffset - 2) - FWordWrapGlyph.Width,
                             (cLine - TopLine) * FTextHeight, FTextHeight);
 {$IFDEF SYN_WIN32}
   // restore brush
@@ -2831,7 +2839,7 @@ begin
 {$ENDIF}
 
   // the gutter separator if visible
-  if (FGutter.BorderStyle <> gbsNone) and (AClip.Right >= fGutterWidth - 2) then
+  if (FGutter.BorderStyle <> gbsNone) and (AClip.Right >= FGutterWidth - 2) then
     with Canvas do
     begin
       Pen.Color := FGutter.BorderColor;
@@ -2840,12 +2848,12 @@ begin
       begin
         if FGutter.BorderStyle = gbsMiddle then
         begin
-          MoveTo(fGutterWidth - 2, Top);
-          LineTo(fGutterWidth - 2, Bottom);
+          MoveTo(FGutterWidth - 2, Top);
+          LineTo(FGutterWidth - 2, Bottom);
           Pen.Color := FGutter.Color;
         end;
-        MoveTo(fGutterWidth - 1, Top);
-        LineTo(fGutterWidth - 1, Bottom);
+        MoveTo(FGutterWidth - 1, Top);
+        LineTo(FGutterWidth - 1, Bottom);
       end;
     end;
 
@@ -3219,7 +3227,7 @@ var
 {$IFNDEF SYN_CLX}
   procedure AdjustEndRect;
   // trick to avoid clipping the last pixels of text in italic,
-  // see also AdjustLastCharWidth() in TheTextDrawer.ExtTextOut()
+  // see also AdjustLastCharWidth() in TSynTextDrawer.ExtTextOut()
   var
     LastChar: Cardinal;
     NormalCharWidth, RealCharWidth: Integer;
@@ -3502,7 +3510,7 @@ var
     // Initialize rcLine for drawing. Note that Top and Bottom are updated
     // inside the loop. Get only the starting point for this.
     rcLine := AClip;
-    rcLine.Left := fGutterWidth + 2;
+    rcLine.Left := FGutterWidth + 2;
     rcLine.Bottom := (aFirstRow - TopLine) * FTextHeight;
     // Make sure the token accumulator string doesn't get reassigned to often.
     if Assigned(FHighlighter) then
@@ -3747,11 +3755,11 @@ begin
 {$ENDIF}
   // If anything of the two pixel space before the text area is visible, then
   // fill it with the component background color.
-  if (AClip.Left < fGutterWidth + 2) then
+  if (AClip.Left < FGutterWidth + 2) then
   begin
     rcToken := AClip;
-    rcToken.Left := Max(AClip.Left, fGutterWidth);
-    rcToken.Right := fGutterWidth + 2;
+    rcToken.Left := Max(AClip.Left, FGutterWidth);
+    rcToken.Right := FGutterWidth + 2;
     // Paint whole left edge of the text with same color.
     // (value of WhiteAttribute can vary in e.g. MultiSyn)
     if Highlighter <> nil then
@@ -4252,13 +4260,13 @@ end;
 procedure TCustomSynEdit.SetGutterWidth(Value: Integer);
 begin
   Value := Max(Value, 0);
-  if fGutterWidth <> Value then
+  if FGutterWidth <> Value then
   begin
-    fGutterWidth := Value;
-    FTextOffset := fGutterWidth + 2 - (LeftChar - 1) * FCharWidth;
+    FGutterWidth := Value;
+    FTextOffset := FGutterWidth + 2 - (LeftChar - 1) * FCharWidth;
     if HandleAllocated then
     begin
-      FCharsInWindow := Max(ClientWidth - fGutterWidth - 2, 0) div FCharWidth;
+      FCharsInWindow := Max(ClientWidth - FGutterWidth - 2, 0) div FCharWidth;
       if WordWrap then
         FWordWrapPlugin.DisplayChanged;
       UpdateScrollBars;
@@ -4296,11 +4304,11 @@ begin
   begin
     iDelta := FLeftChar - Value;
     FLeftChar := Value;
-    FTextOffset := fGutterWidth + 2 - (LeftChar - 1) * FCharWidth;
+    FTextOffset := FGutterWidth + 2 - (LeftChar - 1) * FCharWidth;
     if Abs(iDelta) < CharsInWindow then
     begin
       iTextArea := ClientRect;
-      Inc(iTextArea.Left, fGutterWidth + 2);
+      Inc(iTextArea.Left, FGutterWidth + 2);
 {$IFDEF SYN_CLX}
       ScrollWindow(Self, iDelta * CharWidth, 0, @iTextArea);
 {$ELSE}
@@ -4795,7 +4803,7 @@ begin
     CX := vCaretPix.X + FCaretOffset.X;
     CY := vCaretPix.Y + FCaretOffset.Y;
     iClientRect := GetClientRect;
-    Inc(iClientRect.Left, fGutterWidth);
+    Inc(iClientRect.Left, FGutterWidth);
     if (CX >= iClientRect.Left) and (CX < iClientRect.Right)
       and (CY >= iClientRect.Top) and (CY < iClientRect.Bottom) then
     begin
@@ -5801,7 +5809,7 @@ var
 begin
   GetCursorPos(ptMouse);
   ptMouse := ScreenToClient(ptMouse);
-  if ptMouse.X >= fGutterWidth + 2 then
+  if ptMouse.X >= FGutterWidth + 2 then
   begin
     if not (eoNoSelection in FOptions) then
       SetWordBlock(CaretXY);
@@ -6627,7 +6635,7 @@ begin
             Color := Self.Color;
             ReadOnly := True;
             Top := ClientRect.Top;
-            Left := ClientRect.Left + fGutterWidth + 2;
+            Left := ClientRect.Left + FGutterWidth + 2;
             Show;
             SetFocus;
             Free;
@@ -8288,7 +8296,7 @@ end;
 procedure TCustomSynEdit.MarkModifiedLinesAsSaved;
 begin
   TSynEditStringList(FLines).MarkModifiedLinesAsSaved;
-  if fGutter.ShowModification then
+  if FGutter.ShowModification then
     InvalidateGutter;
 end;
 
@@ -8434,7 +8442,7 @@ begin
     end
     else
       nW := FGutter.RealGutterWidth(FCharWidth);
-    if nW = fGutterWidth then
+    if nW = FGutterWidth then
       InvalidateGutter
     else
       SetGutterWidth(nW);
@@ -8799,7 +8807,7 @@ begin
     Exit;
   end;
 {$ENDIF}
-  if (ptCursor.X < fGutterWidth) then
+  if (ptCursor.X < FGutterWidth) then
     SetCursor(Screen.Cursors[FGutter.Cursor])
   else begin
     ptLineCol := DisplayToBufferPos(PixelsToRowColumn(ptCursor.X, ptCursor.Y));
@@ -8882,7 +8890,7 @@ procedure TCustomSynEdit.SizeOrFontChanged(bFont: Boolean);
 begin
   if HandleAllocated and (FCharWidth <> 0) then
   begin
-    FCharsInWindow := Max(ClientWidth - fGutterWidth - 2, 0) div FCharWidth;
+    FCharsInWindow := Max(ClientWidth - FGutterWidth - 2, 0) div FCharWidth;
     FLinesInWindow := ClientHeight div FTextHeight;
     if WordWrap then
     begin
@@ -10080,7 +10088,7 @@ begin
   if (Line >= TopLine) and (Line <= TopLine + LinesInWindow) then
   begin
     // invalidate text area of this line
-    rcInval := Rect(fGutterWidth, FTextHeight * (Line - TopLine), ClientWidth, 0);
+    rcInval := Rect(FGutterWidth, FTextHeight * (Line - TopLine), ClientWidth, 0);
     rcInval.Bottom := rcInval.Top + FTextHeight;
 {$IFDEF SYN_CLX}
     with GetClientRect do
@@ -11030,7 +11038,7 @@ end;
 procedure TCustomSynEdit.ResetModificationIndicator;
 begin
   TSynEditStringList(FLines).ResetModificationIndicator;
-  if fGutter.ShowModification then
+  if FGutter.ShowModification then
     InvalidateGutter;
 end;
 

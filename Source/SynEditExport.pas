@@ -143,7 +143,7 @@ type
     procedure FormatNewLine; virtual; abstract;
     { Returns the size of the formatted text in the output buffer, to be used
       in the format header or footer. }
-    function GetBufferSize: integer;
+    function GetBufferSize: Integer;
     { The clipboard format the exporter creates as native format. }
     function GetClipboardFormat: UINT; virtual;
     { Has to be overridden in descendant classes to return the correct output
@@ -513,7 +513,7 @@ begin
   AddData(Token);
 end;
 
-function TSynCustomExporter.GetBufferSize: integer;
+function TSynCustomExporter.GetBufferSize: Integer;
 begin
   Result := fBuffer.Size;
 end;

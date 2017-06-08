@@ -1,4 +1,4 @@
-{-------------------------------------------------------------------------------
+﻿{-------------------------------------------------------------------------------
 The contents of this file are subject to the Mozilla Public License
 Version 1.1 (the "License"); you may not use this file except in compliance
 with the License. You may obtain a copy of the License at
@@ -64,15 +64,15 @@ type
 type
   TSynHighlighterAttributes = class(TPersistent)
   private
-    fBackground: TColor;
-    fBackgroundDefault: TColor;
-    fForeground: TColor;
-    fForegroundDefault: TColor;
-    fFriendlyName: UnicodeString;
-    fName: string;
-    fStyle: TFontStyles;
-    fStyleDefault: TFontStyles;
-    fOnChange: TNotifyEvent;
+    FBackground: TColor;
+    FBackgroundDefault: TColor;
+    FForeground: TColor;
+    FForegroundDefault: TColor;
+    FFriendlyName: UnicodeString;
+    FName: string;
+    FStyle: TFontStyles;
+    FStyleDefault: TFontStyles;
+    FOnChange: TNotifyEvent;
     procedure Changed; virtual;
     function GetBackgroundColorStored: Boolean;
     function GetForegroundColorStored: Boolean;
@@ -98,16 +98,16 @@ type
 {$ENDIF}
   public
     procedure SetColors(Foreground, Background: TColor);
-    property FriendlyName: UnicodeString read fFriendlyName;
+    property FriendlyName: UnicodeString read FFriendlyName;
     property IntegerStyle: Integer read GetStyleFromInt write SetStyleFromInt;
-    property Name: string read fName;
-    property OnChange: TNotifyEvent read fOnChange write fOnChange;
+    property Name: string read FName;
+    property OnChange: TNotifyEvent read FOnChange write FOnChange;
   published
-    property Background: TColor read fBackground write SetBackground
+    property Background: TColor read FBackground write SetBackground
       stored GetBackgroundColorStored;
-    property Foreground: TColor read fForeground write SetForeground
+    property Foreground: TColor read FForeground write SetForeground
       stored GetForegroundColorStored;
-    property Style: TFontStyles read fStyle write SetStyle
+    property Style: TFontStyles read FStyle write SetStyle
       stored GetFontStyleStored;
   end;
 
@@ -129,10 +129,10 @@ const
 type
   TSynCustomHighlighter = class(TComponent)
   private
-    fAttributes: TStringList;
-    fAttrChangeHooks: TSynNotifyEventChain;
-    fUpdateCount: Integer;
-    fEnabled: Boolean;
+    FAttributes: TStringList;
+    FAttrChangeHooks: TSynNotifyEventChain;
+    FUpdateCount: Integer;
+    FEnabled: Boolean;
     FAdditionalWordBreakChars: TSysCharSet;
     FAdditionalIdentChars: TSysCharSet;
     FExportName: string;
@@ -250,7 +250,7 @@ type
   published
     property DefaultFilter: string read GetDefaultFilter write SetDefaultFilter
       stored IsFilterStored;
-    property Enabled: Boolean read fEnabled write SetEnabled default True;
+    property Enabled: Boolean read FEnabled write SetEnabled default True;
     property Options: TSynEditHighlighterOptions read FOptions write FOptions; // <-- Codehunter patch
   end;
 
@@ -259,7 +259,7 @@ type
 {$IFNDEF SYN_CPPB_1}
   TSynHighlighterList = class(TList)
   private
-    hlList: TList;
+    FHighlighterList: TList;
     function GetItem(Index: Integer): TSynCustomHighlighterClass;
   public
     constructor Create;
@@ -295,18 +295,18 @@ uses
 
 function TSynHighlighterList.Count: Integer;
 begin
-  Result := hlList.Count;
+  Result := FHighlighterList.Count;
 end;
 
 constructor TSynHighlighterList.Create;
 begin
   inherited Create;
-  hlList := TList.Create;
+  FHighlighterList := TList.Create;
 end;
 
 destructor TSynHighlighterList.Destroy;
 begin
-  hlList.Free;
+  FHighlighterList.Free;
   inherited;
 end;
 
@@ -357,7 +357,7 @@ end;
 
 function TSynHighlighterList.GetItem(Index: Integer): TSynCustomHighlighterClass;
 begin
-  Result := TSynCustomHighlighterClass(hlList[Index]);
+  Result := TSynCustomHighlighterClass(FHighlighterList[Index]);
 end;
 
 var
@@ -370,8 +370,8 @@ var
 
   procedure RegisterPlaceableHighlighter(highlighter: TSynCustomHighlighterClass);
   begin
-    if G_PlaceableHighlighters.hlList.IndexOf(highlighter) < 0 then
-      G_PlaceableHighlighters.hlList.Add(highlighter);
+    if G_PlaceableHighlighters.FHighlighterList.IndexOf(highlighter) < 0 then
+      G_PlaceableHighlighters.FHighlighterList.Add(highlighter);
   end;
 {$ENDIF}
 
@@ -381,7 +381,7 @@ procedure TSynHighlighterAttributes.Assign(Source: TPersistent);
 begin
   if Source is TSynHighlighterAttributes then
   begin
-    fName := TSynHighlighterAttributes(Source).fName;
+    FName := TSynHighlighterAttributes(Source).FName;
     AssignColorAndStyle(TSynHighlighterAttributes(Source));
   end
   else
@@ -393,19 +393,19 @@ var
   bChanged: Boolean;
 begin
   bChanged := False;
-  if fBackground <> Source.fBackground then
+  if FBackground <> Source.FBackground then
   begin
-    fBackground := Source.fBackground;
+    FBackground := Source.FBackground;
     bChanged := True;
   end;
-  if fForeground <> Source.fForeground then
+  if FForeground <> Source.FForeground then
   begin
-    fForeground := Source.fForeground;
+    FForeground := Source.FForeground;
     bChanged := True;
   end;
-  if fStyle <> Source.fStyle then
+  if FStyle <> Source.FStyle then
   begin
-    fStyle := Source.fStyle;
+    FStyle := Source.FStyle;
     bChanged := True;
   end;
   if bChanged then
@@ -415,8 +415,8 @@ end;
 
 procedure TSynHighlighterAttributes.Changed;
 begin
-  if Assigned(fOnChange) then
-    fOnChange(Self);
+  if Assigned(FOnChange) then
+    FOnChange(Self);
 end;
 
 constructor TSynHighlighterAttributes.Create(AName: string);
@@ -429,30 +429,30 @@ begin
   inherited Create;
   Background := clNone;
   Foreground := clNone;
-  fName := AName;
-  fFriendlyName := AFriendlyName;
+  FName := AName;
+  FFriendlyName := AFriendlyName;
 end;
 
 function TSynHighlighterAttributes.GetBackgroundColorStored: Boolean;
 begin
-  Result := fBackground <> fBackgroundDefault;
+  Result := FBackground <> FBackgroundDefault;
 end;
 
 function TSynHighlighterAttributes.GetForegroundColorStored: Boolean;
 begin
-  Result := fForeground <> fForegroundDefault;
+  Result := FForeground <> FForegroundDefault;
 end;
 
 function TSynHighlighterAttributes.GetFontStyleStored: Boolean;
 begin
-  Result := fStyle <> fStyleDefault;
+  Result := FStyle <> FStyleDefault;
 end;
 
 procedure TSynHighlighterAttributes.InternalSaveDefaultValues;
 begin
-  fForegroundDefault := fForeground;
-  fBackgroundDefault := fBackground;
-  fStyleDefault := fStyle;
+  FForegroundDefault := FForeground;
+  FBackgroundDefault := FBackground;
+  FStyleDefault := FStyle;
 end;
 
 {$IFNDEF SYN_CLX}
@@ -647,37 +647,37 @@ end; { TSynHighlighterAttributes.LoadFromBorlandRegistry }
 
 procedure TSynHighlighterAttributes.SetBackground(Value: TColor);
 begin
-  if fBackGround <> Value then
+  if FBackground <> Value then
   begin
-    fBackGround := Value;
+    FBackground := Value;
     Changed;
   end;
 end;
 
 procedure TSynHighlighterAttributes.SetColors(Foreground, Background: TColor);
 begin
-  if (fForeGround <> Foreground) or (fBackground <> Background) then
+  if (FForeground <> Foreground) or (FBackground <> Background) then
   begin
-    fForeGround := Foreground;
-    fBackground := Background;
+    FForeground := Foreground;
+    FBackground := Background;
     Changed;
   end;
 end;
 
 procedure TSynHighlighterAttributes.SetForeground(Value: TColor);
 begin
-  if fForeGround <> Value then
+  if FForeground <> Value then
   begin
-    fForeGround := Value;
+    FForeground := Value;
     Changed;
   end;
 end;
 
 procedure TSynHighlighterAttributes.SetStyle(Value: TFontStyles);
 begin
-  if fStyle <> Value then
+  if FStyle <> Value then
   begin
-    fStyle := Value;
+    FStyle := Value;
     Changed;
   end;
 end;
@@ -780,12 +780,12 @@ end;
 constructor TSynCustomHighlighter.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  fAttributes := TStringList.Create;
-  fAttributes.Duplicates := dupError;
-  fAttributes.Sorted := True;
-  fAttrChangeHooks := TSynNotifyEventChain.CreateEx(Self);
+  FAttributes := TStringList.Create;
+  FAttributes.Duplicates := dupError;
+  FAttributes.Sorted := True;
+  FAttrChangeHooks := TSynNotifyEventChain.CreateEx(Self);
   fDefaultFilter := '';
-  fEnabled := True;
+  FEnabled := True;
   FOptions:= TSynEditHighlighterOptions.Create; // <-- Codehunter patch
 end;
 
@@ -793,22 +793,22 @@ destructor TSynCustomHighlighter.Destroy;
 begin
   inherited Destroy;
   FreeHighlighterAttributes;
-  fAttributes.Free;
-  fAttrChangeHooks.Free;
+  FAttributes.Free;
+  FAttrChangeHooks.Free;
   FOptions.Free; // <-- Codehunter patch
 end;
 
 procedure TSynCustomHighlighter.BeginUpdate;
 begin
-  Inc(fUpdateCount);
+  Inc(FUpdateCount);
 end;
 
 procedure TSynCustomHighlighter.EndUpdate;
 begin
-  if fUpdateCount > 0 then
+  if FUpdateCount > 0 then
   begin
-    Dec(fUpdateCount);
-    if (fUpdateCount = 0) and fUpdateChange then
+    Dec(FUpdateCount);
+    if (FUpdateCount = 0) and fUpdateChange then
     begin
       fUpdateChange := False;
       DefHighlightChange(nil);
@@ -820,11 +820,11 @@ procedure TSynCustomHighlighter.FreeHighlighterAttributes;
 var
   i: Integer;
 begin
-  if fAttributes <> nil then
+  if FAttributes <> nil then
   begin
-    for i := fAttributes.Count - 1 downto 0 do
-      TSynHighlighterAttributes(fAttributes.Objects[i]).Free;
-    fAttributes.Clear;
+    for i := FAttributes.Count - 1 downto 0 do
+      TSynHighlighterAttributes(FAttributes.Objects[i]).Free;
+    FAttributes.Clear;
   end;
 end;
 
@@ -939,7 +939,7 @@ end;
 function TSynCustomHighlighter.SaveToFile(AFileName : String): boolean;
 var
   AIni: TIniFile;
-  i: integer;
+  i: Integer;
 begin
   AIni := TIniFile.Create(AFileName);
   try
@@ -958,17 +958,17 @@ end;
 
 procedure TSynCustomHighlighter.AddAttribute(Attri: TSynHighlighterAttributes);
 begin
-  fAttributes.AddObject(Attri.Name, Attri);
+  FAttributes.AddObject(Attri.Name, Attri);
 end;
 
 procedure TSynCustomHighlighter.DefHighlightChange(Sender: TObject);
 begin
-  if fUpdateCount > 0 then
+  if FUpdateCount > 0 then
     fUpdateChange := True
   else if not(csLoading in ComponentState) then
   begin
-    fAttrChangeHooks.Sender := Sender;
-    fAttrChangeHooks.Fire;
+    FAttrChangeHooks.Sender := Sender;
+    FAttrChangeHooks.Fire;
   end;
 end;
 
@@ -982,15 +982,15 @@ end;
 
 function TSynCustomHighlighter.GetAttribCount: Integer;
 begin
-  Result := fAttributes.Count;
+  Result := FAttributes.Count;
 end;
 
 function TSynCustomHighlighter.GetAttribute(Index: Integer):
   TSynHighlighterAttributes;
 begin
   Result := nil;
-  if (Index >= 0) and (Index < fAttributes.Count) then
-    Result := TSynHighlighterAttributes(fAttributes.Objects[Index]);
+  if (Index >= 0) and (Index < FAttributes.Count) then
+    Result := TSynHighlighterAttributes(FAttributes.Objects[Index]);
 end;
 
 class function TSynCustomHighlighter.GetCapabilities: TSynHighlighterCapabilities;
@@ -1097,7 +1097,7 @@ end;
 
 procedure TSynCustomHighlighter.HookAttrChangeEvent(ANotifyEvent: TNotifyEvent);
 begin
-  fAttrChangeHooks.Add(ANotifyEvent);
+  FAttrChangeHooks.Add(ANotifyEvent);
 end;
 
 function TSynCustomHighlighter.IsCurrentToken(const Token: UnicodeString): Boolean;
@@ -1214,9 +1214,9 @@ var
   i: Integer;
   Attri: TSynHighlighterAttributes;
 begin
-  for i := fAttributes.Count - 1 downto 0 do
+  for i := FAttributes.Count - 1 downto 0 do
   begin
-    Attri := TSynHighlighterAttributes(fAttributes.Objects[i]);
+    Attri := TSynHighlighterAttributes(FAttributes.Objects[i]);
     if Attri <> nil then
     begin
       Attri.OnChange := AEvent;
@@ -1292,14 +1292,14 @@ end;
 
 procedure TSynCustomHighlighter.UnhookAttrChangeEvent(ANotifyEvent: TNotifyEvent);
 begin
-  fAttrChangeHooks.Remove(ANotifyEvent);
+  FAttrChangeHooks.Remove(ANotifyEvent);
 end;
 
 procedure TSynCustomHighlighter.SetEnabled(const Value: Boolean);
 begin
-  if fEnabled <> Value then
+  if FEnabled <> Value then
   begin
-    fEnabled := Value;
+    FEnabled := Value;
     DefHighlightChange(nil);
   end;
 end;

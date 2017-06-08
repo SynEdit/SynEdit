@@ -78,7 +78,7 @@ type
   TMethodList = class
   private
     fData: TList;
-    function GetItem(Index: integer): TMethod;
+    function GetItem(Index: Integer): TMethod;
     function GetCount: Integer;
   public
     constructor Create;

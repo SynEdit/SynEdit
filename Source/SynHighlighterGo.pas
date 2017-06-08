@@ -140,10 +140,8 @@ type
     function AltFunc(Index: Integer): TtkTokenKind;
     procedure InitIdent;
     function IdentKind(MayBe: PWideChar): TtkTokenKind;
-    procedure BlockCommentProc;
     procedure CRProc;
     procedure LFProc;
-    procedure LineCommentProc;
     procedure NullProc;
     procedure NumberProc;
     procedure SlashProc;
@@ -721,45 +719,6 @@ begin
       fTokenID := tkSymbol;
     end;
   end;
-end;
-
-procedure TSynGoSyn.BlockCommentProc;
-begin
-  case fLine[Run] of
-     #0: NullProc;
-    #10: LFProc;
-    #13: CRProc;
-  else
-    begin
-      fTokenID := tkComment;
-      repeat
-        if (fLine[Run] = '*') and
-           (fLine[Run + 1] = '/') then
-        begin
-          Inc(Run, 2);
-          fRange := rsUnKnown;
-          Break;
-        end;
-        if not IsLineEnd(Run) then
-          Inc(Run);
-      until IsLineEnd(Run);
-    end;
-  end;
-end;
-
-procedure TSynGoSyn.LineCommentProc;
-begin
-  fTokenID := tkComment;
-  repeat
-//    if  then
-    begin
-      Inc(Run, 0);
-      fRange := rsUnKnown;
-      Break;
-    end;
-    if not IsLineEnd(Run) then
-      Inc(Run);
-  until IsLineEnd(Run);
 end;
 
 constructor TSynGoSyn.Create(AOwner: TComponent);

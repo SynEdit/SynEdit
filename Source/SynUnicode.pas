@@ -1983,7 +1983,7 @@ end;
 
 function WCharUpperBuff(lpsz: PWideChar; cchLength: DWORD): DWORD;
 var
-  i: integer;
+  i: Integer;
 begin
   if Win32PlatformIsUnicode then
     Result := Windows.CharUpperBuffW(lpsz, cchLength)
@@ -2043,7 +2043,7 @@ end;
 
 function WCharLowerBuff(lpsz: PWideChar; cchLength: DWORD): DWORD;
 var
-  i: integer;
+  i: Integer;
 begin
   if Win32PlatformIsUnicode then
     Result := Windows.CharLowerBuffW(lpsz, cchLength)

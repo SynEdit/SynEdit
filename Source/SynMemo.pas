@@ -228,7 +228,7 @@ uses
 // lParam = (LPARAM) (LPDWORD) lpdwEnd;        // receives ending position
 procedure TSynMemo.EMGetSel(var Message: TMessage);
 var
-  s, e: integer;
+  s, e: Integer;
 begin
   s := GetSelStart;
   e := GetSelEnd;

@@ -175,7 +175,7 @@ type
     property LeftOffset: integer read fLeftOffset write SetLeftOffset
       default 16;
     property ModificationBarWidth: Integer read fModificationBarWidth
-      write SetModificationBarWidth default 2;
+      write SetModificationBarWidth default 4;
     property ModificationColorModified: TColor read fModificationColorModified
       write SetModificationColorModified default clYellow;
     property ModificationColorSaved: TColor read fModificationColorSaved
@@ -482,7 +482,7 @@ begin
   fGradientSteps := 48;
 
   fShowModification := FALSE;
-  fModificationBarWidth := 2;
+  fModificationBarWidth := 4;
   fModificationColorModified := clYellow;
   fModificationColorSaved := clLime;
 end;

@@ -158,7 +158,7 @@ end;
 
 procedure TSynEditKeystrokesEditorForm.UpdateKeystrokesList;
 var
-  x: integer;
+  x: Integer;
 begin
   KeyCmdList.Items.BeginUpdate;
   try
