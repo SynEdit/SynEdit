@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
-    <DCC_DependencyCheckOutputName>C:\Program Files (x86)\Common Files\sng\bpl\SynEdit_D2007.bpl</DCC_DependencyCheckOutputName>
+    <DCC_DependencyCheckOutputName>..\..\..\..\Documents\RAD Studio\5.0\Bpl\SynEdit_D2007.bpl</DCC_DependencyCheckOutputName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Version>7.0</Version>
@@ -35,12 +35,12 @@
     <DelphiCompile Include="SynEdit_D2007.dpk">
       <MainSource>MainSource</MainSource>
     </DelphiCompile>
-    <DCCReference Include="..\..\..\..\..\designide.dcp" />
-    <DCCReference Include="..\..\..\..\..\SynEdit_R2007.dcp" />
-    <DCCReference Include="..\Source\SynEditPropertyReg.pas" />
-    <DCCReference Include="..\Source\SynEditReg.dcr" />
-    <DCCReference Include="..\Source\SynEditReg.dcr" />
-    <DCCReference Include="..\Source\SynEditReg.pas" />
-    <DCCReference Include="..\Source\SynHighlighterManager.pas" />
+    <DCCReference Include="$(SystemRoot)\system32\designide.dcp" />
+    <DCCReference Include="$(SystemRoot)\system32\SynEdit_R2007.dcp" />
+    <DCCReference Include="..\..\Source\SynEditPropertyReg.pas" />
+    <DCCReference Include="..\..\Source\SynEditReg.dcr" />
+    <DCCReference Include="..\..\Source\SynEditReg.dcr" />
+    <DCCReference Include="..\..\Source\SynEditReg.pas" />
+    <DCCReference Include="..\..\Source\SynHighlighterManager.pas" />
   </ItemGroup>
 </Project>
