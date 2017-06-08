@@ -2656,8 +2656,8 @@ procedure TCustomSynEdit.PaintGutter(const AClip: TRect;
   procedure DrawModification(Color: TColor; Top, Bottom: Integer);
   begin
     Canvas.Pen.Color := Color;
-    Canvas.MoveTo(fGutterWidth - FGutter.RightOffset - 2, Top);
-    Canvas.LineTo(fGutterWidth - FGutter.RightOffset - 2, Bottom);
+    Canvas.MoveTo(fGutterWidth - fGutter.RightOffset - fGutter.ModificationBarWidth, Top);
+    Canvas.LineTo(fGutterWidth - fGutter.RightOffset - fGutter.ModificationBarWidth, Bottom);
   end;
 
 var
@@ -2775,9 +2775,9 @@ begin
         if FGutter.ShowModification then
           case TSynEditStringList(FLines).Modification[cLine - 1] of
             smModified:
-              DrawModification(clYellow, rcLine.Top, rcLine.Bottom);
+              DrawModification(fGutter.ModificationColorModified, rcLine.Top, rcLine.Bottom);
             smSaved:
-              DrawModification(clLime, rcLine.Top, rcLine.Bottom);
+              DrawModification(fGutter.ModificationColorSaved, rcLine.Top, rcLine.Bottom);
           end;
       end;
       // now erase the remaining area if any
@@ -2805,9 +2805,9 @@ begin
         vLineTop := (LineToRow(cLine) - TopLine) * FTextHeight;
         case TSynEditStringList(FLines).Modification[cLine - 1] of
           smModified:
-            DrawModification(clYellow, vLineTop, vLineTop + FTextHeight);
+            DrawModification(fGutter.ModificationColorModified, vLineTop, vLineTop + fTextHeight);
           smSaved:
-            DrawModification(clLime, vLineTop, vLineTop + FTextHeight);
+            DrawModification(fGutter.ModificationColorSaved, vLineTop, vLineTop + fTextHeight);
         end;
       end;
   end;
@@ -8288,6 +8288,8 @@ end;
 procedure TCustomSynEdit.MarkModifiedLinesAsSaved;
 begin
   TSynEditStringList(FLines).MarkModifiedLinesAsSaved;
+  if fGutter.ShowModification then
+    InvalidateGutter;
 end;
 
 function TCustomSynEdit.GetSelStart: Integer;
@@ -11028,6 +11030,8 @@ end;
 procedure TCustomSynEdit.ResetModificationIndicator;
 begin
   TSynEditStringList(FLines).ResetModificationIndicator;
+  if fGutter.ShowModification then
+    InvalidateGutter;
 end;
 
 procedure TCustomSynEdit.AddMouseCursorHandler(aHandler: TMouseCursorEvent);
