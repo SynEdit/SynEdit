@@ -1,20 +1,20 @@
-package SynEdit_R7;
+package SynEdit_R2007;
 
 {$R *.res}
 {$ALIGN 8}
-{$ASSERTIONS ON}
+{$ASSERTIONS OFF}
 {$BOOLEVAL OFF}
-{$DEBUGINFO ON}
+{$DEBUGINFO OFF}
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
-{$LOCALSYMBOLS ON}
+{$LOCALSYMBOLS OFF}
 {$LONGSTRINGS ON}
 {$OPENSTRINGS ON}
 {$OPTIMIZATION ON}
 {$OVERFLOWCHECKS OFF}
 {$RANGECHECKS OFF}
-{$REFERENCEINFO ON}
+{$REFERENCEINFO OFF}
 {$SAFEDIVIDE OFF}
 {$STACKFRAMES OFF}
 {$TYPEDADDRESS OFF}
@@ -24,7 +24,7 @@ package SynEdit_R7;
 {$IMAGEBASE $400000}
 {$DESCRIPTION 'SynEdit component suite runtime'}
 {$RUNONLY}
-{$IMPLICITBUILD ON}
+{$IMPLICITBUILD OFF}
 
 requires
   vcl,
@@ -39,11 +39,11 @@ contains
   SynCompletionProposal in '..\..\Source\SynCompletionProposal.pas',
   SynDBEdit in '..\..\Source\SynDBEdit.pas',
   SynEdit in '..\..\Source\SynEdit.pas',
-  SynUnicode in '..\..\Source\SynUnicode.pas',
   SynEditAutoComplete in '..\..\Source\SynEditAutoComplete.pas',
   SynEditDocumentManager in '..\..\Source\SynEditDocumentManager.pas',
   SynEditExport in '..\..\Source\SynEditExport.pas',
   SynEditHighlighter in '..\..\Source\SynEditHighlighter.pas',
+  SynEditHighlighterOptions in '..\..\Source\SynEditHighlighterOptions.pas',
   SynEditKbdHandler in '..\..\Source\SynEditKbdHandler.pas',
   SynEditKeyCmdEditor in '..\..\Source\SynEditKeyCmdEditor.pas' {SynEditKeystrokeEditorForm},
   SynEditKeyCmds in '..\..\Source\SynEditKeyCmds.pas',
@@ -81,12 +81,16 @@ contains
   SynHighlighterCPM in '..\..\Source\SynHighlighterCPM.pas',
   SynHighlighterCpp in '..\..\Source\SynHighlighterCpp.pas',
   SynHighlighterCS in '..\..\Source\SynHighlighterCS.pas',
+  SynHighlighterCss in '..\..\Source\SynHighlighterCss.pas',
   SynHighlighterDfm in '..\..\Source\SynHighlighterDfm.pas',
   SynHighlighterDml in '..\..\Source\SynHighlighterDml.pas',
+  SynHighlighterDOT in '..\..\Source\SynHighlighterDOT.pas',
+  SynHighlighterEiffel in '..\..\Source\SynHighlighterEiffel.pas',
   SynHighlighterFortran in '..\..\Source\SynHighlighterFortran.pas',
   SynHighlighterFoxpro in '..\..\Source\SynHighlighterFoxpro.pas',
   SynHighlighterGalaxy in '..\..\Source\SynHighlighterGalaxy.pas',
   SynHighlighterGeneral in '..\..\Source\SynHighlighterGeneral.pas',
+  SynHighlighterGo in '..\..\Source\SynHighlighterGo.pas',
   SynHighlighterGWS in '..\..\Source\SynHighlighterGWS.pas',
   SynHighlighterHashEntries in '..\..\Source\SynHighlighterHashEntries.pas',
   SynHighlighterHaskell in '..\..\Source\SynHighlighterHaskell.pas',
@@ -98,7 +102,9 @@ contains
   SynHighlighterInno in '..\..\Source\SynHighlighterInno.pas',
   SynHighlighterJava in '..\..\Source\SynHighlighterJava.pas',
   SynHighlighterJScript in '..\..\Source\SynHighlighterJScript.pas',
+  SynHighlighterJSON in '..\..\Source\SynHighlighterJSON.pas',
   SynHighlighterKix in '..\..\Source\SynHighlighterKix.pas',
+  SynHighlighterLDraw in '..\..\Source\SynHighlighterLDraw.pas',
   SynHighlighterM3 in '..\..\Source\SynHighlighterM3.pas',
   SynHighlighterModelica in '..\..\Source\SynHighlighterModelica.pas',
   SynHighlighterMsg in '..\..\Source\SynHighlighterMsg.pas',
@@ -117,22 +123,17 @@ contains
   SynHighlighterTclTk in '..\..\Source\SynHighlighterTclTk.pas',
   SynHighlighterTeX in '..\..\Source\SynHighlighterTeX.pas',
   SynHighlighterUNIXShellScript in '..\..\Source\SynHighlighterUNIXShellScript.pas',
+  SynHighlighterURI in '..\..\Source\SynHighlighterURI.pas',
   SynHighlighterUnreal in '..\..\Source\SynHighlighterUnreal.pas',
   SynHighlighterVB in '..\..\Source\SynHighlighterVB.pas',
   SynHighlighterVBScript in '..\..\Source\SynHighlighterVBScript.pas',
+  SynHighlighterVrml97 in '..\..\Source\SynHighlighterVrml97.pas',
   SynHighlighterXML in '..\..\Source\SynHighlighterXML.pas',
   SynMacroRecorder in '..\..\Source\SynMacroRecorder.pas',
   SynMemo in '..\..\Source\SynMemo.pas',
   SynRegExpr in '..\..\Source\SynRegExpr.pas',
-  SynHighlighterCSS in '..\..\Source\SynHighlighterCss.pas',
-  SynHighlighterLDraw in '..\..\Source\SynHighlighterLDraw.pas',
-  SynHighlighterURI in '..\..\Source\SynHighlighterURI.pas',
   SynURIOpener in '..\..\Source\SynURIOpener.pas',
-  SynHighlighterDOT in '..\..\Source\SynHighlighterDOT.pas',
-  SynHighlighterVrml97 in '..\..\Source\SynHighlighterVrml97.pas',
-  SynHighlighterEiffel in '..\..\Source\SynHighlighterEiffel.pas',
-  SynEditHighlighterOptions in '..\..\Source\SynEditHighlighterOptions.pas',
-  SynHighlighterGo in '..\..\source\SynHighlighterGo.pas',
-  SynHighlighterJSON in '..\..\Source\SynHighlighterJSON.pas';
+  SynUnicode in '..\..\Source\SynUnicode.pas',
+  SynUsp10 in '..\..\Source\SynUsp10.pas';
 
 end.

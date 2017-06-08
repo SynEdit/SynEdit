@@ -32,8 +32,8 @@ requires
   SynEdit_R2007;
 
 contains
-  SynEditReg in '..\Source\SynEditReg.pas',
-  SynEditPropertyReg in '..\Source\SynEditPropertyReg.pas',
-  SynHighlighterManager in '..\Source\SynHighlighterManager.pas';
+  SynEditReg in '..\..\Source\SynEditReg.pas',
+  SynEditPropertyReg in '..\..\Source\SynEditPropertyReg.pas',
+  SynHighlighterManager in '..\..\Source\SynHighlighterManager.pas';
 
 end.
