@@ -213,9 +213,9 @@ end;
 
 function TSynExporterRTF.GetColorIndex(AColor: TColor): Integer;
 begin
-  Result := fListColors.IndexOf(pointer(AColor));
+  Result := fListColors.IndexOf(Pointer(AColor));
   if Result = -1 then
-    Result := fListColors.Add(pointer(AColor));
+    Result := fListColors.Add(Pointer(AColor));
 end;
 
 function TSynExporterRTF.GetFooter: UnicodeString;

@@ -143,7 +143,7 @@ end;
 
 destructor TSynEditKeystrokesEditorForm.Destroy;
 begin
-  if Assigned(FKeyStrokes) then FKeystrokes.Free;
+  if Assigned(FKeystrokes) then FKeystrokes.Free;
   inherited Destroy;
 end;
 

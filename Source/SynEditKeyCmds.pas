@@ -80,8 +80,8 @@ const
   ecRight           = 2;    // Move cursor right one char
   ecUp              = 3;    // Move cursor up one line
   ecDown            = 4;    // Move cursor down one line
-  ecWordLeft        = 5;    // Move cursor left one word
-  ecWordRight       = 6;    // Move cursor right one word
+  ecWordLeft        = 5;    // Move cursor left one Word
+  ecWordRight       = 6;    // Move cursor right one Word
   ecLineStart       = 7;    // Move cursor to beginning of line
   ecLineEnd         = 8;    // Move cursor to end of line
   ecPageUp          = 9;    // Move cursor up one page
@@ -95,7 +95,7 @@ const
   ecGotoXY          = 17;   // Move cursor to specific coordinates, Data = PPoint
 
 //******************************************************************************
-// Maybe the command processor should just take a boolean that signifies if
+// Maybe the command processor should just take a Boolean that signifies if
 // selection is affected or not?
 //******************************************************************************
 
@@ -170,8 +170,8 @@ const
 
   ecDeleteLastChar  = 501;  // Delete last char (i.e. backspace key)
   ecDeleteChar      = 502;  // Delete char at cursor (i.e. delete key)
-  ecDeleteWord      = 503;  // Delete from cursor to end of word
-  ecDeleteLastWord  = 504;  // Delete from cursor to start of word
+  ecDeleteWord      = 503;  // Delete from cursor to end of Word
+  ecDeleteLastWord  = 504;  // Delete from cursor to start of Word
   ecDeleteBOL       = 505;  // Delete from cursor to beginning of line
   ecDeleteEOL       = 506;  // Delete from cursor to end of line
   ecDeleteLine      = 507;  // Delete current line
@@ -194,7 +194,7 @@ const
 
   ecAutoCompletion  = 650;
 
-  ecUpperCase       = 620; // apply to the current or previous word
+  ecUpperCase       = 620; // apply to the current or previous Word
   ecLowerCase       = 621;
   ecToggleCase      = 622;
   ecTitleCase       = 623;
@@ -210,20 +210,20 @@ const
 type
   ESynKeyError = class(Exception);
 
-  TSynEditorCommand = type word;
+  TSynEditorCommand = type Word;
 
   TSynEditKeyStroke = class(TCollectionItem)
   private
-    FKey: word;          // Virtual keycode, i.e. VK_xxx
+    FKey: Word;          // Virtual keycode, i.e. VK_xxx
     FShift: TShiftState;
-    FKey2: word;
+    FKey2: Word;
     FShift2: TShiftState;
     FCommand: TSynEditorCommand;
     function GetShortCut: TShortCut;
     function GetShortCut2: TShortCut;
     procedure SetCommand(const Value: TSynEditorCommand);
-    procedure SetKey(const Value: word);
-    procedure SetKey2(const Value: word);
+    procedure SetKey(const Value: Word);
+    procedure SetKey2(const Value: Word);
     procedure SetShift(const Value: TShiftState);
     procedure SetShift2(const Value: TShiftState);
     procedure SetShortCut(const Value: TShortCut);
@@ -237,8 +237,8 @@ type
     procedure LoadFromStream(AStream: TStream);
     procedure SaveToStream(AStream: TStream);
     // No duplicate checking is done if assignment made via these properties!
-    property Key: word read FKey write SetKey;
-    property Key2: word read FKey2 write SetKey2;
+    property Key: Word read FKey write SetKey;
+    property Key2: Word read FKey2 write SetKey2;
     property Shift: TShiftState read FShift write SetShift;
     property Shift2: TShiftState read FShift2 write SetShift2;
   published
@@ -261,15 +261,15 @@ type
   public
     constructor Create(AOwner: TPersistent);
     function Add: TSynEditKeyStroke;
-    procedure AddKey(const ACmd: TSynEditorCommand; const AKey: word;
+    procedure AddKey(const ACmd: TSynEditorCommand; const AKey: Word;
        const AShift: TShiftState);
     procedure Assign(Source: TPersistent); override;
-    function FindCommand(Cmd: TSynEditorCommand): integer;
-    function FindKeycode(Code: word; SS: TShiftState): integer;
-    function FindKeycode2(Code1: word; SS1: TShiftState;
-      Code2: word; SS2: TShiftState): integer;
-    function FindShortcut(SC: TShortcut): integer;
-    function FindShortcut2(SC, SC2: TShortcut): integer;
+    function FindCommand(Cmd: TSynEditorCommand): Integer;
+    function FindKeycode(Code: Word; SS: TShiftState): Integer;
+    function FindKeycode2(Code1: Word; SS1: TShiftState;
+      Code2: Word; SS2: TShiftState): Integer;
+    function FindShortcut(SC: TShortcut): Integer;
+    function FindShortcut2(SC, SC2: TShortcut): Integer;
     procedure LoadFromStream(AStream: TStream);
     procedure ResetDefaults;
     procedure SaveToStream(AStream: TStream);
@@ -425,7 +425,7 @@ const
 
 procedure GetEditorCommandValues(Proc: TGetStrProc);
 var
-  i: integer;
+  i: Integer;
 begin
   for i := Low(EditorCommandStrs) to High(EditorCommandStrs) do
     Proc(EditorCommandStrs[I].Name);
@@ -433,13 +433,13 @@ end;
 
 procedure GetEditorCommandExtended(Proc: TGetStrProc);
 var
-  i: integer;
+  i: Integer;
 begin
   for i := Low(EditorCommandStrs) to High(EditorCommandStrs) do
     Proc(ConvertCodeStringToExtended(EditorCommandStrs[I].Name));
 end;
 
-function IdentToEditorCommand(const Ident: string; var Cmd: longint): boolean;
+function IdentToEditorCommand(const Ident: string; var Cmd: longint): Boolean;
 {$IFDEF SYN_COMPILER_2}
 var
   I: Integer;
@@ -459,7 +459,7 @@ begin
 {$ENDIF}
 end;
 
-function EditorCommandToIdent(Cmd: longint; var Ident: string): boolean;
+function EditorCommandToIdent(Cmd: longint; var Ident: string): Boolean;
 {$IFDEF SYN_COMPILER_2}
 var
   I: Integer;
@@ -532,7 +532,7 @@ begin
     FCommand := Value;
 end;
 
-procedure TSynEditKeyStroke.SetKey(const Value: word);
+procedure TSynEditKeyStroke.SetKey(const Value: Word);
 begin
   if Value <> FKey then
     FKey := Value;
@@ -548,7 +548,7 @@ procedure TSynEditKeyStroke.SetShortCut(const Value: TShortCut);
 var
   NewKey: Word;
   NewShift: TShiftState;
-  Dup: integer;
+  Dup: Integer;
 begin
   // Duplicate values of no shortcut are OK.
   if Value <> 0 then
@@ -574,7 +574,7 @@ begin
   end;
 end;
 
-procedure TSynEditKeyStroke.SetKey2(const Value: word);
+procedure TSynEditKeyStroke.SetKey2(const Value: Word);
 begin
   if Value <> FKey2 then
     FKey2 := Value;
@@ -590,7 +590,7 @@ procedure TSynEditKeyStroke.SetShortCut2(const Value: TShortCut);
 var
   NewKey: Word;
   NewShift: TShiftState;
-  Dup: integer;
+  Dup: Integer;
 begin
   // Duplicate values of no shortcut are OK.
   if Value <> 0 then
@@ -652,7 +652,7 @@ begin
   Result := TSynEditKeyStroke(inherited Add);
 end;
 
-procedure TSynEditKeyStrokes.AddKey(const ACmd: TSynEditorCommand; const AKey: word;
+procedure TSynEditKeyStrokes.AddKey(const ACmd: TSynEditorCommand; const AKey: Word;
   const AShift: TShiftState);
 var
   NewKeystroke: TSynEditKeyStroke;
@@ -670,7 +670,7 @@ end;
 
 procedure TSynEditKeyStrokes.Assign(Source: TPersistent);
 var
-  x: integer;
+  x: Integer;
 begin
   if Source is TSynEditKeyStrokes then
   begin
@@ -691,9 +691,9 @@ begin
   FOwner := AOwner;
 end;
 
-function TSynEditKeyStrokes.FindCommand(Cmd: TSynEditorCommand): integer;
+function TSynEditKeyStrokes.FindCommand(Cmd: TSynEditorCommand): Integer;
 var
-  x: integer;
+  x: Integer;
 begin
   Result := -1;
   for x := 0 to Count-1 do
@@ -704,9 +704,9 @@ begin
     end;
 end;
 
-function TSynEditKeyStrokes.FindKeycode(Code: word; SS: TShiftState): integer;
+function TSynEditKeyStrokes.FindKeycode(Code: Word; SS: TShiftState): Integer;
 var
-  x: integer;
+  x: Integer;
 begin
   Result := -1;
   for x := 0 to Count-1 do
@@ -717,10 +717,10 @@ begin
     end;
 end;
 
-function TSynEditKeyStrokes.FindKeycode2(Code1: word; SS1: TShiftState;
-  Code2: word; SS2: TShiftState): integer;
+function TSynEditKeyStrokes.FindKeycode2(Code1: Word; SS1: TShiftState;
+  Code2: Word; SS2: TShiftState): Integer;
 var
-  x: integer;
+  x: Integer;
 begin
   Result := -1;
   for x := 0 to Count-1 do
@@ -732,9 +732,9 @@ begin
     end;
 end;
 
-function TSynEditKeyStrokes.FindShortcut(SC: TShortcut): integer;
+function TSynEditKeyStrokes.FindShortcut(SC: TShortcut): Integer;
 var
-  x: integer;
+  x: Integer;
 begin
   Result := -1;
   for x := 0 to Count-1 do
@@ -745,9 +745,9 @@ begin
     end;
 end;
 
-function TSynEditKeyStrokes.FindShortcut2(SC, SC2: TShortcut): integer;
+function TSynEditKeyStrokes.FindShortcut2(SC, SC2: TShortcut): Integer;
 var
-  x: integer;
+  x: Integer;
 begin
   Result := -1;
   for x := 0 to Count-1 do
@@ -772,7 +772,7 @@ end;
 
 procedure TSynEditKeyStrokes.LoadFromStream(AStream: TStream);
 var
-  Num: integer;
+  Num: Integer;
 begin
   Clear;
   AStream.Read(Num, SizeOf(Num));
@@ -879,7 +879,7 @@ end;
 
 procedure TSynEditKeyStrokes.SaveToStream(AStream: TStream);
 var
-  i, Num: integer;
+  i, Num: Integer;
 begin
   Num := Count;
   AStream.Write(Num, SizeOf(Num));
@@ -889,7 +889,7 @@ end;
 
 function ConvertCodeStringToExtended(AString: string): string;
 var
-  i: integer;
+  i: Integer;
   WorkStr: string;
 begin
   if pos('ec', AString) = 1 then

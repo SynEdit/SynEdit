@@ -203,8 +203,8 @@ type
     function GetAsString: UnicodeString;
     procedure SetAsString(const Value: UnicodeString);
   protected
-    fCurrentEditor: TCustomSynEdit;
-    fState: TSynMacroState;
+    FCurrentEditor: TCustomSynEdit;
+    FState: TSynMacroState;
     FEvents: TList;
     FCommandIDs: array [TSynMacroCommand] of TSynEditorCommand;
     procedure SetShortCut(const Index: Integer; const Value: TShortCut);
@@ -214,7 +214,7 @@ type
     procedure DoRemoveEditor(aEditor: TCustomSynEdit); override;
     procedure OnCommand(Sender: TObject; AfterProcessing: boolean;
       var Handled: boolean; var Command: TSynEditorCommand; var aChar: WideChar;
-      Data: pointer; HandlerData: pointer); override;
+      Data, HandlerData: Pointer); override;
     function CreateMacroEvent(aCmd: TSynEditorCommand): TSynMacroEvent;
   protected
     property RecordCommandID: TSynEditorCommand read FCommandIDs[mcRecord];
@@ -231,11 +231,11 @@ type
     procedure Pause;
     procedure Resume;
     property IsEmpty: boolean read GetIsEmpty;
-    property State: TSynMacroState read fState;
+    property State: TSynMacroState read FState;
     procedure Clear;
-    procedure AddEvent(aCmd: TSynEditorCommand; aChar: WideChar; aData: pointer);
+    procedure AddEvent(aCmd: TSynEditorCommand; aChar: WideChar; aData: Pointer);
     procedure InsertEvent(aIndex: Integer; aCmd: TSynEditorCommand; aChar: WideChar;
-      aData: pointer);
+      aData: Pointer);
     procedure AddCustomEvent(aEvent: TSynMacroEvent);
     procedure InsertCustomEvent(aIndex: Integer; aEvent: TSynMacroEvent);
     procedure DeleteEvent(aIndex: Integer);
@@ -322,7 +322,7 @@ begin
 end;
 
 procedure TCustomSynMacroRecorder.AddEvent(aCmd: TSynEditorCommand;
-  aChar: WideChar; aData: pointer);
+  aChar: WideChar; aData: Pointer);
 begin
   InsertEvent(EventCount, aCmd, aChar, aData);
 end;
@@ -451,7 +451,7 @@ begin
 end;
 
 procedure TCustomSynMacroRecorder.InsertEvent(aIndex: Integer;
-  aCmd: TSynEditorCommand; aChar: WideChar; aData: pointer);
+  aCmd: TSynEditorCommand; aChar: WideChar; aData: Pointer);
 var
   iEvent: TSynMacroEvent;
 begin
@@ -499,13 +499,13 @@ end;
 procedure TCustomSynMacroRecorder.OnCommand(Sender: TObject;
   AfterProcessing: boolean; var Handled: boolean;
   var Command: TSynEditorCommand; var aChar: WideChar; Data,
-  HandlerData: pointer);
+  HandlerData: Pointer);
 var
   iEvent: TSynMacroEvent;
 begin
   if AfterProcessing then
   begin
-    if (Sender = fCurrentEditor) and (State = msRecording) and (not Handled) then
+    if (Sender = FCurrentEditor) and (State = msRecording) and (not Handled) then
     begin
       iEvent := CreateMacroEvent(Command);
       iEvent.Initialize(Command, aChar, Data);
@@ -513,7 +513,7 @@ begin
       if SaveMarkerPos and (Command >= ecSetMarker0) and
         (Command <= ecSetMarker9) and (Data = nil) then
       begin
-        TSynPositionEvent(iEvent).Position := fCurrentEditor.CaretXY;
+        TSynPositionEvent(iEvent).Position := FCurrentEditor.CaretXY;
       end;
     end;
   end
@@ -559,7 +559,7 @@ procedure TCustomSynMacroRecorder.Pause;
 begin
   if State <> msRecording then
     Error(sCannotPause);
-  fState := msPaused;
+  FState := msPaused;
   StateChanged;
 end;
 
@@ -569,7 +569,7 @@ var
 begin
   if State <> msStopped then
     Error(sCannotPlay);
-  fState := msPlaying;
+  FState := msPlaying;
   try
     StateChanged;
     for cEvent := 0 to EventCount -1 do
@@ -581,7 +581,7 @@ begin
   finally
     if State = msPlaying then
     begin
-      fState := msStopped;
+      FState := msStopped;
       StateChanged;
     end;
   end;
@@ -589,13 +589,13 @@ end;
 
 procedure TCustomSynMacroRecorder.RecordMacro(aEditor: TCustomSynEdit);
 begin
-  if fState <> msStopped then
+  if FState <> msStopped then
     Error(sCannotRecord);
   Clear;
   FEvents := TList.Create;
   FEvents.Capacity := 512;
-  fState := msRecording;
-  fCurrentEditor := aEditor;
+  FState := msRecording;
+  FCurrentEditor := aEditor;
   StateChanged;
 end;
 
@@ -606,9 +606,9 @@ end;
 
 procedure TCustomSynMacroRecorder.Resume;
 begin
-  if fState <> msPaused then
+  if FState <> msPaused then
     Error(sCannotResume);
-  fState := msRecording;
+  FState := msRecording;
   StateChanged;
 end;
 
@@ -653,10 +653,10 @@ end;
 
 procedure TCustomSynMacroRecorder.Stop;
 begin
-  if fState = msStopped then
+  if FState = msStopped then
     Exit;
-  fState := msStopped;
-  fCurrentEditor := nil;
+  FState := msStopped;
+  FCurrentEditor := nil;
   if FEvents.Count = 0 then
     FreeAndNil(FEvents);
   StateChanged;

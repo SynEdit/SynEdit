@@ -63,7 +63,7 @@ uses
   Graphics;
 
 type
-  TSynEditRange = pointer;
+  TSynEditRange = Pointer;
 
   TSynEditStringFlag = (sfHasTabs, sfHasNoTabs, sfExpandedLengthUnknown,
     sfModified, sfSaved);
@@ -76,11 +76,11 @@ type
     {$ELSE}
     FString: UnicodeString;
     {$ENDIF OWN_UnicodeString_MEMMGR}
-    fObject: TObject;
-    fRange: TSynEditRange;
-    fExpandedLength: Integer;
+    FObject: TObject;
+    FRange: TSynEditRange;
+    FExpandedLength: Integer;
     fCharIndex : Integer;
-    fFlags: TSynEditStringFlags;
+    FFlags: TSynEditStringFlags;
   end;
 
   TSynEditTwoWideChars = record
@@ -355,16 +355,16 @@ begin
       FirstAdded := FCount;
       for i := 0 to Strings.Count - 1 do begin
         with FList^[FCount] do begin
-          Pointer(fString) := nil;
+          Pointer(FString) := nil;
           {$IFDEF OWN_UnicodeString_MEMMGR}
           SetListString(FCount, Strings[i]);
           {$ELSE}
-          fString := Strings[i];
+          FString := Strings[i];
           {$ENDIF OWN_UnicodeString_MEMMGR}
-          fObject := Strings.Objects[i];
-          fRange := NullRange;
-          fExpandedLength := -1;
-          fFlags := [sfExpandedLengthUnknown];
+          FObject := Strings.Objects[i];
+          FRange := NullRange;
+          FExpandedLength := -1;
+          FFlags := [sfExpandedLengthUnknown];
         end;
         Inc(FCount);
       end;
@@ -416,7 +416,7 @@ begin
     System.Move(FList^[Index + 1], FList^[Index],
       (FCount - Index) * SynEditStringRecSize);
     {$IFDEF OWN_UnicodeString_MEMMGR}
-    Pointer(FList[FCount].fString) := nil; // avoid freeing the string, the address is now used in another element
+    Pointer(FList[FCount].FString) := nil; // avoid freeing the string, the address is now used in another element
     {$ENDIF OWN_UnicodeString_MEMMGR}
   end;
   FIndexOfLongestLine := -1;
@@ -493,22 +493,22 @@ begin
     {$ENDIF}
     begin
       Result := '';
-      Exclude(fFlags, sfExpandedLengthUnknown);
-      Exclude(fFlags, sfHasTabs);
-      Include(fFlags, sfHasNoTabs);
-      fExpandedLength := 0;
+      Exclude(FFlags, sfExpandedLengthUnknown);
+      Exclude(FFlags, sfHasTabs);
+      Include(FFlags, sfHasNoTabs);
+      FExpandedLength := 0;
     end
     else
     begin
-      Result := FConvertTabsProc(fstring, FTabWidth, HasTabs);
-      fExpandedLength := Length(FExpandAtWideGlyphsFunc(Result));
-      Exclude(fFlags, sfExpandedLengthUnknown);
-      Exclude(fFlags, sfHasTabs);
-      Exclude(fFlags, sfHasNoTabs);
+      Result := FConvertTabsProc(FString, FTabWidth, HasTabs);
+      FExpandedLength := Length(FExpandAtWideGlyphsFunc(Result));
+      Exclude(FFlags, sfExpandedLengthUnknown);
+      Exclude(FFlags, sfHasTabs);
+      Exclude(FFlags, sfHasNoTabs);
       if HasTabs then
-        Include(fFlags, sfHasTabs)
+        Include(FFlags, sfHasTabs)
       else
-        Include(fFlags, sfHasNoTabs);
+        Include(FFlags, sfHasNoTabs);
     end;
 end;
 
@@ -533,7 +533,7 @@ begin
         Result := '';
     end
     {$ELSE}
-    Result := FList^[Index].fString
+    Result := FList^[Index].FString
     {$ENDIF OWN_UnicodeString_MEMMGR}
   else
     Result := '';
@@ -558,7 +558,7 @@ end;
 function TSynEditStringList.LineCharLength(Index : Integer) : Integer;
 begin
   if Cardinal(Index)<Cardinal(FCount) then
-    Result:=Length(FList^[Index].fString)
+    Result:=Length(FList^[Index].FString)
   else Result:=0;
 end;
 
@@ -585,7 +585,7 @@ function TSynEditStringList.GetExpandedString(Index: Integer): UnicodeString;
 begin
   if (Index >= 0) and (Index < FCount) then
   begin
-    if sfHasNoTabs in FList^[Index].fFlags then
+    if sfHasNoTabs in FList^[Index].FFlags then
       Result := Get(Index)
     else
       Result := ExpandString(Index);
@@ -597,10 +597,10 @@ function TSynEditStringList.GetExpandedStringLength(Index: Integer): Integer;
 begin
   if (Index >= 0) and (Index < FCount) then
   begin
-    if sfExpandedLengthUnknown in FList^[Index].fFlags then
+    if sfExpandedLengthUnknown in FList^[Index].FFlags then
       Result := Length( ExpandedStrings[index] )
     else
-      Result := FList^[Index].fExpandedLength;
+      Result := FList^[Index].FExpandedLength;
   end
   else
     Result := 0;
@@ -619,11 +619,11 @@ begin
       PRec := @FList^[0];
       for i := 0 to FCount - 1 do
       begin
-        if sfExpandedLengthUnknown in PRec^.fFlags then
+        if sfExpandedLengthUnknown in PRec^.FFlags then
           ExpandString(i);
-        if PRec^.fExpandedLength > MaxLen then
+        if PRec^.FExpandedLength > MaxLen then
         begin
-          MaxLen := PRec^.fExpandedLength;
+          MaxLen := PRec^.FExpandedLength;
           FIndexOfLongestLine := i;
         end;
         Inc(PRec);
@@ -631,7 +631,7 @@ begin
     end;
   end;
   if (FIndexOfLongestLine >= 0) and (FIndexOfLongestLine < FCount) then
-    Result := FList^[FIndexOfLongestLine].fExpandedLength
+    Result := FList^[FIndexOfLongestLine].FExpandedLength
   else
     Result := 0;
 end;
@@ -641,17 +641,17 @@ function TSynEditStringList.GetModification(
 begin
   Result := smOriginal;
   if (Index >= 0) and (Index < FCount) then
-    if sfSaved in FList^[Index].fFlags then
+    if sfSaved in FList^[Index].FFlags then
       Result := smSaved
     else
-    if sfModified in FList^[Index].fFlags then
+    if sfModified in FList^[Index].FFlags then
       Result := smModified;
 end;
 
 function TSynEditStringList.GetObject(Index: Integer): TObject;
 begin
   if (Index >= 0) and (Index < FCount) then
-    Result := FList^[Index].fObject
+    Result := FList^[Index].FObject
   else
     Result := nil;
 end;
@@ -659,7 +659,7 @@ end;
 function TSynEditStringList.GetRange(Index: Integer): TSynEditRange;
 begin
   if (Index >= 0) and (Index < FCount) then
-    Result := FList^[Index].fRange
+    Result := FList^[Index].FRange
   else
     Result := nil;
 end;
@@ -785,16 +785,16 @@ begin
   FIndexOfLongestLine := -1;
   with FList^[Index] do
   begin
-    Pointer(fString) := nil;
+    Pointer(FString) := nil;
     {$IFDEF OWN_UnicodeString_MEMMGR}
     SetListString(Index, S);
     {$ELSE}
-    fString := S;
+    FString := S;
     {$ENDIF OWN_UnicodeString_MEMMGR}
-    fObject := nil;
-    fRange := NullRange;
-    fExpandedLength := -1;
-    fFlags := [sfExpandedLengthUnknown];
+    FObject := nil;
+    FRange := NullRange;
+    FExpandedLength := -1;
+    FFlags := [sfExpandedLengthUnknown];
   end;
   Inc(FCount);
   EndUpdate;
@@ -819,11 +819,11 @@ begin
       for c_Line := Index to Index + NumLines -1 do
         with FList^[c_Line] do
         begin
-          Pointer(fString) := nil;
-          fObject := nil;
-          fRange := NullRange;
-          fExpandedLength := -1;
-          fFlags := [sfExpandedLengthUnknown];
+          Pointer(FString) := nil;
+          FObject := nil;
+          FRange := NullRange;
+          FExpandedLength := -1;
+          FFlags := [sfExpandedLengthUnknown];
         end;
       Inc(FCount, NumLines);
       if Assigned(OnInserted) then
@@ -880,8 +880,8 @@ var
   Index: Integer;
 begin
   for Index := 0 to FCount - 1 do
-    if sfModified in FList^[Index].fFlags then
-      Include(FList^[Index].fFlags, sfSaved);
+    if sfModified in FList^[Index].FFlags then
+      Include(FList^[Index].FFlags, sfSaved);
 end;
 
 procedure TSynEditStringList.ResetModificationIndicator;
@@ -890,8 +890,8 @@ var
 begin
   for Index := 0 to FCount - 1 do
   begin
-    Exclude(FList^[Index].fFlags, sfModified);
-    Exclude(FList^[Index].fFlags, sfSaved);
+    Exclude(FList^[Index].FFlags, sfModified);
+    Exclude(FList^[Index].FFlags, sfSaved);
   end;
 end;
 
@@ -921,14 +921,14 @@ begin
     BeginUpdate;
     FIndexOfLongestLine := -1;
     with FList^[Index] do begin
-      Include(fFlags, sfExpandedLengthUnknown);
-      Exclude(fFlags, sfHasTabs);
-      Exclude(fFlags, sfHasNoTabs);
-      Include(fFlags, sfModified);
+      Include(FFlags, sfExpandedLengthUnknown);
+      Exclude(FFlags, sfHasTabs);
+      Exclude(FFlags, sfHasNoTabs);
+      Include(FFlags, sfModified);
       {$IFDEF OWN_UnicodeString_MEMMGR}
         SetListString(Index, S);
       {$ELSE}
-      fString := S;
+      FString := S;
       {$ENDIF OWN_UnicodeString_MEMMGR}
     end;
     if Assigned(FOnPutted) then
@@ -942,7 +942,7 @@ begin
   if Cardinal(Index)>=Cardinal(FCount) then
     ListIndexOutOfBounds(Index);
   BeginUpdate;
-  FList^[Index].fObject := AObject;
+  FList^[Index].FObject := AObject;
   EndUpdate;
 end;
 
@@ -951,7 +951,7 @@ begin
   if Cardinal(Index)>=Cardinal(FCount) then
     ListIndexOutOfBounds(Index);
   BeginUpdate;
-  FList^[Index].fRange := ARange;
+  FList^[Index].FRange := ARange;
   EndUpdate;
 end;
 
@@ -966,7 +966,7 @@ begin
   ReallocMem(FList, NewCapacity * SynEditStringRecSize);
   {$IFDEF OWN_UnicodeString_MEMMGR}
   for I := FCount to NewCapacity - 1 do
-    Pointer(FList[I].fString) := nil;  // so that it does not get freed
+    Pointer(FList[I].FString) := nil;  // so that it does not get freed
   {$ENDIF OWN_UnicodeString_MEMMGR}
   FCapacity := NewCapacity;
 end;
@@ -1024,9 +1024,9 @@ begin
     FIndexOfLongestLine := -1;
     for i := 0 to FCount - 1 do
       with FList^[i] do begin
-        fExpandedLength := -1;
-        Exclude(fFlags, sfHasNoTabs);
-        Include(fFlags, sfExpandedLengthUnknown);
+        FExpandedLength := -1;
+        Exclude(FFlags, sfHasNoTabs);
+        Include(FFlags, sfExpandedLengthUnknown);
       end;
   end;
 end;
@@ -1118,9 +1118,9 @@ begin
   for i := 0 to FCount - 1 do
     with FList^[i] do
     begin
-      fExpandedLength := -1;
-      Exclude(fFlags, sfHasNoTabs);
-      Include(fFlags, sfExpandedLengthUnknown);
+      FExpandedLength := -1;
+      Exclude(FFlags, sfHasNoTabs);
+      Include(FFlags, sfExpandedLengthUnknown);
     end;
 end;
 

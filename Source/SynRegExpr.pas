@@ -253,12 +253,12 @@ type
     fWordChars : RegExprString; //###0.929
     fInvertCase : TRegExprInvertCaseFunction; //###0.927
 
-    fLineSeparators : RegExprString; //###0.941
+    FLineSeparators : RegExprString; //###0.941
     fLinePairedSeparatorAssigned : Boolean;
     fLinePairedSeparatorHead,
     fLinePairedSeparatorTail : REChar;
     {$IFNDEF SynRegUniCode}
-    fLineSeparatorsSet : set of REChar;
+    FLineSeparatorsSet : set of REChar;
     {$ENDIF}
 
     procedure InvalidateProgramm;
@@ -540,7 +540,7 @@ type
     // Contains chars, treated as /w (initially filled with RegExprWordChars
     // global constant)
 
-    property LineSeparators : RegExprString read fLineSeparators write SetLineSeparators; //###0.941
+    property LineSeparators : RegExprString read FLineSeparators write SetLineSeparators; //###0.941
     // line separators (like \n in Unix)
 
     property LinePairedSeparator : RegExprString read GetLinePairedSeparator write SetLinePairedSeparator; //###0.941
@@ -1172,7 +1172,7 @@ begin
   WordChars := RegExprWordChars; //###0.929
   fInvertCase := RegExprInvertCaseFunction; //###0.927
 
-  fLineSeparators := RegExprLineSeparators; //###0.941
+  FLineSeparators := RegExprLineSeparators; //###0.941
   LinePairedSeparator := RegExprLinePairedSeparator; //###0.941
 end; { of constructor TRegExpr.Create
 --------------------------------------------------------------}
@@ -1436,9 +1436,9 @@ begin
 
   // can we optimize line separators by using sets?
   {$IFNDEF SynRegUniCode}
-  fLineSeparatorsSet := [];
-  for i := 1 to length (fLineSeparators)
-   do System.Include (fLineSeparatorsSet, fLineSeparators [i]);
+  FLineSeparatorsSet := [];
+  for i := 1 to length (FLineSeparators) do
+    System.Include (FLineSeparatorsSet, FLineSeparators [i]);
   {$ENDIF}
 
   // [Re]compile if needed
@@ -2275,11 +2275,11 @@ function TRegExpr.ParseAtom (var flagp : Integer) : PRegExprChar;
   inc (regparse);
   case (regparse - 1)^ of
     '^': if ((fCompModifiers and MaskModM) = 0)
-           or ((fLineSeparators = '') and not fLinePairedSeparatorAssigned)
+           or ((FLineSeparators = '') and not fLinePairedSeparatorAssigned)
           then ret := EmitNode (BOL)
           else ret := EmitNode (BOLML);
     '$': if ((fCompModifiers and MaskModM) = 0)
-           or ((fLineSeparators = '') and not fLinePairedSeparatorAssigned)
+           or ((FLineSeparators = '') and not fLinePairedSeparatorAssigned)
           then ret := EmitNode (EOL)
           else ret := EmitNode (EOLML);
     '.':
@@ -2845,9 +2845,9 @@ function TRegExpr.MatchPrim (prog : PRegExprChar) : Boolean;
                 then EXIT; // don't stop between paired separator
                if
                  {$IFNDEF SynRegUniCode}
-                 not (nextch in fLineSeparatorsSet)
+                 not (nextch in FLineSeparatorsSet)
                  {$ELSE}
-                 (pos (nextch, fLineSeparators) <= 0)
+                 (pos (nextch, FLineSeparators) <= 0)
                  {$ENDIF}
                 then EXIT;
               end;
@@ -2863,9 +2863,9 @@ function TRegExpr.MatchPrim (prog : PRegExprChar) : Boolean;
                 then EXIT; // don't stop between paired separator
                if
                  {$IFNDEF SynRegUniCode}
-                 not (nextch in fLineSeparatorsSet)
+                 not (nextch in FLineSeparatorsSet)
                  {$ELSE}
-                 (pos (nextch, fLineSeparators) <= 0)
+                 (pos (nextch, FLineSeparators) <= 0)
                  {$ENDIF}
                 then EXIT;
               end;
@@ -2879,8 +2879,8 @@ function TRegExpr.MatchPrim (prog : PRegExprChar) : Boolean;
             if (reginput^ = #0)
              or ((reginput^ = fLinePairedSeparatorHead)
                  and ((reginput + 1)^ = fLinePairedSeparatorTail))
-             or {$IFNDEF SynRegUniCode} (reginput^ in fLineSeparatorsSet)
-                {$ELSE} (pos (reginput^, fLineSeparators) > 0) {$ENDIF}
+             or {$IFNDEF SynRegUniCode} (reginput^ in FLineSeparatorsSet)
+                {$ELSE} (pos (reginput^, FLineSeparators) > 0) {$ENDIF}
              then EXIT;
             inc (reginput);
            end;
@@ -3627,8 +3627,8 @@ procedure TRegExpr.SetInputString (const AInputString : RegExprString);
 
 procedure TRegExpr.SetLineSeparators (const AStr : RegExprString);
  begin
-  if AStr <> fLineSeparators then begin
-    fLineSeparators := AStr;
+  if AStr <> FLineSeparators then begin
+    FLineSeparators := AStr;
     InvalidateProgramm;
    end;
  end; { of procedure TRegExpr.SetLineSeparators
@@ -3738,7 +3738,7 @@ function TRegExpr.Substitute (const ATemplate : RegExprString) : RegExprString;
     Result := '';
     EXIT;
    end;
-  TemplateBeg := pointer (ATemplate);
+  TemplateBeg := Pointer (ATemplate);
   TemplateEnd := TemplateBeg + TemplateLen;
   // Count result length for speed optimization.
   ResultLen := 0;
@@ -3766,7 +3766,7 @@ function TRegExpr.Substitute (const ATemplate : RegExprString) : RegExprString;
    end;
   SetString (Result, nil, ResultLen);
   // Fill Result
-  ResultPtr := pointer (Result);
+  ResultPtr := Pointer (Result);
   p := TemplateBeg;
   while p < TemplateEnd do begin
     Ch := p^;
@@ -4027,7 +4027,7 @@ function TRegExpr.Dump : RegExprString;
 {$ENDIF}
 procedure TRegExpr.Error (AErrorID : Integer);
 {$IFDEF reRealExceptionAddr}
- function ReturnAddr : pointer; //###0.938
+ function ReturnAddr : Pointer; //###0.938
   asm
    mov  eax,[ebp+4]
   end;

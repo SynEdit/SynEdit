@@ -1,4 +1,4 @@
-{-------------------------------------------------------------------------------
+﻿{-------------------------------------------------------------------------------
 The contents of this file are subject to the Mozilla Public License
 Version 1.1 (the "License"); you may not use this file except in compliance
 with the License. You may obtain a copy of the License at
@@ -156,7 +156,7 @@ type
     FPosition: Integer;
     FLinesInWindow: Integer;
     FTitleFontHeight: Integer;
-    FFontHeight: integer;
+    FFontHeight: Integer;
     FScrollbar: TScrollBar;
     FOnValidate: TValidateEvent;
     FOnCancel: TNotifyEvent;
@@ -178,16 +178,16 @@ type
     FImages: TImageList;
 
     // These are the reflections of the Options property of the CompletionProposal
-    FCase: boolean;
+    FCase: Boolean;
     FMatchText: Boolean;
     FMatchTextAnywhere: Boolean;
     FFormattedText: Boolean;
     FCenterTitle: Boolean;
-    FUseInsertList: boolean;
+    FUseInsertList: Boolean;
     FCompleteWithTab: Boolean;
     FCompleteWithEnter: Boolean;
 
-    FMouseWheelAccumulator: integer;
+    FMouseWheelAccumulator: Integer;
     FDisplayKind: SynCompletionType;
     FParameterToken: TCompletionParameter;
     FCurrentIndex: Integer;
@@ -238,7 +238,7 @@ type
 {$IFDEF SYN_CLX}
     function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;
       const MousePos: TPoint): Boolean; override;
-    procedure KeyString(var S: UnicodeString; var Handled: Boolean); override;      
+    procedure KeyString(var S: UnicodeString; var Handled: Boolean); override;
     function WidgetFlags: Integer; override;
 {$ELSE}
     procedure WMChar(var Msg: TWMChar); message WM_CHAR;
@@ -283,9 +283,9 @@ type
     property ItemHeight: Integer read FItemHeight write SetItemHeight default 0;
     property Margin: Integer read FMargin write FMargin default 2;
 
-    property UsePrettyText: boolean read FFormattedText write FFormattedText default False;
-    property UseInsertList: boolean read FUseInsertList write FUseInsertList default False;
-    property CenterTitle: boolean read FCenterTitle write FCenterTitle default True;
+    property UsePrettyText: Boolean read FFormattedText write FFormattedText default False;
+    property UseInsertList: Boolean read FUseInsertList write FUseInsertList default False;
+    property CenterTitle: Boolean read FCenterTitle write FCenterTitle default True;
     property CaseSensitive: Boolean read FCase write FCase default False;
     property CurrentEditor: TCustomSynEdit read FCurrentEditor write FCurrentEditor;
     property MatchText: Boolean read FMatchText write FMatchText;
@@ -480,8 +480,8 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure AddEditor(AEditor: TCustomSynEdit);
-    function RemoveEditor(AEditor: TCustomSynEdit): boolean;
-    function EditorsCount: integer;
+    function RemoveEditor(AEditor: TCustomSynEdit): Boolean;
+    function EditorsCount: Integer;
     procedure ExecuteEx(s: UnicodeString; x, y: Integer; Kind : SynCompletionType
       {$IFDEF SYN_COMPILER_4_UP} = ctCode {$ENDIF}); override;
     procedure ActivateCompletion;
@@ -1315,8 +1315,8 @@ function TSynBaseCompletionProposalForm.DoMouseWheel(Shift: TShiftState;
 const
   WHEEL_DIVISOR = 120; { according to Qt API... }
 var
-  iWheelClicks: integer;
-  iLinesToScroll: integer;
+  iWheelClicks: Integer;
+  iLinesToScroll: Integer;
 begin
   if ssCtrl in Application.KeyState then
     iLinesToScroll := FLinesInWindow
@@ -1589,7 +1589,7 @@ function TSynBaseCompletionProposalForm.CanResize(var NewWidth, NewHeight: Integ
 var
   NewLinesInWindow: Integer;
   BorderWidth: Integer;
-  tmpHeight : integer;
+  tmpHeight : Integer;
 begin
   Result := True;
   case FDisplayKind of
@@ -1654,7 +1654,7 @@ const
 var
   TmpRect: TRect;
   TmpX: Integer;
-  AlreadyDrawn: boolean;
+  AlreadyDrawn: Boolean;
   TmpString: UnicodeString;
   i: Integer;
 begin
@@ -2063,8 +2063,8 @@ end;
 {$IFNDEF SYN_CLX}
 procedure TSynBaseCompletionProposalForm.WMMouseWheel(var Msg: TMessage);
 var
-  nDelta: integer;
-  nWheelClicks: integer;
+  nDelta: Integer;
+  nWheelClicks: Integer;
 {$IFNDEF SYN_COMPILER_4_UP}
 const
   LinesToScroll = 3;
@@ -2092,7 +2092,7 @@ begin
   Inc(FMouseWheelAccumulator, SmallInt(Msg.wParamHi));
   nWheelClicks := FMouseWheelAccumulator div WHEEL_DELTA;
   FMouseWheelAccumulator := FMouseWheelAccumulator mod WHEEL_DELTA;
-  if (nDelta = integer(WHEEL_PAGESCROLL)) or (nDelta > FLinesInWindow) then
+  if (nDelta = Integer(WHEEL_PAGESCROLL)) or (nDelta > FLinesInWindow) then
     nDelta := FLinesInWindow;
 
   Position := Position - (nDelta * nWheelClicks);
@@ -2337,12 +2337,12 @@ begin
   DefaultType := ctCode;
 end;
 
-procedure TSynBaseCompletionProposal.Execute(s: UnicodeString; x, y: integer);
+procedure TSynBaseCompletionProposal.Execute(s: UnicodeString; x, y: Integer);
 begin
   ExecuteEx(s, x, y, DefaultType);
 end;
 
-procedure TSynBaseCompletionProposal.ExecuteEx(s: UnicodeString; x, y: integer; Kind : SynCompletionType);
+procedure TSynBaseCompletionProposal.ExecuteEx(s: UnicodeString; x, y: Integer; Kind : SynCompletionType);
 
   function GetWorkAreaWidth: Integer;
   begin
@@ -3187,7 +3187,7 @@ end;
 function TSynCompletionProposal.GetCurrentInput(AEditor: TCustomSynEdit): UnicodeString;
 var
   s: UnicodeString;
-  i: integer;
+  i: Integer;
 begin
   Result := '';
   if AEditor <> nil then
@@ -3332,7 +3332,7 @@ begin
 
 end;
 
-procedure TSynCompletionProposal.ExecuteEx(s: UnicodeString; x, y: integer;
+procedure TSynCompletionProposal.ExecuteEx(s: UnicodeString; x, y: Integer;
   Kind: SynCompletionType);
 begin
   {$IFDEF SYN_CLX} // Missing-ShowWindow-Workaround
@@ -3351,7 +3351,7 @@ end;
 
 procedure TSynCompletionProposal.AddEditor(AEditor: TCustomSynEdit);
 var
-  i : integer;
+  i : Integer;
 begin
   i := FEditors.IndexOf(AEditor);
   if i = -1 then begin
@@ -3363,12 +3363,12 @@ begin
   end;
 end;
 
-function TSynCompletionProposal.EditorsCount: integer;
+function TSynCompletionProposal.EditorsCount: Integer;
 begin
   result := FEditors.count;
 end;
 
-function TSynCompletionProposal.GetEditor(i: integer): TCustomSynEdit;
+function TSynCompletionProposal.GetEditor(i: Integer): TCustomSynEdit;
 begin
   if (i < 0) or (i >= EditorsCount) then
     Result := nil
@@ -3376,9 +3376,9 @@ begin
     Result := FEditors[i];
 end;
 
-function TSynCompletionProposal.RemoveEditor(AEditor: TCustomSynEdit): boolean;
+function TSynCompletionProposal.RemoveEditor(AEditor: TCustomSynEdit): Boolean;
 var
-  i: integer;
+  i: Integer;
 begin
   i := FEditors.Remove(AEditor);
   result := i <> -1;
@@ -3403,7 +3403,7 @@ end;
 procedure TSynCompletionProposal.DoExecute(AEditor: TCustomSynEdit);
 var
   p: TPoint;
-  i: integer;
+  i: Integer;
 begin
   i := FEditors.IndexOf(AEditor);
   if i <> -1 then
@@ -3600,7 +3600,7 @@ procedure TSynAutoComplete.ExecuteEx(Token: UnicodeString; Editor: TCustomSynEdi
   LookupIfNotExact: Boolean);
 var
   Temp: UnicodeString;
-  i, j: integer;
+  i, j: Integer;
   StartOfBlock: TBufferCoord;
   ChangedIndent: Boolean;
   ChangedTrailing: Boolean;
@@ -3777,7 +3777,7 @@ end;
 function TSynAutoComplete.GetTokenList: UnicodeString;
 var
   List: TUnicodeStringList;
-  i: integer;
+  i: Integer;
 begin
   Result := '';
   if AutoCompleteList.Count < 1 then Exit;
@@ -3794,7 +3794,7 @@ end;
 
 function TSynAutoComplete.GetTokenValue(Token: UnicodeString): UnicodeString;
 var
-  i: integer;
+  i: Integer;
   List: TUnicodeStringList;
 begin
   Result := '';

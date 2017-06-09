@@ -52,7 +52,7 @@ Two extra properties included (DelphiVersion, PackageSource):
 unit SynHighlighterPas;
 {$ENDIF}
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 interface
 
@@ -92,24 +92,24 @@ const
 type
   TSynPasSyn = class(TSynCustomHighlighter)
   private
-    fAsmStart: Boolean;
-    fRange: TRangeState;
-    fIdentFuncTable: array[0..388] of TIdentFuncTableFunc;
-    fTokenID: TtkTokenKind;
-    fStringAttri: TSynHighlighterAttributes;
-    fCharAttri: TSynHighlighterAttributes;
-    fNumberAttri: TSynHighlighterAttributes;
-    fFloatAttri: TSynHighlighterAttributes;                                                 
-    fHexAttri: TSynHighlighterAttributes;
-    fKeyAttri: TSynHighlighterAttributes;
-    fSymbolAttri: TSynHighlighterAttributes;
-    fAsmAttri: TSynHighlighterAttributes;
-    fCommentAttri: TSynHighlighterAttributes;
-    fDirecAttri: TSynHighlighterAttributes;
-    fIdentifierAttri: TSynHighlighterAttributes;
-    fSpaceAttri: TSynHighlighterAttributes;
-    fDelphiVersion: TDelphiVersion;
-    fPackageSource: Boolean;
+    FAsmStart: Boolean;
+    FRange: TRangeState;
+    FIdentFuncTable: array[0..388] of TIdentFuncTableFunc;
+    FTokenID: TtkTokenKind;
+    FStringAttri: TSynHighlighterAttributes;
+    FCharAttri: TSynHighlighterAttributes;
+    FNumberAttri: TSynHighlighterAttributes;
+    FFloatAttri: TSynHighlighterAttributes;
+    FHexAttri: TSynHighlighterAttributes;
+    FKeyAttri: TSynHighlighterAttributes;
+    FSymbolAttri: TSynHighlighterAttributes;
+    FAsmAttri: TSynHighlighterAttributes;
+    FCommentAttri: TSynHighlighterAttributes;
+    FDirecAttri: TSynHighlighterAttributes;
+    FIdentifierAttri: TSynHighlighterAttributes;
+    FSpaceAttri: TSynHighlighterAttributes;
+    FDelphiVersion: TDelphiVersion;
+    FPackageSource: Boolean;
     function AltFunc(Index: Integer): TtkTokenKind;
     function KeyWordFunc(Index: Integer): TtkTokenKind;
     function FuncAsm(Index: Integer): TtkTokenKind;
@@ -194,31 +194,31 @@ type
     function UseUserSettings(VersionIndex: Integer): Boolean; override;
     procedure EnumUserSettings(DelphiVersions: TStrings); override;
   published
-    property AsmAttri: TSynHighlighterAttributes read fAsmAttri write fAsmAttri;
-    property CommentAttri: TSynHighlighterAttributes read fCommentAttri
-      write fCommentAttri;
-    property DirectiveAttri: TSynHighlighterAttributes read fDirecAttri
-      write fDirecAttri;
-    property IdentifierAttri: TSynHighlighterAttributes read fIdentifierAttri
-      write fIdentifierAttri;
-    property KeyAttri: TSynHighlighterAttributes read fKeyAttri write fKeyAttri;
-    property NumberAttri: TSynHighlighterAttributes read fNumberAttri
-      write fNumberAttri;
-    property FloatAttri: TSynHighlighterAttributes read fFloatAttri
-      write fFloatAttri;
-    property HexAttri: TSynHighlighterAttributes read fHexAttri
-      write fHexAttri;
-    property SpaceAttri: TSynHighlighterAttributes read fSpaceAttri
-      write fSpaceAttri;
-    property StringAttri: TSynHighlighterAttributes read fStringAttri
-      write fStringAttri;
-    property CharAttri: TSynHighlighterAttributes read fCharAttri
-      write fCharAttri;
-    property SymbolAttri: TSynHighlighterAttributes read fSymbolAttri
-      write fSymbolAttri;
-    property DelphiVersion: TDelphiVersion read fDelphiVersion write SetDelphiVersion
+    property AsmAttri: TSynHighlighterAttributes read FAsmAttri write FAsmAttri;
+    property CommentAttri: TSynHighlighterAttributes read FCommentAttri
+      write FCommentAttri;
+    property DirectiveAttri: TSynHighlighterAttributes read FDirecAttri
+      write FDirecAttri;
+    property IdentifierAttri: TSynHighlighterAttributes read FIdentifierAttri
+      write FIdentifierAttri;
+    property KeyAttri: TSynHighlighterAttributes read FKeyAttri write FKeyAttri;
+    property NumberAttri: TSynHighlighterAttributes read FNumberAttri
+      write FNumberAttri;
+    property FloatAttri: TSynHighlighterAttributes read FFloatAttri
+      write FFloatAttri;
+    property HexAttri: TSynHighlighterAttributes read FHexAttri
+      write FHexAttri;
+    property SpaceAttri: TSynHighlighterAttributes read FSpaceAttri
+      write FSpaceAttri;
+    property StringAttri: TSynHighlighterAttributes read FStringAttri
+      write FStringAttri;
+    property CharAttri: TSynHighlighterAttributes read FCharAttri
+      write FCharAttri;
+    property SymbolAttri: TSynHighlighterAttributes read FSymbolAttri
+      write FSymbolAttri;
+    property DelphiVersion: TDelphiVersion read FDelphiVersion write SetDelphiVersion
       default LastDelphiVersion;
-    property PackageSource: Boolean read fPackageSource write SetPackageSource default True;
+    property PackageSource: Boolean read FPackageSource write SetPackageSource default True;
   end;
 
 implementation
@@ -282,10 +282,10 @@ begin
   while IsIdentChar(Str^) do
   begin
     Result := Result * 812 + Ord(Str^) * 76;
-    inc(Str);
+    Inc(Str);
   end;
   Result := Result mod 389;
-  fStringLen := Str - fToIdent;
+  FStringLen := Str - FToIdent;
 end;
 {$Q+}
 
@@ -293,10 +293,10 @@ function TSynPasSyn.IdentKind(MayBe: PWideChar): TtkTokenKind;
 var
   Key: Cardinal;
 begin
-  fToIdent := MayBe;
+  FToIdent := MayBe;
   Key := HashKey(MayBe);
-  if Key <= High(fIdentFuncTable) then
-    Result := fIdentFuncTable[Key](KeyIndices[Key])
+  if Key <= High(FIdentFuncTable) then
+    Result := FIdentFuncTable[Key](KeyIndices[Key])
   else
     Result := tkIdentifier;
 end;
@@ -305,48 +305,48 @@ procedure TSynPasSyn.InitIdent;
 var
   i: Integer;
 begin
-  for i := Low(fIdentFuncTable) to High(fIdentFuncTable) do
+  for i := Low(FIdentFuncTable) to High(FIdentFuncTable) do
     if KeyIndices[i] = -1 then
-      fIdentFuncTable[i] := AltFunc;
+      FIdentFuncTable[i] := AltFunc;
 
-  fIdentFuncTable[275] := FuncAsm;
-  fIdentFuncTable[41] := FuncAutomated;
-  fIdentFuncTable[112] := FuncCdecl;
-  fIdentFuncTable[33] := FuncContains;
-  fIdentFuncTable[137] := FuncDeprecated;
-  fIdentFuncTable[340] := FuncDispid;
-  fIdentFuncTable[382] := FuncDispinterface;
-  fIdentFuncTable[54] := FuncEnd;
-  fIdentFuncTable[282] := FuncExports;
-  fIdentFuncTable[163] := FuncFinal;
-  fIdentFuncTable[306] := FuncFinalization;
-  fIdentFuncTable[141] := FuncHelper;
-  fIdentFuncTable[325] := FuncImplements;
-  fIdentFuncTable[214] := FuncIndex;
-  fIdentFuncTable[323] := FuncName;
-  fIdentFuncTable[185] := FuncNodefault;
-  fIdentFuncTable[307] := FuncOperator;
-  fIdentFuncTable[58] := FuncOverload;
-  fIdentFuncTable[116] := FuncPackage;
-  fIdentFuncTable[148] := FuncPlatform;
-  fIdentFuncTable[120] := FuncProperty;
-  fIdentFuncTable[303] := FuncRead;
-  fIdentFuncTable[83] := FuncReadonly;
-  fIdentFuncTable[297] := FuncReintroduce;
-  fIdentFuncTable[65] := FuncRequires;
-  fIdentFuncTable[94] := FuncResourcestring;
-  fIdentFuncTable[170] := FuncSafecall;
-  fIdentFuncTable[321] := FuncSealed;
-  fIdentFuncTable[333] := FuncStdcall;
-  fIdentFuncTable[348] := FuncStored;
-  fIdentFuncTable[59] := FuncStringresource;
-  fIdentFuncTable[204] := FuncThreadvar;
-  fIdentFuncTable[7] := FuncWrite;
-  fIdentFuncTable[91] := FuncWriteonly;
+  FIdentFuncTable[275] := FuncAsm;
+  FIdentFuncTable[41] := FuncAutomated;
+  FIdentFuncTable[112] := FuncCdecl;
+  FIdentFuncTable[33] := FuncContains;
+  FIdentFuncTable[137] := FuncDeprecated;
+  FIdentFuncTable[340] := FuncDispid;
+  FIdentFuncTable[382] := FuncDispinterface;
+  FIdentFuncTable[54] := FuncEnd;
+  FIdentFuncTable[282] := FuncExports;
+  FIdentFuncTable[163] := FuncFinal;
+  FIdentFuncTable[306] := FuncFinalization;
+  FIdentFuncTable[141] := FuncHelper;
+  FIdentFuncTable[325] := FuncImplements;
+  FIdentFuncTable[214] := FuncIndex;
+  FIdentFuncTable[323] := FuncName;
+  FIdentFuncTable[185] := FuncNodefault;
+  FIdentFuncTable[307] := FuncOperator;
+  FIdentFuncTable[58] := FuncOverload;
+  FIdentFuncTable[116] := FuncPackage;
+  FIdentFuncTable[148] := FuncPlatform;
+  FIdentFuncTable[120] := FuncProperty;
+  FIdentFuncTable[303] := FuncRead;
+  FIdentFuncTable[83] := FuncReadonly;
+  FIdentFuncTable[297] := FuncReintroduce;
+  FIdentFuncTable[65] := FuncRequires;
+  FIdentFuncTable[94] := FuncResourcestring;
+  FIdentFuncTable[170] := FuncSafecall;
+  FIdentFuncTable[321] := FuncSealed;
+  FIdentFuncTable[333] := FuncStdcall;
+  FIdentFuncTable[348] := FuncStored;
+  FIdentFuncTable[59] := FuncStringresource;
+  FIdentFuncTable[204] := FuncThreadvar;
+  FIdentFuncTable[7] := FuncWrite;
+  FIdentFuncTable[91] := FuncWriteonly;
 
-  for i := Low(fIdentFuncTable) to High(fIdentFuncTable) do
-    if @fIdentFuncTable[i] = nil then
-      fIdentFuncTable[i] := KeyWordFunc;
+  for i := Low(FIdentFuncTable) to High(FIdentFuncTable) do
+    if @FIdentFuncTable[i] = nil then
+      FIdentFuncTable[i] := KeyWordFunc;
 end;
 
 function TSynPasSyn.AltFunc(Index: Integer): TtkTokenKind;
@@ -367,8 +367,8 @@ begin
   if IsCurrentToken(KeyWords[Index]) then
   begin
     Result := tkKey;
-    fRange := rsAsm;
-    fAsmStart := True;
+    FRange := rsAsm;
+    FAsmStart := True;
   end
   else
     Result := tkIdentifier;
@@ -427,7 +427,7 @@ begin
   if IsCurrentToken(KeyWords[Index]) then
   begin
     Result := tkKey;
-    fRange := rsUnknown;
+    FRange := rsUnknown;
   end
   else
     Result := tkIdentifier;
@@ -438,7 +438,7 @@ begin
   if IsCurrentToken(KeyWords[Index]) then
   begin
     Result := tkKey;
-    fRange := rsExports;
+    FRange := rsExports;
   end
   else
     Result := tkIdentifier;
@@ -470,7 +470,7 @@ end;
 
 function TSynPasSyn.FuncImplements(Index: Integer): TtkTokenKind;
 begin
-  if (fRange = rsProperty) and (DelphiVersion >= dvDelphi4) and IsCurrentToken(KeyWords[Index]) then
+  if (FRange = rsProperty) and (DelphiVersion >= dvDelphi4) and IsCurrentToken(KeyWords[Index]) then
     Result := tkKey
   else
     Result := tkIdentifier;
@@ -478,7 +478,7 @@ end;
 
 function TSynPasSyn.FuncIndex(Index: Integer): TtkTokenKind;
 begin
-  if (fRange in [rsProperty, rsExports]) and IsCurrentToken(KeyWords[Index]) then
+  if (FRange in [rsProperty, rsExports]) and IsCurrentToken(KeyWords[Index]) then
     Result := tkKey
   else
     Result := tkIdentifier;
@@ -486,7 +486,7 @@ end;
 
 function TSynPasSyn.FuncName(Index: Integer): TtkTokenKind;
 begin
-  if (fRange = rsExports) and IsCurrentToken(KeyWords[Index]) then
+  if (FRange = rsExports) and IsCurrentToken(KeyWords[Index]) then
     Result := tkKey
   else
     Result := tkIdentifier;
@@ -494,7 +494,7 @@ end;
 
 function TSynPasSyn.FuncNodefault(Index: Integer): TtkTokenKind;
 begin
-  if (fRange = rsProperty) and IsCurrentToken(KeyWords[Index]) then
+  if (FRange = rsProperty) and IsCurrentToken(KeyWords[Index]) then
     Result := tkKey
   else
     Result := tkIdentifier;
@@ -537,7 +537,7 @@ begin
   if IsCurrentToken(KeyWords[Index]) then
   begin
     Result := tkKey;
-    fRange := rsProperty;
+    FRange := rsProperty;
   end
   else
     Result := tkIdentifier;
@@ -545,7 +545,7 @@ end;
 
 function TSynPasSyn.FuncRead(Index: Integer): TtkTokenKind;
 begin
-  if (fRange = rsProperty) and IsCurrentToken(KeyWords[Index]) then
+  if (FRange = rsProperty) and IsCurrentToken(KeyWords[Index]) then
     Result := tkKey
   else
     Result := tkIdentifier;
@@ -553,7 +553,7 @@ end;
 
 function TSynPasSyn.FuncReadonly(Index: Integer): TtkTokenKind;
 begin
-  if (DelphiVersion >= dvDelphi3) and (fRange = rsProperty) and IsCurrentToken(KeyWords[Index]) then
+  if (DelphiVersion >= dvDelphi3) and (FRange = rsProperty) and IsCurrentToken(KeyWords[Index]) then
     Result := tkKey
   else
     Result := tkIdentifier;
@@ -609,7 +609,7 @@ end;
 
 function TSynPasSyn.FuncStored(Index: Integer): TtkTokenKind;
 begin
-  if (fRange = rsProperty) and IsCurrentToken(KeyWords[Index]) then
+  if (FRange = rsProperty) and IsCurrentToken(KeyWords[Index]) then
     Result := tkKey
   else
     Result := tkIdentifier;
@@ -633,7 +633,7 @@ end;
 
 function TSynPasSyn.FuncWrite(Index: Integer): TtkTokenKind;
 begin
-  if (fRange = rsProperty) and IsCurrentToken(KeyWords[Index]) then
+  if (FRange = rsProperty) and IsCurrentToken(KeyWords[Index]) then
     Result := tkKey
   else
     Result := tkIdentifier;
@@ -641,7 +641,7 @@ end;
 
 function TSynPasSyn.FuncWriteonly(Index: Integer): TtkTokenKind;
 begin
-  if (DelphiVersion >= dvDelphi3) and (fRange = rsProperty) and IsCurrentToken(KeyWords[Index]) then
+  if (DelphiVersion >= dvDelphi3) and (FRange = rsProperty) and IsCurrentToken(KeyWords[Index]) then
     Result := tkKey
   else
     Result := tkIdentifier;
@@ -650,58 +650,58 @@ end;
 constructor TSynPasSyn.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  fCaseSensitive := False;
+  FCaseSensitive := False;
 
-  fDelphiVersion := LastDelphiVersion;
-  fPackageSource := True;
+  FDelphiVersion := LastDelphiVersion;
+  FPackageSource := True;
 
-  fAsmAttri := TSynHighlighterAttributes.Create(SYNS_AttrAssembler, SYNS_FriendlyAttrAssembler);
-  AddAttribute(fAsmAttri);
-  fCommentAttri := TSynHighlighterAttributes.Create(SYNS_AttrComment, SYNS_FriendlyAttrComment);
-  fCommentAttri.Style:= [fsItalic];
-  AddAttribute(fCommentAttri);
-  fDirecAttri := TSynHighlighterAttributes.Create(SYNS_AttrPreprocessor, SYNS_FriendlyAttrPreprocessor);
-  fDirecAttri.Style:= [fsItalic];
-  AddAttribute(fDirecAttri);
-  fIdentifierAttri := TSynHighlighterAttributes.Create(SYNS_AttrIdentifier, SYNS_FriendlyAttrIdentifier);
-  AddAttribute(fIdentifierAttri);
-  fKeyAttri := TSynHighlighterAttributes.Create(SYNS_AttrReservedWord, SYNS_FriendlyAttrReservedWord);
-  fKeyAttri.Style:= [fsBold];
-  AddAttribute(fKeyAttri);
-  fNumberAttri := TSynHighlighterAttributes.Create(SYNS_AttrNumber, SYNS_FriendlyAttrNumber);
-  AddAttribute(fNumberAttri);
-  fFloatAttri := TSynHighlighterAttributes.Create(SYNS_AttrFloat, SYNS_FriendlyAttrFloat);
-  AddAttribute(fFloatAttri);
-  fHexAttri := TSynHighlighterAttributes.Create(SYNS_AttrHexadecimal, SYNS_FriendlyAttrHexadecimal);
-  AddAttribute(fHexAttri);
-  fSpaceAttri := TSynHighlighterAttributes.Create(SYNS_AttrSpace, SYNS_FriendlyAttrSpace);
-  AddAttribute(fSpaceAttri);
-  fStringAttri := TSynHighlighterAttributes.Create(SYNS_AttrString, SYNS_FriendlyAttrString);
-  AddAttribute(fStringAttri);
-  fCharAttri := TSynHighlighterAttributes.Create(SYNS_AttrCharacter, SYNS_FriendlyAttrCharacter);
-  AddAttribute(fCharAttri);
-  fSymbolAttri := TSynHighlighterAttributes.Create(SYNS_AttrSymbol, SYNS_FriendlyAttrSymbol);
-  AddAttribute(fSymbolAttri);
+  FAsmAttri := TSynHighlighterAttributes.Create(SYNS_AttrAssembler, SYNS_FriendlyAttrAssembler);
+  AddAttribute(FAsmAttri);
+  FCommentAttri := TSynHighlighterAttributes.Create(SYNS_AttrComment, SYNS_FriendlyAttrComment);
+  FCommentAttri.Style:= [fsItalic];
+  AddAttribute(FCommentAttri);
+  FDirecAttri := TSynHighlighterAttributes.Create(SYNS_AttrPreprocessor, SYNS_FriendlyAttrPreprocessor);
+  FDirecAttri.Style:= [fsItalic];
+  AddAttribute(FDirecAttri);
+  FIdentifierAttri := TSynHighlighterAttributes.Create(SYNS_AttrIdentifier, SYNS_FriendlyAttrIdentifier);
+  AddAttribute(FIdentifierAttri);
+  FKeyAttri := TSynHighlighterAttributes.Create(SYNS_AttrReservedWord, SYNS_FriendlyAttrReservedWord);
+  FKeyAttri.Style:= [fsBold];
+  AddAttribute(FKeyAttri);
+  FNumberAttri := TSynHighlighterAttributes.Create(SYNS_AttrNumber, SYNS_FriendlyAttrNumber);
+  AddAttribute(FNumberAttri);
+  FFloatAttri := TSynHighlighterAttributes.Create(SYNS_AttrFloat, SYNS_FriendlyAttrFloat);
+  AddAttribute(FFloatAttri);
+  FHexAttri := TSynHighlighterAttributes.Create(SYNS_AttrHexadecimal, SYNS_FriendlyAttrHexadecimal);
+  AddAttribute(FHexAttri);
+  FSpaceAttri := TSynHighlighterAttributes.Create(SYNS_AttrSpace, SYNS_FriendlyAttrSpace);
+  AddAttribute(FSpaceAttri);
+  FStringAttri := TSynHighlighterAttributes.Create(SYNS_AttrString, SYNS_FriendlyAttrString);
+  AddAttribute(FStringAttri);
+  FCharAttri := TSynHighlighterAttributes.Create(SYNS_AttrCharacter, SYNS_FriendlyAttrCharacter);
+  AddAttribute(FCharAttri);
+  FSymbolAttri := TSynHighlighterAttributes.Create(SYNS_AttrSymbol, SYNS_FriendlyAttrSymbol);
+  AddAttribute(FSymbolAttri);
   SetAttributesOnChange(DefHighlightChange);
 
   InitIdent;
-  fRange := rsUnknown;
-  fAsmStart := False;
+  FRange := rsUnknown;
+  FAsmStart := False;
   fDefaultFilter := SYNS_FilterPascal;
 end;
 
 procedure TSynPasSyn.AddressOpProc;
 begin
-  fTokenID := tkSymbol;
-  inc(Run);
-  if fLine[Run] = '@' then inc(Run);
+  FTokenID := tkSymbol;
+  Inc(Run);
+  if FLine[Run] = '@' then Inc(Run);
 end;
 
 procedure TSynPasSyn.AsciiCharProc;
 
   function IsAsciiChar: Boolean;
   begin
-    case fLine[Run] of
+    case FLine[Run] of
       '0'..'9', '$', 'A'..'F', 'a'..'f':
         Result := True;
       else
@@ -710,7 +710,7 @@ procedure TSynPasSyn.AsciiCharProc;
   end;
   
 begin
-  fTokenID := tkChar;
+  FTokenID := tkChar;
   Inc(Run);
   while IsAsciiChar do
     Inc(Run);
@@ -718,24 +718,24 @@ end;
 
 procedure TSynPasSyn.BorProc;
 begin
-  case fLine[Run] of
+  case FLine[Run] of
      #0: NullProc;
     #10: LFProc;
     #13: CRProc;
   else
     begin
-      if fRange in [rsDirective, rsDirectiveAsm] then
-        fTokenID := tkDirec
+      if FRange in [rsDirective, rsDirectiveAsm] then
+        FTokenID := tkDirec
       else
-        fTokenID := tkComment;
+        FTokenID := tkComment;
       repeat
-        if fLine[Run] = '}' then
+        if FLine[Run] = '}' then
         begin
           Inc(Run);
-          if fRange in [rsBorAsm, rsDirectiveAsm] then
-            fRange := rsAsm
+          if FRange in [rsBorAsm, rsDirectiveAsm] then
+            FRange := rsAsm
           else
-            fRange := rsUnknown;
+            FRange := rsUnknown;
           break;
         end;
         Inc(Run);
@@ -746,43 +746,43 @@ end;
 
 procedure TSynPasSyn.BraceOpenProc;
 begin
-  if (fLine[Run + 1] = '$') then
+  if (FLine[Run + 1] = '$') then
   begin
-    if fRange = rsAsm then
-      fRange := rsDirectiveAsm
+    if FRange = rsAsm then
+      FRange := rsDirectiveAsm
     else
-      fRange := rsDirective;
+      FRange := rsDirective;
   end
   else
   begin
-    if fRange = rsAsm then
-      fRange := rsBorAsm
+    if FRange = rsAsm then
+      FRange := rsBorAsm
     else
-      fRange := rsBor;
+      FRange := rsBor;
   end;
   BorProc;
 end;
 
 procedure TSynPasSyn.ColonOrGreaterProc;
 begin
-  fTokenID := tkSymbol;
-  inc(Run);
-  if fLine[Run] = '=' then inc(Run);
+  FTokenID := tkSymbol;
+  Inc(Run);
+  if FLine[Run] = '=' then Inc(Run);
 end;
 
 procedure TSynPasSyn.CRProc;
 begin
-  fTokenID := tkSpace;
-  inc(Run);
-  if fLine[Run] = #10 then
+  FTokenID := tkSpace;
+  Inc(Run);
+  if FLine[Run] = #10 then
     Inc(Run);
 end;
 
 procedure TSynPasSyn.IdentProc;
 begin
-  fTokenID := IdentKind(fLine + Run);
-  inc(Run, fStringLen);
-  while IsIdentChar(fLine[Run]) do
+  FTokenID := IdentKind(FLine + Run);
+  Inc(Run, FStringLen);
+  while IsIdentChar(FLine[Run]) do
     Inc(Run);
 end;
 
@@ -790,7 +790,7 @@ procedure TSynPasSyn.IntegerProc;
 
   function IsIntegerChar: Boolean;
   begin
-    case fLine[Run] of
+    case FLine[Run] of
       '0'..'9', 'A'..'F', 'a'..'f':
         Result := True;
       else
@@ -799,37 +799,37 @@ procedure TSynPasSyn.IntegerProc;
   end;
   
 begin
-  inc(Run);
-  fTokenID := tkHex;
+  Inc(Run);
+  FTokenID := tkHex;
   while IsIntegerChar do
     Inc(Run);
 end;
 
 procedure TSynPasSyn.LFProc;
 begin
-  fTokenID := tkSpace;
-  inc(Run);
+  FTokenID := tkSpace;
+  Inc(Run);
 end;
 
 procedure TSynPasSyn.LowerProc;
 begin
-  fTokenID := tkSymbol;
-  inc(Run);
-  if (fLine[Run] = '=') or (fLine[Run] = '>') then
+  FTokenID := tkSymbol;
+  Inc(Run);
+  if (FLine[Run] = '=') or (FLine[Run] = '>') then
     Inc(Run);
 end;
 
 procedure TSynPasSyn.NullProc;
 begin
-  fTokenID := tkNull;
-  inc(Run);
+  FTokenID := tkNull;
+  Inc(Run);
 end;
 
 procedure TSynPasSyn.NumberProc;
 
   function IsNumberChar: Boolean;
   begin
-    case fLine[Run] of
+    case FLine[Run] of
       '0'..'9', '.', 'e', 'E', '-', '+':
         Result := True;
       else
@@ -839,19 +839,19 @@ procedure TSynPasSyn.NumberProc;
 
 begin
   Inc(Run);
-  fTokenID := tkNumber;
+  FTokenID := tkNumber;
   while IsNumberChar do
   begin
-    case fLine[Run] of
+    case FLine[Run] of
       '.':
-        if fLine[Run + 1] = '.' then
+        if FLine[Run + 1] = '.' then
           Break
         else
-          fTokenID := tkFloat;
-      'e', 'E': fTokenID := tkFloat;
+          FTokenID := tkFloat;
+      'e', 'E': FTokenID := tkFloat;
       '-', '+':
         begin
-          if fTokenID <> tkFloat then // arithmetic
+          if FTokenID <> tkFloat then // arithmetic
             Break;
           if (FLine[Run - 1] <> 'e') and (FLine[Run - 1] <> 'E') then
             Break; //float, but it ends here
@@ -863,27 +863,27 @@ end;
 
 procedure TSynPasSyn.PointProc;
 begin
-  fTokenID := tkSymbol;
-  inc(Run);
-  if (fLine[Run] = '.') or (fLine[Run - 1] = ')') then
+  FTokenID := tkSymbol;
+  Inc(Run);
+  if (FLine[Run] = '.') or (FLine[Run - 1] = ')') then
     Inc(Run);
 end; 
 
 procedure TSynPasSyn.AnsiProc;
 begin
-  case fLine[Run] of
+  case FLine[Run] of
      #0: NullProc;
     #10: LFProc;
     #13: CRProc;
   else
-    fTokenID := tkComment;
+    FTokenID := tkComment;
     repeat
-      if (fLine[Run] = '*') and (fLine[Run + 1] = ')') then begin
+      if (FLine[Run] = '*') and (FLine[Run + 1] = ')') then begin
         Inc(Run, 2);
-        if fRange = rsAnsiAsm then
-          fRange := rsAsm
+        if FRange = rsAnsiAsm then
+          FRange := rsAsm
         else
-          fRange := rsUnknown;
+          FRange := rsUnknown;
         break;
       end;
       Inc(Run);
@@ -894,66 +894,66 @@ end;
 procedure TSynPasSyn.RoundOpenProc;
 begin
   Inc(Run);
-  case fLine[Run] of
+  case FLine[Run] of
     '*':
       begin
         Inc(Run);
-        if fRange = rsAsm then
-          fRange := rsAnsiAsm
+        if FRange = rsAsm then
+          FRange := rsAnsiAsm
         else
-          fRange := rsAnsi;
-        fTokenID := tkComment;
+          FRange := rsAnsi;
+        FTokenID := tkComment;
         if not IsLineEnd(Run) then
           AnsiProc;
       end;
     '.':
       begin
-        inc(Run);
-        fTokenID := tkSymbol;
+        Inc(Run);
+        FTokenID := tkSymbol;
       end;
   else
-    fTokenID := tkSymbol;
+    FTokenID := tkSymbol;
   end;
 end;
 
 procedure TSynPasSyn.SemicolonProc;
 begin
   Inc(Run);
-  fTokenID := tkSymbol;
-  if fRange in [rsProperty, rsExports] then
-    fRange := rsUnknown;
+  FTokenID := tkSymbol;
+  if FRange in [rsProperty, rsExports] then
+    FRange := rsUnknown;
 end;
 
 procedure TSynPasSyn.SlashProc;
 begin
   Inc(Run);
-  if (fLine[Run] = '/') and (fDelphiVersion > dvDelphi1) then
+  if (FLine[Run] = '/') and (FDelphiVersion > dvDelphi1) then
   begin
-    fTokenID := tkComment;
+    FTokenID := tkComment;
     repeat
       Inc(Run);
     until IsLineEnd(Run);
   end
   else
-    fTokenID := tkSymbol;
+    FTokenID := tkSymbol;
 end;
 
 procedure TSynPasSyn.SpaceProc;
 begin
-  inc(Run);
-  fTokenID := tkSpace;
-  while (FLine[Run] <= #32) and not IsLineEnd(Run) do inc(Run);
+  Inc(Run);
+  FTokenID := tkSpace;
+  while (FLine[Run] <= #32) and not IsLineEnd(Run) do Inc(Run);
 end;
 
 procedure TSynPasSyn.StringProc;
 begin
-  fTokenID := tkString;
+  FTokenID := tkString;
   Inc(Run);
   while not IsLineEnd(Run) do
   begin
-    if fLine[Run] = #39 then begin
+    if FLine[Run] = #39 then begin
       Inc(Run);
-      if fLine[Run] <> #39 then
+      if FLine[Run] <> #39 then
         break;
     end;
     Inc(Run);
@@ -962,27 +962,27 @@ end;
 
 procedure TSynPasSyn.SymbolProc;
 begin
-  inc(Run);
-  fTokenID := tkSymbol;
+  Inc(Run);
+  FTokenID := tkSymbol;
 end;
 
 procedure TSynPasSyn.UnknownProc;
 begin
-  inc(Run);
-  fTokenID := tkUnknown;
+  Inc(Run);
+  FTokenID := tkUnknown;
 end;
 
 procedure TSynPasSyn.Next;
 begin
-  fAsmStart := False;
-  fTokenPos := Run;
-  case fRange of
+  FAsmStart := False;
+  FTokenPos := Run;
+  case FRange of
     rsAnsi, rsAnsiAsm:
       AnsiProc;
     rsBor, rsBorAsm, rsDirective, rsDirectiveAsm:
       BorProc;
     else
-      case fLine[Run] of
+      case FLine[Run] of
         #0: NullProc;
         #10: LFProc;
         #13: CRProc;
@@ -995,7 +995,7 @@ begin
         '{': BraceOpenProc;
         '}', '!', '"', '%', '&', '('..'/', ':'..'@', '['..'^', '`', '~':
           begin
-            case fLine[Run] of
+            case FLine[Run] of
               '(': RoundOpenProc;
               '.': PointProc;
               ';': SemicolonProc;
@@ -1018,12 +1018,12 @@ function TSynPasSyn.GetDefaultAttribute(Index: Integer):
   TSynHighlighterAttributes;
 begin
   case Index of
-    SYN_ATTR_COMMENT: Result := fCommentAttri;
-    SYN_ATTR_IDENTIFIER: Result := fIdentifierAttri;
-    SYN_ATTR_KEYWORD: Result := fKeyAttri;
-    SYN_ATTR_STRING: Result := fStringAttri;
-    SYN_ATTR_WHITESPACE: Result := fSpaceAttri;
-    SYN_ATTR_SYMBOL: Result := fSymbolAttri;
+    SYN_ATTR_COMMENT: Result := FCommentAttri;
+    SYN_ATTR_IDENTIFIER: Result := FIdentifierAttri;
+    SYN_ATTR_KEYWORD: Result := FKeyAttri;
+    SYN_ATTR_STRING: Result := FStringAttri;
+    SYN_ATTR_WHITESPACE: Result := FSpaceAttri;
+    SYN_ATTR_SYMBOL: Result := FSymbolAttri;
   else
     Result := nil;
   end;
@@ -1031,35 +1031,35 @@ end;
 
 function TSynPasSyn.GetEol: Boolean;
 begin
-  Result := Run = fLineLen + 1;
+  Result := Run = FLineLen + 1;
 end;
 
 function TSynPasSyn.GetTokenID: TtkTokenKind;
 begin
-  if not fAsmStart and (fRange = rsAsm)
-    and not (fTokenId in [tkNull, tkComment, tkDirec, tkSpace])
+  if not FAsmStart and (FRange = rsAsm)
+    and not (FTokenID in [tkNull, tkComment, tkDirec, tkSpace])
   then
     Result := tkAsm
   else
-    Result := fTokenId;
+    Result := FTokenID;
 end;
 
 function TSynPasSyn.GetTokenAttribute: TSynHighlighterAttributes;
 begin
   case GetTokenID of
-    tkAsm: Result := fAsmAttri;
-    tkComment: Result := fCommentAttri;
-    tkDirec: Result := fDirecAttri;
-    tkIdentifier: Result := fIdentifierAttri;
-    tkKey: Result := fKeyAttri;
-    tkNumber: Result := fNumberAttri;
-    tkFloat: Result := fFloatAttri;
-    tkHex: Result := fHexAttri;
-    tkSpace: Result := fSpaceAttri;
-    tkString: Result := fStringAttri;
-    tkChar: Result := fCharAttri;
-    tkSymbol: Result := fSymbolAttri;
-    tkUnknown: Result := fSymbolAttri;
+    tkAsm: Result := FAsmAttri;
+    tkComment: Result := FCommentAttri;
+    tkDirec: Result := FDirecAttri;
+    tkIdentifier: Result := FIdentifierAttri;
+    tkKey: Result := FKeyAttri;
+    tkNumber: Result := FNumberAttri;
+    tkFloat: Result := FFloatAttri;
+    tkHex: Result := FHexAttri;
+    tkSpace: Result := FSpaceAttri;
+    tkString: Result := FStringAttri;
+    tkChar: Result := FCharAttri;
+    tkSymbol: Result := FSymbolAttri;
+    tkUnknown: Result := FSymbolAttri;
   else
     Result := nil;
   end;
@@ -1072,17 +1072,17 @@ end;
 
 function TSynPasSyn.GetRange: Pointer;
 begin
-  Result := Pointer(fRange);
+  Result := Pointer(FRange);
 end;
 
 procedure TSynPasSyn.SetRange(Value: Pointer);
 begin
-  fRange := TRangeState(Value);
+  FRange := TRangeState(Value);
 end;
 
 procedure TSynPasSyn.ResetRange;
 begin
-  fRange:= rsUnknown;
+  FRange:= rsUnknown;
 end;
 
 procedure TSynPasSyn.EnumUserSettings(DelphiVersions: TStrings);
@@ -1250,18 +1250,18 @@ function TSynPasSyn.UseUserSettings(VersionIndex: Integer): Boolean;
 
     if Result then
     begin
-      fAsmAttri.AssignColorAndStyle(tmpAsmAttri);
-      fCharAttri.AssignColorAndStyle(tmpStringAttri); { Delphi lacks Char attribute }
-      fCommentAttri.AssignColorAndStyle(tmpCommentAttri);
-      fDirecAttri.AssignColorAndStyle(tmpCommentAttri); { Delphi lacks Directive attribute }
-      fFloatAttri.AssignColorAndStyle(tmpNumberAttri); { Delphi lacks Float attribute }
-      fHexAttri.AssignColorAndStyle(tmpNumberAttri); { Delphi lacks Hex attribute }
-      fIdentifierAttri.AssignColorAndStyle(tmpIdentAttri);
-      fKeyAttri.AssignColorAndStyle(tmpKeyAttri);
-      fNumberAttri.AssignColorAndStyle(tmpNumberAttri);
-      fSpaceAttri.AssignColorAndStyle(tmpSpaceAttri);
-      fStringAttri.AssignColorAndStyle(tmpStringAttri);
-      fSymbolAttri.AssignColorAndStyle(tmpSymbolAttri);
+      FAsmAttri.AssignColorAndStyle(tmpAsmAttri);
+      FCharAttri.AssignColorAndStyle(tmpStringAttri); { Delphi lacks Char attribute }
+      FCommentAttri.AssignColorAndStyle(tmpCommentAttri);
+      FDirecAttri.AssignColorAndStyle(tmpCommentAttri); { Delphi lacks Directive attribute }
+      FFloatAttri.AssignColorAndStyle(tmpNumberAttri); { Delphi lacks Float attribute }
+      FHexAttri.AssignColorAndStyle(tmpNumberAttri); { Delphi lacks Hex attribute }
+      FIdentifierAttri.AssignColorAndStyle(tmpIdentAttri);
+      FKeyAttri.AssignColorAndStyle(tmpKeyAttri);
+      FNumberAttri.AssignColorAndStyle(tmpNumberAttri);
+      FSpaceAttri.AssignColorAndStyle(tmpSpaceAttri);
+      FStringAttri.AssignColorAndStyle(tmpStringAttri);
+      FSymbolAttri.AssignColorAndStyle(tmpSymbolAttri);
     end;
     tmpAsmAttri.Free;
     tmpCommentAttri.Free;
@@ -1325,22 +1325,22 @@ end;
 
 procedure TSynPasSyn.SetDelphiVersion(const Value: TDelphiVersion);
 begin
-  if fDelphiVersion <> Value then
+  if FDelphiVersion <> Value then
   begin
-    fDelphiVersion := Value;
-    if (fDelphiVersion < dvDelphi3) and fPackageSource then
-      fPackageSource := False;
+    FDelphiVersion := Value;
+    if (FDelphiVersion < dvDelphi3) and FPackageSource then
+      FPackageSource := False;
     DefHighlightChange(Self);
   end;
 end;
 
 procedure TSynPasSyn.SetPackageSource(const Value: Boolean);
 begin
-  if fPackageSource <> Value then
+  if FPackageSource <> Value then
   begin
-    fPackageSource := Value;
-    if fPackageSource and (fDelphiVersion < dvDelphi3) then
-      fDelphiVersion := dvDelphi3;
+    FPackageSource := Value;
+    if FPackageSource and (FDelphiVersion < dvDelphi3) then
+      FDelphiVersion := dvDelphi3;
     DefHighlightChange(Self);
   end;
 end;

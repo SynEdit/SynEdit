@@ -81,7 +81,7 @@ procedure SwapInt(var l, r: Integer);
 function MaxPoint(const P1, P2: TPoint): TPoint;
 function MinPoint(const P1, P2: TPoint): TPoint;
 
-function GetIntArray(Count: Cardinal; InitialValue: integer): PIntArray;
+function GetIntArray(Count: Cardinal; InitialValue: Integer): PIntArray;
 
 {$IFNDEF SYN_CLX}
 procedure InternalFillRect(dc: HDC; const rcPaint: TRect);
@@ -281,7 +281,7 @@ var
   nBeforeTab: Integer;
 begin
   Result := Line;  // increment reference count only
-  if GetHasTabs(pointer(Line), nBeforeTab) then
+  if GetHasTabs(Pointer(Line), nBeforeTab) then
   begin
     HasTabs := True;
     pDest := @Result[nBeforeTab + 1]; // this will make a copy of Line
@@ -310,7 +310,7 @@ var
   pSrc, pDest: PWideChar;
 begin
   Result := Line;  // increment reference count only
-  if GetHasTabs(pointer(Line), DestLen) then
+  if GetHasTabs(Pointer(Line), DestLen) then
   begin
     HasTabs := True;
     pSrc := @Line[1 + DestLen];
@@ -385,7 +385,7 @@ var
   pSrc, pDest: PWideChar;
 begin
   Result := Line;  // increment reference count only
-  if GetHasTabs(pointer(Line), DestLen) then
+  if GetHasTabs(Pointer(Line), DestLen) then
   begin
     HasTabs := True;
     pSrc := @Line[1 + DestLen];
@@ -504,7 +504,7 @@ begin
 // possible sanity check here: Index := Max(Index, Length(Line));
   if Index > 1 then
   begin
-    if (TabWidth <= 1) or not GetHasTabs(pointer(Line), iChar) then
+    if (TabWidth <= 1) or not GetHasTabs(Pointer(Line), iChar) then
       Result := Index
     else
     begin
@@ -556,7 +556,7 @@ begin
   InsideTabChar := False;
   if Position > 1 then
   begin
-    if (TabWidth <= 1) or not GetHasTabs(pointer(Line), iPos) then
+    if (TabWidth <= 1) or not GetHasTabs(Pointer(Line), iPos) then
       Result := Position
     else
     begin

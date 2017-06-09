@@ -64,14 +64,14 @@ type
 type
   TSynTeXSyn = class(TSynCustomHighlighter)
   private
-    fTokenID: TtkTokenKind;
-    fTextAttri: TSynHighlighterAttributes;
-    fControlSequenceAttri: TSynHighlighterAttributes;
-    fMathmodeAttri: TSynHighlighterAttributes;
-    fCommentAttri: TSynHighlighterAttributes;
-    fSpaceAttri: TSynHighlighterAttributes;
-    fBracketAttri: TSynHighlighterAttributes;
-    fBraceAttri: TSynHighlighterAttributes;
+    FTokenID: TtkTokenKind;
+    FTextAttri: TSynHighlighterAttributes;
+    FControlSequenceAttri: TSynHighlighterAttributes;
+    FMathmodeAttri: TSynHighlighterAttributes;
+    FCommentAttri: TSynHighlighterAttributes;
+    FSpaceAttri: TSynHighlighterAttributes;
+    FBracketAttri: TSynHighlighterAttributes;
+    FBraceAttri: TSynHighlighterAttributes;
 
     function CreateHighlighterAttributes(Name: string; FriendlyName: UnicodeString;
       Foreground, Background: TColor; FontStyles: TFontStyles): TSynHighlighterAttributes;
@@ -95,29 +95,28 @@ type
     class function GetFriendlyLanguageName: UnicodeString; override;    
   public
     constructor Create(AOwner: TComponent); override;
-    function GetDefaultAttribute(Index: integer): TSynHighlighterAttributes;
+    function GetDefaultAttribute(Index: Integer): TSynHighlighterAttributes;
       override;
     function GetEol: Boolean; override;
     function GetTokenID: TtkTokenKind;
     function GetTokenAttribute: TSynHighlighterAttributes; override;
-    function GetTokenKind: integer; override;
+    function GetTokenKind: Integer; override;
     procedure Next; override;
   published
-    property CommentAttri : TSynHighlighterAttributes read fCommentAttri
-      write fCommentAttri;
-    property TextAttri: TSynHighlighterAttributes read fTextAttri
-      write fTextAttri;
-    property ControlSequenceAttri: TSynHighlighterAttributes read
-fControlSequenceAttri
-      write fControlSequenceAttri;
-    property MathmodeAttri: TSynHighlighterAttributes read fMathmodeAttri
-      write fMathmodeAttri;
-    property SpaceAttri: TSynHighlighterAttributes read fSpaceAttri
-      write fSpaceAttri;
-    property BraceAttri: TSynHighlighterAttributes read fBraceAttri
-      write fBraceAttri;
-    property BracketAttri: TSynHighlighterAttributes read fBracketAttri
-      write fBracketAttri;
+    property CommentAttri : TSynHighlighterAttributes read FCommentAttri
+      write FCommentAttri;
+    property TextAttri: TSynHighlighterAttributes read FTextAttri
+      write FTextAttri;
+    property ControlSequenceAttri: TSynHighlighterAttributes read FControlSequenceAttri
+      write FControlSequenceAttri;
+    property MathmodeAttri: TSynHighlighterAttributes read FMathmodeAttri
+      write FMathmodeAttri;
+    property SpaceAttri: TSynHighlighterAttributes read FSpaceAttri
+      write FSpaceAttri;
+    property BraceAttri: TSynHighlighterAttributes read FBraceAttri
+      write FBraceAttri;
+    property BracketAttri: TSynHighlighterAttributes read FBracketAttri
+      write FBracketAttri;
   end;
 
 implementation
@@ -133,30 +132,30 @@ constructor TSynTeXSyn.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
 
-  fCommentAttri := CreateHighlighterAttributes(SYNS_AttrComment, SYNS_FriendlyAttrComment, clTeal, clNone, []);
-  AddAttribute(fCommentAttri);
+  FCommentAttri := CreateHighlighterAttributes(SYNS_AttrComment, SYNS_FriendlyAttrComment, clTeal, clNone, []);
+  AddAttribute(FCommentAttri);
 
-  fTextAttri := CreateHighlighterAttributes(SYNS_AttrText, SYNS_FriendlyAttrText, clBlack, clNone, []);
-  AddAttribute(fTextAttri);
+  FTextAttri := CreateHighlighterAttributes(SYNS_AttrText, SYNS_FriendlyAttrText, clBlack, clNone, []);
+  AddAttribute(FTextAttri);
 
-  fMathmodeAttri := CreateHighlighterAttributes(SYNS_AttrMathmode, SYNS_FriendlyAttrMathmode, clOlive, clNone,
+  FMathmodeAttri := CreateHighlighterAttributes(SYNS_AttrMathmode, SYNS_FriendlyAttrMathmode, clOlive, clNone,
     [fsbold]);
-  AddAttribute(fMathmodeAttri);
+  AddAttribute(FMathmodeAttri);
 
-  fSpaceAttri := CreateHighlighterAttributes(SYNS_AttrSpace, SYNS_FriendlyAttrSpace, clNone, clWhite, []);
-  AddAttribute(fSpaceAttri);
+  FSpaceAttri := CreateHighlighterAttributes(SYNS_AttrSpace, SYNS_FriendlyAttrSpace, clNone, clWhite, []);
+  AddAttribute(FSpaceAttri);
 
-  fControlSequenceAttri := CreateHighlighterAttributes(SYNS_AttrTexCommand, SYNS_FriendlyAttrTexCommand, clBlue,
+  FControlSequenceAttri := CreateHighlighterAttributes(SYNS_AttrTexCommand, SYNS_FriendlyAttrTexCommand, clBlue,
     clWhite, [fsBold]);
-  AddAttribute(fControlSequenceAttri);
+  AddAttribute(FControlSequenceAttri);
 
-  fBracketAttri := CreateHighlighterAttributes(SYNS_AttrSquareBracket, SYNS_FriendlyAttrSquareBracket, clPurple,
+  FBracketAttri := CreateHighlighterAttributes(SYNS_AttrSquareBracket, SYNS_FriendlyAttrSquareBracket, clPurple,
     clNone, []);
-  AddAttribute(fBracketAttri);
+  AddAttribute(FBracketAttri);
 
-  fBraceAttri:= CreateHighlighterAttributes(SYNS_AttrRoundBracket, SYNS_FriendlyAttrRoundBracket, clRed,
+  FBraceAttri:= CreateHighlighterAttributes(SYNS_AttrRoundBracket, SYNS_FriendlyAttrRoundBracket, clRed,
     clNone, [fsBold]);
-  AddAttribute(fBraceAttri);
+  AddAttribute(FBraceAttri);
 
   SetAttributesOnChange(DefHighlightChange);
   fDefaultFilter := SYNS_FilterTeX;
@@ -164,7 +163,7 @@ end;  { Create }
 
 procedure TSynTeXSyn.CRProc;
 begin
-  fTokenID := tkSpace;
+  FTokenID := tkSpace;
   case FLine[Run + 1] of
     #10: inc(Run, 2);
     else inc(Run);
@@ -174,56 +173,56 @@ end;  { CRProc }
 
 procedure TSynTeXSyn.SpaceProc;
 begin
-  fTokenID := tkSpace;
+  FTokenID := tkSpace;
   inc(Run);
   while (FLine[Run] <= #32) and not IsLineEnd(Run) do inc(Run);
 end;  { SpaceProc }
 
 procedure TSynTeXSyn.TextProc;
 begin
-  fTokenID := tkText;
+  FTokenID := tkText;
   inc(Run);
 end;  { TextProc }
 
 procedure TSynTeXSyn.LFProc;
 begin
-  fTokenID := tkSpace;
+  FTokenID := tkSpace;
   inc(Run);
 end;  { SpaceProc }
 
 procedure TSynTeXSyn.BraceOpenProc;
 begin
-  fTokenID := tkBrace;
+  FTokenID := tkBrace;
   inc(Run);
 end;  { BraceOpen }
 
 procedure TSynTeXSyn.BraceCloseProc;
 begin
-  fTokenID := tkBrace;
+  FTokenID := tkBrace;
   inc(Run);
 end;  { BraceClose }
 
 procedure TSynTeXSyn.BracketOpenProc;
 begin
-  fTokenID := tkBracket;
+  FTokenID := tkBracket;
   inc(Run);
 end;  { BracketOpen }
 
 procedure TSynTeXSyn.BracketCloseProc;
 begin
-  fTokenID := tkBracket;
+  FTokenID := tkBracket;
   inc(Run);
 end;  { BracketClose }
 
 procedure TSynTeXSyn.NullProc;
 begin
-  fTokenID := tkNull;
+  FTokenID := tkNull;
   inc(Run);
 end;  { NullProc }
 
 procedure TSynTeXSyn.CommentProc;
 begin
- fTokenID := tkComment;
+ FTokenID := tkComment;
  repeat
     case fLine[Run] of
       #0, #10: Break;
@@ -235,13 +234,13 @@ end;  { CommentProc }
 
 procedure TSynTeXSyn.MathModeProc;
 begin
- fTokenID := tkMathMode;
+ FTokenID := tkMathMode;
  Inc(Run);
 end;  { MathModeProc }
 
 procedure TSynTeXSyn.ControlSequenceProc;
 begin
- fTokenID := tkControlSequence;
+ FTokenID := tkControlSequence;
  repeat
    case fLine[Run] of
      #0..#31: Break;  //No Control Chars !
@@ -250,7 +249,7 @@ begin
      #91, #93,#94, #123,              //only can follow to '\'
      #125, #126:
        begin
-         if (fLine[Run-1]='\') then
+         if (FLine[Run-1] = '\') then
            Inc(Run,1);
          Break;
        end;
@@ -262,7 +261,7 @@ end;  { ControlSequenceProc }
 
 procedure TSynTeXSyn.Next;
 begin
-  fTokenPos := Run;
+  FTokenPos := Run;
   case  fLine[Run] of
     #0: NullProc;
     #10: LFProc;
@@ -280,44 +279,44 @@ begin
   inherited;
 end;  { Next }
 
-function TSynTeXSyn.GetDefaultAttribute(Index: integer):
+function TSynTeXSyn.GetDefaultAttribute(Index: Integer):
   TSynHighlighterAttributes;
 begin
   case Index of
-    SYN_ATTR_COMMENT: Result := fCommentAttri;
-    SYN_ATTR_WHITESPACE: Result := fSpaceAttri;
+    SYN_ATTR_COMMENT: Result := FCommentAttri;
+    SYN_ATTR_WHITESPACE: Result := FSpaceAttri;
     else Result := nil;
   end;
 end;
 
 function TSynTeXSyn.GetEol: Boolean;
 begin
-  Result := Run = fLineLen + 1;
+  Result := Run = FLineLen + 1;
 end;  { GetDefaultAttribute }
 
 function TSynTeXSyn.GetTokenID: TtkTokenKind;
 begin
-  Result := fTokenId;
+  Result := FTokenID;
 end;  { GetTokenID }
 
 function TSynTeXSyn.GetTokenAttribute: TSynHighlighterAttributes;
 begin
-  case fTokenID of
-    tkComment: Result := fCommentAttri;
-    tkText: Result := fTextAttri;
-    tkControlSequence: Result := fControlSequenceAttri;
-    tkMathMode: Result := fMathmodeAttri;
-    tkSpace: Result := fSpaceAttri;
-    tkBrace: Result := fBraceAttri;
-    tkBracket: Result := fBracketAttri;
+  case FTokenID of
+    tkComment: Result := FCommentAttri;
+    tkText: Result := FTextAttri;
+    tkControlSequence: Result := FControlSequenceAttri;
+    tkMathMode: Result := FMathmodeAttri;
+    tkSpace: Result := FSpaceAttri;
+    tkBrace: Result := FBraceAttri;
+    tkBracket: Result := FBracketAttri;
   else
     Result := nil;
   end;
 end;  { GetTokenAttribute }
 
-function TSynTeXSyn.GetTokenKind: integer;
+function TSynTeXSyn.GetTokenKind: Integer;
 begin
-  Result := Ord(fTokenId);
+  Result := Ord(FTokenID);
 end;  { GetTokenKind }
 
 function TSynTeXSyn.IsFilterStored: Boolean;

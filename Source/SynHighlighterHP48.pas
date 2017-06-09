@@ -185,8 +185,8 @@ type
     procedure SetRange(Value: Pointer); override;
     procedure ResetRange; override;
     {$IFNDEF SYN_CLX}
-    function SaveToRegistry(RootKey: HKEY; Key: string): boolean; override;
-    function LoadFromRegistry(RootKey: HKEY; Key: string): boolean; override;
+    function SaveToRegistry(RootKey: HKEY; Key: string): Boolean; override;
+    function LoadFromRegistry(RootKey: HKEY; Key: string): Boolean; override;
     {$ENDIF}
     procedure Assign(Source: TPersistent); override;
     property AsmKeyWords: TSpeedStringList read FAsmKeyWords;
@@ -396,7 +396,7 @@ var
 begin
   for i := Low(FSumOfUsed) + 1 to High(FSumOfUsed) do
     if Index > FSumOfUsed[i] then begin
-      Result := FDatas[i - 1][Index - FSumOfUsed[i - 1]].pointer;
+      Result := FDatas[i - 1][Index - FSumOfUsed[i - 1]].Pointer;
       Exit;
     end;
   Result := nil;
@@ -480,7 +480,7 @@ var
 begin
   for i := Low(FSumOfUsed) + 1 to High(FSumOfUsed) do
     if Index > FSumOfUsed[i] then begin
-      FDatas[i - 1][Index - FSumOfUsed[i - 1]].pointer := value;
+      FDatas[i - 1][Index - FSumOfUsed[i - 1]].Pointer := value;
       Exit;
     end;
 end;
@@ -557,15 +557,15 @@ end; { Destroy }
 function TSynHP48Syn.AsmComProc(c: WideChar): TtkTokenKind;
 begin
   Result := tkAsmComment;
-  if (Run > Length(fLineStr)) then
+  if (Run > Length(FLineStr)) then
     Result := NullProc
   else
-    while Run <= Length(fLineStr) do
-      if ((run = 1) or (fLineStr[run - 1] <= ' ')) and
-        (fLineStr[Run] = '*') and
-        ((run < Length(fLineStr)) and (fLineStr[run + 1] = c)) and
-        ((run + 1 = Length(fLineStr)) or (fLineStr[run + 2] <= ' ')) then begin
-        inc(run, 2);
+    while Run <= Length(FLineStr) do
+      if ((Run = 1) or (FLineStr[Run - 1] <= ' ')) and
+        (FLineStr[Run] = '*') and
+        ((Run < Length(FLineStr)) and (FLineStr[Run + 1] = c)) and
+        ((Run + 1 = Length(FLineStr)) or (FLineStr[Run + 2] <= ' ')) then begin
+        inc(Run, 2);
         FRange := rsAsm;
         break;
       end
@@ -576,12 +576,12 @@ end;
 function TSynHP48Syn.RplComProc: TtkTokenKind;
 begin
   Result := tkRplComment;
-  if (Run > Length(fLineStr)) then
+  if (Run > Length(FLineStr)) then
     Result := NullProc
   else
-    while Run <= Length(fLineStr) do
-      if fLineStr[Run] = ')' then begin
-        inc(run);
+    while Run <= Length(FLineStr) do
+      if FLineStr[Run] = ')' then begin
+        inc(Run);
         FRange := rsRpl;
         break;
       end
@@ -593,20 +593,20 @@ function TSynHP48Syn.SlashProc: TtkTokenKind;
 begin
   if FRange = rsRpl then
     Result := IdentProc
-  else if ((Run = 1) or (fLineStr[Run - 1] <= ' ')) and
-    (fLineStr[Run] = '/') and
-    (run < Length(fLineStr)) and
-    (fLineStr[run + 1] = '*') and
-    ((run + 1 = Length(fLineStr)) or (fLineStr[Run + 2] <= ' ')) then begin
+  else if ((Run = 1) or (FLineStr[Run - 1] <= ' ')) and
+    (FLineStr[Run] = '/') and
+    (Run < Length(FLineStr)) and
+    (FLineStr[Run + 1] = '*') and
+    ((Run + 1 = Length(FLineStr)) or (FLineStr[Run + 2] <= ' ')) then begin
     inc(Run, 2);
     Result := tkAsmComment;
     FRange := rsComAsm2;
   end
-  else if (run < Length(fLineStr)) and (fLineStr[Run + 1] = '/') then begin
+  else if (Run < Length(FLineStr)) and (FLineStr[Run + 1] = '/') then begin
     inc(Run, 2);
     Result := tkAsmComment;
-    while (run <= Length(fLineStr)) do
-      if CharInSet(fLineStr[Run], [#10, #13]) then
+    while (Run <= Length(FLineStr)) do
+      if CharInSet(FLineStr[Run], [#10, #13]) then
       begin
         inc(Run);
         break;
@@ -621,19 +621,19 @@ end;
 function TSynHP48Syn.ParOpenProc: TtkTokenKind;
 begin
   if FRange = rsRpl then
-    if ((Run = 1) and ((Length(fLineStr) = 1) or (fLineStr[Run + 1] <= ' '))) or
-      ((fLineStr[Run - 1] <= ' ') and ((Length(fLineStr) = Run) or (fLineStr[Run + 1] <= ' '))) then begin
+    if ((Run = 1) and ((Length(FLineStr) = 1) or (FLineStr[Run + 1] <= ' '))) or
+      ((FLineStr[Run - 1] <= ' ') and ((Length(FLineStr) = Run) or (FLineStr[Run + 1] <= ' '))) then begin
       inc(Run);
       Result := tkRplComment;
       FRange := rsComRpl;
     end
     else
       Result := IdentProc
-  else if ((run = 1) or (fLineStr[run - 1] <= ' ')) and
-    (fLineStr[Run] = '(') and
-    (run < Length(fLineStr)) and
-    (fLineStr[run + 1] = '*') and
-    ((run + 2 > Length(fLineStr)) or (fLineStr[run + 2] <= ' ')) then begin
+  else if ((Run = 1) or (FLineStr[Run - 1] <= ' ')) and
+    (FLineStr[Run] = '(') and
+    (Run < Length(FLineStr)) and
+    (FLineStr[Run + 1] = '*') and
+    ((Run + 2 > Length(FLineStr)) or (FLineStr[Run + 2] <= ' ')) then begin
     inc(Run, 2);
     Result := tkAsmComment;
     FRange := rsComAsm1;
@@ -647,8 +647,8 @@ begin
   if FRange = rsAsm then begin
     inc(Run);
     Result := tkAsmComment;
-    while (run <= Length(fLineStr)) do
-      case fLineStr[Run] of
+    while (Run <= Length(FLineStr)) do
+      case FLineStr[Run] of
         #10, #13: begin
             inc(Run);
             break;
@@ -666,8 +666,8 @@ begin
   if FRange = rsRpl then begin
     inc(Run);
     Result := tkRplComment;
-    while (run <= Length(fLineStr)) do
-      case fLineStr[Run] of
+    while (Run <= Length(FLineStr)) do
+      case FLineStr[Run] of
         #10, #13: begin
             inc(Run);
             break;
@@ -687,7 +687,7 @@ var
 begin
   i := Run;
   EndOfToken;
-  s := Copy(fLineStr, i, run - i);
+  s := Copy(FLineStr, i, Run - i);
   if FRange = rsAsm then
     if FAsmKeyWords.Find(s) <> nil then
       if (s = '!RPL') or (s = 'ENDCODE') then begin
@@ -696,7 +696,7 @@ begin
       end
       else
         Result := tkAsmKey
-    else if fLineStr[i] <> '*' then
+    else if FLineStr[i] <> '*' then
       Result := tkAsm
     else
       Result := tkAsmKey
@@ -739,15 +739,15 @@ end;
 function TSynHP48Syn.SpaceProc: TtkTokenKind;
 begin
   inc(Run);
-  while (Run <= Length(fLineStr)) and CharInSet(fLineStr[Run], [#1..#32]) do
+  while (Run <= Length(FLineStr)) and CharInSet(FLineStr[Run], [#1..#32]) do
     inc(Run);
   Result := GetTokenFromRange;
 end;
 
 function TSynHP48Syn.Next1: TtkTokenKind;
 begin
-  fTokenPos := Run - 1;
-  if Run > Length(fLineStr) then
+  FTokenPos := Run - 1;
+  if Run > Length(FLineStr) then
     Result := NullProc
   else if FRange = rsComRpl then
     Result := RplComProc
@@ -761,15 +761,15 @@ begin
     Result := sasmproc2
   else if FRange = rssasm3 then
     Result := sasmproc3
-  else if CharInSet(fLineStr[Run], [#1..#32]) then
+  else if CharInSet(FLineStr[Run], [#1..#32]) then
     Result := SpaceProc
-  else if fLineStr[Run] = '(' then
+  else if FLineStr[Run] = '(' then
     Result := ParOpenProc
-  else if fLineStr[Run] = '%' then
+  else if FLineStr[Run] = '%' then
     Result := PersentProc
-  else if fLineStr[Run] = '/' then
+  else if FLineStr[Run] = '/' then
     Result := SlashProc
-  else if (run = 1) and (FRange = rsRpl) and (fLineStr[1] = '*') then
+  else if (Run = 1) and (FRange = rsRpl) and (FLineStr[1] = '*') then
     Result := StarProc
   else
     Result := IdentProc;
@@ -788,7 +788,7 @@ end;
 
 function TSynHP48Syn.GetEol: Boolean;
 begin
-  Result := Run = fLineLen + 2;
+  Result := Run = FLineLen + 2;
 end;
 
 function TSynHP48Syn.GetRange: Pointer;
@@ -818,12 +818,12 @@ end;
 
 procedure TSynHP48Syn.EndOfToken;
 begin
-  while (Run <= Length(fLineStr)) and (fLineStr[Run] > ' ') do
+  while (Run <= Length(FLineStr)) and (FLineStr[Run] > ' ') do
     Inc(Run);
 end;
 
 {$IFNDEF SYN_CLX}
-function TSynHP48Syn.LoadFromRegistry(RootKey: HKEY; Key: string): boolean;
+function TSynHP48Syn.LoadFromRegistry(RootKey: HKEY; Key: string): Boolean;
 var
   r: TBetterRegistry;
 begin
@@ -843,7 +843,7 @@ begin
   end;
 end;
 
-function TSynHP48Syn.SaveToRegistry(RootKey: HKEY; Key: string): boolean;
+function TSynHP48Syn.SaveToRegistry(RootKey: HKEY; Key: string): Boolean;
 var
   r: TBetterRegistry;
 begin
@@ -921,26 +921,26 @@ var
   s: UnicodeString;
 begin
   Result := tksAsmKey;
-  if run > Length(fLineStr) then
+  if Run > Length(FLineStr) then
     Exit;
-  if fLineStr[Run] = '*' then begin
+  if FLineStr[Run] = '*' then begin
     FRange := rssasm3;
     Result := tksAsmComment;
     Exit;
   end;
-  if fLineStr[Run] >= ' ' then begin
-    i := run;
-    while (run <= Length(fLineStr)) and (fLineStr[run] > ' ') do
-      inc(run);
-    s := Copy(fLineStr, i, run - i);
+  if FLineStr[Run] >= ' ' then begin
+    i := Run;
+    while (Run <= Length(FLineStr)) and (FLineStr[Run] > ' ') do
+      inc(Run);
+    s := Copy(FLineStr, i, Run - i);
     if (s = 'RPL') or (s = 'ENDCODE') then begin
       FRange := rsRpl;
       Exit;
     end;
   end;
-  while (run <= Length(fLineStr)) and (fLineStr[run] <= ' ') and (fLineStr[run] <> #10) do
-    inc(run);
-  if run <= Length(fLineStr) then
+  while (Run <= Length(FLineStr)) and (FLineStr[Run] <= ' ') and (FLineStr[Run] <> #10) do
+    inc(Run);
+  if Run <= Length(FLineStr) then
     FRange := rssasm2
   else
     FRange := rssasm1;
@@ -952,30 +952,30 @@ var
   s: UnicodeString;
 begin
   Result := tksAsm;
-  while (run <= Length(fLineStr)) and (fLineStr[run] <= ' ') and (fLineStr[run] <> #10) do
-    inc(run);
-  if run > 30 then begin
+  while (Run <= Length(FLineStr)) and (FLineStr[Run] <= ' ') and (FLineStr[Run] <> #10) do
+    inc(Run);
+  if Run > 30 then begin
     FRange := rssasm3;
     Exit;
   end;
-  i := run;
-  while (run <= Length(fLineStr)) and (fLineStr[run] > ' ') do
-    inc(run);
-  s := Copy(fLineStr, i, run - i);
+  i := Run;
+  while (Run <= Length(FLineStr)) and (FLineStr[Run] > ' ') do
+    inc(Run);
+  s := Copy(FLineStr, i, Run - i);
   if (s = 'ENDCODE') or (s = 'RPL') then begin
     FRange := rsRpl;
     Result := tksAsmKey;
   end
   else begin
     if FSAsmNoField.Find(s) = nil then begin
-      while (run <= Length(fLineStr)) and (fLineStr[run] <= ' ') and (fLineStr[run] <> #10) do
-        inc(run);
-      while (run <= Length(fLineStr)) and (fLineStr[run] > ' ') do
-        inc(run);
-      while (run <= Length(fLineStr)) and (fLineStr[run] <= ' ') and (fLineStr[run] <> #10) do
-        inc(run);
+      while (Run <= Length(FLineStr)) and (FLineStr[Run] <= ' ') and (FLineStr[Run] <> #10) do
+        inc(Run);
+      while (Run <= Length(FLineStr)) and (FLineStr[Run] > ' ') do
+        inc(Run);
+      while (Run <= Length(FLineStr)) and (FLineStr[Run] <= ' ') and (FLineStr[Run] <> #10) do
+        inc(Run);
     end;
-    if run <= Length(fLineStr) then
+    if Run <= Length(FLineStr) then
       FRange := rssasm3
     else
       FRange := rssasm1;
@@ -985,9 +985,9 @@ end;
 function TSynHP48Syn.SasmProc3: TtkTokenKind;
 begin
   Result := tksAsmComment;
-  while (run <= Length(fLineStr)) and (fLineStr[run] <> #10) do
-    inc(run);
-  if run <= Length(fLineStr) then inc(run);
+  while (Run <= Length(FLineStr)) and (FLineStr[Run] <> #10) do
+    inc(Run);
+  if Run <= Length(FLineStr) then inc(Run);
   FRange := rssasm1;
 end;
 
@@ -1021,15 +1021,15 @@ function TSynHP48Syn.GetToken: UnicodeString;
 var
   Len: Integer;
 begin
-  Len := (Run - 1) - fTokenPos;
+  Len := (Run - 1) - FTokenPos;
   SetLength(Result, Len);
   if Len > 0 then
-    WStrLCopy(@Result[1], fCasedLine + fTokenPos, Len);
+    WStrLCopy(@Result[1], fCasedLine + FTokenPos, Len);
 end;
 
 function TSynHP48Syn.IsLineEnd(Run: Integer): Boolean;
 begin
-  Result := (Run - 1 >= fLineLen) or (fLine[Run - 1] = #10) or (fLine[Run - 1] = #13);
+  Result := (Run - 1 >= FLineLen) or (FLine[Run - 1] = #10) or (FLine[Run - 1] = #13);
 end;
 
 class function TSynHP48Syn.GetFriendlyLanguageName: UnicodeString;

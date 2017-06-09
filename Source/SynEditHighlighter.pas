@@ -142,25 +142,25 @@ type
     procedure SetAdditionalIdentChars(const Value: TSysCharSet);
     procedure SetAdditionalWordBreakChars(const Value: TSysCharSet);
   protected
-    fCasedLine: PWideChar;
-    fCasedLineStr: UnicodeString;
-    fCaseSensitive: Boolean;
-    fDefaultFilter: string;
-    fExpandedLine: PWideChar;
-    fExpandedLineLen: Integer;
-    fExpandedLineStr: UnicodeString;
-    fExpandedTokenPos: Integer;
-    fLine: PWideChar;
-    fLineLen: Integer;
-    fLineStr: UnicodeString;
-    fLineNumber: Integer;
-    fStringLen: Integer;
-    fToIdent: PWideChar;
-    fTokenPos: Integer;
-    fUpdateChange: Boolean;
+    FCasedLine: PWideChar;
+    FCasedLineStr: UnicodeString;
+    FCaseSensitive: Boolean;
+    FDefaultFilter: string;
+    FExpandedLine: PWideChar;
+    FExpandedLineLen: Integer;
+    FExpandedLineStr: UnicodeString;
+    FExpandedTokenPos: Integer;
+    FLine: PWideChar;
+    FLineLen: Integer;
+    FLineStr: UnicodeString;
+    FLineNumber: Integer;
+    FStringLen: Integer;
+    FToIdent: PWideChar;
+    FTokenPos: Integer;
+    FUpdateChange: Boolean;
     Run: Integer;
-    ExpandedRun: Integer;
-    fOldRun: Integer;
+    FExpandedRun: Integer;
+    FOldRun: Integer;
     procedure Loaded; override;
     procedure AddAttribute(Attri: TSynHighlighterAttributes);
     procedure DefHighlightChange(Sender: TObject);
@@ -725,7 +725,7 @@ begin
     Result := False;
 end;
 
-function TSynHighlighterAttributes.LoadFromFile(Ini : TIniFile): boolean;
+function TSynHighlighterAttributes.LoadFromFile(Ini : TIniFile): Boolean;
 var
   S: TStringList;
 begin
@@ -749,7 +749,7 @@ begin
   end;
 end;
 
-function TSynHighlighterAttributes.SaveToFile(Ini : TIniFile): boolean;
+function TSynHighlighterAttributes.SaveToFile(Ini : TIniFile): Boolean;
 begin
   Ini.WriteInteger(Name, 'Background', Background);
   Ini.WriteInteger(Name, 'Foreground', Foreground);
@@ -784,7 +784,7 @@ begin
   FAttributes.Duplicates := dupError;
   FAttributes.Sorted := True;
   FAttrChangeHooks := TSynNotifyEventChain.CreateEx(Self);
-  fDefaultFilter := '';
+  FDefaultFilter := '';
   FEnabled := True;
   FOptions:= TSynEditHighlighterOptions.Create; // <-- Codehunter patch
 end;
@@ -808,9 +808,9 @@ begin
   if FUpdateCount > 0 then
   begin
     Dec(FUpdateCount);
-    if (FUpdateCount = 0) and fUpdateChange then
+    if (FUpdateCount = 0) and FUpdateChange then
     begin
-      fUpdateChange := False;
+      FUpdateChange := False;
       DefHighlightChange(nil);
     end;
   end;
@@ -918,7 +918,7 @@ begin
   end;
 end;
 
-function TSynCustomHighlighter.LoadFromFile(AFileName : String): boolean;
+function TSynCustomHighlighter.LoadFromFile(AFileName : String): Boolean;
 var
   AIni: TIniFile;
   i: Integer;
@@ -936,7 +936,7 @@ begin
   end;
 end;
 
-function TSynCustomHighlighter.SaveToFile(AFileName : String): boolean;
+function TSynCustomHighlighter.SaveToFile(AFileName : String): Boolean;
 var
   AIni: TIniFile;
   i: Integer;
@@ -964,7 +964,7 @@ end;
 procedure TSynCustomHighlighter.DefHighlightChange(Sender: TObject);
 begin
   if FUpdateCount > 0 then
-    fUpdateChange := True
+    FUpdateChange := True
   else if not(csLoading in ComponentState) then
   begin
     FAttrChangeHooks.Sender := Sender;
@@ -1005,15 +1005,15 @@ end;
 
 function TSynCustomHighlighter.GetDefaultFilter: string;
 begin
-  Result := fDefaultFilter;
+  Result := FDefaultFilter;
 end;
 
 function TSynCustomHighlighter.GetExpandedTokenPos: Integer;
 begin
-  if fExpandedLine = nil then
-    Result := fTokenPos
+  if FExpandedLine = nil then
+    Result := FTokenPos
   else
-    Result := fExpandedTokenPos;
+    Result := FExpandedTokenPos;
 end;
 
 function TSynCustomHighlighter.GetExportName: string;
@@ -1027,16 +1027,16 @@ function TSynCustomHighlighter.GetExpandedToken: UnicodeString;
 var
   Len: Integer;
 begin
-  if fExpandedLine = nil then
+  if FExpandedLine = nil then
   begin
     Result := GetToken;
     Exit;
   end;
 
-  Len := ExpandedRun - fExpandedTokenPos;
+  Len := FExpandedRun - FExpandedTokenPos;
   SetLength(Result, Len);
   if Len > 0 then
-    WStrLCopy(@Result[1], fExpandedLine + fExpandedTokenPos, Len);
+    WStrLCopy(@Result[1], FExpandedLine + FExpandedTokenPos, Len);
 end;
 
 class function TSynCustomHighlighter.GetFriendlyLanguageName: UnicodeString;
@@ -1074,15 +1074,15 @@ function TSynCustomHighlighter.GetToken: UnicodeString;
 var
   Len: Integer;
 begin
-  Len := Run - fTokenPos;
+  Len := Run - FTokenPos;
   SetLength(Result, Len);
   if Len > 0 then
-    WStrLCopy(@Result[1], fCasedLine + fTokenPos, Len);
+    WStrLCopy(@Result[1], FCasedLine + FTokenPos, Len);
 end;
 
 function TSynCustomHighlighter.GetTokenPos: Integer;
 begin
-  Result := fTokenPos;
+  Result := FTokenPos;
 end;
 
 function TSynCustomHighlighter.GetKeyWords(TokenKind: Integer): UnicodeString;
@@ -1105,11 +1105,11 @@ var
   I: Integer;
   Temp: PWideChar;
 begin
-  Temp := fToIdent;
-  if Length(Token) = fStringLen then
+  Temp := FToIdent;
+  if Length(Token) = FStringLen then
   begin
     Result := True;
-    for i := 1 to fStringLen do
+    for i := 1 to FStringLen do
     begin
       if Temp^ <> Token[i] then
       begin
@@ -1143,7 +1143,7 @@ end;
 
 function TSynCustomHighlighter.IsLineEnd(Run: Integer): Boolean;
 begin
-  Result := (Run >= fLineLen) or (fLine[Run] = #10) or (fLine[Run] = #13);
+  Result := (Run >= FLineLen) or (FLine[Run] = #10) or (FLine[Run] = #13);
 end;
 
 function TSynCustomHighlighter.IsWhiteChar(AChar: WideChar): Boolean;
@@ -1172,20 +1172,20 @@ procedure TSynCustomHighlighter.Next;
 var
   Delta: Integer;
 begin
-  if fOldRun = Run then Exit;
+  if FOldRun = Run then Exit;
 
-  fExpandedTokenPos := ExpandedRun;
-  if fExpandedLine = nil then Exit;
+  FExpandedTokenPos := FExpandedRun;
+  if FExpandedLine = nil then Exit;
 
-  Delta := Run - fOldRun;
+  Delta := Run - FOldRun;
   while Delta > 0 do
   begin
-    while fExpandedLine[ExpandedRun] = FillerChar do
-      inc(ExpandedRun);
-    inc(ExpandedRun);
+    while FExpandedLine[FExpandedRun] = FillerChar do
+      inc(FExpandedRun);
+    inc(FExpandedRun);
     dec(Delta);
   end;
-  fOldRun := Run;
+  FOldRun := Run;
 end;
 
 procedure TSynCustomHighlighter.NextToEol;
@@ -1228,18 +1228,18 @@ end;
 procedure TSynCustomHighlighter.SetLineExpandedAtWideGlyphs(const Line,
   ExpandedLine: UnicodeString; LineNumber: Integer);
 begin
-  fExpandedLineStr := ExpandedLine;
-  fExpandedLine := PWideChar(fExpandedLineStr);
-  fExpandedLineLen := Length(fExpandedLineStr);
+  FExpandedLineStr := ExpandedLine;
+  FExpandedLine := PWideChar(FExpandedLineStr);
+  FExpandedLineLen := Length(FExpandedLineStr);
   DoSetLine(Line, LineNumber);
   Next;
 end;
 
 procedure TSynCustomHighlighter.SetLine(const Value: UnicodeString; LineNumber: Integer);
 begin
-  fExpandedLineStr := '';
-  fExpandedLine := nil;
-  fExpandedLineLen := 0;
+  FExpandedLineStr := '';
+  FExpandedLine := nil;
+  FExpandedLineLen := 0;
   DoSetLine(Value, LineNumber);
   Next;
 end;
@@ -1255,25 +1255,25 @@ procedure TSynCustomHighlighter.DoSetLine(const Value: UnicodeString; LineNumber
 
 begin
   // UnicodeStrings are not reference counted, hence we need to copy
-  if fCaseSensitive then
+  if FCaseSensitive then
   begin
-    fLineStr := Value;
-    fCasedLineStr := '';
-    fCasedLine := PWideChar(fLineStr);
+    FLineStr := Value;
+    FCasedLineStr := '';
+    FCasedLine := PWideChar(FLineStr);
   end
   else
   begin
-    DoWideLowerCase(Value, fLineStr);
-    fCasedLineStr := Value;
-    fCasedLine := PWideChar(fCasedLineStr);
+    DoWideLowerCase(Value, FLineStr);
+    FCasedLineStr := Value;
+    FCasedLine := PWideChar(FCasedLineStr);
   end;
-  fLine := PWideChar(fLineStr);
-  fLineLen := Length(fLineStr);
+  FLine := PWideChar(FLineStr);
+  FLineLen := Length(FLineStr);
 
   Run := 0;
-  ExpandedRun := 0;
-  fOldRun := Run;
-  fLineNumber := LineNumber;
+  FExpandedRun := 0;
+  FOldRun := Run;
+  FLineNumber := LineNumber;
 end;
 
 procedure TSynCustomHighlighter.SetRange(Value: Pointer);
@@ -1282,7 +1282,7 @@ end;
 
 procedure TSynCustomHighlighter.SetDefaultFilter(Value: string);
 begin
-  fDefaultFilter := Value;
+  FDefaultFilter := Value;
 end;
 
 procedure TSynCustomHighlighter.SetSampleSource(Value: UnicodeString);
@@ -1315,7 +1315,7 @@ function TSynCustomHighlighter.PosToExpandedPos(Pos: Integer): Integer;
 var
   i: Integer;
 begin
-  if fExpandedLine = nil then
+  if FExpandedLine = nil then
   begin
     Result := Pos;
     Exit;
@@ -1325,7 +1325,7 @@ begin
   i := 0;
   while i < Pos do
   begin
-    while fExpandedLine[Result] = FillerChar do
+    while FExpandedLine[Result] = FillerChar do
       inc(Result);
     inc(Result);
     inc(i);

@@ -153,12 +153,12 @@ type
 
   THookedCommandEvent = procedure(Sender: TObject; AfterProcessing: Boolean;
     var Handled: Boolean; var Command: TSynEditorCommand; var AChar: WideChar;
-    Data: pointer; HandlerData: pointer) of object;
+    Data, HandlerData: Pointer) of object;
 
   TPaintEvent = procedure(Sender: TObject; ACanvas: TCanvas) of object;
 
   TProcessCommandEvent = procedure(Sender: TObject;
-    var Command: TSynEditorCommand; var AChar: WideChar; Data: pointer) of object;
+    var Command: TSynEditorCommand; var AChar: WideChar; Data: Pointer) of object;
 
   TReplaceTextEvent = procedure(Sender: TObject; const ASearch, AReplace:
     UnicodeString; Line, Column: Integer; var Action: TSynReplaceAction) of object;
@@ -705,7 +705,7 @@ type
     procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
       override;
     procedure NotifyHookedCommandHandlers(AfterProcessing: Boolean;
-      var Command: TSynEditorCommand; var AChar: WideChar; Data: pointer); virtual;
+      var Command: TSynEditorCommand; var AChar: WideChar; Data: Pointer); virtual;
     procedure Paint; override;
     procedure PaintGutter(const AClip: TRect; const aFirstRow,
       aLastRow: Integer); virtual;
@@ -728,7 +728,7 @@ type
     // If the translations requires Data, memory will be allocated for it via a
     // GetMem call.  The client must call FreeMem on Data if it is not NIL.
     function TranslateKeyCode(Code: Word; Shift: TShiftState;
-      var Data: pointer): TSynEditorCommand;
+      var Data: Pointer): TSynEditorCommand;
     procedure UndoItem;
     procedure UpdateMouseCursor; virtual;
   protected
@@ -738,7 +738,7 @@ type
     procedure ShowCaret;
     procedure DoOnClearBookmark(var Mark: TSynEditMark); virtual;
     procedure DoOnCommandProcessed(Command: TSynEditorCommand; AChar: WideChar;
-      Data: pointer); virtual;
+      Data: Pointer); virtual;
     // no method DoOnDropFiles, intercept the WM_DROPFILES instead
     procedure DoOnGutterClick(Button: TMouseButton; X, Y: Integer); virtual;
     procedure DoOnPaint; virtual;
@@ -747,7 +747,7 @@ type
 
     procedure DoOnPlaceMark(var Mark: TSynEditMark); virtual;
     procedure DoOnProcessCommand(var Command: TSynEditorCommand;
-      var AChar: WideChar; Data: pointer); virtual;
+      var AChar: WideChar; Data: Pointer); virtual;
     function DoOnReplaceText(const ASearch, AReplace: UnicodeString;
       Line, Column: Integer): TSynReplaceAction; virtual;
     function DoOnSpecialLineColors(Line: Integer;
@@ -794,7 +794,7 @@ type
     procedure ClearBookMark(BookMark: Integer);
     procedure ClearSelection;
     procedure CommandProcessor(Command: TSynEditorCommand; AChar: WideChar;
-      Data: pointer); virtual;
+      Data: Pointer); virtual;
     procedure ClearUndo;
     procedure CopyToClipboard;
     procedure CutToClipboard;
@@ -812,7 +812,7 @@ type
     function ExecuteAction(Action: TBasicAction): Boolean; override;
 {$ENDIF}
     procedure ExecuteCommand(Command: TSynEditorCommand; AChar: WideChar;
-      Data: pointer); virtual;
+      Data: Pointer); virtual;
     function ExpandAtWideGlyphs(const S: UnicodeString): UnicodeString;
     function GetBookMark(BookMark: Integer; var X, Y: Integer): Boolean;
     function GetHighlighterAttriAtRowCol(const XY: TBufferCoord; var Token: UnicodeString;
@@ -866,7 +866,7 @@ type
     function PixelsToNearestRowColumn(aX, aY: Integer): TDisplayCoord;
     procedure Redo;
     procedure RegisterCommandHandler(const AHandlerProc: THookedCommandEvent;
-      AHandlerData: pointer);
+      AHandlerData: Pointer);
     function RowColumnToPixels(const RowCol: TDisplayCoord): TPoint;
     function RowColToCharIndex(RowCol: TBufferCoord): Integer;
     function SearchReplace(const ASearch, AReplace: UnicodeString;
@@ -1209,23 +1209,23 @@ end;
 type
   THookedCommandHandlerEntry = class(TObject)
   private
-    fEvent: THookedCommandEvent;
-    fData: pointer;
-    constructor Create(AEvent: THookedCommandEvent; AData: pointer);
+    FEvent: THookedCommandEvent;
+    FData: Pointer;
+    constructor Create(AEvent: THookedCommandEvent; AData: Pointer);
     function Equals(AEvent: THookedCommandEvent): Boolean; {$IFDEF UNICODE} reintroduce; {$ENDIF}
   end;
 
 constructor THookedCommandHandlerEntry.Create(AEvent: THookedCommandEvent;
-  AData: pointer);
+  AData: Pointer);
 begin
   inherited Create;
-  fEvent := AEvent;
-  fData := AData;
+  FEvent := AEvent;
+  FData := AData;
 end;
 
 function THookedCommandHandlerEntry.Equals(AEvent: THookedCommandEvent): Boolean;
 begin
-  with TMethod(fEvent) do
+  with TMethod(FEvent) do
     Result := (Code = TMethod(AEvent).Code) and (Data = TMethod(AEvent).Data);
 end;
 
@@ -2084,7 +2084,7 @@ end;
 
 procedure TCustomSynEdit.KeyDown(var Key: Word; Shift: TShiftState);
 var
-  Data: pointer;
+  Data: Pointer;
   C: WideChar;
   Cmd: TSynEditorCommand;
   {$IFDEF SYN_LINUX}
@@ -7103,7 +7103,7 @@ end;
 // GetMem call.  The client must call FreeMem on Data if it is not NIL.
 
 function TCustomSynEdit.TranslateKeyCode(Code: Word; Shift: TShiftState;
-  var Data: pointer): TSynEditorCommand;
+  var Data: Pointer): TSynEditorCommand;
 var
   i: Integer;
 {$IFNDEF SYN_COMPILER_3_UP}
@@ -7138,7 +7138,7 @@ begin
 end;
 
 procedure TCustomSynEdit.CommandProcessor(Command: TSynEditorCommand;
-  AChar: WideChar; Data: pointer);
+  AChar: WideChar; Data: Pointer);
 begin
   // first the program event handler gets a chance to process the command
   DoOnProcessCommand(Command, AChar, Data);
@@ -7159,7 +7159,7 @@ begin
 end;
 
 procedure TCustomSynEdit.ExecuteCommand(Command: TSynEditorCommand; AChar: WideChar;
-  Data: pointer);
+  Data: Pointer);
 
   procedure SetSelectedTextEmpty;
   var
@@ -8049,14 +8049,14 @@ begin
 end;
 
 procedure TCustomSynEdit.DoOnCommandProcessed(Command: TSynEditorCommand;
-  AChar: WideChar; Data: pointer);
+  AChar: WideChar; Data: Pointer);
 begin
   if Assigned(FOnCommandProcessed) then
     FOnCommandProcessed(Self, Command, AChar, Data);
 end;
 
 procedure TCustomSynEdit.DoOnProcessCommand(var Command: TSynEditorCommand;
-  var AChar: WideChar; Data: pointer);
+  var AChar: WideChar; Data: Pointer);
 begin
   if Command < ecUserFirst then
   begin
@@ -10307,7 +10307,7 @@ begin
 end;
 
 procedure TCustomSynEdit.RegisterCommandHandler(
-  const AHandlerProc: THookedCommandEvent; AHandlerData: pointer);
+  const AHandlerProc: THookedCommandEvent; AHandlerData: Pointer);
 begin
   if not Assigned(AHandlerProc) then
   begin
@@ -10351,7 +10351,7 @@ begin
 end;
 
 procedure TCustomSynEdit.NotifyHookedCommandHandlers(AfterProcessing: Boolean;
-  var Command: TSynEditorCommand; var AChar: WideChar; Data: pointer);
+  var Command: TSynEditorCommand; var AChar: WideChar; Data: Pointer);
 var
   Handled: Boolean;
   i: Integer;
@@ -10364,8 +10364,8 @@ begin
     // NOTE: Command should NOT be set to ecNone, because this might interfere
     // with other handlers.  Set Handled to False instead (and check its value
     // to not process the command twice).
-    Entry.fEvent(Self, AfterProcessing, Handled, Command, AChar, Data,
-      Entry.fData);
+    Entry.FEvent(Self, AfterProcessing, Handled, Command, AChar, Data,
+      Entry.FData);
   end;
   if Handled then
     Command := ecNone;

@@ -49,7 +49,7 @@ Last Changes:
 unit SynUnicode;
 {$ENDIF}
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 interface
 
@@ -1652,7 +1652,7 @@ asm
         JZ      @@1
         REPNE   SCASW
         JNE     @@1
-        INC     ECX
+        Inc     ECX
 @@1:    SUB     EBX,ECX
         MOV     EDI,ESI
         MOV     ESI,EDX
@@ -2854,14 +2854,14 @@ var
   function CountOfTrailingBytes: Integer;
   begin
     Result := 0;
-    inc(i);
+    Inc(i);
     while (i < BufferSize) and (Result < 4) do
     begin
       if Buffer[i] in [$80..$BF] then
-        inc(Result)
+        Inc(Result)
       else
         Break;
-      inc(i);
+      Inc(i);
     end;
   end;
 
@@ -2909,48 +2909,48 @@ begin
           ;
         $C2..$DF:
           if CountOfTrailingBytes = 1 then
-            inc(FoundUTF8Strings)
+            Inc(FoundUTF8Strings)
           else
             Break;
         $E0:
           begin
-            inc(i);
+            Inc(i);
             if (i < BufferSize) and (Buffer[i] in [$A0..$BF]) and (CountOfTrailingBytes = 1) then
-              inc(FoundUTF8Strings)
+              Inc(FoundUTF8Strings)
             else
               Break;
           end;
         $E1..$EC, $EE..$EF:
           if CountOfTrailingBytes = 2 then
-            inc(FoundUTF8Strings)
+            Inc(FoundUTF8Strings)
           else
             Break;
         $ED:
           begin
-            inc(i);
+            Inc(i);
             if (i < BufferSize) and (Buffer[i] in [$80..$9F]) and (CountOfTrailingBytes = 1) then
-              inc(FoundUTF8Strings)
+              Inc(FoundUTF8Strings)
             else
               Break;
           end;
         $F0:
           begin
-            inc(i);
+            Inc(i);
             if (i < BufferSize) and (Buffer[i] in [$90..$BF]) and (CountOfTrailingBytes = 2) then
-              inc(FoundUTF8Strings)
+              Inc(FoundUTF8Strings)
             else
               Break;
           end;
         $F1..$F3:
           if CountOfTrailingBytes = 3 then
-            inc(FoundUTF8Strings)
+            Inc(FoundUTF8Strings)
           else
             Break;
         $F4:
           begin
-            inc(i);
+            Inc(i);
             if (i < BufferSize) and (Buffer[i] in [$80..$8F]) and (CountOfTrailingBytes = 2) then
-              inc(FoundUTF8Strings)
+              Inc(FoundUTF8Strings)
             else
               Break;
           end;
@@ -2967,7 +2967,7 @@ begin
         Break;
       end;
 
-      inc(i);
+      Inc(i);
     end;
   end;
 end;
