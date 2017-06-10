@@ -1783,7 +1783,7 @@ begin
   InitIdent;
   FRange := rsUnknown;
   FCommentLevel := 0;
-  fDefaultFilter := SYNS_FilterCPM;
+  FDefaultFilter := SYNS_FilterCPM;
 end; { Create }
 
 procedure TSynCPMSyn.BraceOpenProc;
@@ -2005,7 +2005,7 @@ end; { GetSampleSource }
 
 function TSynCPMSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterCPM;
+  Result := FDefaultFilter <> SYNS_FilterCPM;
 end; { IsFilterStored }
 
 procedure TSynCPMSyn.SemiColonProc;

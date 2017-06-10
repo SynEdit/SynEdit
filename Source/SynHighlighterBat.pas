@@ -425,7 +425,7 @@ begin
   AddAttribute(FVariableAttri);
   SetAttributesOnChange(DefHighlightChange);
   InitIdent;
-  fDefaultFilter := SYNS_FilterBatch;
+  FDefaultFilter := SYNS_FilterBatch;
 end;
 
 procedure TSynBatSyn.VariableProc;
@@ -594,7 +594,7 @@ end;
 
 function TSynBatSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterBatch;
+  Result := FDefaultFilter <> SYNS_FilterBatch;
 end;
 
 class function TSynBatSyn.GetLanguageName: string;

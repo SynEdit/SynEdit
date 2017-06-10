@@ -49,7 +49,7 @@ unit SynHighlighterAWK;
 
 interface
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 uses
 {$IFDEF SYN_CLX}
@@ -464,7 +464,7 @@ begin
   AWKSyntaxList := TUnicodeStringList.Create;
   MakeSyntaxList;
 
-  fDefaultFilter := SYNS_FilterAWK;
+  FDefaultFilter := SYNS_FilterAWK;
 end;
 
 destructor TSynAWKSyn.Destroy;
@@ -490,14 +490,14 @@ end;
 procedure TSynAWKSyn.NullProc;
 begin
   FTokenID := tkNull;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynAWKSyn.SpaceProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSpace;
-  while (FLine[Run] <= #32) and not IsLineEnd(Run) do inc(Run);
+  while (FLine[Run] <= #32) and not IsLineEnd(Run) do Inc(Run);
 end;
 
 function TSynAWKSyn.GetDefaultAttribute(Index: Integer): TSynHighlighterAttributes;
@@ -546,7 +546,7 @@ end;
 
 function TSynAWKSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterAWK;
+  Result := FDefaultFilter <> SYNS_FilterAWK;
 end;
 
 class function TSynAWKSyn.GetLanguageName: string;

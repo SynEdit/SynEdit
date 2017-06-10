@@ -39,7 +39,7 @@ Known Issues:
 unit SynHighlighterTeX;
 {$ENDIF}
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 interface
 
@@ -158,15 +158,15 @@ begin
   AddAttribute(FBraceAttri);
 
   SetAttributesOnChange(DefHighlightChange);
-  fDefaultFilter := SYNS_FilterTeX;
+  FDefaultFilter := SYNS_FilterTeX;
 end;  { Create }
 
 procedure TSynTeXSyn.CRProc;
 begin
   FTokenID := tkSpace;
   case FLine[Run + 1] of
-    #10: inc(Run, 2);
-    else inc(Run);
+    #10: Inc(Run, 2);
+    else Inc(Run);
   end;
 end;  { CRProc }
 
@@ -174,50 +174,50 @@ end;  { CRProc }
 procedure TSynTeXSyn.SpaceProc;
 begin
   FTokenID := tkSpace;
-  inc(Run);
-  while (FLine[Run] <= #32) and not IsLineEnd(Run) do inc(Run);
+  Inc(Run);
+  while (FLine[Run] <= #32) and not IsLineEnd(Run) do Inc(Run);
 end;  { SpaceProc }
 
 procedure TSynTeXSyn.TextProc;
 begin
   FTokenID := tkText;
-  inc(Run);
+  Inc(Run);
 end;  { TextProc }
 
 procedure TSynTeXSyn.LFProc;
 begin
   FTokenID := tkSpace;
-  inc(Run);
+  Inc(Run);
 end;  { SpaceProc }
 
 procedure TSynTeXSyn.BraceOpenProc;
 begin
   FTokenID := tkBrace;
-  inc(Run);
+  Inc(Run);
 end;  { BraceOpen }
 
 procedure TSynTeXSyn.BraceCloseProc;
 begin
   FTokenID := tkBrace;
-  inc(Run);
+  Inc(Run);
 end;  { BraceClose }
 
 procedure TSynTeXSyn.BracketOpenProc;
 begin
   FTokenID := tkBracket;
-  inc(Run);
+  Inc(Run);
 end;  { BracketOpen }
 
 procedure TSynTeXSyn.BracketCloseProc;
 begin
   FTokenID := tkBracket;
-  inc(Run);
+  Inc(Run);
 end;  { BracketClose }
 
 procedure TSynTeXSyn.NullProc;
 begin
   FTokenID := tkNull;
-  inc(Run);
+  Inc(Run);
 end;  { NullProc }
 
 procedure TSynTeXSyn.CommentProc;
@@ -227,7 +227,7 @@ begin
     case fLine[Run] of
       #0, #10: Break;
     end;
-    inc(Run);
+    Inc(Run);
   until fLine[Run] = #13;
   Exit;
 end;  { CommentProc }
@@ -321,7 +321,7 @@ end;  { GetTokenKind }
 
 function TSynTeXSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterTeX;
+  Result := FDefaultFilter <> SYNS_FilterTeX;
 end;
 
 class function TSynTeXSyn.GetLanguageName: string;

@@ -131,9 +131,9 @@ const
 begin
   inherited Create(AOwner);
   {$IFNDEF SYN_CLX}
-  fClipboardFormat := RegisterClipboardFormat(CF_HTML);
+  FClipboardFormat := RegisterClipboardFormat(CF_HTML);
   {$ENDIF} // TODO: register for Kylix, too, see what Netscape Composer uses/accepts
-  fDefaultFilter := SYNS_FilterHTML;
+  FDefaultFilter := SYNS_FilterHTML;
   FEncoding := seUTF8;
 end;
 

@@ -40,7 +40,7 @@ Known Issues:
 unit SynEditSearch;
 {$ENDIF}
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 interface
 
@@ -141,7 +141,7 @@ begin
   if (Delta <> 0) and (FResults.Count > 0) then begin
     i := Pred(FResults.Count);
     while i >= 0 do begin
-      if Integer(FResults[i]) <= First then break;
+      if Integer(FResults[i]) <= First then Break;
       FResults[i] := Pointer(Integer(FResults[i]) - Delta);
       Dec(i);
     end;
@@ -161,8 +161,8 @@ begin
   for I := 1 to FPatLen do FShift[FPat[I]] := FPatLenSucc - I;
   while FLookAt < FPatLen do
   begin
-    if FPat[FPatLen] = FPat[FPatLen - FLookAt] then break;
-    inc(FLookAt);
+    if FPat[FPatLen] = FPat[FPatLen - FLookAt] then Break;
+    Inc(FLookAt);
   end;
   FShiftInitialized := True;
 end;                                
@@ -197,11 +197,11 @@ var
   J: PWideChar;
 begin
   Result := 0;
-  inc(Run, FPatLen);
+  Inc(Run, FPatLen);
   while Run < FTheEnd do
   begin
     if FPat[FPatLen] <> Run^ then
-      inc(Run, FShift[(Run + 1)^])
+      Inc(Run, FShift[(Run + 1)^])
     else
     begin
       J := Run - FPatLen + 1;
@@ -210,17 +210,17 @@ begin
       begin
         if I = FPatLen then
         begin
-          if FWhole and not TestWholeWord then break;
-          inc(FCount);
+          if FWhole and not TestWholeWord then Break;
+          Inc(FCount);
           Result := Run - FOrigin - FPatLen + 2;
           exit;
         end;
-        inc(I);
-        inc(J);
+        Inc(I);
+        Inc(J);
       end;
       Inc(Run, FLookAt);
       if Run >= FTheEnd then
-        break;
+        Break;
       Inc(Run, FShift[Run^] - 1);
     end;
   end;

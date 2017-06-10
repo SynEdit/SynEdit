@@ -274,7 +274,7 @@ begin
   SetAttributesOnChange(DefHighlightChange);
 
   FRange := rsUnknown;
-  fDefaultFilter := SYNS_FilterUNIXShellScript;
+  FDefaultFilter := SYNS_FilterUNIXShellScript;
 end; { Create }
 
 destructor TSynUNIXShellScriptSyn.Destroy;
@@ -748,7 +748,7 @@ end;
 
 function TSynUNIXShellScriptSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterUNIXShellScript;
+  Result := FDefaultFilter <> SYNS_FilterUNIXShellScript;
 end;
 
 class function TSynUNIXShellScriptSyn.GetLanguageName: string;

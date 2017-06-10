@@ -51,7 +51,7 @@ Different SQL dialects can be selected via the Dialect property.
 unit SynHighlighterSQL;
 {$ENDIF}
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 interface
 
@@ -1323,7 +1323,7 @@ begin
 {$ELSE}
     Result := (2 * Result + GetOrd) and $FFFFFF;
 {$ENDIF}
-    inc(Str);
+    Inc(Str);
   end;
   Result := Result and $FF; // 255
   if Assigned(FToIdent) then
@@ -1341,7 +1341,7 @@ begin
   while Assigned(Entry) do
   begin
     if Entry.KeywordLen > FStringLen then
-      break
+      Break
     else if Entry.KeywordLen = FStringLen then
       if IsCurrentToken(Entry.Keyword) then
       begin
@@ -1428,7 +1428,7 @@ begin
   FVariableAttri := TSynHighlighterAttributes.Create(SYNS_AttrVariable, SYNS_FriendlyAttrVariable);
   AddAttribute(FVariableAttri);
   SetAttributesOnChange(DefHighlightChange);
-  fDefaultFilter := SYNS_FilterSQL;
+  FDefaultFilter := SYNS_FilterSQL;
   FRange := rsUnknown;
   FDialect := sqlStandard;
   InitializeKeywordLists;
@@ -1493,7 +1493,7 @@ begin
           if (FLine[Run] <> '\') and (FLine[Run + 1] = #39) then
           begin
             Inc(Run);
-            break;
+            Break;
           end;
           Inc(Run);
         until IsLineEnd(Run);
@@ -1533,7 +1533,7 @@ var
   FoundDoubleMinus: Boolean;
 begin
   FTokenID := IdentKind((FLine + Run));
-  inc(Run, FStringLen);
+  Inc(Run, FStringLen);
   if FTokenID in [tkComment, tkConsoleOutput] then
   begin
     while not IsLineEnd(Run) do
@@ -1544,14 +1544,14 @@ begin
     begin
       FoundDoubleMinus := (FLine[Run] = '-') and (FLine[Run + 1] = '-');
       if FoundDoubleMinus then Break;
-      inc(Run);
+      Inc(Run);
     end;
 end;
 
 procedure TSynSQLSyn.LFProc;
 begin
   FTokenID := tkSpace;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynSQLSyn.LowerProc;
@@ -1600,7 +1600,7 @@ end;
 procedure TSynSQLSyn.NullProc;
 begin
   FTokenID := tkNull;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynSQLSyn.NumberProc;
@@ -1616,15 +1616,16 @@ procedure TSynSQLSyn.NumberProc;
   end;
 
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkNumber;
   while IsNumberChar do
   begin
     case FLine[Run] of
       '.':
-        if FLine[Run + 1] = '.' then break;
+        if FLine[Run + 1] = '.' then
+          Break;
     end;
-    inc(Run);
+    Inc(Run);
   end;
 end;
 
@@ -1673,7 +1674,7 @@ begin
           if (FLine[Run] = '*') and (FLine[Run + 1] = '/') then begin
             FRange := rsUnknown;
             Inc(Run, 2);
-            break;
+            Break;
           end;
         until IsLineEnd(Run);
       end;
@@ -1699,9 +1700,9 @@ end;
 
 procedure TSynSQLSyn.SpaceProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSpace;
-  while (FLine[Run] <= #32) and not IsLineEnd(Run) do inc(Run);
+  while (FLine[Run] <= #32) and not IsLineEnd(Run) do Inc(Run);
 end;
 
 procedure TSynSQLSyn.QuoteProc;
@@ -1966,7 +1967,7 @@ end;
 
 function TSynSQLSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterSQL;
+  Result := FDefaultFilter <> SYNS_FilterSQL;
 end;
 
 function TSynSQLSyn.IsIdentChar(AChar: WideChar): Boolean;

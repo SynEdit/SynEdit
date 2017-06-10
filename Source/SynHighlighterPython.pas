@@ -48,7 +48,7 @@ The SynHighlighterPython implements a highlighter for Python for the SynEdit pro
 unit SynHighlighterPython;
 {$ENDIF}
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 interface
 
@@ -420,7 +420,7 @@ end;
 
 procedure TSynPythonSyn.SymbolProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSymbol;
 end;
 
@@ -428,29 +428,29 @@ procedure TSynPythonSyn.CRProc;
 begin
   FTokenID := tkSpace;
   case FLine[Run + 1] of
-    #10: inc(Run, 2);
+    #10: Inc(Run, 2);
   else
-    inc(Run);
+    Inc(Run);
   end;
 end;
 
 procedure TSynPythonSyn.CommentProc;
 begin
   FTokenID := tkComment;
-  inc(Run);
+  Inc(Run);
   while not IsLineEnd(Run) do
-    inc(Run);
+    Inc(Run);
 end;
 
 procedure TSynPythonSyn.GreaterProc;
 begin
   case FLine[Run + 1] of
     '=': begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FTokenID := tkSymbol;
       end;
   else begin
-      inc(Run);
+      Inc(Run);
       FTokenID := tkSymbol;
     end;
   end;
@@ -459,28 +459,28 @@ end;
 procedure TSynPythonSyn.IdentProc;
 begin
   FTokenID := IdentKind((FLine + Run));
-  inc(Run, FStringLen);
+  Inc(Run, FStringLen);
 end;
 
 procedure TSynPythonSyn.LFProc;
 begin
   FTokenID := tkSpace;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynPythonSyn.LowerProc;
 begin
   case FLine[Run + 1] of
     '=': begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FTokenID := tkSymbol;
       end;
     '>': begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FTokenID := tkSymbol;
       end
   else begin
-      inc(Run);
+      Inc(Run);
       FTokenID := tkSymbol;
     end;
   end;
@@ -489,7 +489,7 @@ end;
 procedure TSynPythonSyn.NullProc;
 begin
   FTokenID := tkNull;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynPythonSyn.NumberProc;
@@ -786,9 +786,9 @@ end;
 
 procedure TSynPythonSyn.SpaceProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSpace;
-  while (FLine[Run] <= #32) and not IsLineEnd(Run) do inc(Run);
+  while (FLine[Run] <= #32) and not IsLineEnd(Run) do Inc(Run);
 end;
 
 procedure TSynPythonSyn.String2Proc;
@@ -799,7 +799,7 @@ begin
   if (FLine[Run + 1] = '"') and (FLine[Run + 2] = '"') then
   begin
     FTokenID := tkTrippleQuotedString;
-    inc(Run, 3);
+    Inc(Run, 3);
 
     FRange := rsMultilineString2;
     while FLine[Run] <> #0 do
@@ -819,22 +819,22 @@ begin
               while ((Run > BackslashCount) and (FLine[Run - BackslashCount] = '\')) do
                 BackslashCount := BackslashCount + 1;
 
-              if (BackslashCount mod 2 = 1) then inc(Run)
+              if (BackslashCount mod 2 = 1) then Inc(Run)
             end;
-            inc(Run);
+            Inc(Run);
           end;// '\':
 
         '"':
           if (FLine[Run + 1] = '"') and (FLine[Run + 2] = '"') then begin
             FRange := rsUnknown;
-            inc(Run, 3);
-            exit;
+            Inc(Run, 3);
+            Exit;
           end else
-            inc(Run);
-        #10: exit;
-        #13: exit;
+            Inc(Run);
+        #10: Exit;
+        #13: Exit;
         else
-          inc(Run);
+          Inc(Run);
       end;
     end;
   end
@@ -860,15 +860,15 @@ begin
             while ((Run > BackslashCount) and (FLine[Run - BackslashCount] = '\')) do
               BackslashCount := BackslashCount + 1;
 
-            if (BackslashCount mod 2 = 1) then inc(Run)
+            if (BackslashCount mod 2 = 1) then Inc(Run)
           end;
-          inc(Run);
+          Inc(Run);
         end;// '\':
 
-      else inc(Run);
+      else Inc(Run);
     end; //case
   until (FLine[Run] = '"');
-  if FLine[Run] <> #0 then inc(Run);
+  if FLine[Run] <> #0 then Inc(Run);
 end;
 
 procedure TSynPythonSyn.PreStringProc;
@@ -911,12 +911,12 @@ end;
 
 procedure TSynPythonSyn.StringProc;
 var
-  fBackslashCount: Integer;
+  FBackslashCount: Integer;
 begin
   FTokenID := tkString;
   if (FLine[Run + 1] = #39) and (FLine[Run + 2] = #39) then begin
     FTokenID := tkTrippleQuotedString;
-    inc(Run, 3);
+    Inc(Run, 3);
 
     FRange:=rsMultilineString;
     while FLine[Run] <> #0 do begin
@@ -929,27 +929,27 @@ begin
              even number, then it should. !!!THIS RULE DOESNT APPLY IN RAW STRINGS}
               if FLine[Run + 1] = #39 then
                 begin
-                  fBackslashCount := 1;
+                  FBackslashCount := 1;
 
-                  while ((Run > fBackslashCount) and (FLine[Run - fBackslashCount] = '\')) do
-                    fBackslashCount := fBackslashCount + 1;
+                  while ((Run > FBackslashCount) and (FLine[Run - FBackslashCount] = '\')) do
+                    FBackslashCount := FBackslashCount + 1;
 
-                  if (fBackslashCount mod 2 = 1) then inc(Run)
+                  if (FBackslashCount mod 2 = 1) then Inc(Run)
               end;
-              inc(Run);
+              Inc(Run);
             end;// '\':
 
         #39:
           if (FLine[Run + 1] = #39) and (FLine[Run + 2] = #39) then begin
             FRange := rsUnknown;
-            inc(Run, 3);
-            EXIT;
+            Inc(Run, 3);
+            Exit;
           end else
-            inc(Run);
-        #10: EXIT;
-        #13: EXIT;
+            Inc(Run);
+        #10: Exit;
+        #13: Exit;
         else
-          inc(Run);
+          Inc(Run);
       end;
     end;
   end
@@ -961,7 +961,7 @@ begin
           FStringStarter := #39;
           FRange := rsMultilineString3;
         end;
-        BREAK;
+        Break;
         end;
 
       {The same backslash stuff above...}
@@ -969,25 +969,25 @@ begin
         begin
           if FLine[Run + 1] = #39 then
           begin
-            fBackslashCount := 1;
+            FBackslashCount := 1;
 
-            while ((Run > fBackslashCount) and (FLine[Run - fBackslashCount] = '\')) do
-              fBackslashCount := fBackslashCount + 1;
+            while ((Run > FBackslashCount) and (FLine[Run - FBackslashCount] = '\')) do
+              FBackslashCount := FBackslashCount + 1;
 
-            if (fBackslashCount mod 2 = 1) then inc(Run)
+            if (FBackslashCount mod 2 = 1) then Inc(Run)
           end;
-          inc(Run);
+          Inc(Run);
         end;// '\':
 
-      else inc(Run);
+      else Inc(Run);
     end; //case
   until (FLine[Run] = #39);
-  if FLine[Run] <> #0 then inc(Run);
+  if FLine[Run] <> #0 then Inc(Run);
 end;
 
 procedure TSynPythonSyn.StringEndProc(EndChar: WideChar);
 var
-  fBackslashCount: Integer;
+  BackslashCount: Integer;
 begin
   if FRange = rsMultilineString3 then
     FTokenID := tkString
@@ -998,44 +998,44 @@ begin
     #0:
       begin
         NullProc;
-        EXIT;
+        Exit;
       end;
     #10:
       begin
         LFProc;
-        EXIT;
+        Exit;
     end;
     #13:
       begin
         CRProc;
-        EXIT;
+        Exit;
       end;
   end;
 
   if FRange = rsMultilineString3 then begin
     repeat
       if FLine[Run]=FStringStarter then begin
-        inc(Run);
+        Inc(Run);
         FRange:=rsUnknown;
-        EXIT;
+        Exit;
       end else if FLine[Run]='\' then ;  {The same backslash stuff above...}
           begin
              if FLine[Run + 1] = FStringStarter then
                begin
-                 fBackslashCount := 1;
+                 BackslashCount := 1;
 
-                 while ((Run > fBackslashCount) and (FLine[Run - fBackslashCount] = '\')) do
-                   fBackslashCount := fBackslashCount + 1;
+                 while ((Run > BackslashCount) and (FLine[Run - BackslashCount] = '\')) do
+                   BackslashCount := BackslashCount + 1;
 
-                 if (fBackslashCount mod 2 = 1) then inc(Run);
+                 if (BackslashCount mod 2 = 1) then Inc(Run);
              end;
            end;// if FLine[Run]...
 
-      inc(Run);
+      Inc(Run);
     until IsLineEnd(Run);
     if FLine[Run-1]<>'\' then begin
       FRange:=rsUnknown;
-      EXIT;
+      Exit;
     end;
   end else
   repeat
@@ -1043,26 +1043,26 @@ begin
     begin
        if FLine[Run + 1] = EndChar then
          begin
-           fBackslashCount := 1;
+           BackslashCount := 1;
 
-           while ((Run > fBackslashCount) and (FLine[Run - fBackslashCount] = '\')) do
-             fBackslashCount := fBackslashCount + 1;
+           while ((Run > BackslashCount) and (FLine[Run - BackslashCount] = '\')) do
+             BackslashCount := BackslashCount + 1;
 
-           if (fBackslashCount mod 2 = 1) then inc(Run, 2);
+           if (BackslashCount mod 2 = 1) then Inc(Run, 2);
        end;
      end;// if FLine[Run]...
     if (FLine[Run]=EndChar) and (FLine[Run+1]=EndChar) and (FLine[Run+2]=EndChar) then begin
-      inc(Run,3);
+      Inc(Run,3);
       FRange:=rsUnknown;
-      EXIT;
+      Exit;
     end;
-    inc(Run);
+    Inc(Run);
   until IsLineEnd(Run);
 end;
 
 procedure TSynPythonSyn.UnknownProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkUnknown;
 end;
 

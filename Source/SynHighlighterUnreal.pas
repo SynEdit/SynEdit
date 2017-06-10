@@ -1791,7 +1791,7 @@ begin
   SetAttributesOnChange(DefHighlightChange);
   InitIdent;
   FRange := rsUnknown;
-  fDefaultFilter := SYNS_FilterCPP;
+  FDefaultFilter := SYNS_FilterCPP;
 end; { Create }
 
 procedure TSynUnrealSyn.AnsiCProc;
@@ -2201,7 +2201,7 @@ begin
   Inc(Run);
   FTokenID := tkSymbol;
   FExtTokenID := xtkRoundClose;
-  dec(FRoundCount);
+  Dec(FRoundCount);
 end;
 
 procedure TSynUnrealSyn.RoundOpenProc;
@@ -2282,7 +2282,7 @@ begin
   Inc(Run);
   FTokenID := tkSymbol;
   FExtTokenID := xtkSquareClose;
-  dec(FSquareCount);
+  Dec(FSquareCount);
 end;
 
 procedure TSynUnrealSyn.SquareOpenProc;
@@ -2457,7 +2457,7 @@ end;
 
 function TSynUnrealSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterCPP;
+  Result := FDefaultFilter <> SYNS_FilterCPP;
 end; { IsFilterStored }
 
 
@@ -2522,7 +2522,7 @@ function TSynUnrealSyn.UseUserSettings(settingIndex: Integer): Boolean;
 //   index into TStrings returned by EnumUserSettings
 // Possible return values:
 //   true : settings were read and used
-//   false: problem reading settings or invalid version specified - old settings
+//   False: problem reading settings or invalid version specified - old settings
 //          were preserved
 
 {$IFNDEF SYN_CLX}
@@ -2544,7 +2544,7 @@ function TSynUnrealSyn.UseUserSettings(settingIndex: Integer): Boolean;
       begin
         Result := attri.LoadFromBorlandRegistry(HKEY_CURRENT_USER,
                  '\Software\Borland\C++Builder\'+settingTag+'\Editor\Highlight',
-                 key,false);
+                 key, False);
       end; { ReadCPPB3OrMore }
 
     begin { ReadCPPBSetting }
@@ -2552,7 +2552,7 @@ function TSynUnrealSyn.UseUserSettings(settingIndex: Integer): Boolean;
         if (settingTag[1] = '1')
           then Result := ReadCPPB1(settingTag,attri,key)
           else Result := ReadCPPB3OrMore(settingTag,attri,key);
-      except Result := false; end;
+      except Result := False; end;
     end; { ReadCPPBSetting }
 
   var
@@ -2571,7 +2571,7 @@ function TSynUnrealSyn.UseUserSettings(settingIndex: Integer): Boolean;
     sl := TStringList.Create;
     try
       EnumUserSettings(sl);
-      if settingIndex >= sl.Count then Result := false
+      if settingIndex >= sl.Count then Result := False
       else begin
         tmpStringAttri    := TSynHighlighterAttributes.Create('', '');
         tmpNumberAttri    := TSynHighlighterAttributes.Create('', '');

@@ -576,7 +576,7 @@ begin
     begin
       Events[cEvent].Playback(aEditor);
       if State <> msPlaying then
-        break;
+        Break;
     end;
   finally
     if State = msPlaying then

@@ -48,7 +48,7 @@ The SynHighlighterGeneral unit provides a customizable highlighter for SynEdit.
 unit SynHighlighterGeneral;
 {$ENDIF}
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 interface
 
@@ -332,14 +332,14 @@ begin
   begin
     FTokenID := tkPreprocessor;
     repeat
-      inc(Run);
+      Inc(Run);
     until IsLineEnd(Run);
   end
   else
   begin
     FTokenID := tkString;
     repeat
-      inc(Run);
+      Inc(Run);
     until not CharInSet(FLine[Run], ['0'..'9']);
   end;
 end;
@@ -350,25 +350,25 @@ begin
   begin
     FTokenID := tkComment;
     FRange := rsPasStyle;
-    inc(Run);
+    Inc(Run);
     while FLine[Run] <> #0 do
       case FLine[Run] of
         '}':
           begin
             FRange := rsUnknown;
-            inc(Run);
+            Inc(Run);
             break;
           end;
         #10: break;
 
         #13: break;
       else
-        inc(Run);
+        Inc(Run);
       end;
   end
   else
   begin
-    inc(Run);
+    Inc(Run);
     FTokenID := tkSymbol;
   end;
 end;
@@ -379,16 +379,16 @@ begin
   begin
     FTokenID := tkComment;
     FRange := rsUnknown;
-    inc(Run);
+    Inc(Run);
     while FLine[Run] <> #0 do
     begin
       FTokenID := tkComment;
-      inc(Run);
+      Inc(Run);
     end;
   end
   else
   begin
-    inc(Run);
+    Inc(Run);
     FTokenID := tkSymbol;
   end;
 end;
@@ -402,7 +402,7 @@ end;
 
 procedure TSynGeneralSyn.IdentProc;
 begin
-  while IsIdentChar(FLine[Run]) do inc(Run);
+  while IsIdentChar(FLine[Run]) do Inc(Run);
   if IsKeyWord(GetToken) then
     FTokenID := tkKey
   else
@@ -422,21 +422,21 @@ procedure TSynGeneralSyn.IntegerProc;
   end;
 
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkNumber;
-  while IsIntegerChar do inc(Run);
+  while IsIntegerChar do Inc(Run);
 end;
 
 procedure TSynGeneralSyn.LFProc;
 begin
   FTokenID := tkSpace;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynGeneralSyn.NullProc;
 begin
   FTokenID := tkNull;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynGeneralSyn.NumberProc;
@@ -452,7 +452,7 @@ procedure TSynGeneralSyn.NumberProc;
   end;
 
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkNumber;
   while IsNumberChar do
   begin
@@ -464,13 +464,13 @@ begin
       '.':
         if FLine[Run + 1] = '.' then break;
     end;
-    inc(Run);
+    Inc(Run);
   end;
 end;
 
 procedure TSynGeneralSyn.RoundOpenProc;
 begin
-  inc(Run);
+  Inc(Run);
   if csAnsiStyle in FComments then
   begin
     case FLine[Run] of
@@ -478,24 +478,24 @@ begin
         begin
           FTokenID := tkComment;
           FRange := rsAnsi;
-          inc(Run);
+          Inc(Run);
           while FLine[Run] <> #0 do
             case FLine[Run] of
               '*':
                 if FLine[Run + 1] = ')' then
                 begin
                   FRange := rsUnknown;
-                  inc(Run, 2);
+                  Inc(Run, 2);
                   break;
-                end else inc(Run);
+                end else Inc(Run);
               #10: break;
               #13: break;
-            else inc(Run);
+            else Inc(Run);
             end;
         end;
       '.':
         begin
-          inc(Run);
+          Inc(Run);
           FTokenID := tkSymbol;
         end;
     else
@@ -521,7 +521,7 @@ begin
             case FLine[Run] of
               #10, #13: break;
             end;
-            inc(Run);
+            Inc(Run);
           end;
         end
         else
@@ -540,9 +540,9 @@ begin
                 if FLine[Run + 1] = '/' then
                 begin
                   FRange := rsUnknown;
-                  inc(Run, 2);
+                  Inc(Run, 2);
                   break;
-                end else inc(Run);
+                end else Inc(Run);
               #10, #13:
                 break;
               else
@@ -559,9 +559,9 @@ end;
 
 procedure TSynGeneralSyn.SpaceProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSpace;
-  while (FLine[Run] <= #32) and not IsLineEnd(Run) do inc(Run);
+  while (FLine[Run] <= #32) and not IsLineEnd(Run) do Inc(Run);
 end;
 
 procedure TSynGeneralSyn.StringProc;
@@ -600,7 +600,7 @@ end;
 
 procedure TSynGeneralSyn.UnknownProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkUnknown;
 end;
 
@@ -766,22 +766,25 @@ function TSynGeneralSyn.LoadFromRegistry(RootKey: HKEY; Key: string): Boolean;
 var
   r: TBetterRegistry;
 begin
-  r:= TBetterRegistry.Create;
+  r := TBetterRegistry.Create;
   try
     r.RootKey := RootKey;
     if r.OpenKeyReadOnly(Key) then begin
       if r.ValueExists('KeyWords') then KeyWords.Text:= r.ReadString('KeyWords');
       Result := inherited LoadFromRegistry(RootKey, Key);
     end
-    else Result := false;
-  finally r.Free; end;
+    else
+      Result := False;
+  finally
+    r.Free;
+  end;
 end;
 
 function TSynGeneralSyn.SaveToRegistry(RootKey: HKEY; Key: string): Boolean;
 var
   r: TBetterRegistry;
 begin
-  r:= TBetterRegistry.Create;
+  r := TBetterRegistry.Create;
   try
     r.RootKey := RootKey;
     if r.OpenKey(Key,true) then begin
@@ -791,8 +794,11 @@ begin
       r.WriteString('KeyWords', KeyWords.Text);
       Result := inherited SaveToRegistry(RootKey, Key);
     end
-    else Result := false;
-  finally r.Free; end;
+    else
+      Result := False;
+  finally
+    r.Free;
+  end;
 end;
 {$ENDIF}
 

@@ -794,7 +794,7 @@ begin
 
   InitIdent;
   FRange := rsText;
-  fDefaultFilter := SYNS_FilterHTML;
+  FDefaultFilter := SYNS_FilterHTML;
   FAndCode := -1;
 end;
 
@@ -1201,7 +1201,7 @@ end;
 
 function TSynHTMLSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterHTML;
+  Result := FDefaultFilter <> SYNS_FilterHTML;
 end;
 
 class function TSynHTMLSyn.GetLanguageName: string;
@@ -1211,17 +1211,18 @@ end;
 
 function TSynHTMLSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '<!-- Syntax highlighting -->'#13#10 +
-            #13#10 +
-            '<html>'#13#10 +
-            '<body bgcolor="red">'#13#10 +
-            '  <form name="frmLogin" action="doSomething.asp">'#13#10 +
-            '    <input name="user" value=''any'#13#10 +
-            '      value''>'#13#10 +
-            '  </form>'#13#10 +
-            '  <invalid>Sample HTML code &copy; 2001</invalid>'#13#10 +
-            '</body>'#13#10 +
-            '</html>';
+  Result :=
+    '<!-- Syntax highlighting -->'#13#10 +
+    #13#10 +
+    '<html>'#13#10 +
+    '<body bgcolor="red">'#13#10 +
+    '  <form name="frmLogin" action="doSomething.asp">'#13#10 +
+    '    <input name="user" value=''any'#13#10 +
+    '      value''>'#13#10 +
+    '  </form>'#13#10 +
+    '  <invalid>Sample HTML code &copy; 2001</invalid>'#13#10 +
+    '</body>'#13#10 +
+    '</html>';
 end;
 
 class function TSynHTMLSyn.GetFriendlyLanguageName: UnicodeString;

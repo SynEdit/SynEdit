@@ -258,7 +258,7 @@ begin
   AddAttribute(FSymbolAttri);
   SetAttributesOnChange(DefHighlightChange);
   InitIdent;
-  fDefaultFilter := SYNS_FilterFortran;
+  FDefaultFilter := SYNS_FilterFortran;
 end;
 
 procedure TSynFortranSyn.AsciiCharProc;
@@ -639,7 +639,7 @@ end;
 
 function TSynFortranSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterFortran;
+  Result := FDefaultFilter <> SYNS_FilterFortran;
 end;
 
 class function TSynFortranSyn.GetLanguageName: string;

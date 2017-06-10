@@ -1310,7 +1310,7 @@ begin
   AddAttribute(FSymbolAttri);
   SetAttributesOnChange(DefHighlightChange);
   InitIdent;
-  fDefaultFilter := SYNS_FilterFoxpro;
+  FDefaultFilter := SYNS_FilterFoxpro;
 end;
 
 procedure TSynFoxproSyn.AndSymbolProc;
@@ -1749,7 +1749,8 @@ begin
     tkString: Result := FStringAttri;
     tkSymbol: Result := FSymbolAttri;
     tkUnknown: Result := FIdentifierAttri;
-    else Result := nil;
+    else
+      Result := nil;
   end;
 end;
 
@@ -1760,7 +1761,7 @@ end;
 
 function TSynFoxproSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterFoxpro;
+  Result := FDefaultFilter <> SYNS_FilterFoxpro;
 end;
 
 class function TSynFoxproSyn.GetLanguageName: string;                    

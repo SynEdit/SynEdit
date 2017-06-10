@@ -40,7 +40,7 @@ Known Issues:
 unit SynEditOptionsDialog;
 {$ENDIF}
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 interface
 
@@ -88,7 +88,7 @@ uses
   SynEditKeyCmds,
 {$ENDIF}
   Classes,
-  SysUtils;
+  SysUtils, Vcl.ImgList;
 
 type
 {$IFNDEF SYN_DELPHI_4_UP}
@@ -1018,7 +1018,9 @@ begin
       cKeyCommand.SelLength := Length(cKeyCommand.Text) - cKeyCommand.SelStart;
       Key := #0;
       break;
-    end else inc(i);
+    end
+    else
+      Inc(i);
   end;
 
 end;

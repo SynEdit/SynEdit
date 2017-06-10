@@ -3666,7 +3666,7 @@ end;
 
 procedure TSynPerlSyn.StringInterpProc;
 var
-  fBackslashCount : Integer;
+  BackslashCount : Integer;
 begin
   FTokenID := tkString;
   if (FLine[Run + 1] = #34) and (FLine[Run + 2] = #34) then Inc(Run, 2);
@@ -3680,12 +3680,12 @@ begin
           even number, then it should. }
         if (FLine[Run + 1] = #34) then
           begin
-            fBackslashCount := 1;
+            BackslashCount := 1;
 
-            while ((Run > fBackslashCount) and (FLine[Run - fBackslashCount] = #92)) do
-              fBackslashCount := fBackslashCount + 1;
+            while ((Run > BackslashCount) and (FLine[Run - BackslashCount] = #92)) do
+              BackslashCount := BackslashCount + 1;
 
-            if (fBackslashCount mod 2 = 1) then Inc(Run)
+            if (BackslashCount mod 2 = 1) then Inc(Run)
           end;
     end;
     Inc(Run);

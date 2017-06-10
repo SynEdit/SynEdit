@@ -177,8 +177,8 @@ begin
   inherited Create(AOwner);
   FMargin := 2;
   FTabWidth := 2;
-  FPageStyleEmpty := false;
-  fDefaultFilter := SYNS_FilterTeX;
+  FPageStyleEmpty := False;
+  FDefaultFilter := SYNS_FilterTeX;
   FEncoding := seAnsi;
 end;
 

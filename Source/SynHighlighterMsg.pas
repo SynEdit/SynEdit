@@ -373,7 +373,7 @@ begin
 
   SetAttributesOnChange(DefHighlightChange);
   InitIdent;
-  fDefaultFilter := SYNS_FilterSynGenMsgfiles;
+  FDefaultFilter := SYNS_FilterSynGenMsgfiles;
   FRange := rsUnknown;
 end;
 
@@ -492,7 +492,7 @@ end;
 
 function TSynMsgSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterSynGenMsgfiles;
+  Result := FDefaultFilter <> SYNS_FilterSynGenMsgfiles;
 end;
 
 function TSynMsgSyn.IsIdentChar(AChar: WideChar): Boolean;

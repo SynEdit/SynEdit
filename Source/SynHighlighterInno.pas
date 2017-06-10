@@ -336,7 +336,7 @@ begin
   EnumerateKeywords(Ord(tkParameter), Parameters, IsIdentChar, DoAddKeyword);
   EnumerateKeywords(Ord(tkKeyOrParameter), KeyOrParameter, IsIdentChar,
     DoAddKeyword);
-  fDefaultFilter := SYNS_FilterInno;
+  FDefaultFilter := SYNS_FilterInno;
 end;
 
 destructor TSynInnoSyn.Destroy;
@@ -592,7 +592,7 @@ end;
 
 function TSynInnoSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterInno;
+  Result := FDefaultFilter <> SYNS_FilterInno;
 end;
 
 class function TSynInnoSyn.GetLanguageName: string;

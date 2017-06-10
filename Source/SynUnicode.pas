@@ -1747,7 +1747,7 @@ begin
       else if c > $7FF then
       begin
         if count + 3 > MaxDestBytes then
-          break;
+          Break;
         Dest[count] := Char($E0 or (c shr 12));
         Dest[count+1] := Char($80 or ((c shr 6) and $3F));
         Dest[count+2] := Char($80 or (c and $3F));
@@ -1756,7 +1756,7 @@ begin
       else //  $7F < Source[i] <= $7FF
       begin
         if count + 2 > MaxDestBytes then
-          break;
+          Break;
         Dest[count] := Char($C0 or (c shr 6));
         Dest[count+1] := Char($80 or (c and $3F));
         Inc(count,2);
@@ -3727,7 +3727,7 @@ begin
           begin
             PropInfo := PropList^[I];
             if (PropInfo = nil) then
-              break;
+              Break;
             if (PropInfo.PropType^.Kind = tkWString) then
               UnicodeStringFiler.DefineProperties(Filer, Instance, PropInfo.Name)
             else if (PropInfo.PropType^.Kind = tkWChar) then

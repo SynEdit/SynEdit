@@ -1873,8 +1873,8 @@ function TSynCSSyn.UseUserSettings(settingIndex: Integer): Boolean;
 // Possible parameter values:
 //   index into TStrings returned by EnumUserSettings
 // Possible return values:
-//   true : settings were read and used
-//   false: problem reading settings or invalid version specified - old settings
+//   True : settings were read and used
+//   False: problem reading settings or invalid version specified - old settings
 //          were preserved
 
   {$IFNDEF SYN_CLX}
@@ -1889,22 +1889,25 @@ function TSynCSSyn.UseUserSettings(settingIndex: Integer): Boolean;
         for i := 1 to Length(name) do
           if name[i] = ' ' then name[i] := '_';
         Result := attri.LoadFromBorlandRegistry(HKEY_CURRENT_USER,
-             '\SOFTWARE\Borland\C++Builder\'+settingTag+'\Highlight',name,true);
+             '\SOFTWARE\Borland\C++Builder\' + settingTag + '\Highlight', name, True);
       end; { ReadCPPB1 }
 
       function ReadCPPB3OrMore(settingTag: string; attri: TSynHighlighterAttributes; key: string): Boolean;
       begin
         Result := attri.LoadFromBorlandRegistry(HKEY_CURRENT_USER,
-                 '\Software\Borland\C++Builder\'+settingTag+'\Editor\Highlight',
-                 key,false);
+                 '\Software\Borland\C++Builder\' + settingTag + '\Editor\Highlight',
+                 key, False);
       end; { ReadCPPB3OrMore }
 
     begin { ReadCPPBSetting }
       try
-        if (settingTag[1] = '1')
-          then Result := ReadCPPB1(settingTag,attri,key)
-          else Result := ReadCPPB3OrMore(settingTag,attri,key);
-      except Result := false; end;
+        if (settingTag[1] = '1') then
+          Result := ReadCPPB1(settingTag,attri,key)
+        else
+          Result := ReadCPPB3OrMore(settingTag,attri,key);
+      except
+        Result := False;
+      end;
     end; { ReadCPPBSetting }
 
   var
@@ -1924,7 +1927,7 @@ function TSynCSSyn.UseUserSettings(settingIndex: Integer): Boolean;
     s := TStringList.Create;
     try
       EnumUserSettings(s);
-      if settingIndex >= s.Count then Result := false
+      if settingIndex >= s.Count then Result := False
       else begin
         tmpStringAttri    := TSynHighlighterAttributes.Create('', '');
         tmpNumberAttri    := TSynHighlighterAttributes.Create('', '');

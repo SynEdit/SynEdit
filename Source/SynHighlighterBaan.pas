@@ -319,7 +319,7 @@ begin
   AddAttribute(FVariableAttri);
   SetAttributesOnChange(DefHighlightChange);
   InitIdent;
-  fDefaultFilter := SYNS_FilterBaan;
+  FDefaultFilter := SYNS_FilterBaan;
 end;
 
 procedure TSynBaanSyn.AndSymbolProc;
@@ -817,7 +817,7 @@ end;
 
 function TSynBaanSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterBaan;
+  Result := FDefaultFilter <> SYNS_FilterBaan;
 end;
 
 function TSynBaanSyn.IsIdentChar(AChar: WideChar): Boolean;

@@ -1900,7 +1900,7 @@ begin
 
   SetAttributesOnChange(DefHighlightChange);
   InitIdent;
-  fDefaultFilter := SYNS_FilterDOT;
+  FDefaultFilter := SYNS_FilterDOT;
   FRange := rsUnknown;
 end;
 
@@ -2067,7 +2067,7 @@ end;
 
 function TSynDOTSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterDOT;
+  Result := FDefaultFilter <> SYNS_FilterDOT;
 end;
 
 function TSynDOTSyn.IsIdentChar(AChar: WideChar): Boolean;

@@ -45,7 +45,7 @@ Known Issues:
 unit SynCompletionProposal;
 {$ENDIF}
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 interface
 
@@ -713,7 +713,7 @@ var
 
   procedure NextChar;
   begin
-    inc(CurPos);
+    Inc(CurPos);
     {$IFOPT R+}
     // Work-around Delphi's annoying behaviour of failing the RangeCheck when
     // reading the final #0 char
@@ -962,9 +962,9 @@ begin
           if not Invisible then
             TextOut(TargetCanvas, X, Rect.Top, C^.Str);
 
-          inc(X, TextWidth(TargetCanvas, C^.Str));
+          Inc(X, TextWidth(TargetCanvas, C^.Str));
           if X > Rect.Right then
-            break;
+            Break;
         end;
       fcColor:
         if not Invisible then
@@ -995,10 +995,10 @@ begin
         begin
           if CurrentColumnIndex <= Columns.Count -1 then
           begin
-            inc(LastColumnStart, CurrentColumn.FColumnWidth);
+            Inc(LastColumnStart, CurrentColumn.FColumnWidth);
             X := LastColumnStart;
 
-            inc(CurrentColumnIndex);
+            Inc(CurrentColumnIndex);
             if CurrentColumnIndex <= Columns.Count -1 then
             begin
               CurrentColumn := TProposalColumn(Columns.Items[CurrentColumnIndex]);
@@ -1009,9 +1009,9 @@ begin
         end;
       fcHSpace:
         begin
-          inc(X, Integer(C^.Data));
+          Inc(X, Integer(C^.Data));
           if X > Rect.Right then
-            break;
+            Break;
         end;
       fcImage:
         begin
@@ -1019,9 +1019,9 @@ begin
 
           Images.Draw(TargetCanvas, X, Rect.Top, Integer(C^.Data));
 
-          inc(X, Images.Width);
+          Inc(X, Images.Width);
           if X > Rect.Right then
-            break;
+            Break;
         end;
       end;
     end;
@@ -1089,7 +1089,7 @@ Begin
 
           Result := Result+'\color{'+ColorToString(Color)+'}';
 
-          inc(i, 4);
+          Inc(i, 4);
         end;
       #3:
         begin
@@ -1108,18 +1108,18 @@ Begin
 
             Result := Result + '}';
           end;
-          inc(i, 2);
+          Inc(i, 2);
         end;
       #9:
         begin
           Result := Result + '\column{}';
           if AlternateBoldStyle then
             Result := Result + '\style{~B}';
-          inc(i);
+          Inc(i);
         end;
       else
         Result := Result + APrettyText[i];
-        inc(i);
+        Inc(i);
     end;
 end;
 
@@ -1718,7 +1718,7 @@ begin
         TmpRect := Rect(0, 0, ClientWidth + 1, FHeightBuffer);
         Canvas.FillRect(TmpRect);
         Canvas.Pen.Color := clBtnShadow;
-        dec(TmpRect.Bottom, 1);
+        Dec(TmpRect.Bottom, 1);
         Canvas.PenPos := TmpRect.BottomRight;
         Canvas.LineTo(TmpRect.Left - 1,TmpRect.Bottom);
         Canvas.Pen.Color := clBtnFace;
@@ -1845,7 +1845,7 @@ begin
       if Integer(FAssignedList.Objects[i]) = Index then
       begin
         Result := i;
-        break;
+        Break;
       end;
   end else
     Result := Index;
@@ -1955,7 +1955,7 @@ begin
   begin
     i := 0;
     while (i < ItemList.Count) and (not MatchItem(i, True)) do
-      inc(i);
+      Inc(i);
 
     if i < ItemList.Count then
       Position := i
@@ -2438,7 +2438,7 @@ procedure TSynBaseCompletionProposal.ExecuteEx(s: UnicodeString; x, y: Integer; 
             tmpWidth := NewWidth;
         end;
 
-        inc(tmpWidth, 2 * FForm.Margin +BorderWidth);
+        Inc(tmpWidth, 2 * FForm.Margin +BorderWidth);
       end;
     ctParams:
       begin
@@ -2458,7 +2458,7 @@ procedure TSynBaseCompletionProposal.ExecuteEx(s: UnicodeString; x, y: Integer; 
             tmpWidth := NewWidth;
         end;
 
-        inc(tmpWidth, 2 * FForm.Margin +BorderWidth);
+        Inc(tmpWidth, 2 * FForm.Margin +BorderWidth);
       end;
     end;
 
@@ -3198,7 +3198,7 @@ begin
     begin                                 
       FAdjustCompletionStart := False;
       while (i > 0) and (s[i] > #32) and not Self.IsWordBreakChar(s[i]) do
-        dec(i);
+        Dec(i);
 
       FCompletionStart := i + 1;
       Result := Copy(s, i + 1, AEditor.CaretX - i - 1);
@@ -3225,12 +3225,12 @@ begin
     exit;
 
   if Self.IsWordBreakChar(Line[X]) then
-    dec(X);
+    Dec(X);
 
   while (X > 0) and not(Self.IsWordBreakChar(Line[X])) do
   begin
     Result := Line[X] + Result;
-    dec(x);
+    Dec(x);
   end;
 end;
 
@@ -3541,7 +3541,7 @@ begin
   CreateInternalCompletion;
   FEndOfTokenChr := DefaultEndOfTokenChr;
   fAutoCompleteList := TUnicodeStringList.Create;
-  FNoNextKey := false;
+  FNoNextKey := False;
 {$IFDEF SYN_CLX}
   FShortCut := QMenus.ShortCut(Ord(' '), [ssShift]);
 {$ELSE}
@@ -3664,7 +3664,7 @@ begin
           if (Temp[j] = '|') then
             StartOfBlock := Editor.CaretXY
         end;
-        inc(i);
+        Inc(i);
         if (i < AutoCompleteList.Count) and
            (length(AutoCompleteList[i]) > 0) and
            (AutoCompleteList[i][1] = '=') then
@@ -3786,7 +3786,7 @@ begin
   while (i < AutoCompleteList.Count) do begin
     if (length(AutoCompleteList[i]) > 0) and (AutoCompleteList[i][1] <> '=') then
       List.Add(WideTrim(AutoCompleteList[i]));
-    inc(i);
+    Inc(i);
   end;
   Result := List.Text;
   List.Free;
@@ -3810,7 +3810,7 @@ begin
         List.Add('')
       else
         List.Add(Copy(AutoCompleteList[i], 2, Length(AutoCompleteList[i])));
-      inc(i);
+      Inc(i);
     end;
     Result := List.Text;
     List.Free;

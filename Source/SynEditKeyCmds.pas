@@ -452,7 +452,7 @@ begin
     begin
       Result := TRUE;
       Cmd := EditorCommandStrs[I].Value;
-      break;
+      Break;
     end;
 {$ELSE}
     Result := IdentToInt(Ident, Cmd, EditorCommandStrs);
@@ -472,7 +472,7 @@ begin
     begin
       Result := TRUE;
       Ident := EditorCommandStrs[I].Name;
-      break;
+      Break;
     end;
 {$ELSE}
   Result := IntToIdent(Cmd, Ident, EditorCommandStrs);
@@ -700,7 +700,7 @@ begin
     if Items[x].Command = Cmd then
     begin
       Result := x;
-      break;
+      Break;
     end;
 end;
 
@@ -713,7 +713,7 @@ begin
     if (Items[x].Key = Code) and (Items[x].Shift = SS) and (Items[x].Key2 = 0)
     then begin
       Result := x;
-      break;
+      Break;
     end;
 end;
 
@@ -728,7 +728,7 @@ begin
        (Items[x].Key2 = Code2) and (Items[x].Shift2 = SS2) then
     begin
       Result := x;
-      break;
+      Break;
     end;
 end;
 
@@ -741,7 +741,7 @@ begin
     if Items[x].Shortcut = SC then
     begin
       Result := x;
-      break;
+      Break;
     end;
 end;
 
@@ -754,7 +754,7 @@ begin
     if (Items[x].Shortcut = SC) and (Items[x].Shortcut2 = SC2) then
     begin
       Result := x;
-      break;
+      Break;
     end;
 end;
 
@@ -994,7 +994,7 @@ begin
     if Uppercase(EditorCommandStrs[i].Name) = AString then
     begin
       Result := EditorCommandStrs[i].Value;
-      break;
+      Break;
     end;
 end;
 

@@ -821,7 +821,7 @@ begin
     if HighlighterList[i] = Highlighter then
       Exit
     else if Assigned(HighlighterList[i]) and (TObject(HighlighterList[i]).ClassType = Highlighter.ClassType) then
-      inc(Result);
+      Inc(Result);
 end;
 
 function InternalEnumHighlighterAttris(Highlighter: TSynCustomHighlighter;

@@ -46,7 +46,7 @@ The SynHighlighterEiffel unit provides SynEdit with an Eiffel highlighter.
 unit SynHighlighterEiffel;
 {$ENDIF}
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 interface
 
@@ -306,7 +306,7 @@ begin
   while IsIdentChar(Str^) or IsOperatorChar(Str^) do
   begin
     Result := Result * 543 + Ord(Str^) * 79;
-    inc(Str);
+    Inc(Str);
   end;
   Result := Result mod 503;
   FStringLen := Str - FToIdent;
@@ -1213,29 +1213,29 @@ end;
 
 procedure TSynEiffelSyn.SpaceProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSpace;
-  while (FLine[Run] <= #32) and not IsLineEnd(Run) do inc(Run);
+  while (FLine[Run] <= #32) and not IsLineEnd(Run) do Inc(Run);
 end;
 
 procedure TSynEiffelSyn.NullProc;
 begin
   FTokenID := tkNull;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynEiffelSyn.CRProc;
 begin
   FTokenID := tkSpace;
-  inc(Run);
+  Inc(Run);
   if FLine[Run] = #10 then
-    inc(Run);
+    Inc(Run);
 end;
 
 procedure TSynEiffelSyn.LFProc;
 begin
   FTokenID := tkSpace;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynEiffelSyn.OperatorAndSymbolProc;
@@ -1385,21 +1385,21 @@ begin
 
   SetAttributesOnChange(DefHighlightChange);
   InitIdent;
-  fDefaultFilter := SYNS_FilterEiffel;
+  FDefaultFilter := SYNS_FilterEiffel;
   FRange := rsUnknown;
 end;
 
 procedure TSynEiffelSyn.IdentProc;
 begin
   FTokenID := IdentKind(FLine + Run);
-  inc(Run, FStringLen);
+  Inc(Run, FStringLen);
   while IsIdentChar(FLine[Run]) do
     Inc(Run);
 end;
 
 procedure TSynEiffelSyn.UnknownProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkUnknown;
 end;
 
@@ -1522,7 +1522,7 @@ end;
 
 function TSynEiffelSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterEiffel;
+  Result := FDefaultFilter <> SYNS_FilterEiffel;
 end;
 
 class function TSynEiffelSyn.GetLanguageName: string;

@@ -43,7 +43,7 @@ The SynHighlighterM3 unit provides SynEdit with a Modula-3 (.m3) highlighter.
 unit SynHighlighterM3;
 {$ENDIF}
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 interface
 
@@ -269,7 +269,7 @@ begin
 
   EnumerateKeywords(Ord(tkKey), Keywords, IsIdentChar, DoAddKeyword);
   EnumerateKeywords(Ord(tkReserved), ReservedWords, IsIdentChar, DoAddKeyword);
-  fDefaultFilter := SYNS_FilterModula3;
+  FDefaultFilter := SYNS_FilterModula3;
 end;
 
 destructor TSynM3Syn.Destroy;
@@ -366,7 +366,7 @@ end;
 procedure TSynM3Syn.SymNullProc;
 begin
   FTokenID := tkNull;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynM3Syn.SymNumberProc;
@@ -523,9 +523,9 @@ end;
 
 procedure TSynM3Syn.SymSpaceProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSpace;
-  while (FLine[Run] <= #32) and not IsLineEnd(Run) do inc(Run);
+  while (FLine[Run] <= #32) and not IsLineEnd(Run) do Inc(Run);
 end;
 
 procedure TSynM3Syn.SymStringProc;
@@ -605,7 +605,7 @@ end;
 
 function TSynM3Syn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterModula3;
+  Result := FDefaultFilter <> SYNS_FilterModula3;
 end;
 
 class function TSynM3Syn.GetLanguageName: string;

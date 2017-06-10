@@ -49,7 +49,7 @@ Thanks to Martin Waldenburg, Hideo Koiso.
 unit SynHighlighterAsm;
 {$ENDIF}
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 interface
 
@@ -193,7 +193,7 @@ begin
   while IsIdentChar(Str^) do
   begin
     Result := Result * 197 + Ord(Str^) * 14;
-    inc(Str);
+    Inc(Str);
   end;
   Result := Result mod 4561;
   FStringLen := Str - FToIdent;
@@ -282,14 +282,14 @@ end;
 procedure TSynAsmSyn.IdentProc;
 begin
   FTokenID := IdentKind((FLine + Run));
-  inc(Run, FStringLen);
-  while IsIdentChar(FLine[Run]) do inc(Run);
+  Inc(Run, FStringLen);
+  while IsIdentChar(FLine[Run]) do Inc(Run);
 end;
 
 procedure TSynAsmSyn.LFProc;
 begin
   FTokenID := tkSpace;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynAsmSyn.LowerProc;
@@ -302,7 +302,7 @@ end;
 procedure TSynAsmSyn.NullProc;
 begin
   FTokenID := tkNull;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynAsmSyn.NumberProc;
@@ -318,7 +318,7 @@ procedure TSynAsmSyn.NumberProc;
   end;
 
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkNumber;
   while IsNumberChar do
     Inc(Run);
@@ -348,39 +348,39 @@ procedure TSynAsmSyn.StringProc;
 begin
   FTokenID := tkString;
   if (FLine[Run + 1] = #34) and (FLine[Run + 2] = #34) then
-    inc(Run, 2);
+    Inc(Run, 2);
   repeat
     case FLine[Run] of
       #0, #10, #13: break;
     end;
-    inc(Run);
+    Inc(Run);
   until FLine[Run] = #34;
-  if FLine[Run] <> #0 then inc(Run);
+  if FLine[Run] <> #0 then Inc(Run);
 end;
 
 procedure TSynAsmSyn.SingleQuoteStringProc;
 begin
   FTokenID := tkString;
   if (FLine[Run + 1] = #39) and (FLine[Run + 2] = #39) then
-    inc(Run, 2);
+    Inc(Run, 2);
   repeat
     case FLine[Run] of
       #0, #10, #13: break;
     end;
-    inc(Run);
+    Inc(Run);
   until FLine[Run] = #39;
-  if FLine[Run] <> #0 then inc(Run);
+  if FLine[Run] <> #0 then Inc(Run);
 end;
 
 procedure TSynAsmSyn.SymbolProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSymbol;
 end;
 
 procedure TSynAsmSyn.UnknownProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkIdentifier;
 end;
 

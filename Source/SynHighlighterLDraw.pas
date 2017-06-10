@@ -304,7 +304,7 @@ begin
 
   SetAttributesOnChange(DefHighlightChange);
   InitIdent;
-  fDefaultFilter := SYNS_FilterLDraw;
+  FDefaultFilter := SYNS_FilterLDraw;
   FRange := rsUnknown;
 end;
 
@@ -475,7 +475,7 @@ end;
 
 function TSynLDRSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterLDraw;
+  Result := FDefaultFilter <> SYNS_FilterLDraw;
 end;
 
 function TSynLDRSyn.IsIdentChar(AChar: WideChar): Boolean;

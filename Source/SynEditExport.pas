@@ -95,18 +95,18 @@ type
     function StringSize(const AText: UnicodeString): Integer;
     procedure WriteString(const AText: UnicodeString);
   protected
-    fBackgroundColor: TColor;
-    fClipboardFormat: UINT;
-    fDefaultFilter: string;
+    FBackgroundColor: TColor;
+    FClipboardFormat: UINT;
+    FDefaultFilter: string;
     FEncoding: TSynEncoding;
-    fExportAsText: Boolean;
-    fFont: TFont;
-    fHighlighter: TSynCustomHighlighter;
-    fLastBG: TColor;
-    fLastFG: TColor;
-    fLastStyle: TFontStyles;
-    fTitle: UnicodeString;
-    fUseBackground: Boolean;
+    FExportAsText: Boolean;
+    FFont: TFont;
+    FHighlighter: TSynCustomHighlighter;
+    FLastBG: TColor;
+    FLastFG: TColor;
+    FLastStyle: TFontStyles;
+    FTitle: UnicodeString;
+    FUseBackground: Boolean;
     { Adds a string to the output buffer. }
     procedure AddData(const AText: UnicodeString);
     { Adds a string and a trailing newline to the output buffer. }
@@ -191,24 +191,24 @@ type
   public
     { Default background color for text that has no token attribute assigned or
       for token attributes that have the background set to default. }
-    property Color: TColor read fBackgroundColor write fBackgroundColor;
+    property Color: TColor read FBackgroundColor write FBackgroundColor;
     { Filter string for the output format for SaveAs file dialogs. }
-    property DefaultFilter: string read fDefaultFilter write fDefaultFilter;
+    property DefaultFilter: string read FDefaultFilter write FDefaultFilter;
     property Encoding: TSynEncoding read FEncoding write SetEncoding default seUTF8;
-    property ExportAsText: Boolean read fExportAsText write SetExportAsText;
+    property ExportAsText: Boolean read FExportAsText write SetExportAsText;
     { The font to be used for the output format. The font color is used for text
       that has no token attribute assigned or for token attributes that have
       the background set to default. }
-    property Font: TFont read fFont write SetFont;
+    property Font: TFont read FFont write SetFont;
     { The output format of the exporter. }
     property FormatName: string read GetFormatName;
     { The highlighter to use for exporting. }
     property Highlighter: TSynCustomHighlighter
-      read fHighlighter write SetHighlighter;
+      read FHighlighter write SetHighlighter;
     { The title to embedd into the output header. }
-    property Title: UnicodeString read fTitle write SetTitle;
+    property Title: UnicodeString read FTitle write SetTitle;
     { Use the token attribute background for the exporting. }
-    property UseBackground: Boolean read fUseBackground write SetUseBackground;
+    property UseBackground: Boolean read FUseBackground write SetUseBackground;
   end;
 
 const
@@ -239,20 +239,20 @@ begin
   inherited Create(AOwner);
   FBuffer := TMemoryStream.Create;
 {$IFNDEF SYN_CLX}
-  fClipboardFormat := CF_TEXT;
+  FClipboardFormat := CF_TEXT;
 {$ENDIF}
   FCharSize := 1;
   FEncoding := seUTF8;
-  fFont := TFont.Create;
-  fBackgroundColor := clWindow;
+  FFont := TFont.Create;
+  FBackgroundColor := clWindow;
   AssignFont(nil);
   Clear;
-  fTitle := SYNS_Untitled;
+  FTitle := SYNS_Untitled;
 end;
 
 destructor TSynCustomExporter.Destroy;
 begin
-  fFont.Free;
+  FFont.Free;
   FBuffer.Free;
   inherited Destroy;
 end;
@@ -281,13 +281,13 @@ end;
 procedure TSynCustomExporter.AssignFont(Value: TFont);
 begin
   if Value <> nil then
-    fFont.Assign(Value)
+    FFont.Assign(Value)
   else
   begin
-    fFont.Name := 'Courier New';
-    fFont.Size := 10;
-    fFont.Color := clWindowText;
-    fFont.Style := [];
+    FFont.Name := 'Courier New';
+    FFont.Size := 10;
+    FFont.Color := clWindowText;
+    FFont.Style := [];
   end;
 end;
 
@@ -296,9 +296,9 @@ begin
   FBuffer.Position := 0;
   // Size is ReadOnly in Delphi 2
   FBuffer.SetSize(0);
-  fLastStyle := [];
-  fLastBG := clWindow;
-  fLastFG := clWindowText;
+  FLastStyle := [];
+  FLastBG := clWindow;
+  FLastFG := clWindowText;
 end;
 
 procedure SetClipboardText(Text: UnicodeString);
@@ -367,7 +367,7 @@ const
 var
   S: UnicodeString;
 begin
-  if fExportAsText then
+  if FExportAsText then
   begin
     FBuffer.Position := FBuffer.Size;
     FBuffer.Write(Nulls, FCharSize);
@@ -520,7 +520,7 @@ end;
 
 function TSynCustomExporter.GetClipboardFormat: UINT;
 begin
-  Result := fClipboardFormat;
+  Result := FClipboardFormat;
 end;
 
 function TSynCustomExporter.GetFormatName: string;
@@ -644,9 +644,9 @@ end;
 
 procedure TSynCustomExporter.SetExportAsText(Value: Boolean);
 begin
-  if fExportAsText <> Value then
+  if FExportAsText <> Value then
   begin
-    fExportAsText := Value;
+    FExportAsText := Value;
     Clear;
   end;
 end;
@@ -658,25 +658,25 @@ end;
 
 procedure TSynCustomExporter.SetHighlighter(Value: TSynCustomHighlighter);
 begin
-  if fHighlighter <> Value then
+  if FHighlighter <> Value then
   begin
-    if fHighlighter <> nil then
-      fHighlighter.FreeNotification(Self);
-    fHighlighter := Value;
+    if FHighlighter <> nil then
+      FHighlighter.FreeNotification(Self);
+    FHighlighter := Value;
     Clear;
-    if Assigned(fHighlighter) and Assigned(fHighlighter.WhitespaceAttribute) and fUseBackground then
-      fBackgroundColor := fHighlighter.WhitespaceAttribute.Background;
+    if Assigned(FHighlighter) and Assigned(FHighlighter.WhitespaceAttribute) and FUseBackground then
+      FBackgroundColor := FHighlighter.WhitespaceAttribute.Background;
   end;
 end;
 
 procedure TSynCustomExporter.SetTitle(const Value: UnicodeString);
 begin
-  if fTitle <> Value then
+  if FTitle <> Value then
   begin
     if Value <> '' then
-      fTitle := Value
+      FTitle := Value
     else
-      fTitle := SYNS_Untitled;
+      FTitle := SYNS_Untitled;
   end;
 end;
 
@@ -698,27 +698,27 @@ begin
   if FFirstAttribute then
   begin
     FFirstAttribute := False;
-    fLastBG := ValidatedColor(Attri.Background, fBackgroundColor);
-    fLastFG := ValidatedColor(Attri.Foreground, fFont.Color);
-    fLastStyle := Attri.Style;
-    FormatBeforeFirstAttribute(UseBackground and (fLastBG <> fBackgroundColor),
-      fLastFG <> fFont.Color, Attri.Style);
+    FLastBG := ValidatedColor(Attri.Background, FBackgroundColor);
+    FLastFG := ValidatedColor(Attri.Foreground, FFont.Color);
+    FLastStyle := Attri.Style;
+    FormatBeforeFirstAttribute(UseBackground and (FLastBG <> FBackgroundColor),
+      FLastFG <> FFont.Color, Attri.Style);
   end
   else
   begin
     ChangedBG := UseBackground and
-      (fLastBG <> ValidatedColor(Attri.Background, fBackgroundColor));
-    ChangedFG := (fLastFG <> ValidatedColor(Attri.Foreground, fFont.Color));
+      (FLastBG <> ValidatedColor(Attri.Background, FBackgroundColor));
+    ChangedFG := (FLastFG <> ValidatedColor(Attri.Foreground, FFont.Color));
     // which font style bits are to be reset?
-    ChangedStyles := fLastStyle - Attri.Style;
-    if ChangedBG or ChangedFG or (fLastStyle <> Attri.Style) then
+    ChangedStyles := FLastStyle - Attri.Style;
+    if ChangedBG or ChangedFG or (FLastStyle <> Attri.Style) then
     begin
       FormatAttributeDone(ChangedBG, ChangedFG, ChangedStyles);
       // which font style bits are to be set?
-      ChangedStyles := Attri.Style - fLastStyle;
-      fLastBG := ValidatedColor(Attri.Background, fBackgroundColor);
-      fLastFG := ValidatedColor(Attri.Foreground, fFont.Color);
-      fLastStyle := Attri.Style;
+      ChangedStyles := Attri.Style - FLastStyle;
+      FLastBG := ValidatedColor(Attri.Background, FBackgroundColor);
+      FLastFG := ValidatedColor(Attri.Foreground, FFont.Color);
+      FLastStyle := Attri.Style;
       FormatAttributeInit(ChangedBG, ChangedFG, ChangedStyles);
     end;
   end;
@@ -726,9 +726,9 @@ end;
 
 procedure TSynCustomExporter.SetUseBackground(const Value: Boolean);
 begin
-  fUseBackground := Value;
-  if Assigned(fHighlighter) and Assigned(fHighlighter.WhitespaceAttribute) and fUseBackground then
-    fBackgroundColor := fHighlighter.WhitespaceAttribute.Background;
+  FUseBackground := Value;
+  if Assigned(FHighlighter) and Assigned(FHighlighter.WhitespaceAttribute) and FUseBackground then
+    FBackgroundColor := FHighlighter.WhitespaceAttribute.Background;
 end;
 
 function TSynCustomExporter.StringSize(const AText: UnicodeString): Integer;

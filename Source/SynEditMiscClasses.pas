@@ -556,8 +556,10 @@ begin
     Inc(Line, FLineNumberStart - 1);
   Result := Format('%*d', [FAutoSizeDigitCount, Line]);
   if FLeadingZeros then
-    for i := 1 to FAutoSizeDigitCount - 1 do begin
-      if (Result[i] <> ' ') then break;
+    for i := 1 to FAutoSizeDigitCount - 1 do
+    begin
+      if (Result[i] <> ' ') then
+        Break;
       Result[i] := '0';
     end;
 end;

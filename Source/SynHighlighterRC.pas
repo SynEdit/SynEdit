@@ -257,7 +257,7 @@ begin
   SetAttributesOnChange(DefHighlightChange);
   InitIdent;
   FRange := rsUnknown;
-  fDefaultFilter := SYNS_FilterRC;
+  FDefaultFilter := SYNS_FilterRC;
 end;
 
 destructor TSynRCSyn.Destroy;
@@ -298,10 +298,11 @@ begin
           begin
             Inc(Run, 2);
             FRange := rsUnknown;
-            break;
+            Break;
           end
          else Inc(Run);
-        #10, #13: break;
+        #10, #13:
+          Break;
        else
         Inc(Run);
        end;
@@ -326,7 +327,7 @@ begin
      begin
        Inc(Run, 2);
        FRange := rsUnknown;
-       break;
+       Break;
      end
     else
      Inc(Run);
@@ -409,7 +410,9 @@ begin
   while IsNumberChar do
    begin
      case FLine[Run] of
-      '.': if FLine[Run + 1] = '.' then break;
+      '.':
+        if FLine[Run + 1] = '.' then
+          Break;
      end;
      Inc(Run);
    end;
@@ -527,7 +530,7 @@ end;
 
 function TSynRCSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterRC;
+  Result := FDefaultFilter <> SYNS_FilterRC;
 end;
 
 class function TSynRCSyn.GetLanguageName: string;

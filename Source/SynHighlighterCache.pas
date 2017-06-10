@@ -454,7 +454,7 @@ begin
 
   SetAttributesOnChange(DefHighlightChange);
   InitIdent;
-  fDefaultFilter := SYNS_FilterCache;
+  FDefaultFilter := SYNS_FilterCache;
   FRange := rsUnknown;
 end;
 
@@ -498,7 +498,7 @@ begin
     begin
       FTokenID := tkIdentifier;
       while IsIdentChar(FLine[Run]) do Inc(Run);
-      exit;
+      Exit;
     end;
     FRange := rsCommand;
     Inc(Run, FStringLen);
@@ -540,8 +540,8 @@ begin
   begin
     FTokenID := tkLabel;
     while IsIdentChar(FLine[Run]) do Inc(Run);
-    FCanKey := false;
-    exit;
+    FCanKey := False;
+    Exit;
   end;
 
   Inc(Run);
@@ -687,7 +687,7 @@ end;
 
 function TSynCacheSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterCache;
+  Result := FDefaultFilter <> SYNS_FilterCache;
 end;
 
 function TSynCacheSyn.IsIdentChar(AChar: WideChar): Boolean;
@@ -769,7 +769,7 @@ begin
       begin
         FTokenID := tkSymbol;
         Inc(Run);
-        exit;
+        Exit;
       end;
 
     FTokenID := tkDirective
@@ -804,24 +804,24 @@ begin
              while (FLine[Run] <> #0) and (FBrace<>0) do begin
                case FLine[Run] of
                  '(': if not FFirstBrace then Inc(FBrace)
-                      else FFirstBrace := false;
-                 ')': dec(FBrace);
+                      else FFirstBrace := False;
+                 ')': Dec(FBrace);
                end;
                Inc(Run);
              end;
-             if FBrace=0 then FRange := rsUnknown;
+             if FBrace = 0 then FRange := rsUnknown;
            end;
     rsHTML: begin
               FTokenID := tkEmbedSQL;
               while (FLine[Run] <> #0) and (FBrace<>0) do begin
                 case FLine[Run] of
                   '<': if not FFirstBrace then Inc(FBrace)
-                       else FFirstBrace := false;
-                  '>': dec(FBrace);
+                       else FFirstBrace := False;
+                  '>': Dec(FBrace);
                 end;
                 Inc(Run);
               end;
-              if FBrace=0 then FRange := rsUnknown;
+              if FBrace = 0 then FRange := rsUnknown;
             end;
   end;
 end;

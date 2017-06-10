@@ -602,7 +602,7 @@ begin
   FSymbolAttri := TSynHighlighterAttributes.Create(SYNS_AttrSymbol, SYNS_FriendlyAttrSymbol);
   AddAttribute(FSymbolAttri);
 
-  fDefaultFilter := SYNS_FilterProgress;
+  FDefaultFilter := SYNS_FilterProgress;
 
   EnumerateKeywords(Ord(tkKey), DefaultKeywords, IsIdentChar, DoAddKeyword);
   EnumerateKeywords(Ord(tkNonReserved), DefaultNonReservedKeywords,
@@ -1036,7 +1036,7 @@ end;
 
 function TSynProgressSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterProgress;
+  Result := FDefaultFilter <> SYNS_FilterProgress;
 end;
 
 function TSynProgressSyn.IsIdentChar(AChar: WideChar): Boolean;

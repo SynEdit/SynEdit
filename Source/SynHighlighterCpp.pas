@@ -48,7 +48,7 @@ Thanks to Martin Waldenburg.
 unit SynHighlighterCpp;
 {$ENDIF}
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 interface
 
@@ -266,7 +266,7 @@ begin
   while IsIdentChar(Str^) do
   begin
     Result := Result * 179 + Ord(Str^) * 44;
-    inc(Str);
+    Inc(Str);
   end;
   Result := Result mod 343;
   FStringLen := Str - FToIdent;
@@ -367,7 +367,7 @@ begin
   InitIdent;
   FRange := rsUnknown;
   FAsmStart := False;
-  fDefaultFilter := SYNS_FilterCPP;
+  FDefaultFilter := SYNS_FilterCPP;
 end;
 
 procedure TSynCppSyn.AnsiCProc;
@@ -396,7 +396,7 @@ begin
       '*':
         if FLine[Run + 1] = '/' then
         begin
-          inc(Run, 2);
+          Inc(Run, 2);
           if FRange = rsAnsiCAsm then
             FRange := rsAsm
           else if FRange = rsAnsiCAsmBlock then
@@ -408,10 +408,10 @@ begin
             FRange := rsUnknown;
           break;
         end else
-          inc(Run);
+          Inc(Run);
       #10: break;
       #13: break;
-    else inc(Run);
+    else Inc(Run);
     end;
 end;
 
@@ -421,17 +421,17 @@ begin
   case FLine[Run + 1] of
     '=':                               {and assign}
       begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FExtTokenID := xtkAndAssign;
       end;
     '&':                               {logical and}
       begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FExtTokenID := xtkLogAnd;
       end;
   else                                 {and}
     begin
-      inc(Run);
+      Inc(Run);
       FExtTokenID := xtkAnd;
     end;
   end;
@@ -443,23 +443,23 @@ begin
   repeat
     if FLine[Run] = '\' then begin
       if CharInSet(FLine[Run + 1], [#39, '\']) then
-        inc(Run);
+        Inc(Run);
     end;
-    inc(Run);
+    Inc(Run);
   until IsLineEnd(Run) or (FLine[Run] = #39);
   if FLine[Run] = #39 then
-    inc(Run);
+    Inc(Run);
 end;
 
 procedure TSynCppSyn.AtSymbolProc;
 begin
   FTokenID := tkUnknown;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynCppSyn.BraceCloseProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSymbol;
   FExtTokenID := xtkBraceClose;
   if FRange = rsAsmBlock then FRange := rsUnknown;
@@ -467,7 +467,7 @@ end;
 
 procedure TSynCppSyn.BraceOpenProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSymbol;
   FExtTokenID := xtkBraceOpen;
   if FRange = rsAsm then
@@ -490,12 +490,12 @@ begin
   case FLine[Run + 1] of
     ':':                               {scope resolution operator}
       begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FExtTokenID := xtkScopeResolution;
       end;
   else                                 {colon}
     begin
-      inc(Run);
+      Inc(Run);
       FExtTokenID := xtkColon;
     end;
   end;
@@ -503,7 +503,7 @@ end;
 
 procedure TSynCppSyn.CommaProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSymbol;
   FExtTokenID := xtkComma;
 end;
@@ -601,12 +601,12 @@ begin
   case FLine[Run + 1] of
     '=':                               {logical equal}
       begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FExtTokenID := xtkLogEqual;
       end;
   else                                 {assign}
     begin
-      inc(Run);
+      Inc(Run);
       FExtTokenID := xtkAssign;
     end;
   end;
@@ -618,25 +618,25 @@ begin
   case FLine[Run + 1] of
     '=':                               {greater than or equal to}
       begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FExtTokenID := xtkGreaterThanEqual;
       end;
     '>':
       begin
         if FLine[Run + 2] = '=' then   {shift right assign}
         begin
-          inc(Run, 3);
+          Inc(Run, 3);
           FExtTokenID := xtkShiftRightAssign;
         end
         else                           {shift right}
         begin
-          inc(Run, 2);
+          Inc(Run, 2);
           FExtTokenID := xtkShiftRight;
         end;
       end;
   else                                 {greater than}
     begin
-      inc(Run);
+      Inc(Run);
       FExtTokenID := xtkGreaterThan;
     end;
   end;
@@ -646,20 +646,20 @@ procedure TSynCppSyn.QuestionProc;
 begin
   FTokenID := tkSymbol;                {conditional}
   FExtTokenID := xtkQuestion;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynCppSyn.IdentProc;
 begin
   FTokenID := IdentKind((FLine + Run));
-  inc(Run, FStringLen);
-  while IsIdentChar(FLine[Run]) do inc(Run);
+  Inc(Run, FStringLen);
+  while IsIdentChar(FLine[Run]) do Inc(Run);
 end;
 
 procedure TSynCppSyn.LFProc;
 begin
   FTokenID := tkSpace;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynCppSyn.LowerProc;
@@ -668,25 +668,25 @@ begin
   case FLine[Run + 1] of
     '=':                               {less than or equal to}
       begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FExtTokenID := xtkLessThanEqual;
       end;
     '<':
       begin
         if FLine[Run + 2] = '=' then   {shift left assign}
         begin
-          inc(Run, 3);
+          Inc(Run, 3);
           FExtTokenID := xtkShiftLeftAssign;
         end
         else                           {shift left}
         begin
-          inc(Run, 2);
+          Inc(Run, 2);
           FExtTokenID := xtkShiftLeft;
         end;
       end;
   else                                 {less than}
     begin
-      inc(Run);
+      Inc(Run);
       FExtTokenID := xtkLessThan;
     end;
   end;
@@ -698,22 +698,22 @@ begin
   case FLine[Run + 1] of
     '=':                               {subtract assign}
       begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FExtTokenID := xtkSubtractAssign;
       end;
     '-':                               {decrement}
       begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FExtTokenID := xtkDecrement;
       end;
     '>':                               {arrow}
       begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FExtTokenID := xtkArrow;
       end;
   else                                 {subtract}
     begin
-      inc(Run);
+      Inc(Run);
       FExtTokenID := xtkSubtract;
     end;
   end;
@@ -725,12 +725,12 @@ begin
   case FLine[Run + 1] of
     '=':                               {mod assign}
       begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FExtTokenID := xtkModAssign;
       end;
   else                                 {mod}
     begin
-      inc(Run);
+      Inc(Run);
       FExtTokenID := xtkMod;
     end;
   end;
@@ -742,12 +742,12 @@ begin
   case FLine[Run + 1] of
     '=':                               {not equal}
       begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FExtTokenID := xtkNotEqual;
       end;
   else                                 {not}
     begin
-      inc(Run);
+      Inc(Run);
       FExtTokenID := xtkLogComplement;
     end;
   end;
@@ -756,7 +756,7 @@ end;
 procedure TSynCppSyn.NullProc;
 begin
   FTokenID := tkNull;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynCppSyn.NumberProc;
@@ -929,17 +929,17 @@ begin
   case FLine[Run + 1] of
     '=':                               {or assign}
       begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FExtTokenID := xtkIncOrAssign;
       end;
     '|':                               {logical or}
       begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FExtTokenID := xtkLogOr;
       end;
   else                                 {or}
     begin
-      inc(Run);
+      Inc(Run);
       FExtTokenID := xtkIncOr;
     end;
   end;
@@ -951,17 +951,17 @@ begin
   case FLine[Run + 1] of
     '=':                               {add assign}
       begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FExtTokenID := xtkAddAssign;
       end;
     '+':                               {increment}
       begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FExtTokenID := xtkIncrement;
       end;
   else                                 {add}
     begin
-      inc(Run);
+      Inc(Run);
       FExtTokenID := xtkAdd;
     end;
   end;
@@ -972,7 +972,7 @@ begin
   FTokenID := tkSymbol;
   if (FLine[Run + 1] = '.') and (FLine[Run + 2] = '.') then
     begin                              {ellipse}
-      inc(Run, 3);
+      Inc(Run, 3);
       FExtTokenID := xtkEllipse;
     end
   else
@@ -983,28 +983,28 @@ begin
     end
   else                                 {point}
     begin
-      inc(Run);
+      Inc(Run);
       FExtTokenID := xtkPoint;
     end;
 end;
 
 procedure TSynCppSyn.RoundCloseProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSymbol;
   FExtTokenID := xtkRoundClose;
 end;
 
 procedure TSynCppSyn.RoundOpenProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSymbol;
   FExtTokenID := xtkRoundOpen;
 end;
 
 procedure TSynCppSyn.SemiColonProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSymbol;
   FExtTokenID := xtkSemiColon;
   if FRange = rsAsm then FRange := rsUnknown;
@@ -1016,7 +1016,7 @@ begin
     '/':                               {c++ style comments}
       begin
         FTokenID := tkComment;
-        inc(Run, 2);
+        Inc(Run, 2);
         while not IsLineEnd(Run) do Inc(Run);
       end;
     '*':                               {c style comments}
@@ -1028,13 +1028,13 @@ begin
           FRange := rsAnsiCAsmBlock
         else if FRange <> rsDirectiveComment then
           FRange := rsAnsiC;
-        inc(Run, 2);
+        Inc(Run, 2);
         while FLine[Run] <> #0 do
           case FLine[Run] of
             '*':
               if FLine[Run + 1] = '/' then
               begin
-                inc(Run, 2);
+                Inc(Run, 2);
                 if FRange = rsDirectiveComment then
                   FRange := rsMultiLineDirective
                 else if FRange = rsAnsiCAsm then
@@ -1047,25 +1047,25 @@ begin
                     FRange := rsUnknown;
                   end;
                 break;
-              end else inc(Run);
+              end else Inc(Run);
             #10, #13:
               begin
                 if FRange = rsDirectiveComment then
                   FRange := rsAnsiC;
                 break;
               end;
-          else inc(Run);
+          else Inc(Run);
           end;
       end;
     '=':                               {divide assign}
       begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FTokenID := tkSymbol;
         FExtTokenID := xtkDivideAssign;
       end;
   else                                 {divide}
     begin
-      inc(Run);
+      Inc(Run);
       FTokenID := tkSymbol;
       FExtTokenID := xtkDivide;
     end;
@@ -1074,21 +1074,21 @@ end;
 
 procedure TSynCppSyn.SpaceProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSpace;
-  while (FLine[Run] <= #32) and not IsLineEnd(Run) do inc(Run);
+  while (FLine[Run] <= #32) and not IsLineEnd(Run) do Inc(Run);
 end;
 
 procedure TSynCppSyn.SquareCloseProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSymbol;
   FExtTokenID := xtkSquareClose;
 end;
 
 procedure TSynCppSyn.SquareOpenProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSymbol;
   FExtTokenID := xtkSquareOpen;
 end;
@@ -1099,12 +1099,12 @@ begin
   case FLine[Run + 1] of
     '=':                               {multiply assign}
       begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FExtTokenID := xtkMultiplyAssign;
       end;
   else                                 {star}
     begin
-      inc(Run);
+      Inc(Run);
       FExtTokenID := xtkStar;
     end;
   end;
@@ -1126,10 +1126,10 @@ begin
           end;
       end;
     end;
-    inc(Run);
+    Inc(Run);
   until IsLineEnd(Run) or (FLine[Run] = #34);
   if FLine[Run] = #34 then
-    inc(Run);
+    Inc(Run);
 end;
 
 procedure TSynCppSyn.StringEndProc;
@@ -1174,15 +1174,15 @@ begin
         end;
       #34: Break;
     end;
-    inc(Run);
+    Inc(Run);
   until IsLineEnd(Run) or (FLine[Run] = #34);
   if FLine[Run] = #34 then
-    inc(Run);
+    Inc(Run);
 end;
 
 procedure TSynCppSyn.TildeProc;
 begin
-  inc(Run);                            {bitwise complement}
+  Inc(Run);                            {bitwise complement}
   FTokenID := tkSymbol;
   FExtTokenID := xtkBitComplement;
 end;
@@ -1193,12 +1193,12 @@ begin
   case FLine[Run + 1] of
   	'=':                               {xor assign}
       begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FExtTokenID := xtkXorAssign;
       end;
   else                                 {xor}
     begin
-      inc(Run);
+      Inc(Run);
       FExtTokenID := xtkXor;
     end;
   end;
@@ -1365,8 +1365,8 @@ function TSynCppSyn.UseUserSettings(settingIndex: Integer): Boolean;
 // Possible parameter values:
 //   index into TStrings returned by EnumUserSettings
 // Possible return values:
-//   true : settings were read and used
-//   false: problem reading settings or invalid version specified - old settings
+//   True : settings were read and used
+//   False: problem reading settings or invalid version specified - old settings
 //          were preserved
 
   {$IFNDEF SYN_CLX}
@@ -1381,22 +1381,25 @@ function TSynCppSyn.UseUserSettings(settingIndex: Integer): Boolean;
         for i := 1 to Length(name) do
           if name[i] = ' ' then name[i] := '_';
         Result := attri.LoadFromBorlandRegistry(HKEY_CURRENT_USER,
-             '\SOFTWARE\Borland\C++Builder\'+settingTag+'\Highlight',name,true);
+             '\SOFTWARE\Borland\C++Builder\' + settingTag + '\Highlight', name, True);
       end; { ReadCPPB1 }
 
       function ReadCPPB3OrMore(settingTag: string; attri: TSynHighlighterAttributes; key: string): Boolean;
       begin
         Result := attri.LoadFromBorlandRegistry(HKEY_CURRENT_USER,
-                 '\Software\Borland\C++Builder\'+settingTag+'\Editor\Highlight',
-                 key,false);
+          '\Software\Borland\C++Builder\' + settingTag + '\Editor\Highlight',
+          key, False);
       end; { ReadCPPB3OrMore }
 
     begin { ReadCPPBSetting }
       try
-        if (settingTag[1] = '1')
-          then Result := ReadCPPB1(settingTag,attri,key)
-          else Result := ReadCPPB3OrMore(settingTag,attri,key);
-      except Result := false; end;
+        if (settingTag[1] = '1') then
+          Result := ReadCPPB1(settingTag,attri,key)
+        else
+          Result := ReadCPPB3OrMore(settingTag,attri,key);
+      except
+        Result := False;
+      end;
     end; { ReadCPPBSetting }
 
   var
@@ -1420,8 +1423,10 @@ function TSynCppSyn.UseUserSettings(settingIndex: Integer): Boolean;
     s := TStringList.Create;
     try
       EnumUserSettings(s);
-      if settingIndex >= s.Count then Result := false
-      else begin
+      if settingIndex >= s.Count then
+        Result := False
+      else
+      begin
         tmpStringAttri    := TSynHighlighterAttributes.Create('', '');
         tmpCharAttri      := TSynHighlighterAttributes.Create('', '');
         tmpNumberAttri    := TSynHighlighterAttributes.Create('', '');
@@ -1450,9 +1455,10 @@ function TSynCppSyn.UseUserSettings(settingIndex: Integer): Boolean;
         tmpInvalidAttri   .Assign(FInvalidAttri);
         tmpSpaceAttri     .Assign(FSpaceAttri);
         tmpDirecAttri     .Assign(FDirecAttri);
-        if s[settingIndex][1] = '1'
-          then Result := ReadCPPBSetting(s[settingIndex],FAsmAttri,'Plain text')
-          else Result := ReadCPPBSetting(s[settingIndex],FAsmAttri,'Assembler');
+        if s[settingIndex][1] = '1' then
+          Result := ReadCPPBSetting(s[settingIndex],FAsmAttri,'Plain text')
+        else
+          Result := ReadCPPBSetting(s[settingIndex],FAsmAttri,'Assembler');
         Result := Result                                                         and
                   ReadCPPBSetting(s[settingIndex],FCommentAttri,'Comment')       and
                   ReadCPPBSetting(s[settingIndex],FIdentifierAttri,'Identifier') and
@@ -1467,7 +1473,8 @@ function TSynCppSyn.UseUserSettings(settingIndex: Integer): Boolean;
                   ReadCPPBSetting(s[settingIndex],FCharAttri,'Character')             and
                   ReadCPPBSetting(s[settingIndex],FSymbolAttri,'Symbol')         and
                   ReadCPPBSetting(s[settingIndex],FDirecAttri,'Preprocessor');
-        if not Result then begin
+        if not Result then
+        begin
           FStringAttri    .Assign(tmpStringAttri);
           FCharAttri      .Assign(tmpCharAttri);
           FNumberAttri    .Assign(tmpNumberAttri);
@@ -1498,7 +1505,9 @@ function TSynCppSyn.UseUserSettings(settingIndex: Integer): Boolean;
         tmpSpaceAttri     .Free;
         tmpDirecAttri     .Free;
       end;
-    finally s.Free; end;
+    finally
+      s.Free;
+    end;
   end; { ReadCPPBSettings }
   {$ENDIF}
 
@@ -1512,7 +1521,7 @@ end; { TSynCppSyn.UseUserSettings }
 
 function TSynCppSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterCPP;
+  Result := FDefaultFilter <> SYNS_FilterCPP;
 end;
 
 class function TSynCppSyn.GetLanguageName: string;
@@ -1527,28 +1536,28 @@ end;
 
 function TSynCppSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '// Syntax Highlighting'#13#10+
-            'void __fastcall TForm1::Button1Click(TObject *Sender)'#13#10+
-            '{'#13#10+
-            '  int number = 123456;'#13#10+
-            '  char c = ''a'';'#13#10+
-            '  Caption = "The number is " + IntToStr(i);'#13#10+
-            '  for (int i = 0; i <= number; i++)'#13#10+
-            '  {'#13#10+
-            '    x -= 0xff;'#13#10+
-            '    x -= 023;'#13#10+
-            '    x += 1.0;'#13#10+
-            '    x += @; /* illegal character */'#13#10+
-            '  }'#13#10+
-            '  #ifdef USE_ASM'#13#10+
-            '    asm'#13#10+
-            '    {'#13#10+
-            '      ASM MOV AX, 0x1234'#13#10+
-            '      ASM MOV i, AX'#13#10+
-            '    }'#13#10+
-            '  #endif'#13#10+
-            '}';
-
+  Result :=
+    '// Syntax Highlighting'#13#10+
+    'void __fastcall TForm1::Button1Click(TObject *Sender)'#13#10+
+    '{'#13#10+
+    '  int number = 123456;'#13#10+
+    '  char c = ''a'';'#13#10+
+    '  Caption = "The number is " + IntToStr(i);'#13#10+
+    '  for (int i = 0; i <= number; i++)'#13#10+
+    '  {'#13#10+
+    '    x -= 0xff;'#13#10+
+    '    x -= 023;'#13#10+
+    '    x += 1.0;'#13#10+
+    '    x += @; /* illegal character */'#13#10+
+    '  }'#13#10+
+    '  #ifdef USE_ASM'#13#10+
+    '    asm'#13#10+
+    '    {'#13#10+
+    '      ASM MOV AX, 0x1234'#13#10+
+    '      ASM MOV i, AX'#13#10+
+    '    }'#13#10+
+    '  #endif'#13#10+
+    '}';
 end;
 
 class function TSynCppSyn.GetFriendlyLanguageName: UnicodeString;

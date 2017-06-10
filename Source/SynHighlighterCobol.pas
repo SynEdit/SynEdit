@@ -646,7 +646,7 @@ begin
   AddAttribute(FDebugLinesAttri);
   SetAttributesOnChange(DefHighlightChange);
 
-  fDefaultFilter := SYNS_FilterCOBOL;
+  FDefaultFilter := SYNS_FilterCOBOL;
   FRange := rsUnknown;
   FIndicator := #0;
 
@@ -873,7 +873,7 @@ end;
 
 function TSynCobolSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterCOBOL;
+  Result := FDefaultFilter <> SYNS_FilterCOBOL;
 end;
 
 function TSynCobolSyn.IsIdentChar(AChar: WideChar): Boolean;

@@ -31,7 +31,7 @@ Known Issues:
 unit SynEditHighlighter;
 {$ENDIF}
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 interface
 
@@ -1116,7 +1116,7 @@ begin
         Result := False;
         break;
       end;
-      inc(Temp);
+      Inc(Temp);
     end;
   end
   else
@@ -1181,9 +1181,9 @@ begin
   while Delta > 0 do
   begin
     while FExpandedLine[FExpandedRun] = FillerChar do
-      inc(FExpandedRun);
-    inc(FExpandedRun);
-    dec(Delta);
+      Inc(FExpandedRun);
+    Inc(FExpandedRun);
+    Dec(Delta);
   end;
   FOldRun := Run;
 end;
@@ -1326,9 +1326,9 @@ begin
   while i < Pos do
   begin
     while FExpandedLine[Result] = FillerChar do
-      inc(Result);
-    inc(Result);
-    inc(i);
+      Inc(Result);
+    Inc(Result);
+    Inc(i);
   end;
 end;
 

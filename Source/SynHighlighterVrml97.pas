@@ -678,7 +678,7 @@ begin
   EnumerateKeywords(Ord(tkVrmlViewpoint), VrmlViewpoints, IsIdentChar, DoAddKeyword);
   EnumerateKeywords(Ord(tkVrmlWorldInfo), VrmlWorldInfos, IsIdentChar, DoAddKeyword);
 
-  fDefaultFilter := SYNS_FilterVrml97;
+  FDefaultFilter := SYNS_FilterVrml97;
   FRange := rsNormalText;
 end;
 
@@ -1140,7 +1140,7 @@ end;
 
 function TSynVrml97Syn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterVrml97;
+  Result := FDefaultFilter <> SYNS_FilterVrml97;
 end;
 
 class function TSynVrml97Syn.GetLanguageName: string;

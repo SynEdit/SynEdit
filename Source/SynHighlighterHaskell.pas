@@ -287,7 +287,7 @@ begin
   InitIdent;
   FRange := rsUnknown;
   FAsmStart := False;
-  fDefaultFilter := SYNS_FilterHaskell;
+  FDefaultFilter := SYNS_FilterHaskell;
 end; { Create }
 
 procedure TSynHaskellSyn.AnsiCProc;
@@ -935,7 +935,7 @@ end;
 
 function TSynHaskellSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterHaskell;
+  Result := FDefaultFilter <> SYNS_FilterHaskell;
 end;
 
 function TSynHaskellSyn.IsIdentChar(AChar: WideChar): Boolean;
@@ -960,10 +960,11 @@ end;
 
 function TSynHaskellSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '-- Haskell Sample Source'#13#10 +
-            'tail :: [a] -> [a]'#13#10 +
-            'tail (x:xs) = xs'#13#10 +
-            '';
+  Result :=
+    '-- Haskell Sample Source'#13#10 +
+    'tail :: [a] -> [a]'#13#10 +
+    'tail (x:xs) = xs'#13#10 +
+    '';
 end;
 
 class function TSynHaskellSyn.GetFriendlyLanguageName: UnicodeString;

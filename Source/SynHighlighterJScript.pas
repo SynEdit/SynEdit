@@ -4437,7 +4437,7 @@ begin
   AddAttribute(FSymbolAttri);
   SetAttributesOnChange(DefHighlightChange);
   InitIdent;
-  fDefaultFilter := SYNS_FilterJScript;
+  FDefaultFilter := SYNS_FilterJScript;
   FRange := rsUnknown;
 end;
 
@@ -4744,7 +4744,7 @@ end;
 
 function TSynJScriptSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterJScript;
+  Result := FDefaultFilter <> SYNS_FilterJScript;
 end;
 
 class function TSynJScriptSyn.GetLanguageName: string;

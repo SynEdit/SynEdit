@@ -273,7 +273,7 @@ begin
 
   EnumerateKeywords(Ord(tkKey), Keywords, IsIdentChar, DoAddKeyword);
   EnumerateKeywords(Ord(tkDirective), Directives, IsIdentChar, DoAddKeyword);
-  fDefaultFilter := SYNS_FilterAsm68HC11;
+  FDefaultFilter := SYNS_FilterAsm68HC11;
 end; { Create }
 
 destructor TSynHC11Syn.Destroy;
@@ -479,7 +479,7 @@ end;
 
 function TSynHC11Syn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterAsm68HC11;
+  Result := FDefaultFilter <> SYNS_FilterAsm68HC11;
 end;
 
 class function TSynHC11Syn.GetLanguageName: string;

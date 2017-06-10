@@ -267,7 +267,7 @@ begin
   FSymbolAttri := TSynHighlighterAttributes.Create(SYNS_AttrSymbol, SYNS_FriendlyAttrSymbol);
   AddAttribute(FSymbolAttri);
   SetAttributesOnChange(DefHighlightChange);
-  fDefaultFilter := SYNS_FilterVBScript;
+  FDefaultFilter := SYNS_FilterVBScript;
   InitIdent;
 end;
 
@@ -290,7 +290,8 @@ procedure TSynVBScriptSyn.DateProc;
 begin
   FTokenID := tkString;
   repeat
-    if IsLineEnd(Run) then break;
+    if IsLineEnd(Run) then
+      Break;
     Inc(Run);
   until FLine[Run] = '#';
   if not IsLineEnd(Run) then Inc(Run);
@@ -359,7 +360,8 @@ begin
   FTokenID := tkString;
   if (FLine[Run + 1] = #34) and (FLine[Run + 2] = #34) then Inc(Run, 2);
   repeat
-    if IsLineEnd(Run) then break;
+    if IsLineEnd(Run) then
+      Break;
     Inc(Run);
   until FLine[Run] = #34;
   if not IsLineEnd(Run) then Inc(Run);
@@ -446,7 +448,7 @@ end;
 
 function TSynVBScriptSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterVBScript;
+  Result := FDefaultFilter <> SYNS_FilterVBScript;
 end;
 
 class function TSynVBScriptSyn.GetLanguageName: string;

@@ -498,7 +498,7 @@ begin
   
   SetAttributesOnChange(DefHighlightChange);
   InitIdent;
-  fDefaultFilter := SYNS_FilterSDD;
+  FDefaultFilter := SYNS_FilterSDD;
   FRange := rsUnknown;
 end; { Create }
 
@@ -701,7 +701,7 @@ end; { NumberProc }
 
 function TSynSDDSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterSDD;
+  Result := FDefaultFilter <> SYNS_FilterSDD;
 end; { IsFilterStored }
 
 procedure TSynSDDSyn.SymbolProc;

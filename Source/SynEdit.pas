@@ -49,7 +49,7 @@ Known Issues:
 unit SynEdit;
 {$ENDIF}
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 interface
 
@@ -1358,7 +1358,7 @@ end;
         begin
           // Our format:  TSynSelectionMode value followed by Ansi-text.
           PSynSelectionMode(P)^ := FActiveSelectionMode;
-          inc(P, SizeOf(TSynSelectionMode));
+          Inc(P, SizeOf(TSynSelectionMode));
           Move(PAnsiChar(AnsiString(SText))^, P^, SLen + 1);
           SetClipboardData(SynEditClipboardFormat, Mem);
         end;
@@ -1901,7 +1901,7 @@ end;
 
 procedure TCustomSynEdit.IncPaintLock;
 begin
-  inc(FPaintLock);
+  Inc(FPaintLock);
 end;
 
 procedure TCustomSynEdit.InvalidateGutter;
@@ -2923,7 +2923,7 @@ begin
   SetLength(Result, Length(S) * 2); // speed improvement
   for i := 1 to Length(S) do
   begin
-    inc(j);
+    Inc(j);
     CountOfAvgGlyphs := CeilOfIntDiv(FTextDrawer.TextWidth(S[i]), FCharWidth);
 
     if j + CountOfAvgGlyphs > Length(Result) then
@@ -2933,8 +2933,8 @@ begin
     while CountOfAvgGlyphs > 1 do
     begin
       Result[j] := FillerChar;
-      inc(j);
-      dec(CountOfAvgGlyphs);
+      Inc(j);
+      Dec(CountOfAvgGlyphs);
     end;
 
     Result[j] := S[i];
@@ -2955,11 +2955,11 @@ begin
   j := 0;
   while i < First + CharCount do
   begin
-    inc(j);
+    Inc(j);
     while S[i] = FillerChar do
-      inc(i);
+      Inc(i);
     Result[j] := S[i];
-    inc(i);
+    Inc(i);
   end;
 
   SetLength(Result, j);
@@ -3156,8 +3156,8 @@ var
         NonFillerPos := First;
         while Token[NonFillerPos] = FillerChar do
         begin
-          inc(FillerCount);
-          inc(NonFillerPos);
+          Inc(FillerCount);
+          Inc(NonFillerPos);
         end;
 
         CountOfAvgGlyphs := CeilOfIntDiv(FTextDrawer.TextWidth(Token[NonFillerPos]) , FCharWidth);
@@ -3175,9 +3175,9 @@ var
         if WordWrap then
           while nX + FCharWidth * nCharsToPaint > ClientWidth do
           begin
-            dec(nCharsToPaint);
+            Dec(nCharsToPaint);
             while (nCharsToPaint > 0) and (Token[First + nCharsToPaint - 1] = FillerChar) do
-              dec(nCharsToPaint);
+              Dec(nCharsToPaint);
           end;
 
         // same as copy(Token, First, nCharsToPaint) and remove filler chars
@@ -3200,7 +3200,7 @@ var
         while (TabStart > 0) and (TabStart >= First) and (TabStart <= Last) do
         begin
           TabLen := 1;
-          while (TabStart + CharsBefore + TabLen - 1) mod FTabWidth <> 0 do inc(TabLen);
+          while (TabStart + CharsBefore + TabLen - 1) mod FTabWidth <> 0 do Inc(TabLen);
           Text := SynTabGlyphString;
 
           nX := ColumnToXValue(CharsBefore + TabStart + (TabLen div 2) - 1);
@@ -7732,7 +7732,7 @@ begin
               begin
                 SpaceCount2 := LeftSpacesEx(Lines[BackCounter],True);
                 if Length(Lines[BackCounter]) > 0 then break;
-                dec(BackCounter);
+                Dec(BackCounter);
               end;
             end;
             Lines.Insert(CaretY - 1, '');
@@ -9490,10 +9490,10 @@ begin
     if NewX > LineLen then
       NewX := DestX
     else if (NewX > DestX) and (Line[NewX - 1] = #9) then
-      dec(NewX)
+      Dec(NewX)
     else begin
       while (NewX > DestX) and ((NewX - 1 > LineLen) or (Line[NewX - 1] = #32)) do
-        dec(NewX);
+        Dec(NewX);
     end;
   end;
 
@@ -9558,8 +9558,8 @@ begin
     while (first_nonblank <= vMaxX) and
       CharInSet(s[first_nonblank], [#32, #9])
     do
-      inc(first_nonblank);
-    dec(first_nonblank);
+      Inc(first_nonblank);
+    Dec(first_nonblank);
 
     newX := CaretXY.Char - 1;
 
@@ -10385,10 +10385,10 @@ begin
   DoTransient :=(FPaintTransientLock=0);
   if Lock then
   begin
-    if (TransientType=ttBefore) then inc(FPaintTransientLock)
+    if (TransientType=ttBefore) then Inc(FPaintTransientLock)
     else
     begin
-      dec(FPaintTransientLock);
+      Dec(FPaintTransientLock);
       DoTransient :=(FPaintTransientLock=0);
     end;
   end;
@@ -10528,14 +10528,14 @@ begin
     x := 0;
     for i := 1 to p.Char - 1 do begin
       if (i <= l) and (s[i] = #9) then
-        inc(x, TabWidth - (x mod TabWidth))
+        Inc(x, TabWidth - (x mod TabWidth))
       else if i <= l then
       begin
         CountOfAvgGlyphs := CeilOfIntDiv(FTextDrawer.TextWidth(s[i]) , FCharWidth);
-        inc(x, CountOfAvgGlyphs);
+        Inc(x, CountOfAvgGlyphs);
       end
       else
-        inc(x);
+        Inc(x);
     end;
     Result.Column := x + 1;
   end;
@@ -10566,16 +10566,16 @@ begin
 
     while x < Result.Char  do
     begin
-      inc(i);
+      Inc(i);
       if (i <= l) and (s[i] = #9) then
-        inc(x, TabWidth - (x mod TabWidth))
+        Inc(x, TabWidth - (x mod TabWidth))
       else if i <= l then
       begin
         CountOfAvgGlyphs := CeilOfIntDiv(FTextDrawer.TextWidth(s[i]) , FCharWidth);
-        inc(x, CountOfAvgGlyphs);
+        Inc(x, CountOfAvgGlyphs);
       end
       else
-        inc(x);
+        Inc(x);
     end;
     Result.Char := i;
   end;

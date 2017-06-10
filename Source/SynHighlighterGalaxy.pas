@@ -204,7 +204,7 @@ begin
   SetAttributesOnChange(DefHighlightChange);
 
   FRange := rsUnknown;
-  fDefaultFilter := SYNS_FilterGalaxy;
+  FDefaultFilter := SYNS_FilterGalaxy;
 end; { Create }
 
 destructor TSynGalaxySyn.Destroy;
@@ -398,7 +398,7 @@ end;
 
 function TSynGalaxySyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterGalaxy;
+  Result := FDefaultFilter <> SYNS_FilterGalaxy;
 end;
 
 class function TSynGalaxySyn.GetLanguageName: string;
@@ -411,7 +411,7 @@ function TSynGalaxySyn.LoadFromRegistry(RootKey: HKEY; Key: string): Boolean;
 var
   r: TBetterRegistry;
 begin
-  r:= TBetterRegistry.Create;
+  r := TBetterRegistry.Create;
   try
     r.RootKey := RootKey;
     if r.OpenKeyReadOnly(Key) then
@@ -430,7 +430,7 @@ function TSynGalaxySyn.SaveToRegistry(RootKey: HKEY; Key: string): Boolean;
 var
   r: TBetterRegistry;
 begin
-  r:= TBetterRegistry.Create;
+  r := TBetterRegistry.Create;
   try
     r.RootKey := RootKey;
     if r.OpenKey(Key,true) then
@@ -442,7 +442,7 @@ begin
       Result := inherited SaveToRegistry(RootKey, Key);
     end
     else
-      Result := false;
+      Result := False;
   finally
     r.Free;
   end;

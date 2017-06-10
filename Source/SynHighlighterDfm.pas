@@ -48,7 +48,7 @@ The highlighter formats form source code similar to when forms are viewed as tex
 unit SynHighlighterDfm;
 {$ENDIF}
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 interface
 
@@ -317,7 +317,7 @@ begin
   FSymbolAttri := TSynHighlighterAttributes.Create(SYNS_AttrSymbol, SYNS_FriendlyAttrSymbol);
   AddAttribute(FSymbolAttri);
   SetAttributesOnChange(DefHighlightChange);
-  fDefaultFilter := SYNS_FilterDFM;
+  FDefaultFilter := SYNS_FilterDFM;
   FRange := rsUnknown;
 end;
 
@@ -339,7 +339,7 @@ end;
 
 procedure TSynDfmSyn.BraceCloseProc;
 begin
-  inc(Run);
+  Inc(Run);
   FRange := rsUnknown;
   FTokenID := tkIdentifier;
 end;
@@ -354,7 +354,7 @@ procedure TSynDfmSyn.CommentProc;
 begin
   FTokenID := tkComment;
   repeat
-    inc(Run);
+    Inc(Run);
     if FLine[Run] = '}' then begin
       Inc(Run);
       FRange := rsUnknown;
@@ -399,20 +399,20 @@ procedure TSynDfmSyn.IntegerProc;
 begin
   FTokenID := tkNumber;
   repeat
-    inc(Run);
+    Inc(Run);
   until not IsIntegerChar;
 end;
 
 procedure TSynDfmSyn.LFProc;
 begin
   FTokenID := tkSpace;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynDfmSyn.NullProc;
 begin
   FTokenID := tkNull;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynDfmSyn.NumberProc;
@@ -509,13 +509,13 @@ end;
 
 procedure TSynDfmSyn.SymbolProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSymbol;
 end;
 
 procedure TSynDfmSyn.UnknownProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkUnknown;
 end;
 
@@ -617,7 +617,7 @@ end;
 
 function TSynDfmSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterDFM;
+  Result := FDefaultFilter <> SYNS_FilterDFM;
 end;
 
 class function TSynDfmSyn.GetLanguageName: string;

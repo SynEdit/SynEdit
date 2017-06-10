@@ -87,7 +87,7 @@ unit SynEditPrint;
 {$ENDIF}
 
 {$M+}
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 interface
 
@@ -376,7 +376,7 @@ begin
   SetLength(Result, Length(S) * 2); // speed improvement
   for i := 1 to Length(S) do
   begin
-    inc(j);
+    Inc(j);
     CountOfAvgGlyphs := Ceil(TextWidth(FCanvas, S[i]) / fCharWidth);
 
     if j + CountOfAvgGlyphs > Length(Result) then
@@ -386,8 +386,8 @@ begin
     while CountOfAvgGlyphs > 1 do
     begin
       Result[j] := FillerChar;
-      inc(j);
-      dec(CountOfAvgGlyphs);
+      Inc(j);
+      Dec(CountOfAvgGlyphs);
     end;
 
     Result[j] := S[i];
@@ -432,7 +432,7 @@ begin
   CalcPages;
   FHeader.InitPrint(FCanvas, FPageCount, FTitle, FMargins);
   FFooter.InitPrint(FCanvas, FPageCount, FTitle, FMargins);
-  FSynOK := Highlight and Assigned(FHighLighter) and (FLines.Count > 0);
+  FSynOK := Highlight and Assigned(FHighlighter) and (FLines.Count > 0);
 end;
 
 procedure TSynEditPrint.SetPixelsPrInch;
@@ -455,7 +455,7 @@ begin
   if not FRangesOK and Assigned(FHighlighter) and (Lines.Count > 0) then
   begin
     FHighlighter.ResetRange;
-    FLines.Objects[0] := fHighlighter.GetRange;
+    FLines.Objects[0] := FHighlighter.GetRange;
     i := 1;
     while i < Lines.Count do
     begin
@@ -758,11 +758,11 @@ begin
     Token := '';
     TokenStart := 0;
     LCount := 0;
-    while not FHighLighter.GetEol do
+    while not FHighlighter.GetEol do
     begin
-      Token := FHighLighter.GetToken;
-      TokenPos := FHighLighter.GetTokenPos;
-      Attr := FHighLighter.GetTokenAttribute;
+      Token := FHighlighter.GetToken;
+      TokenPos := FHighlighter.GetTokenPos;
+      Attr := FHighlighter.GetTokenAttribute;
       if Assigned(Attr) then
       begin
         FCanvas.Font.Style := Attr.Style;
@@ -813,11 +813,11 @@ begin
       {$IFNDEF SYN_CLX}
       if not Handled then
       begin
-        ExpandedPos := FHighLighter.PosToExpandedPos(TokenPos - TokenStart);
+        ExpandedPos := FHighlighter.PosToExpandedPos(TokenPos - TokenStart);
         ClippedTextOut(FMargins.PLeft + ExpandedPos * FCharWidth, FYPos, Token);
       end;
       {$ENDIF}
-      FHighLighter.Next;
+      FHighlighter.Next;
     end;
     RestoreCurrentFont;
   end

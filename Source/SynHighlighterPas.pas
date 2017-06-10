@@ -687,7 +687,7 @@ begin
   InitIdent;
   FRange := rsUnknown;
   FAsmStart := False;
-  fDefaultFilter := SYNS_FilterPascal;
+  FDefaultFilter := SYNS_FilterPascal;
 end;
 
 procedure TSynPasSyn.AddressOpProc;
@@ -1320,7 +1320,7 @@ end;
 
 function TSynPasSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterPascal;
+  Result := FDefaultFilter <> SYNS_FilterPascal;
 end;
 
 procedure TSynPasSyn.SetDelphiVersion(const Value: TDelphiVersion);

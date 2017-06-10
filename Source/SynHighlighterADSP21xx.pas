@@ -2541,7 +2541,7 @@ function TSynADSP21xxSyn.UseUserSettings(settingIndex: Integer): Boolean;
 //   index into TStrings returned by EnumUserSettings
 // Possible return values:
 //   true : settings were read and used
-//   false: problem reading settings or invalid version specified - old settings
+//   False: problem reading settings or invalid version specified - old settings
 //          were preserved
 
     {$IFNDEF SYN_CLX}
@@ -2549,8 +2549,10 @@ function TSynADSP21xxSyn.UseUserSettings(settingIndex: Integer): Boolean;
     begin
       try
         Result := attri.LoadFromBorlandRegistry(HKEY_CURRENT_USER,
-               '\Software\Wynand\DspIDE\1.0\Editor\Highlight',key,false);
-      except Result := false; end;
+          '\Software\Wynand\DspIDE\1.0\Editor\Highlight', key, False);
+      except
+        Result := False;
+      end;
     end;
     {$ENDIF}
 var
@@ -2569,7 +2571,7 @@ begin  // UseUserSettings
   try
     EnumUserSettings(StrLst);
     if settingIndex >= StrLst.Count then
-      Result := false
+      Result := False
     else
     begin
       tmpNumberAttri    := TSynHighlighterAttributes.Create('', '');

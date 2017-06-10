@@ -558,9 +558,9 @@ begin
     if fExpandedLine <> nil then
     begin
       if FMarkers.Count = 0 then
-        ExpandedTmpLine := fExpandedLineStr
+        ExpandedTmpLine := FExpandedLineStr
       else
-        ExpandedTmpLine := Copy(fExpandedLineStr, 1,
+        ExpandedTmpLine := Copy(FExpandedLineStr, 1,
           PosToExpandedPos(Markers[FNextMarker].FStartPos - 1));
       iHL.SetLineExpandedAtWideGlyphs(TmpLine, ExpandedTmpLine, FLineNumber);
     end
@@ -589,10 +589,10 @@ begin
     if fExpandedLine <> nil then
     begin
       if FNextMarker < FMarkers.Count then
-        ExpandedTmpLine := Copy(fExpandedLineStr, FExpandedRun + 1,
+        ExpandedTmpLine := Copy(FExpandedLineStr, FExpandedRun + 1,
           PosToExpandedPos(Markers[FNextMarker].FStartPos - Run - 1))
       else
-        ExpandedTmpLine := Copy(fExpandedLineStr, FExpandedRun + 1, MaxInt);
+        ExpandedTmpLine := Copy(FExpandedLineStr, FExpandedRun + 1, MaxInt);
 
       iHL.SetLineExpandedAtWideGlyphs(TmpLine, ExpandedTmpLine, FLineNumber);
     end
@@ -964,7 +964,7 @@ end;
 function TSynMultiSyn.GetExpandedToken: UnicodeString;
 begin
   if (DefaultHighlighter = nil) and (fExpandedLine <> nil) then
-    Result := fExpandedLineStr
+    Result := FExpandedLineStr
   else
     Result := inherited GetExpandedToken;
 end;

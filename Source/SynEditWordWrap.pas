@@ -473,7 +473,7 @@ begin
       begin
         vLastVisibleChar := vRowEnd - 1;
         while (vLastVisibleChar^ = FillerChar) and (vLastVisibleChar > vRowBegin) do
-          dec(vLastVisibleChar);
+          Dec(vLastVisibleChar);
         vRowEnd := vLastVisibleChar + 1;
       end;
 
@@ -605,7 +605,7 @@ begin
       begin
         vLastVisibleChar := vRowEnd - 1;
         while (vLastVisibleChar^ = FillerChar) and (vLastVisibleChar > vRowBegin) do
-          dec(vLastVisibleChar);
+          Dec(vLastVisibleChar);
         vRowEnd := vLastVisibleChar + 1;
       end;
 

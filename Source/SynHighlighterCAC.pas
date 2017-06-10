@@ -293,7 +293,7 @@ begin
   InitIdent;
   SetAttributesOnChange(DefHighlightChange);
   FRange := rsUnknown;
-  fDefaultFilter := SYNS_FilterCAClipper;
+  FDefaultFilter := SYNS_FilterCAClipper;
 end;
 
 procedure TSynCACSyn.CStyleProc;
@@ -303,18 +303,18 @@ begin
     #0:
       begin
         NullProc;
-        exit;
+        Exit;
       end;
     #10:
       begin
         LFProc;
-        exit;
+        Exit;
       end;
 
     #13:
       begin
         CRProc;
-        exit;
+        Exit;
       end;
   end;
 
@@ -581,7 +581,7 @@ end;
 
 function TSynCACSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterCAClipper;
+  Result := FDefaultFilter <> SYNS_FilterCAClipper;
 end;
 
 class function TSynCACSyn.GetLanguageName: string;

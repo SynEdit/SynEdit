@@ -498,7 +498,7 @@ begin
   EnumerateKeywords(Ord(tkOperator), Operators, IsIdentChar, DoAddOperatorKeyword);
 
   SetAttributesOnChange(DefHighlightChange);
-  fDefaultFilter      := SYNS_FilterX86Assembly;
+  FDefaultFilter := SYNS_FilterX86Assembly;
 end;
 
 destructor TSynAsmMASMSyn.Destroy;
@@ -727,7 +727,7 @@ end;
 
 function TSynAsmMASMSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterX86Assembly;
+  Result := FDefaultFilter <> SYNS_FilterX86Assembly;
 end;
 
 function TSynAsmMASMSyn.GetSampleSource: UnicodeString;

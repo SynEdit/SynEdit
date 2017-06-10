@@ -297,7 +297,7 @@ begin
   SetAttributesOnChange(DefHighlightChange);
 
   InitIdent;
-  fDefaultFilter := SYNS_FilterJava;
+  FDefaultFilter := SYNS_FilterJava;
 end; { Create }
 
 procedure TSynJavaSyn.CommentProc;
@@ -713,7 +713,7 @@ begin
   Inc(Run);
   FTokenID := tkSymbol;
   FExtTokenID := xtkRoundClose;
-  dec(FRoundCount);
+  Dec(FRoundCount);
 end;
 
 procedure TSynJavaSyn.RoundOpenProc;
@@ -798,7 +798,7 @@ begin
   Inc(Run);
   FTokenID := tkSymbol;
   FExtTokenID := xtkSquareClose;
-  dec(FSquareCount);
+  Dec(FSquareCount);
 end;
 
 procedure TSynJavaSyn.SquareOpenProc;
@@ -973,7 +973,7 @@ end;
 
 function TSynJavaSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterJava;
+  Result := FDefaultFilter <> SYNS_FilterJava;
 end;
 
 function TSynJavaSyn.IsIdentChar(AChar: WideChar): Boolean;
@@ -994,17 +994,18 @@ end;
 
 function TSynJavaSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '/* Java syntax highlighting */'#13#10 +
-            'import java.util.*;'#13#10 +
-            #13#10 +
-            '/** Example class */'#13#10 +
-            'public class Sample {'#13#10 +
-            '  public static void main(String[] args) {'#13#10 +
-            '    int i = 0;'#13#10 +
-            '    for(i = 0; i < 10; i++)'#13#10 +
-            '      System.out.println("Hello world");'#13#10 +
-            '  }'#13#10 +
-            '}';
+  Result :=
+    '/* Java syntax highlighting */'#13#10 +
+    'import java.util.*;'#13#10 +
+    #13#10 +
+    '/** Example class */'#13#10 +
+    'public class Sample {'#13#10 +
+    '  public static void main(String[] args) {'#13#10 +
+    '    int i = 0;'#13#10 +
+    '    for(i = 0; i < 10; i++)'#13#10 +
+    '      System.out.println("Hello world");'#13#10 +
+    '  }'#13#10 +
+    '}';
 end;
 
 class function TSynJavaSyn.GetFriendlyLanguageName: UnicodeString;

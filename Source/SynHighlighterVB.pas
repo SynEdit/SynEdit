@@ -373,7 +373,8 @@ procedure TSynVBSyn.DateProc;
 begin
   FTokenID := tkString;
   repeat
-    if IsLineEnd(Run) then break;
+    if IsLineEnd(Run) then
+      Break;
     Inc(Run);
   until FLine[Run] = '#';
   if not IsLineEnd(Run) then Inc(Run);
@@ -442,7 +443,8 @@ begin
   FTokenID := tkString;
   if (FLine[Run + 1] = #34) and (FLine[Run + 2] = #34) then Inc(Run, 2);
   repeat
-    if IsLineEnd(Run) then break;
+    if IsLineEnd(Run) then
+      Break;
     Inc(Run);
   until FLine[Run] = #34;
   if not IsLineEnd(Run) then Inc(Run);

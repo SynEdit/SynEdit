@@ -310,7 +310,7 @@ begin
   AddAttribute(FSyntaxErrorAttri);
   SetAttributesOnChange(DefHighlightChange);
   InitIdent;        
-  fDefaultFilter := SYNS_FilterSML;
+  FDefaultFilter := SYNS_FilterSML;
   Basis := True;
 end;
 
@@ -372,7 +372,8 @@ begin
   while IsNumberChar do
   begin
     case FLine[Run] of
-      '.':  if FLine[Run + 1] = '.' then break;
+      '.':  if FLine[Run + 1] = '.' then
+        Break;
     end;
     Inc(Run);
   end;
@@ -629,7 +630,7 @@ end;
 
 function TSynSMLSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterSML;
+  Result := FDefaultFilter <> SYNS_FilterSML;
 end;
 
 function TSynSMLSyn.IsIdentChar(AChar: WideChar): Boolean;

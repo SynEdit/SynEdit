@@ -47,7 +47,7 @@ The SynHighlighterVisualLisp unit provides SynEdit with a Ruby highlighter.
 unit SynHighlighterRuby;
 {$ENDIF}
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 interface
 
@@ -272,7 +272,7 @@ begin
   SetAttributesOnChange(DefHighlightChange);
 
   FRange := rsUnknown;
-  fDefaultFilter := SYNS_FilterRuby;
+  FDefaultFilter := SYNS_FilterRuby;
 end; { Create }
 
 destructor TSynRubySyn.Destroy;
@@ -284,13 +284,13 @@ end; { Destroy }
 
 procedure TSynRubySyn.BraceOpenProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSymbol;
 end;
 
 procedure TSynRubySyn.PointCommaProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSymbol;
 end;
 
@@ -298,14 +298,16 @@ procedure TSynRubySyn.CRProc;
 begin
   FTokenID := tkSpace;
   case FLine[Run + 1] of
-    #10: inc(Run, 2);
-  else inc(Run);
+    #10:
+      Inc(Run, 2);
+    else
+      Inc(Run);
   end;
 end;
 
 procedure TSynRubySyn.IdentProc;
 begin
-  while IsIdentChar(FLine[Run]) do inc(Run);
+  while IsIdentChar(FLine[Run]) do Inc(Run);
   if IsKeyWord(GetToken) then
   begin
     FTokenID := tkKey;
@@ -321,7 +323,7 @@ end;
 procedure TSynRubySyn.LFProc;
 begin
   FTokenID := tkSpace;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynRubySyn.LowerProc;
@@ -356,7 +358,7 @@ begin
 
     if IsIdentChar(FLine[Run + SkipRun + 2]) then
     begin
-      inc(Run, 2);
+      Inc(Run, 2);
 
       i := Run;
       while IsIdentChar(FLine[SkipRun + i]) do Inc(i);
@@ -385,12 +387,12 @@ begin
       FTokenID := tkString;
     end
     else
-      inc(Run, 2);
+      Inc(Run, 2);
   end
   else
 {$ENDIF}
   begin
-    inc(Run);
+    Inc(Run);
     FTokenID := tkSymbol;
   end;
 end;
@@ -398,7 +400,7 @@ end;
 procedure TSynRubySyn.NullProc;
 begin
   FTokenID := tkNull;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynRubySyn.NumberProc;
@@ -414,7 +416,7 @@ procedure TSynRubySyn.NumberProc;
   end;
 
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkNumber;
   while IsNumberChar do
   begin
@@ -422,13 +424,13 @@ begin
       '.':
         if FLine[Run + 1] = '.' then break;
     end;
-    inc(Run);
+    Inc(Run);
   end;
 end;
 
 procedure TSynRubySyn.RoundOpenProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSymbol;
 end;
 
@@ -437,12 +439,12 @@ begin
   case FLine[Run] of
     '/':
       begin
-        inc(Run);
+        Inc(Run);
         FTokenID := tkSymbol;
       end;
     '*':
       begin
-        inc(Run);
+        Inc(Run);
         FTokenID := tkSymbol;
       end;
   else
@@ -453,7 +455,7 @@ begin
         case FLine[Run] of
           #10, #13: break;
         end;
-        inc(Run);
+        Inc(Run);
       end;
     end;
   end;
@@ -461,9 +463,9 @@ end;
 
 procedure TSynRubySyn.SpaceProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSpace;
-  while (FLine[Run] <= #32) and not IsLineEnd(Run) do inc(Run);
+  while (FLine[Run] <= #32) and not IsLineEnd(Run) do Inc(Run);
 end;
 
 procedure TSynRubySyn.StringProc;
@@ -489,19 +491,19 @@ begin
   FTokenID := tkString;
   QuoteChar := FLine[Run];      // either " or '
   if (FLine[Run + 1] = QuoteChar) and (FLine[Run + 2] = QuoteChar)
-    then inc(Run, 2);
+    then Inc(Run, 2);
   repeat
     case FLine[Run] of
       #0, #10, #13: break;
     end;
-    inc(Run);
+    Inc(Run);
   until FLine[Run] = QuoteChar;
-  if FLine[Run] <> #0 then inc(Run);
+  if FLine[Run] <> #0 then Inc(Run);
 end;
 
 procedure TSynRubySyn.UnknownProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkUnknown;
 end;
 
@@ -516,7 +518,7 @@ procedure TSynRubySyn.HeredocProc;
       #13: CRProc;
     else
       repeat
-        inc(Run);
+        Inc(Run);
       until IsLineEnd(Run);
     end;
   end;
@@ -711,7 +713,7 @@ end;
 
 function TSynRubySyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterRuby;
+  Result := FDefaultFilter <> SYNS_FilterRuby;
 end;
 
 class function TSynRubySyn.GetLanguageName: string;

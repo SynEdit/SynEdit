@@ -317,7 +317,7 @@ begin
 
   SetAttributesOnChange(DefHighlightChange);
   InitIdent;
-  fDefaultFilter := SYNS_FilterKIX;
+  FDefaultFilter := SYNS_FilterKIX;
 end;
 
 procedure TSynKixSyn.AsciiCharProc;
@@ -502,7 +502,8 @@ begin
     tkSymbol: Result := FSymbolAttri;
     tkVariable: Result := FVariableAttri;
     tkUnknown: Result := FIdentifierAttri;
-    else Result := nil;
+    else
+      Result := nil;
   end;
 end;
 
@@ -518,18 +519,19 @@ end;
 
 function TSynKixSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterKIX;
+  Result := FDefaultFilter <> SYNS_FilterKIX;
 end;
 
 function TSynKixSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '; KiXtart sample source'#13#10 +
-            'break on'#13#10 +
-            'color b/n'#13#10 +
-            #13#10 +
-            'AT(1, 30) "Hello World!"'#13#10 +
-            '$USERID = @USERID'#13#10 +
-            'AT(1, 30) $USERID';
+  Result :=
+    '; KiXtart sample source'#13#10 +
+    'break on'#13#10 +
+    'color b/n'#13#10 +
+    #13#10 +
+    'AT(1, 30) "Hello World!"'#13#10 +
+    '$USERID = @USERID'#13#10 +
+    'AT(1, 30) $USERID';
 end;
 
 class function TSynKixSyn.GetFriendlyLanguageName: UnicodeString;

@@ -272,7 +272,7 @@ begin
     if Compare = 0 then
     begin
       Result := True;
-      break;
+      Break;
     end
     else
       if Compare < 0 then First := I + 1 else Last := I - 1;
@@ -361,7 +361,7 @@ begin
   AddAttribute(FPathAttri);
 
   FRange := rsUnknown;
-  fDefaultFilter := SYNS_FilterTclTk;
+  FDefaultFilter := SYNS_FilterTclTk;
 end;
 
 destructor TSynTclTkSyn.Destroy;
@@ -402,7 +402,7 @@ begin
       begin
         FRange := rsUnknown;
         Inc(Run, 2);
-        break;
+        Break;
       end
       else
         Inc(Run)
@@ -438,7 +438,7 @@ begin
     begin
       FRange := rsUnknown;
       Inc(Run);
-      break;
+      Break;
     end
     else
       Inc(Run);
@@ -473,7 +473,7 @@ begin
       begin
         FRange := rsUnknown;
         Inc(Run, 2);
-        break;
+        Break;
       end
       else Inc(Run)
     end
@@ -548,7 +548,7 @@ begin
   begin
     case FLine[Run] of
       '.':
-        if FLine[Run + 1] = '.' then break;
+        if FLine[Run + 1] = '.' then Break;
     end;
     Inc(Run);
   end;
@@ -587,7 +587,7 @@ begin
   if (FLine[Run + 1] = #34) and (FLine[Run + 2] = #34) then
     Inc(Run, 2);
   repeat
-    if IsLineEnd(Run) then break;
+    if IsLineEnd(Run) then Break;
     Inc(Run);
   until (FLine[Run] = #34) and (FLine[Pred(Run)] <> '\');
   if not IsLineEnd(Run) then Inc(Run);
@@ -728,7 +728,7 @@ end;
 
 function TSynTclTkSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterTclTk;
+  Result := FDefaultFilter <> SYNS_FilterTclTk;
 end;
 
 class function TSynTclTkSyn.GetLanguageName: string;
@@ -770,8 +770,10 @@ begin
       r.WriteString('KeyWords', KeyWords.Text);
       Result := inherited SaveToRegistry(RootKey, Key);
     end
-    else Result := false;
-  finally r.Free; end;
+    else Result := False;
+  finally
+    r.Free;
+  end;
 end;
 {$ENDIF}
 

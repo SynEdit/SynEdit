@@ -210,8 +210,10 @@ begin
       cmbCommand.SelStart := length(WorkStr);
       cmbCommand.SelLength := Length(cmbCommand.Text) - cmbCommand.SelStart;
       Key := #0;
-      break;
-    end else inc(i);
+      Break;
+    end
+    else
+      Inc(i);
   end;
 end;
 

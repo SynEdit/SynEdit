@@ -637,7 +637,7 @@ begin
   EnumerateKeywords(Ord(tkProperty), Properties_CSS3, IsIdentChar, DoAddKeyword);
 
   FRange := rsSelector;
-  fDefaultFilter := SYNS_FilterCSS;
+  FDefaultFilter := SYNS_FilterCSS;
 end;
 
 destructor TSynCssSyn.Destroy;
@@ -1123,7 +1123,7 @@ end;
 
 function TSynCssSyn.IsFilterStored: boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterCSS;
+  Result := FDefaultFilter <> SYNS_FilterCSS;
 end;
 
 function TSynCssSyn.IsIdentChar(AChar: WideChar): Boolean;

@@ -3194,7 +3194,7 @@ begin
   InitIdent;
   FRange := rsUnknown;
 
-  fDefaultFilter := SYNS_FilterGembase;
+  FDefaultFilter := SYNS_FilterGembase;
 end;
 
 procedure TSynDmlSyn.AddressOpProc;
@@ -3432,7 +3432,7 @@ end;
 
 function TSynDmlSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterGembase;
+  Result := FDefaultFilter <> SYNS_FilterGembase;
 end;
 
 class function TSynDmlSyn.GetLanguageName: string;

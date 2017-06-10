@@ -257,7 +257,7 @@ begin
       if Temp^ <> Token[i] then
       begin
         Result := False;
-        break;
+        Break;
       end;
       Inc(Temp);
     end;
@@ -291,7 +291,7 @@ begin
 
   SetAttributesOnChange(DefHighlightChange);
   InitIdent;
-  fDefaultFilter := SYNS_FilterURI;
+  FDefaultFilter := SYNS_FilterURI;
 end;
 
 destructor TSynURISyn.Destroy; 
@@ -422,7 +422,7 @@ end;
 
 function TSynURISyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterURI;
+  Result := FDefaultFilter <> SYNS_FilterURI;
 end;
 
 function TSynURISyn.IsIdentChar(AChar: WideChar): Boolean;
@@ -624,14 +624,14 @@ begin
     else if FLine[Run] = '.' then
       // reject array of dots: "neighbour" dots are not allowed
       if (Run = StartPos) or (DotPos >= 0) and (DotPos = Run - 1) then
-        break
+        Break
       else
         DotPos := Run;
     Inc(Run);
   end;
 
   while (Run > StartPos) and (IsNeverAtEMailAddressEnd(FLine[Run - 1])) do
-    dec(Run);
+    Dec(Run);
 
   while (DotPos >= Run) or (DotPos > -1) and (FLine[DotPos] <> '.') do
     Dec(DotPos);
@@ -660,14 +660,14 @@ begin
     if FLine[Run] = '.' then
       // reject array of dots: "neighbour" dots are not allowed
       if (DotPos >= 0) and (DotPos = Run - 1) and not IsRelativePath then
-        break
+        Break
       else
         DotPos := Run;
     Inc(Run);
   end;
 
   while (Run > ProtocolEndPos) and IsNeverAtEnd(FLine[Run - 1]) do
-    dec(Run);
+    Dec(Run);
 
   Result := Run > ProtocolEndPos;
 end;
@@ -693,7 +693,7 @@ begin
     if FLine[Run] = '.' then
       // reject array of dots: "neighbour" dots are not allowed
       if (DotPos >= 0) and (DotPos = Run - 1) and not IsRelativePath then
-        break
+        Break
       else
       begin
         DotPos := Run;
@@ -704,7 +704,7 @@ begin
   end;
 
   while (Run > WWWEndPos) and IsNeverAtEnd(FLine[Run - 1]) do
-    dec(Run);
+    Dec(Run);
 
   Result := (Run > WWWEndPos) and (FLine[WWWEndPos] = '.') and
             (SecondDotPos > WWWEndPos + 1) and (SecondDotPos < Run);

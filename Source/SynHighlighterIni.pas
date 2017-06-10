@@ -161,7 +161,7 @@ begin
   AddAttribute(FSymbolAttri);
   SetAttributesOnChange(DefHighlightChange);
 
-  fDefaultFilter := SYNS_FilterINI;
+  FDefaultFilter := SYNS_FilterINI;
 end; { Create }
 
 procedure TSynIniSyn.SectionOpenProc;
@@ -413,7 +413,7 @@ end;
 
 function TSynIniSyn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterINI;
+  Result := FDefaultFilter <> SYNS_FilterINI;
 end;
 
 class function TSynIniSyn.GetLanguageName: string;

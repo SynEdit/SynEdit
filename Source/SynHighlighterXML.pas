@@ -55,7 +55,7 @@ unit SynHighlighterXML;
 
 interface
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 uses
 {$IFDEF SYN_CLX}
@@ -282,7 +282,7 @@ end;
 procedure TSynXMLSyn.NullProc;
 begin
   FTokenID := tkNull;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynXMLSyn.CarriageReturnProc;
@@ -300,7 +300,7 @@ end;
 
 procedure TSynXMLSyn.SpaceProc;
 begin
-  inc(Run);
+  Inc(Run);
   FTokenID := tkSpace;
   while FLine[Run] <= #32 do
   begin
@@ -432,7 +432,7 @@ begin
             '[': begin
                    while True do
                    begin
-                     inc(Run);
+                     Inc(Run);
                      case FLine[Run] of
                        ']':
                          begin
@@ -453,7 +453,7 @@ begin
                    Break;
                  end;
           end;
-          inc(Run);
+          Inc(Run);
         end;
     end;
     rsDocTypeSquareBraces:
@@ -466,7 +466,7 @@ begin
             Inc(Run);
             Exit;
           end;
-          inc(Run);
+          Inc(Run);
         end;
       end;
   end;

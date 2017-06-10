@@ -47,7 +47,7 @@ The unit SynHighlighterHP48 provides SynEdit with a HP48 assembler highlighter.
 unit SynHighlighterHP48;
 {$ENDIF}
 
-{$I SynEdit.inc}
+{$I SynEdit.Inc}
 
 interface
 
@@ -299,15 +299,16 @@ var
   i: Integer;
 begin
   crc := StringCrc(Value.Name) mod High(FDatas) + 1;
-  if FDatasUsed[crc] = FLengthDatas[crc] then begin
+  if FDatasUsed[crc] = FLengthDatas[crc] then
+  begin
     ReallocMem(FDatas[crc], (FLengthDatas[crc] * 2 + 1) * SizeOf(FDatas[1][0]));
     FLengthDatas[crc] := FLengthDatas[crc] * 2 + 1;
   end;
   FDatas[crc][FDatasUsed[crc]] := Value;
   Result := FSumOfUsed[crc] + FDatasUsed[crc];
-  inc(FDatasUsed[crc]);
+  Inc(FDatasUsed[crc]);
   for i := crc + 1 to High(FSumOfUsed) do
-    inc(FSumOfUsed[i]);
+    Inc(FSumOfUsed[i]);
   Value.SpeedList := Self;
 end;
 
@@ -444,7 +445,7 @@ begin
       for j := i + 1 to FDatasUsed[crc] - 1 do
         FDatas[i - 1] := FDatas[i];
       for j := crc + 1 to High(FDatas) do
-        dec(FSumOfUsed[j]);
+        Dec(FSumOfUsed[j]);
       if FDatasUsed[crc] < FLengthDatas[crc] div 2 then begin
         ReallocMem(FDatas[crc], FDatasUsed[crc] * SizeOf(FDatas[crc][0]));
         FLengthDatas[crc] := FDatasUsed[crc];
@@ -467,7 +468,7 @@ begin
         if i > 0 then
           FDatas[i - 1] := FDatas[i];
       for j := crc + 1 to High(FDatas) do
-        dec(FSumOfUsed[j]);
+        Dec(FSumOfUsed[j]);
       Obj.FSpeedList := nil;
       Exit;
     end;
@@ -539,7 +540,7 @@ begin
   FSAsmNoField.Text := SAsmNoField;
   BaseRange := rsRpl;
   FRange := rsRpl;
-  fDefaultFilter := SYNS_FilterHP48;
+  FDefaultFilter := SYNS_FilterHP48;
 end; { Create }
 
 destructor TSynHP48Syn.Destroy;
@@ -565,12 +566,12 @@ begin
         (FLineStr[Run] = '*') and
         ((Run < Length(FLineStr)) and (FLineStr[Run + 1] = c)) and
         ((Run + 1 = Length(FLineStr)) or (FLineStr[Run + 2] <= ' ')) then begin
-        inc(Run, 2);
+        Inc(Run, 2);
         FRange := rsAsm;
         break;
       end
       else
-        inc(Run);
+        Inc(Run);
 end;
 
 function TSynHP48Syn.RplComProc: TtkTokenKind;
@@ -581,12 +582,12 @@ begin
   else
     while Run <= Length(FLineStr) do
       if FLineStr[Run] = ')' then begin
-        inc(Run);
+        Inc(Run);
         FRange := rsRpl;
         break;
       end
       else
-        inc(Run);
+        Inc(Run);
 end;
 
 function TSynHP48Syn.SlashProc: TtkTokenKind;
@@ -598,21 +599,21 @@ begin
     (Run < Length(FLineStr)) and
     (FLineStr[Run + 1] = '*') and
     ((Run + 1 = Length(FLineStr)) or (FLineStr[Run + 2] <= ' ')) then begin
-    inc(Run, 2);
+    Inc(Run, 2);
     Result := tkAsmComment;
     FRange := rsComAsm2;
   end
   else if (Run < Length(FLineStr)) and (FLineStr[Run + 1] = '/') then begin
-    inc(Run, 2);
+    Inc(Run, 2);
     Result := tkAsmComment;
     while (Run <= Length(FLineStr)) do
       if CharInSet(FLineStr[Run], [#10, #13]) then
       begin
-        inc(Run);
+        Inc(Run);
         break;
       end
       else
-        inc(Run);
+        Inc(Run);
   end
   else
     Result := IdentProc
@@ -623,7 +624,7 @@ begin
   if FRange = rsRpl then
     if ((Run = 1) and ((Length(FLineStr) = 1) or (FLineStr[Run + 1] <= ' '))) or
       ((FLineStr[Run - 1] <= ' ') and ((Length(FLineStr) = Run) or (FLineStr[Run + 1] <= ' '))) then begin
-      inc(Run);
+      Inc(Run);
       Result := tkRplComment;
       FRange := rsComRpl;
     end
@@ -634,7 +635,7 @@ begin
     (Run < Length(FLineStr)) and
     (FLineStr[Run + 1] = '*') and
     ((Run + 2 > Length(FLineStr)) or (FLineStr[Run + 2] <= ' ')) then begin
-    inc(Run, 2);
+    Inc(Run, 2);
     Result := tkAsmComment;
     FRange := rsComAsm1;
   end
@@ -645,16 +646,16 @@ end;
 function TSynHP48Syn.PersentProc: TtkTokenKind;
 begin
   if FRange = rsAsm then begin
-    inc(Run);
+    Inc(Run);
     Result := tkAsmComment;
     while (Run <= Length(FLineStr)) do
       case FLineStr[Run] of
         #10, #13: begin
-            inc(Run);
+            Inc(Run);
             break;
           end;
       else
-        inc(Run);
+        Inc(Run);
       end;
   end
   else
@@ -664,16 +665,16 @@ end;
 function TSynHP48Syn.StarProc: TtkTokenKind;
 begin
   if FRange = rsRpl then begin
-    inc(Run);
+    Inc(Run);
     Result := tkRplComment;
     while (Run <= Length(FLineStr)) do
       case FLineStr[Run] of
         #10, #13: begin
-            inc(Run);
+            Inc(Run);
             break;
           end;
       else
-        inc(Run);
+        Inc(Run);
       end;
   end
   else
@@ -733,14 +734,14 @@ end;
 function TSynHP48Syn.NullProc: TtkTokenKind;
 begin
   Result := tkNull;
-  inc(Run);
+  Inc(Run);
 end;
 
 function TSynHP48Syn.SpaceProc: TtkTokenKind;
 begin
-  inc(Run);
+  Inc(Run);
   while (Run <= Length(FLineStr)) and CharInSet(FLineStr[Run], [#1..#32]) do
-    inc(Run);
+    Inc(Run);
   Result := GetTokenFromRange;
 end;
 
@@ -838,8 +839,9 @@ begin
       Result := inherited LoadFromRegistry(RootKey, Key);
     end
     else
-      Result := false;
-  finally r.Free;
+      Result := False;
+  finally
+    r.Free;
   end;
 end;
 
@@ -859,8 +861,9 @@ begin
       Result := inherited SaveToRegistry(RootKey, Key);
     end
     else
-      Result := false;
-  finally r.Free;
+      Result := False;
+  finally
+    r.Free;
   end;
 end;
 {$ENDIF}
@@ -897,7 +900,7 @@ end;
 
 function TSynHP48Syn.IsFilterStored: Boolean;
 begin
-  Result := fDefaultFilter <> SYNS_FilterHP48;
+  Result := FDefaultFilter <> SYNS_FilterHP48;
 end;
 
 class function TSynHP48Syn.GetLanguageName: string;
@@ -931,7 +934,7 @@ begin
   if FLineStr[Run] >= ' ' then begin
     i := Run;
     while (Run <= Length(FLineStr)) and (FLineStr[Run] > ' ') do
-      inc(Run);
+      Inc(Run);
     s := Copy(FLineStr, i, Run - i);
     if (s = 'RPL') or (s = 'ENDCODE') then begin
       FRange := rsRpl;
@@ -939,7 +942,7 @@ begin
     end;
   end;
   while (Run <= Length(FLineStr)) and (FLineStr[Run] <= ' ') and (FLineStr[Run] <> #10) do
-    inc(Run);
+    Inc(Run);
   if Run <= Length(FLineStr) then
     FRange := rssasm2
   else
@@ -953,14 +956,14 @@ var
 begin
   Result := tksAsm;
   while (Run <= Length(FLineStr)) and (FLineStr[Run] <= ' ') and (FLineStr[Run] <> #10) do
-    inc(Run);
+    Inc(Run);
   if Run > 30 then begin
     FRange := rssasm3;
     Exit;
   end;
   i := Run;
   while (Run <= Length(FLineStr)) and (FLineStr[Run] > ' ') do
-    inc(Run);
+    Inc(Run);
   s := Copy(FLineStr, i, Run - i);
   if (s = 'ENDCODE') or (s = 'RPL') then begin
     FRange := rsRpl;
@@ -969,11 +972,11 @@ begin
   else begin
     if FSAsmNoField.Find(s) = nil then begin
       while (Run <= Length(FLineStr)) and (FLineStr[Run] <= ' ') and (FLineStr[Run] <> #10) do
-        inc(Run);
+        Inc(Run);
       while (Run <= Length(FLineStr)) and (FLineStr[Run] > ' ') do
-        inc(Run);
+        Inc(Run);
       while (Run <= Length(FLineStr)) and (FLineStr[Run] <= ' ') and (FLineStr[Run] <> #10) do
-        inc(Run);
+        Inc(Run);
     end;
     if Run <= Length(FLineStr) then
       FRange := rssasm3
@@ -986,8 +989,8 @@ function TSynHP48Syn.SasmProc3: TtkTokenKind;
 begin
   Result := tksAsmComment;
   while (Run <= Length(FLineStr)) and (FLineStr[Run] <> #10) do
-    inc(Run);
-  if Run <= Length(FLineStr) then inc(Run);
+    Inc(Run);
+  if Run <= Length(FLineStr) then Inc(Run);
   FRange := rssasm1;
 end;
 
