@@ -227,7 +227,7 @@ begin
       if IsCurrentToken(Entry.Keyword) then
       begin
         Result := TtkTokenKind(Entry.Kind);
-        exit;
+        Exit;
       end;
     Entry := Entry.Next;
   end;
@@ -406,7 +406,7 @@ begin
   while FLine[Run] = '0' do
     Inc(Run);
   if not IsIdentChar(FLine[Run]) then
-    exit;
+    Exit;
   // check for numbers with a base prefix
   if CharInSet(FLine[Run], ['2'..'9']) and (FLine[Run + 1] = '_') then
   begin
@@ -615,7 +615,7 @@ end;
 
 function TSynM3Syn.GetRange: Pointer;
 begin
-  result := FRange.p;
+  Result := FRange.p;
 end;
 
 function TSynM3Syn.GetTokenAttribute: TSynHighlighterAttributes;

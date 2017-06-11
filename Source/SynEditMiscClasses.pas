@@ -1171,7 +1171,7 @@ begin
       with TInternalResource(InternalResources[idx]) do begin
         UsageCount := UsageCount + 1;
         Result := Bitmap;
-        exit;
+        Exit;
       end;
 
   { There is no loaded resource in the list so let's create a new one }
@@ -1194,7 +1194,7 @@ var
   begin
     for Result := 0 to InternalResources.Count - 1 do
       if (TInternalResource (InternalResources[Result]).Bitmap = FImages) then
-        exit;
+        Exit;
     Result := -1;
   end;
 begin
@@ -1203,7 +1203,7 @@ begin
 
   { Ey, what's this ???? }
   if (idx = -1) then
-    exit;
+    Exit;
 
   { Decrement the usagecount in the object. If there are no more users
     remove the object from the list and free it }

@@ -243,12 +243,12 @@ begin
   while Assigned(Entry) do
   begin
     if Entry.KeywordLen > FStringLen then
-      break
+      Break
     else if Entry.KeywordLen = FStringLen then
       if IsCurrentToken(Entry.Keyword) then
       begin
         Result := TtkTokenKind(Entry.Kind);
-        exit;
+        Exit;
       end;
     Entry := Entry.Next;
   end;
@@ -269,7 +269,7 @@ begin
       if SynWideLowerCase(Temp^)[1] <> SynWideLowerCase(Token[i])[1] then
       begin
         Result := False;
-        break;
+        Break;
       end;
       Inc(Temp);
     end;
@@ -369,7 +369,7 @@ begin
     if FLine[Run] = ';' then
     begin
       Inc(Run);
-      break;
+      Break;
     end;
   until IsLineEnd(Run);
 end;
@@ -409,7 +409,7 @@ begin
     if FLine[Run] = ']' then
     begin
       Inc(Run);
-      break;
+      Break;
     end;
   until IsLineEnd(Run);
 end;
@@ -509,7 +509,7 @@ begin
     if FLine[Run] = '"' then begin
       Inc(Run);
       if FLine[Run] <> '"' then // embedded "" does not end the string
-        break;
+        Break;
     end;
   until IsLineEnd(Run);
 end;

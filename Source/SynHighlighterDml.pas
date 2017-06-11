@@ -3278,7 +3278,8 @@ begin
   begin
     case FLine[Run] of
       '.':
-        if FLine[Run + 1] = '.' then break;
+        if FLine[Run + 1] = '.' then
+          Break;
     end;
     Inc(Run);
   end;
@@ -3302,7 +3303,7 @@ begin
     begin
       Inc(Run);
       FTokenID := tkSymbol;
-      exit;
+      Exit;
     end;
     Dec(p);
   end;

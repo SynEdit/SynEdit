@@ -182,10 +182,10 @@ begin
       ']':
         begin
           Inc(Run);
-          break
+          Break
         end;
-      #10: break;
-      #13: break;
+      #10, #13:
+        Break;
     else Inc(Run);
     end;
 end;
@@ -211,9 +211,10 @@ begin
   Inc(Run);
   while FLine[Run] <> #0 do
     case FLine[Run] of
-      '=': break;
-      #10: break;
-      #13: break;
+      '=':
+        Break;
+      #10, #13:
+        Break;
       else Inc(Run);
     end;
 end;
@@ -241,7 +242,7 @@ begin
       if IsTextChar then
         Inc(Run)
       else
-        break;
+        Break;
   end;
 end;
 
@@ -307,9 +308,10 @@ begin
   Inc(Run);
   while FLine[Run] <> #0 do
     case FLine[Run] of
-      #10: break;
-      #13: break;
-      else Inc(Run);
+      #10, #13:
+        Break;
+      else
+        Inc(Run);
     end;
 end;
 
@@ -327,7 +329,8 @@ begin
   if (FLine[Run + 1] = #34) and (FLine[Run + 2] = #34) then Inc(Run, 2);
   repeat
     case FLine[Run] of
-      #0, #10, #13: break;
+      #0, #10, #13:
+        Break;
     end;
     Inc(Run);
   until FLine[Run] = #34;
@@ -341,7 +344,8 @@ begin
   if (FLine[Run + 1] = #39) and (FLine[Run + 2] = #39) then Inc(Run, 2);
   repeat
     case FLine[Run] of
-      #0, #10, #13: break;
+      #0, #10, #13:
+        Break;
     end;
     Inc(Run);
   until FLine[Run] = #39;

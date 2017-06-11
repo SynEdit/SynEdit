@@ -234,29 +234,29 @@ end;  { CommentProc }
 
 procedure TSynTeXSyn.MathModeProc;
 begin
- FTokenID := tkMathMode;
- Inc(Run);
+  FTokenID := tkMathMode;
+  Inc(Run);
 end;  { MathModeProc }
 
 procedure TSynTeXSyn.ControlSequenceProc;
 begin
- FTokenID := tkControlSequence;
- repeat
-   case fLine[Run] of
-     #0..#31: Break;  //No Control Chars !
-     #48..#57: Break;  //No Numbers !
-     #33..#47, #58..#64,               //Just the Characters that
-     #91, #93,#94, #123,              //only can follow to '\'
-     #125, #126:
-       begin
-         if (FLine[Run-1] = '\') then
-           Inc(Run,1);
-         Break;
-       end;
-   end;
-   Inc(Run);
- until fLine[Run] = #32;
- exit;
+  FTokenID := tkControlSequence;
+  repeat
+    case fLine[Run] of
+      #0..#31: Break;  //No Control Chars !
+      #48..#57: Break;  //No Numbers !
+      #33..#47, #58..#64,               //Just the Characters that
+      #91, #93,#94, #123,              //only can follow to '\'
+      #125, #126:
+        begin
+          if (FLine[Run-1] = '\') then
+            Inc(Run,1);
+          Break;
+        end;
+    end;
+    Inc(Run);
+  until fLine[Run] = #32;
+  Exit;
 end;  { ControlSequenceProc }
 
 procedure TSynTeXSyn.Next;

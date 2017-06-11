@@ -454,7 +454,7 @@ begin
           if Editor.IsWordBreakChar(vRunner^) then
           begin
             vRowEnd := vRunner;
-            break;
+            Break;
           end;
           Dec(vRunner);
         end;
@@ -586,7 +586,7 @@ begin
           if Editor.IsWordBreakChar(vRunner^) then
           begin
             vRowEnd := vRunner;
-            break;
+            Break;
           end;
           Dec(vRunner);
         end;

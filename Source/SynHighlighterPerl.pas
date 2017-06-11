@@ -3305,7 +3305,8 @@ begin
   FTokenID := tkComment;
   repeat
     case FLine[Run] of
-      #0, #10, #13: break;
+      #0, #10, #13:
+        Break;
     end;
     Inc(Run);
   until FLine[Run] = #0;
@@ -3371,7 +3372,7 @@ begin
             begin                      {predefined variables}
               Inc(Run, 2);
               FTokenID := tkVariable;
-              exit;
+              Exit;
             end;
           '^':
             begin
@@ -3380,13 +3381,13 @@ begin
                   begin                {predefined variables}
                     Inc(Run, 3);
                     FTokenID := tkVariable;
-                    exit;
+                    Exit;
                   end;
                 #0, #10, #13:          {predefined variables}
                   begin
                     Inc(Run, 2);
                     FTokenID := tkVariable;
-                    exit;
+                    Exit;
                   end;
               end;
             end;
@@ -3399,13 +3400,13 @@ begin
             begin
               Inc(Run, 2);
               FTokenID := tkSymbol;
-              exit;
+              Exit;
             end;
           #0, #10, #13:                {mod}
             begin
               Inc(Run);
               FTokenID := tkSymbol;
-              exit;
+              Exit;
             end;
         end;
       end;
@@ -3416,13 +3417,13 @@ begin
             begin
               Inc(Run, 2);
               FTokenID := tkSymbol;
-              exit;
+              Exit;
             end;
           #0, #10, #13:                {repetition}
             begin
               Inc(Run);
               FTokenID := tkSymbol;
-              exit;
+              Exit;
             end;
         end;
       end;
@@ -3542,19 +3543,19 @@ begin
             Inc(Run);
 
           FTokenID := tkSymbol;        {range}
-          exit;
+          Exit;
         end;
       '=':
         begin
           Inc(Run, 2);
           FTokenID := tkSymbol;        {concatenation assign}
-          exit;
+          Exit;
         end;
       'a'..'z', 'A'..'Z', '_':
         begin
           FTokenID := tkSymbol;        {concatenation}
           Inc(Run);
-          exit;
+          Exit;
         end;
     end;
   end;
@@ -3564,9 +3565,9 @@ begin
   begin
     case FLine[Run] of
       '.':
-        if FLine[Run + 1] = '.' then break;
+        if FLine[Run + 1] = '.' then Break;
       '-':                             {check for e notation}
-        if not ((FLine[Run + 1] = 'e') or (FLine[Run + 1] = 'E')) then break;
+        if not ((FLine[Run + 1] = 'e') or (FLine[Run + 1] = 'E')) then Break;
     end;
     Inc(Run);
   end;
@@ -3672,7 +3673,8 @@ begin
   if (FLine[Run + 1] = #34) and (FLine[Run + 2] = #34) then Inc(Run, 2);
   repeat
     case FLine[Run] of
-      #0, #10, #13: break;
+      #0, #10, #13:
+        Break;
       #92:
         { If we're looking at a backslash, and the following character is an
           end quote, and it's preceeded by an odd number of backslashes, then
@@ -3698,7 +3700,8 @@ begin
   FTokenID := tkString;
   repeat
     case FLine[Run] of
-      #0, #10, #13: break;
+      #0, #10, #13:
+        Break;
     end;
     Inc(Run);
   until FLine[Run] = #39;

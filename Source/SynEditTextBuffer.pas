@@ -672,17 +672,18 @@ var
   P, PLineBreak: PChar;
   PRec: PSynEditStringRec;
 begin
-  if FCount = 0 then begin
-     Result := '';
-     exit;
+  if FCount = 0 then
+  begin
+    Result := '';
+    Exit;
   end;
   LineBreakSize := Length(Separators);
   PLineBreak := Pointer(Separators);
 
   // compute buffer size
-  Size :=   (FCount-1) * LineBreakSize
-          + LineCharIndex( FCount-1 )
-          + Length( FList^[FCount-1].FString );
+  Size :=   (FCount - 1) * LineBreakSize
+          + LineCharIndex( FCount - 1 )
+          + Length( FList^[FCount - 1].FString );
   SetLength(Result, Size);
 
   P := Pointer(Result);
@@ -840,7 +841,7 @@ var
   i, Cnt: Integer;
 begin
   Cnt := NewStrings.Count;
-  if Cnt = 0 then exit;
+  if Cnt = 0 then Exit;
 
   BeginUpdate;
   try
@@ -857,7 +858,7 @@ procedure TSynEditStringList.InsertText(Index: Integer;
 var
   TmpStringList: TUnicodeStringList;
 begin
-  if NewText = '' then exit;
+  if NewText = '' then Exit;
 
   TmpStringList := TUnicodeStringList.Create;
   try
@@ -1009,7 +1010,7 @@ begin
     end;
 
     FString := PWideChar(A);
-    Pointer(A) := nil; // do not release the array on procedure exit
+    Pointer(A) := nil; // do not release the array on procedure Exit
   end;
 end;
 {$ENDIF OWN_UnicodeString_MEMMGR}
@@ -1337,9 +1338,9 @@ end;
 function TSynEditUndoList.LastChangeReason: TSynChangeReason;
 begin
   if FItems.Count = 0 then
-    result := crNothing
+    Result := crNothing
   else
-    result := TSynEditUndoItem(FItems[FItems.Count - 1]).FChangeReason;
+    Result := TSynEditUndoItem(FItems[FItems.Count - 1]).FChangeReason;
 end;
 
 procedure TSynEditUndoList.AddGroupBreak;

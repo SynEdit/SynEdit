@@ -377,17 +377,17 @@ begin
     #0:
       begin
         NullProc;
-        exit;
+        Exit;
       end;
     #10:
       begin
         LFProc;
-        exit;
+        Exit;
       end;
     #13:
       begin
         CRProc;
-        exit;
+        Exit;
       end;
   end;
 
@@ -406,12 +406,13 @@ begin
               FRange := rsMultiLineDirective
           else
             FRange := rsUnknown;
-          break;
+          Break;
         end else
           Inc(Run);
-      #10: break;
-      #13: break;
-    else Inc(Run);
+      #10, #13:
+        Break;
+      else
+        Inc(Run);
     end;
 end;
 
@@ -1046,13 +1047,13 @@ begin
                   else
                     FRange := rsUnknown;
                   end;
-                break;
+                Break;
               end else Inc(Run);
             #10, #13:
               begin
                 if FRange = rsDirectiveComment then
                   FRange := rsAnsiC;
-                break;
+                Break;
               end;
           else Inc(Run);
           end;

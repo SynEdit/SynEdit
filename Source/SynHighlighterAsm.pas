@@ -209,12 +209,12 @@ begin
   while Assigned(Entry) do
   begin
     if Entry.KeywordLen > FStringLen then
-      break
+      Break
     else if Entry.KeywordLen = FStringLen then
       if IsCurrentToken(Entry.Keyword) then
       begin
         Result := TtkTokenKind(Entry.Kind);
-        exit;
+        Exit;
       end;
     Entry := Entry.Next;
   end;
@@ -351,7 +351,8 @@ begin
     Inc(Run, 2);
   repeat
     case FLine[Run] of
-      #0, #10, #13: break;
+      #0, #10, #13:
+        Break;
     end;
     Inc(Run);
   until FLine[Run] = #34;
@@ -365,7 +366,8 @@ begin
     Inc(Run, 2);
   repeat
     case FLine[Run] of
-      #0, #10, #13: break;
+      #0, #10, #13:
+        Break;
     end;
     Inc(Run);
   until FLine[Run] = #39;

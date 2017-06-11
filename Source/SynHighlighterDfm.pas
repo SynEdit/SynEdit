@@ -358,7 +358,7 @@ begin
     if FLine[Run] = '}' then begin
       Inc(Run);
       FRange := rsUnknown;
-      break;
+      Break;
     end;
   until IsLineEnd(Run);
 end;
@@ -434,7 +434,7 @@ begin
     if FLine[Run] = '.' then
     begin
       if FLine[Run + 1] <> '.' then Inc(Run);
-      break;
+      Break;
     end;
   until not IsNumberChar;
 end;
@@ -500,9 +500,11 @@ begin
   FTokenID := tkString;
   repeat
     Inc(Run);
-    if FLine[Run] = '''' then begin
+    if FLine[Run] = '''' then
+    begin
       Inc(Run);
-      if FLine[Run] <> '''' then break
+      if FLine[Run] <> '''' then
+        Break
     end;
   until IsLineEnd(Run);
 end;

@@ -252,7 +252,7 @@ begin
       begin
         s := FCompletions[i];
         if WideCompareStr(s, AToken) = 0 then
-          break
+          Break
         else if WideCompareStr(Copy(s, 1, Len), AToken) = 0 then
         begin
           Inc(NumMaybe);
@@ -267,7 +267,7 @@ begin
       begin
         s := FCompletions[i];
         if WideCompareText(s, AToken) = 0 then
-          break
+          Break
         else if WideCompareText(Copy(s, 1, Len), AToken) = 0 then
         begin
           Inc(NumMaybe);
@@ -318,7 +318,7 @@ begin
                 Inc(p.Char, j - 1)
               else
                 p.Char := j;
-              break;
+              Break;
             end;
           end;
           s := Temp.Text;

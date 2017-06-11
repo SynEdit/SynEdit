@@ -848,7 +848,7 @@ begin
         if AttriName = SrcAttri.Name then
         begin
           Attribute[i].Assign(SrcAttri);
-          break;
+          Break;
         end;
       end;
     end;
@@ -1114,7 +1114,7 @@ begin
       if Temp^ <> Token[i] then
       begin
         Result := False;
-        break;
+        Break;
       end;
       Inc(Temp);
     end;

@@ -297,17 +297,17 @@ begin
     #0:
       begin
         NullProc;
-        exit;
+        Exit;
       end;
     #10:
       begin
         LFProc;
-        exit;
+        Exit;
       end;
     #13:
       begin
         CRProc;
-        exit;
+        Exit;
       end;
   end;
 
@@ -325,11 +325,11 @@ begin
             FRange := rsDirective
           else
             FRange := rsUnknown;
-          break;
+          Break;
         end else
           Inc(Run);
-      #10: break;
-      #13: break;
+      #10, #13:
+        Break;
     else Inc(Run);
     end;
 end;
@@ -611,7 +611,8 @@ begin
   begin
     case FLine[Run] of
       '.':
-        if FLine[Run + 1] = '.' then break;
+        if FLine[Run + 1] = '.' then
+          Break;
     end;
     Inc(Run);
   end;

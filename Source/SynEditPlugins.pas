@@ -465,7 +465,7 @@ begin
   begin
     for Col := CurrentEditor.CaretX - 1 downto 1 do
       if not CurrentEditor.IsIdentChar(S[Col])then
-        break;
+        Break;
     Result := Copy(S, Col + 1, CurrentEditor.CaretX - Col - 1);
   end;
 end;

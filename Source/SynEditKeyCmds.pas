@@ -937,8 +937,8 @@ var
 begin
   if pos('ec', AString) = 1 then
   begin
-    result := AString;
-    exit;
+    Result := AString;
+    Exit;
   end;
 
   WorkStr := AString;

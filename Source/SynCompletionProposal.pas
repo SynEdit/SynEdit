@@ -761,7 +761,7 @@ var
     begin
       CurrentChunk := CurrentChunk  + '\';
       NextChar;
-      exit;
+      Exit;
     end;
 
     if CurrentChunk <> '' then
@@ -880,7 +880,7 @@ begin
   Assert(Assigned(ChunkList));
 
   if FormattedString = '' then
-    exit;
+    Exit;
 
   ErrorFound := False;
   CurrentChunk := '';
@@ -1935,7 +1935,7 @@ var
 begin
   FCurrentString := Value;
   if DisplayType <> ctCode then
-    exit;
+    Exit;
   if FMatchText then
   begin
     if fMatchTextAnywhere then
@@ -1986,7 +1986,7 @@ end;
 procedure TSynBaseCompletionProposalForm.SetPosition(const Value: Integer);
 begin
   if ((Value <= 0) and (FPosition = 0)) or (FPosition = Value) then
-    exit;
+    Exit;
 
   if Value <= FAssignedList.Count - 1 then
   begin
@@ -2075,7 +2075,7 @@ const
   {$ENDIF}
 {$ENDIF}
 begin
-  if csDesigning in ComponentState then exit;
+  if csDesigning in ComponentState then Exit;
 
 {$IFDEF SYN_COMPILER_4_UP}
   if GetKeyState(VK_CONTROL) >= 0 then nDelta := Mouse.WheelScrollLines
@@ -2108,7 +2108,7 @@ var
 begin
   Result := Form;
   if Form = nil then
-    exit;
+    Exit;
   if (Form is TSynForm) and
      ((Form as TForm).FormStyle = fsMDIChild) then
     for I := 0 to Screen.FormCount-1 do
@@ -2119,7 +2119,7 @@ begin
           if MDIChildren[J] = Form then
           begin
             Result := Screen.Forms[I];
-            exit;
+            Exit;
           end;
       end;
 end;
@@ -2499,7 +2499,7 @@ begin
   begin
     if Form.Visible and (Kind = ctParams) then
       Form.Visible := False;
-    exit;
+    Exit;
   end;
 
 {$IFDEF SYN_DELPHI_XE_UP}
@@ -3217,12 +3217,12 @@ var
 begin
   Result := '';
   if not Assigned(AEditor) then
-    exit;
+    Exit;
 
   Line := AEditor.Lines[AEditor.CaretXY.Line - 1];
   X := AEditor.CaretXY.Char - 1;
   if (X = 0) or (X > Length(Line)) or (Length(Line) = 0) then
-    exit;
+    Exit;
 
   if Self.IsWordBreakChar(Line[X]) then
     Dec(X);
@@ -3289,7 +3289,7 @@ end;
 
 procedure TSynCompletionProposal.TimerExecute(Sender: TObject);
 begin
-  if not Assigned(FTimer) then exit;
+  if not Assigned(FTimer) then Exit;
   FTimer.Enabled := False;
   if Application.Active then
   begin
@@ -3365,7 +3365,7 @@ end;
 
 function TSynCompletionProposal.EditorsCount: Integer;
 begin
-  result := FEditors.count;
+  Result := FEditors.count;
 end;
 
 function TSynCompletionProposal.GetEditor(i: Integer): TCustomSynEdit;
@@ -3381,8 +3381,8 @@ var
   i: Integer;
 begin
   i := FEditors.Remove(AEditor);
-  result := i <> -1;
-  if result then begin
+  Result := i <> -1;
+  if Result then begin
     if Form.CurrentEditor = AEditor then
     begin
       if Form.Visible then

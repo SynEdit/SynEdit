@@ -213,7 +213,7 @@ begin
           if FWhole and not TestWholeWord then Break;
           Inc(FCount);
           Result := Run - FOrigin - FPatLen + 2;
-          exit;
+          Exit;
         end;
         Inc(I);
         Inc(J);

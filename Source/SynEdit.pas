@@ -2471,7 +2471,7 @@ begin
 
   FScrollTimer.Enabled := False;
   if (Button = mbRight) and (Shift = [ssRight]) and Assigned(PopupMenu) then
-    exit;
+    Exit;
   MouseCapture := False;
   if (sfPossibleGutterClick in FStateFlags) and (X < FGutterWidth) and (Button <> mbRight) then
     DoOnGutterClick(Button, X, Y)
@@ -2513,7 +2513,7 @@ begin
           if X < offs then
           begin
             mark := allmrk[i];
-            break;
+            Break;
           end;
         end;
       end; //for
@@ -3422,7 +3422,7 @@ var
         while pTok^ <> #0 do
         begin
           if pTok^ <> #32 then
-            break;
+            Break;
           Inc(pTok);
         end;
         bIsSpaces := pTok^ = #0;
@@ -3675,7 +3675,7 @@ var
               if nTokenPos + nTokenLen > vLastChar then
               begin
                 if nTokenPos > vLastChar then
-                  break;
+                  Break;
                 if WordWrap then
                   nTokenLen := vLastChar - nTokenPos - 1
                 else
@@ -3818,7 +3818,7 @@ var
 {$ENDIF}
 begin
   if not CanPaste then
-    exit;
+    Exit;
   DoOnPaintTransient(ttBefore);
   BeginUndoBlock;
   AddPasteEndMarker := False;
@@ -5467,7 +5467,7 @@ begin
   CommandProcessor(ecLostFocus, #0, nil);
   //Added check for focused to prevent caret disappearing problem
   if Focused or FAlwaysShowCaret then
-    exit;
+    Exit;
   HideCaret;
   Windows.DestroyCaret;
   if FHideSelection and SelAvail then
@@ -5791,7 +5791,7 @@ begin
   if Value.Char > Length(TempString) then
   begin
     InternalCaretXY := BufferCoord(Length(TempString), Value.Line);
-    exit;
+    Exit;
   end;
 
   CharScan;
@@ -5823,12 +5823,12 @@ end;
 
 function TCustomSynEdit.GetCanUndo: Boolean;
 begin
-  result := not ReadOnly and FUndoList.CanUndo;
+  Result := not ReadOnly and FUndoList.CanUndo;
 end;
 
 function TCustomSynEdit.GetCanRedo: Boolean;
 begin
-  result := not ReadOnly and FRedoList.CanUndo;
+  Result := not ReadOnly and FRedoList.CanUndo;
 end;
 
 function TCustomSynEdit.GetCanPaste;
@@ -5889,7 +5889,7 @@ var
   FKeepGoing: Boolean;
 begin
   if ReadOnly then
-    exit;
+    Exit;
 
   FLastChange := FRedoList.LastChangeReason;
   FAutoComplete := FLastChange = crAutoCompleteBegin;
@@ -6122,7 +6122,7 @@ var
   FKeepGoing: Boolean;
 begin
   if ReadOnly then
-    exit;
+    Exit;
 
   RemoveGroupBreak;
 
@@ -7353,7 +7353,7 @@ begin
                         begin
                           SpaceCount2 := LeftSpacesEx(Lines[BackCounter], True);
                           if (SpaceCount2 > 0) and (SpaceCount2 < SpaceCount1) then
-                            break;
+                            Break;
                           Dec(BackCounter);
                         end
                       else
@@ -7361,7 +7361,7 @@ begin
                         begin
                           SpaceCount2 := LeftSpaces(Lines[BackCounter]);
                           if (SpaceCount2 > 0) and (SpaceCount2 < SpaceCount1) then
-                            break;
+                            Break;
                           Dec(BackCounter);
                         end;
                       if (BackCounter = -1) and (SpaceCount2 > SpaceCount1) then
@@ -7412,7 +7412,7 @@ begin
                         begin
                           SpaceCount2 := LeftSpacesEx(Lines[BackCounter], True);
                           if (SpaceCount2 > 0) and (SpaceCount2 < SpaceCount1) then
-                            break;
+                            Break;
                           Dec(BackCounter);
                         end
                       else
@@ -7420,7 +7420,7 @@ begin
                         begin
                           SpaceCount2 := LeftSpaces(Lines[BackCounter]);
                           if (SpaceCount2 > 0) and (SpaceCount2 < SpaceCount1) then
-                            break;
+                            Break;
                           Dec(BackCounter);
                         end;
                       if (BackCounter = -1) and (SpaceCount2 > SpaceCount1) then
@@ -7731,7 +7731,8 @@ begin
               while BackCounter >= 0 do
               begin
                 SpaceCount2 := LeftSpacesEx(Lines[BackCounter],True);
-                if Length(Lines[BackCounter]) > 0 then break;
+                if Length(Lines[BackCounter]) > 0 then
+                  Break;
                 Dec(BackCounter);
               end;
             end;
@@ -8464,18 +8465,18 @@ end;
 function TCustomSynEdit.UnifiedSelection: TBufferBlock;
 begin
   if BlockBegin.Line > BlockEnd.Line then begin
-    result.BeginLine := BlockEnd.Line;
-    result.EndLine := BlockBegin.Line;
+    Result.BeginLine := BlockEnd.Line;
+    Result.EndLine := BlockBegin.Line;
   end else begin
-    result.BeginLine := BlockBegin.Line;
-    result.EndLine := BlockEnd.Line;
+    Result.BeginLine := BlockBegin.Line;
+    Result.EndLine := BlockEnd.Line;
   end;
   if BlockBegin.Char > BlockEnd.Char then begin
-    result.BeginChar := BlockEnd.Char;
-    result.EndChar := BlockBegin.Char;
+    Result.BeginChar := BlockEnd.Char;
+    Result.EndChar := BlockBegin.Char;
   end else begin
-    result.BeginChar := BlockBegin.Char;
-    result.EndChar := BlockEnd.Char;
+    Result.BeginChar := BlockBegin.Char;
+    Result.EndChar := BlockEnd.Char;
   end;
 end;
 
@@ -8494,7 +8495,7 @@ const
 {$ENDIF}
 begin
   if csDesigning in ComponentState then
-    exit;
+    Exit;
 
   Msg.Result := 1;
 
@@ -8599,7 +8600,7 @@ begin
 
   Result := 0;
   // can't search for or replace an empty string
-  if Length(ASearch) = 0 then exit;
+  if Length(ASearch) = 0 then Exit;
   // get the text range to search in, ignore the "Search in selection only"
   // option if nothing is selected
   bBackward := (ssoBackwards in AOptions);
@@ -8684,14 +8685,14 @@ begin
         InternalCaretXY := ptCurrent;
         if bBackward then InternalCaretXY := BlockBegin else InternalCaretXY := ptCurrent;
         // If it's a search only we can leave the procedure now.
-        if not (bReplace or bReplaceAll) then exit;
+        if not (bReplace or bReplaceAll) then Exit;
         // Prompt and replace or replace all.  If user chooses to replace
         // all after prompting, turn off prompting.
         if bPrompt and Assigned(FOnReplaceText) then
         begin
           nAction := DoOnReplaceText(ASearch, AReplace, ptCurrent.Line, nFound);
           if nAction = raCancel then
-            exit;
+            Exit;
         end
         else
           nAction := raReplace;
@@ -8729,7 +8730,7 @@ begin
           end;
         end;
         if not bReplaceAll then
-          exit;
+          Exit;
       end;
       // search next / previous line
       if bBackward then
@@ -8778,7 +8779,7 @@ begin
   begin
     if TWinControl (FFocusList.Last).CanFocus then
       TWinControl (FFocusList.Last).SetFocus;
-    exit;
+    Exit;
   end;
   inherited;
 end;
@@ -9099,7 +9100,7 @@ begin
         if iCurr = iFontStyles[cStyle] then
         begin
           iHasStyle[cStyle] := True;
-          break;
+          Break;
         end;
     end;
   end
@@ -9109,7 +9110,7 @@ begin
       if iCurr = iFontStyles[cStyle] then
       begin
         iHasStyle[cStyle] := True;
-        break;
+        Break;
       end;
   end;
 
@@ -9283,7 +9284,7 @@ begin
       else
         FBlockEnd.Char := 1;
     end;
-    exit;
+    Exit;
   end;
   i := 0;
   iLine := 0;
@@ -9304,18 +9305,19 @@ begin
           p := @PrevLine[MinLen];
           // scan over non-whitespaces
           repeat
-            if (p^ = #9) or (p^ = #32) then break;
+            if (p^ = #9) or (p^ = #32) then
+              Break;
             Inc(i);
             Inc(p);
           until p^ = #0;
           // scan over whitespaces
           if p^ <> #0 then
             repeat
-              if (p^ <> #9) and (p^ <> #32) then break;
+              if (p^ <> #9) and (p^ <> #32) then Break;
               Inc(i);
               Inc(p);
             until p^ = #0;
-          break;
+          Break;
         end;
         Dec(iLine);
       until iLine < 0;
@@ -9442,7 +9444,7 @@ begin
   if (eoTabIndent in Options) and ((SelTabBlock) or (SelTabLine)) then
   begin
     DoBlockUnIndent;
-    exit;
+    Exit;
   end;
 
   NewX := CaretX;
@@ -9461,18 +9463,18 @@ begin
           p := @PrevLine[MaxLen];
           // scan over whitespaces
           repeat
-            if p^ <> #32 then break;
+            if p^ <> #32 then Break;
             Dec(NewX);
             Dec(p);
           until NewX = 1;
           // scan over non-whitespaces
           if NewX <> 1 then
             repeat
-              if p^ = #32 then break;
+              if p^ = #32 then Break;
               Dec(NewX);
               Dec(p);
             until NewX = 1;
-          break;
+          Break;
         end;
         Dec(iLine);
       until iLine < 0;
@@ -9816,7 +9818,7 @@ var
     begin
       Result := 1;
       SomethingToDelete := True;
-      exit;
+      Exit;
     end;
     //Deal with compound tabwidths  Sometimes they have TabChars after a few
     //spaces, yet we need to delete the whole tab width even though the char
@@ -10182,13 +10184,13 @@ begin
                   begin
                     // matching bracket found, set caret and bail out
                     Result := P;
-                    exit;
+                    Exit;
                   end;
                 end;
               end;
             end;
             // get previous line if possible
-            if PosY = 1 then break;
+            if PosY = 1 then Break;
             Dec(PosY);
             Line := Lines[PosY - 1];
             PosX := Length(Line) + 1;
@@ -10220,7 +10222,7 @@ begin
                   begin
                     // matching bracket found, set caret and bail out
                     Result := P;
-                    exit;
+                    Exit;
                   end;
                 end;
               end;
@@ -10234,7 +10236,7 @@ begin
           until False;
         end;
         // don't test the other brackets, we're done
-        break;
+        Break;
       end;
   end;
 end;
@@ -10274,7 +10276,7 @@ begin
           Attri := Highlighter.GetTokenAttribute;
           TokenType := Highlighter.GetTokenKind;
           Result := True;
-          exit;
+          Exit;
         end;
         Highlighter.Next;
       end;
@@ -10293,7 +10295,7 @@ begin
   begin
     Entry := THookedCommandHandlerEntry(FHookedCommandHandlers[Result]);
     if Entry.Equals(AHandlerProc) then
-      break;
+      Break;
     Dec(Result);
   end;
 end;
@@ -10314,7 +10316,7 @@ begin
 {$IFDEF SYN_DEVELOPMENT_CHECKS}
     raise Exception.Create('Event handler is NIL in RegisterCommandHandler');
 {$ENDIF}
-    exit;
+    Exit;
   end;
   if not Assigned(FHookedCommandHandlers) then
     FHookedCommandHandlers := TObjectList.Create;
@@ -10338,7 +10340,7 @@ begin
 {$IFDEF SYN_DEVELOPMENT_CHECKS}
     raise Exception.Create('Event handler is NIL in UnregisterCommandHandler');
 {$ENDIF}
-    exit;
+    Exit;
   end;
   i := FindHookedCmdEvent(AHandlerProc);
   if i > -1 then
@@ -10799,7 +10801,7 @@ begin
     if Chars + x + 2 > Index then
     begin
       x := Index - Chars;
-      break;
+      Break;
     end;
     Inc(Chars, x + 2);
     x := 0;
@@ -11388,7 +11390,7 @@ end;
 
 function TSynEditMarkList.Last: TSynEditMark;
 begin
-  result := TSynEditMark(inherited Last);
+  Result := TSynEditMark(inherited Last);
 end;
 
 function TSynEditMarkList.Extract(Item: TSynEditMark): TSynEditMark;
@@ -11419,7 +11421,8 @@ begin
     begin
       Inc(cnt);
       marks[cnt] := Items[i];
-      if cnt = MAX_MARKS then break;
+      if cnt = MAX_MARKS then
+        Break;
     end;
   end;
 end;

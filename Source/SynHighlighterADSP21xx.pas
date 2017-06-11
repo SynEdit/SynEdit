@@ -2150,7 +2150,8 @@ begin
   if (FLine[Run + 1] = #39) and (FLine[Run + 2] = #39) then Inc(Run, 2);
   repeat
     case FLine[Run] of
-      #0, #10, #13: break;
+      #0, #10, #13:
+        Break;
     end;
     Inc(Run);
   until FLine[Run] = #39;
@@ -2164,17 +2165,17 @@ begin
     #0:
       begin
         NullProc;
-        exit;
+        Exit;
       end;
     #10:
       begin
         LFProc;
-        exit;
+        Exit;
       end;
     #13:
       begin
         CRProc;
-        exit;
+        Exit;
       end;
   end;
 
@@ -2184,10 +2185,10 @@ begin
         begin
           FRange := rsUnknown;
           Inc(Run);
-          break;
+          Break;
         end;
-      #10: break;
-      #13: break;
+      #10, #13:
+        Break;
       else Inc(Run);
     end;
 end;
@@ -2199,17 +2200,17 @@ begin
     #0: 
       begin
         NullProc;
-        exit;
+        Exit;
       end;
     #10:
       begin
         LFProc;
-        exit;
+        Exit;
       end;
     #13:
       begin
         CRProc;
-        exit;
+        Exit;
       end;
   end;
 
@@ -2221,14 +2222,15 @@ begin
           begin
             FRange := rsUnknown;
             Inc(Run, 2);
-            break;
+            Break;
           end
           else
             Inc(Run);
         end;
-      #10: break;
-      #13: break;
-      else Inc(Run);
+      #10, #13:
+        Break;
+      else
+        Inc(Run);
     end;
 end;
 
@@ -2243,11 +2245,12 @@ begin
         begin
           FRange := rsUnknown;
           Inc(Run);
-          break;
+          Break;
         end;
-      #10: break;
-      #13: break;
-    else Inc(Run);
+      #10, #13:
+        Break;
+      else
+        Inc(Run);
     end;
 end;
 
@@ -2333,7 +2336,8 @@ begin
   begin
     case FLine[Run] of
       '.':
-        if FLine[Run + 1] = '.' then break;
+        if FLine[Run + 1] = '.' then
+          Break;
     end;
     Inc(Run);
   end;
@@ -2386,18 +2390,21 @@ begin
     Inc(Run, 2);
     while FLine[Run] <> #0 do
       case FLine[Run] of
-        '*':  begin
-                if FLine[Run+1] = '/' then
-                begin
-                  Inc(Run, 2);
-                  FRange := rsUnknown;
-                  break;
-                end
-                else Inc(Run);
-              end;
-        #10: break;
-        #13: break;
-        else Inc(Run);
+        '*':
+          begin
+            if FLine[Run+1] = '/' then
+            begin
+              Inc(Run, 2);
+              FRange := rsUnknown;
+              Break;
+            end
+            else
+              Inc(Run);
+          end;
+        #10, #13:
+          Break;
+        else
+          Inc(Run);
       end;
     end
   else

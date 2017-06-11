@@ -161,7 +161,8 @@ begin
       // skip over chars that are not in Identifiers
       while (pStart^ <> #0) and not IsIdentChar(pStart^) do
         Inc(pStart);
-      if pStart^ = #0 then break;
+      if pStart^ = #0 then
+        Break;
       // find the last char that is in Identifiers
       pEnd := pStart + 1;
       while (pEnd^ <> #0) and IsIdentChar(pEnd^) do

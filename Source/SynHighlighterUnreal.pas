@@ -1801,17 +1801,17 @@ begin
     #0:
       begin
         NullProc;
-        exit;
+        Exit;
       end;
     #10:
       begin
         LFProc;
-        exit;
+        Exit;
       end;
     #13:
       begin
         CRProc;
-        exit;
+        Exit;
       end;
   end;
 
@@ -1825,12 +1825,13 @@ begin
             FRange := rsDirective
           else
             FRange := rsUnknown;
-          break;
+          Break;
         end else
           Inc(Run);
-      #10: break;
-      #13: break;
-    else Inc(Run);
+      #10, #13:
+        Break;
+      else
+        Inc(Run);
     end;
 end;
 
@@ -1860,7 +1861,7 @@ procedure TSynUnrealSyn.AsciiCharProc;
 begin
   FTokenID := tkString2;
   repeat
-    if IsLineEnd(Run) then break;
+    if IsLineEnd(Run) then Break;
     if FLine[Run] = #92 then                             {backslash}
         {if we have an escaped single quote it doesn't count}
       if FLine[Run + 1] = #39 then Inc(Run);
@@ -1930,18 +1931,18 @@ begin
         '/': // comment?
           begin
             if FLine[Run + 1] = '/' then // is end of directive as well
-              break
+              Break
             else if FLine[Run + 1] = '*' then
             begin // might be embedded only
               FRange := rsDirectiveComment;
-              break;
+              Break;
             end else
               Inc(Run);
           end;
         #0, #10, #13:
           begin
             FRange := rsUnknown;
-            break;
+            Break;
           end;
         else Inc(Run);
       end;
@@ -2131,7 +2132,8 @@ begin
   begin
     case FLine[Run] of
       '.':
-        if FLine[Run + 1] = '.' then break;
+        if FLine[Run + 1] = '.' then
+          Break;
     end;
     Inc(Run);
   end;
@@ -2244,13 +2246,13 @@ begin
                   FRange := rsDirective
                 else
                   FRange := rsUnknown;
-                break;
+                Break;
               end else Inc(Run);
             #10, #13:
               begin
                 if FRange = rsDirectiveComment then
                   FRange := rsAnsiC;
-                break;
+                Break;
               end;
           else Inc(Run);
           end;
@@ -2315,7 +2317,8 @@ begin
   FTokenID := tkString;
   if (FLine[Run + 1] = #34) and (FLine[Run + 2] = #34) then Inc(Run, 2);
   repeat
-    if IsLineEnd(Run) then break;
+    if IsLineEnd(Run) then
+      Break;
     if FLine[Run] = #92 then                             {backslash}
         case FLine[Run + 1] of
           #10: Inc(Run);               {line continuation character}

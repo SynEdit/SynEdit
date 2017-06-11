@@ -505,7 +505,8 @@ begin
     Inc(Run, 3);
     while (FLine[Run] <> #0) do begin
       case FLine[Run] of
-        #10, #13: break;
+        #10, #13:
+          Break;
       end; { case }
       Inc(Run);
     end; { while }

@@ -476,12 +476,12 @@ begin
   while Assigned(Entry) do
   begin
     if Entry.KeywordLen > FStringLen then
-      break
+      Break
     else if Entry.KeywordLen = FStringLen then
       if IsCurrentToken(Entry.Keyword) then
       begin
         Result := TtkTokenKind(Entry.Kind);
-        exit;
+        Exit;
       end;
     Entry := Entry.Next;
   end;
@@ -723,7 +723,7 @@ begin
           begin
             FRange := rsNormalText;
             Inc(Run, 2);
-            break;
+            Break;
           end;
       until IsLineEnd(Run);
       Exit;
@@ -833,7 +833,7 @@ begin
           begin
             FRange := rsNormalText;
             Inc(Run, 2);
-            break;
+            Break;
           end;
         Inc(Run);
       until IsLineEnd(Run);
@@ -967,7 +967,7 @@ begin
             begin
               FRange := rsNormalText;
               Inc(Run, 2);
-              break;
+              Break;
             end;
         until IsLineEnd(Run);
       end;
@@ -1003,7 +1003,8 @@ begin
   l_strChar := FLine[Run]; // We could have '"' or #39
   if (FLine[Run + 1] = l_strChar) and (FLine[Run + 2] = l_strChar) then Inc(Run, 2);
   repeat
-    if IsLineEnd(Run) then break;
+    if IsLineEnd(Run) then
+      Break;
     Inc(Run);
   until (FLine[Run] = l_strChar) and (FLine[Pred(Run)] <> '\');
   if not IsLineEnd(Run) then

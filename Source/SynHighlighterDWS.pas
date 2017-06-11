@@ -500,7 +500,7 @@ begin
             FRange := rsAsm
           else
             FRange := rsUnknown;
-          break;
+          Break;
         end;
         Inc(Run);
       until IsLineEnd(Run);
@@ -697,7 +697,7 @@ begin
           FRange := rsAsm
         else
           FRange := rsUnknown;
-        break;
+        Break;
       end;
       Inc(Run);
     until IsLineEnd(Run);
@@ -781,7 +781,7 @@ begin
     if FLine[Run] = #39 then begin
       Inc(Run);
       if FLine[Run] <> #39 then
-        break;
+        Break;
     end;
     Inc(Run);
   end;
@@ -799,7 +799,7 @@ begin
       Inc(Run);
       if FLine[Run] <> '''' then begin
         FRange := rsUnknown;
-        break;
+        Break;
       end;
     end;
     Inc(Run);
@@ -830,7 +830,7 @@ begin
       if FLine[Run] <> '"' then
       begin
         FRange := rsUnknown;
-        break;
+        Break;
       end;
     end;
     Inc(Run);
@@ -1015,32 +1015,35 @@ end;
 //
 function TSynDWSSyn.IsCurrentToken(const Token: UnicodeString): Boolean;
 var
-   i : Integer;
-   temp : PWideChar;
+  i: Integer;
+  temp: PWideChar;
 begin
-   temp := FToIdent;
-   if Length(Token) = FStringLen then begin
-      Result := True;
-      for i := 1 to FStringLen do begin
-         if     (temp^ <> Token[i])
-            and (   (temp^>'z')
-                 or (UpCase(temp^)<>UpCase(Token[i])))  then begin
-            Result := False;
-            break;
-         end;
-         Inc(temp);
+  temp := FToIdent;
+  if Length(Token) = FStringLen then
+  begin
+    Result := True;
+    for i := 1 to FStringLen do
+    begin
+      if (temp^ <> Token[i]) and ((temp^>'z') or (UpCase(temp^) <> UpCase(Token[i]))) then
+      begin
+        Result := False;
+        Break;
       end;
-   end else Result := False;
+      Inc(temp);
+    end;
+  end
+  else
+    Result := False;
 end;
 
 // IsIdentChar
 //
 function TSynDWSSyn.IsIdentChar(AChar: WideChar): Boolean;
 begin
-   if Ord(AChar)<=$7F then
-      Result := AnsiChar(AChar) in ['_', '0'..'9', 'A'..'Z', 'a'..'z']
-   else
-      Result := {$IFDEF SYN_COMPILER_18_UP}AChar.IsLetterOrDigit{$ELSE}TCharacter.IsLetterOrDigit(AChar){$ENDIF};
+  if Ord(AChar) <= $7F then
+    Result := AnsiChar(AChar) in ['_', '0'..'9', 'A'..'Z', 'a'..'z']
+  else
+    Result := {$IFDEF SYN_COMPILER_18_UP}AChar.IsLetterOrDigit{$ELSE}TCharacter.IsLetterOrDigit(AChar){$ENDIF};
 end;
 
 class function TSynDWSSyn.GetFriendlyLanguageName: UnicodeString;

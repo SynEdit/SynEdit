@@ -618,7 +618,7 @@ begin
   if (FLine[Run] <= #31) or (FLine[Run] = '<') then
   begin
     NextProcedure;
-    exit;
+    Exit;
   end;
 
   FTokenID := tkText;

@@ -736,7 +736,7 @@ begin
             FRange := rsAsm
           else
             FRange := rsUnknown;
-          break;
+          Break;
         end;
         Inc(Run);
       until IsLineEnd(Run);
@@ -884,7 +884,7 @@ begin
           FRange := rsAsm
         else
           FRange := rsUnknown;
-        break;
+        Break;
       end;
       Inc(Run);
     until IsLineEnd(Run);
@@ -954,7 +954,7 @@ begin
     if FLine[Run] = #39 then begin
       Inc(Run);
       if FLine[Run] <> #39 then
-        break;
+        Break;
     end;
     Inc(Run);
   end;

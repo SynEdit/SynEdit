@@ -545,12 +545,12 @@ begin
   while Assigned(Entry) do
   begin
     if Entry.KeywordLen > FStringLen then
-      break
+      Break
     else if Entry.KeywordLen = FStringLen then
       if IsCurrentToken(Entry.Keyword) then
       begin
         Result := TtkTokenKind(Entry.Kind);
-        exit;
+        Exit;
       end;
     Entry := Entry.Next;
   end;
@@ -727,7 +727,7 @@ begin
       begin
         FRange := FCommentRange;
         Inc(Run, 2);
-        break;
+        Break;
       end;
       Inc(Run);
     until IsLineEnd(Run)
@@ -767,7 +767,7 @@ begin
     begin
       case FLine[Run] of
         '.':
-          if FLine[Run + 1] = '.' then break;
+          if FLine[Run + 1] = '.' then Break;
       end;
       Inc(Run);
     end;

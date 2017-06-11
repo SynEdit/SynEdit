@@ -834,7 +834,7 @@ begin
       if Schemes[i].Highlighter is TSynMultiSyn then
       begin
         FRangeProc := OldRangeProc;
-        break;
+        Break;
       end;
   end;
   Result := TMethod(OldProc).Code <> TMethod(FRangeProc).Code;
@@ -915,7 +915,7 @@ begin
           iScheme := nil;
         end
         else
-          break;
+          Break;
       end
       else
       begin
@@ -935,11 +935,11 @@ begin
               iExpr, True, LineNumber, Value);
             Delete(iLine, 1, iParser.MatchPos[0] - 1 + iParser.MatchLen[0]);
             Inc(iEaten, iParser.MatchPos[0] - 1 + iParser.MatchLen[0]);
-            break;
+            Break;
           end;
         end; {for}
         if i >= Schemes.Count then
-          break;
+          Break;
       end; {else}
 
   finally

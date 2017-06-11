@@ -252,7 +252,7 @@ begin
     if Compare = 0 then
     begin
       Result := True;
-      break;
+      Break;
     end
     else if Compare < 0 then
       First := I + 1
@@ -279,7 +279,7 @@ begin
       begin
         FRange := rsUnknown;
         Inc(Run, 2);
-        break;
+        Break;
       end;
       Inc(Run);
     until IsLineEnd(Run);
@@ -299,7 +299,7 @@ begin
       begin
         FRange := rsUnknown;
         Inc(Run);
-        break;
+        Break;
       end;
       Inc(Run);
     until IsLineEnd(Run);
@@ -319,7 +319,7 @@ begin
       begin
         FRange := rsUnknown;
         Inc(Run, 2);
-        break;
+        Break;
       end;
       Inc(Run);
     until IsLineEnd(Run);
@@ -357,11 +357,10 @@ begin
           begin
             FRange := rsUnknown;
             Inc(Run);
-            break;
+            Break;
           end;
-        #10: break;
-
-        #13: break;
+        #10, #13:
+          Break;
       else
         Inc(Run);
       end;
@@ -457,12 +456,13 @@ begin
   while IsNumberChar do
   begin
     case FLine[Run] of
-      'x': begin // handle C style hex numbers
-             IntegerProc;
-             break;
-           end;
+      'x':
+        begin // handle C style hex numbers
+          IntegerProc;
+          Break;
+        end;
       '.':
-        if FLine[Run + 1] = '.' then break;
+        if FLine[Run + 1] = '.' then Break;
     end;
     Inc(Run);
   end;
@@ -486,11 +486,12 @@ begin
                 begin
                   FRange := rsUnknown;
                   Inc(Run, 2);
-                  break;
+                  Break;
                 end else Inc(Run);
-              #10: break;
-              #13: break;
-            else Inc(Run);
+              #10, #13:
+                Break;
+              else
+                Inc(Run);
             end;
         end;
       '.':
@@ -519,7 +520,7 @@ begin
           while FLine[Run] <> #0 do
           begin
             case FLine[Run] of
-              #10, #13: break;
+              #10, #13: Break;
             end;
             Inc(Run);
           end;
@@ -541,10 +542,10 @@ begin
                 begin
                   FRange := rsUnknown;
                   Inc(Run, 2);
-                  break;
+                  Break;
                 end else Inc(Run);
               #10, #13:
-                break;
+                Break;
               else
                 Inc(Run);
             end;
@@ -585,7 +586,7 @@ begin
       begin
         FRange := rsUnknown;
         FStringDelimChar := #0;
-        break;
+        Break;
       end;
     end;
     Inc(Run);

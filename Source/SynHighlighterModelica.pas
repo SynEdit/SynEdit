@@ -375,7 +375,7 @@ begin
   begin
     case FLine[Run] of
       '.':
-        if FLine[Run + 1] = '.' then break;
+        if FLine[Run + 1] = '.' then Break;
     end;
     Inc(Run);
   end;
@@ -482,7 +482,7 @@ begin
       if (FLine[Run] = '*') and (FLine[Run + 1] = '/') then begin
         Inc(Run, 2);
         FRange := rsUnknown;
-        break;
+        Break;
       end;
       Inc(Run);
     until IsLineEnd(Run);
@@ -501,7 +501,7 @@ begin
       if FLine[Run] = #39 then begin
         Inc(Run);
         FRange := rsUnknown;
-        break;
+        Break;
       end;
       Inc(Run);
     until IsLineEnd(Run);
@@ -522,7 +522,7 @@ begin
           begin
             Inc(Run);
             FRange := rsUnknown;
-            break;
+            Break;
           end;
         #92:
           begin

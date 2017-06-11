@@ -196,7 +196,7 @@ begin
     if Compare = 0 then
     begin
       Result := True;
-      break;
+      Break;
     end
     else if Compare < 0 then
       First := I + 1
@@ -221,7 +221,7 @@ begin
     if Compare = 0 then
     begin
       Result := True;
-      break;
+      Break;
     end
     else if Compare < 0 then
       First := I + 1
@@ -422,7 +422,8 @@ begin
   begin
     case FLine[Run] of
       '.':
-        if FLine[Run + 1] = '.' then break;
+        if FLine[Run + 1] = '.' then
+          Break;
     end;
     Inc(Run);
   end;
@@ -453,7 +454,8 @@ begin
       while FLine[Run] <> #0 do
       begin
         case FLine[Run] of
-          #10, #13: break;
+          #10, #13:
+            Break;
         end;
         Inc(Run);
       end;
@@ -494,7 +496,8 @@ begin
     then Inc(Run, 2);
   repeat
     case FLine[Run] of
-      #0, #10, #13: break;
+      #0, #10, #13:
+        Break;
     end;
     Inc(Run);
   until FLine[Run] = QuoteChar;

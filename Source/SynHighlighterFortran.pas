@@ -266,7 +266,8 @@ begin
   FTokenID := tkString;
   repeat
     case FLine[Run] of
-      #0, #10, #13: break;
+      #0, #10, #13:
+        Break;
     end;
     Inc(Run);
   until FLine[Run] = #39;
@@ -309,7 +310,8 @@ begin
   while FLine[Run] <> #0 do
   begin
     case FLine[Run] of
-      #10, #13: break;
+      #10, #13:
+        Break;
     end;
     Inc(Run);
   end;
@@ -422,7 +424,8 @@ begin
   begin
     case FLine[Run] of
       '.':
-        if FLine[Run + 1] = '.' then break;
+        if FLine[Run + 1] = '.' then
+          Break;
     end;
     Inc(Run);
   end;
@@ -535,7 +538,8 @@ begin
   while FLine[Run] <> #0 do
   begin
     case FLine[Run] of
-      #10, #13: break;
+      #10, #13:
+        Break;
     end; //case
     Inc(Run);
   end; //while
@@ -547,7 +551,8 @@ begin
   if (FLine[Run + 1] = #34) and (FLine[Run + 2] = #34) then Inc(Run, 2);
   repeat
     case FLine[Run] of
-      #0, #10, #13: break;
+      #0, #10, #13:
+        Break;
       #92:
         if FLine[Run + 1] = #10 then Inc(Run);
     end;

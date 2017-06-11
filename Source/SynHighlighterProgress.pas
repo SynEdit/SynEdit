@@ -528,7 +528,7 @@ begin
   while Assigned(Entry) do
   begin
     if Entry.KeywordLen > FStringLen then
-      break
+      Break
     else if Entry.KeywordLen = FStringLen then
       if IsCurrentToken(Entry.Keyword) then
       begin
@@ -811,7 +811,7 @@ begin
              if FIncludeLevel = 0 then
              begin
                FRange := rsNone;
-               break;
+               Break;
              end
              else
                Inc(p);
@@ -914,7 +914,7 @@ begin
                FRange := rsInclude
              else
                FRange := rsPreprocessor;
-             break;
+             Break;
            end;
       '}': case FTokenID of
              tkInclude     : Dec(FIncludeLevel);

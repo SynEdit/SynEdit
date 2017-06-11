@@ -403,7 +403,7 @@ begin
             begin
               Inc(Run); // also the '$'
               Start := Run;
-              break;
+              Break;
             end
             else
             begin

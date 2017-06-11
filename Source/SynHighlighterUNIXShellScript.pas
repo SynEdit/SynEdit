@@ -313,7 +313,7 @@ procedure TSynUNIXShellScriptSyn.DotProc;
   var
     i: Integer;
   begin
-    result := False;
+    Result := False;
     i := Run;
     Inc(i);
     while CharInSet(FLine[i], ['a'..'z', 'A'..'Z']) do

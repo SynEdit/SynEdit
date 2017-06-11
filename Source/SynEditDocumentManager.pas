@@ -163,23 +163,23 @@ end;
 function TSynEditDocumentManager.GetDocument(index: Integer): ISynDocument;
 begin
   if (index >= 0) and (index < FDocuments.Count) then
-    result := FDocuments.Items[index] as ISynDocument
+    Result := FDocuments.Items[index] as ISynDocument
   else
-    result := nil;
+    Result := nil;
 end;
 
 function TSynEditDocumentManager.GetDocumentByName(index: string): ISynDocument;
 var
   i: Integer;
 begin
-  result := nil;
+  Result := nil;
   for i := 0 to FDocuments.Count -1 do
   begin
-    result := GetDocument(i);
-    if CompareText(result.Name,index) = 0 then
-      break
+    Result := GetDocument(i);
+    if CompareText(Result.Name,index) = 0 then
+      Break
     else
-      result := nil;
+      Result := nil;
   end;
 end;
 
@@ -267,15 +267,15 @@ end;
 
 function TSynEditDocumentManager.GetCount: Integer;
 begin
-  result := FDocuments.Count;
+  Result := FDocuments.Count;
 end;
 
 function TSynEditDocumentManager.GetCurrentDocument: ISynDocument;
 begin
   if FCurrentDocumentIndex <> -1 then
-    result := GetDocument(FCurrentDocumentIndex)
+    Result := GetDocument(FCurrentDocumentIndex)
   else
-    result := nil;
+    Result := nil;
 end;
 
 function CloneMark(const AOwner: TCustomSynEdit; const source: TSynEditMark): TSynEditMark;
@@ -347,53 +347,53 @@ end;
 
 function TSynDocument.GetCaretXY: TBufferCoord;
 begin
-  result := FCaretXY;
+  Result := FCaretXY;
 end;
 
 function TSynDocument.GetDataIntf: IInterface;
 begin
-  result := FDataIntf;
+  Result := FDataIntf;
 end;
 
 function TSynDocument.GetHighLighter: TSynCustomHighlighter;
 begin
-  result := FHighLighter;
+  Result := FHighLighter;
 end;
 
 
 function TSynDocument.GetLines: TStrings;
 begin
-  result := FLines;
+  Result := FLines;
 end;
 
 function TSynDocument.GetMarks: TSynEditMarkList;
 begin
-  result := FMarks;
+  Result := FMarks;
 end;
 
 function TSynDocument.GetModified: Boolean;
 begin
-  result := FModified;
+  Result := FModified;
 end;
 
 function TSynDocument.GetName: string;
 begin
-  result := FName;
+  Result := FName;
 end;
 
 function TSynDocument.GetRedoList: TSynEditUndoList;
 begin
-  result := FRedoList;
+  Result := FRedoList;
 end;
 
 function TSynDocument.GetTopLine: Integer;
 begin
-  result := FTopLine;
+  Result := FTopLine;
 end;
 
 function TSynDocument.GetUndoList: TSynEditUndoList;
 begin
-  result := FUndoList;
+  Result := FUndoList;
 end;
 
 procedure TSynDocument.SetCaretXY(const value: TBufferCoord);

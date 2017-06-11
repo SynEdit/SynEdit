@@ -570,7 +570,8 @@ begin
   begin
     case FLine[Run] of
       '.':
-        if FLine[Run + 1] = '.' then break;
+        if FLine[Run + 1] = '.' then
+          Break;
     end;
     Inc(Run);
   end;
@@ -696,7 +697,7 @@ begin
             begin
               FRange := rsUnknown;
               Inc(Run, 2);
-              break;
+              Break;
             end
             else
               Inc(Run)
@@ -764,7 +765,7 @@ begin
   while not IsLineEnd(Run) do
   begin
     if (FLine[Run] = iCloseChar) and not IsEscaped then
-      break;
+      Break;
     if (FLine[Run] = '$') and (iCloseChar = '"') and
       ((FLine[Run + 1] = '{') or IsIdentChar(FLine[Run + 1])) then
     begin
@@ -824,7 +825,7 @@ begin
         if iOpenBraces = 0 then
         begin
           Inc(Run);
-          break;
+          Break;
         end;
       end;
       if FLine[Run] = '{' then
@@ -856,7 +857,7 @@ begin
             continue;
           end
           else
-            break;
+            Break;
         end
         else
           Inc(iOpenBrackets);
@@ -864,10 +865,10 @@ begin
       else if (FLine[iTempRun] = '-') and (FLine[iTempRun +1] = '>') then
         Inc(iTempRun, 2)
       else
-        break;
+        Break;
 
       if not IsIdentChar(FLine[iTempRun]) then
-        break
+        Break
       else
         repeat
           Inc(iTempRun);
@@ -876,7 +877,7 @@ begin
       while FLine[iTempRun] = ']' do
       begin
         if iOpenBrackets = 0 then
-          break;
+          Break;
         Dec(iOpenBrackets);
         Inc(iTempRun);
       end;
@@ -928,17 +929,17 @@ begin
     #0:
       begin
         NullProc;
-        exit;
+        Exit;
       end;
     #10:
       begin
         LFProc;
-        exit;
+        Exit;
       end;
     #13:
       begin
         CRProc;
-        exit;
+        Exit;
       end;
   end;
 
@@ -949,7 +950,7 @@ begin
       begin
         Inc(Run, 2);
         FRange := rsUnknown;
-        break;
+        Break;
       end
       else
         Inc(Run);

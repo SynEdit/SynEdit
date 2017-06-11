@@ -166,7 +166,7 @@ begin
     if Compare = 0 then
     begin
       Result := True;
-      break;
+      Break;
     end else
       if Compare < 0 then First := I + 1 else Last := I - 1;
   end;
@@ -220,22 +220,23 @@ begin
     #0:
       begin
         NullProc;
-        exit;
+        Exit;
       end;
     #10:
       begin
         LFProc;
-        exit;
+        Exit;
       end;
 
     #13:
       begin
         CRProc;
-        exit;
+        Exit;
       end;
   end;
 
-  if (Run = 0) and (FLine[Run] = '@') then begin
+  if (Run = 0) and (FLine[Run] = '@') then
+  begin
     FRange := rsUnknown;
     Inc(Run);
   end else

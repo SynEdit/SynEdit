@@ -88,7 +88,7 @@ uses
   SynEditKeyCmds,
 {$ENDIF}
   Classes,
-  SysUtils, Vcl.ImgList;
+  SysUtils;
 
 type
 {$IFNDEF SYN_DELPHI_4_UP}
@@ -1017,7 +1017,7 @@ begin
       cKeyCommand.SelStart := length(WorkStr);
       cKeyCommand.SelLength := Length(cKeyCommand.Text) - cKeyCommand.SelStart;
       Key := #0;
-      break;
+      Break;
     end
     else
       Inc(i);
@@ -1035,7 +1035,7 @@ procedure TfmEditorOptionsDialog.KeyListChanging(Sender: TObject;
   Item: TListItem; Change: TItemChange; var AllowChange: Boolean);
 begin
 //make sure that it's saved.
-  if FInChanging then exit;
+  if FInChanging then Exit;
   FInChanging := True;
   if Visible then
   begin

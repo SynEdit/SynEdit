@@ -310,17 +310,17 @@ begin
     #0:
       begin
         NullProc;
-        exit;
+        Exit;
       end;
     #10:
       begin
         LFProc;
-        exit;
+        Exit;
       end;
     #13:
       begin
         CRProc;
-        exit;
+        Exit;
       end;
   end;
 
@@ -331,7 +331,7 @@ begin
         begin
           Inc(Run, 2);
           FRange := rsUnknown;
-          break;
+          Break;
         end
         else Inc(Run);
     else Inc(Run);
@@ -366,7 +366,7 @@ procedure TSynJavaSyn.AsciiCharProc;
 begin
   FTokenID := tkString;
   repeat
-    if IsLineEnd(Run) then break;
+    if IsLineEnd(Run) then Break;
     if FLine[Run] = #92 then
       Inc(Run); // backslash, if we have an escaped single character, skip to the next
     if not IsLineEnd(Run) then Inc(Run); //Add check here to prevent overrun from backslash being last char
@@ -611,7 +611,7 @@ begin
   begin
     case FLine[Run] of
       '.':
-        if FLine[Run + 1] = '.' then break;
+        if FLine[Run + 1] = '.' then Break;
     end;
     Inc(Run);
   end;
@@ -765,7 +765,7 @@ begin
               begin
                 Inc(Run, 2);
                 FRange := rsUnknown;
-                break;
+                Break;
               end else Inc(Run);
           else
             Inc(Run);
@@ -814,7 +814,7 @@ begin
   FTokenID := tkString;
   if (FLine[Run + 1] = #34) and (FLine[Run + 2] = #34) then Inc(Run, 2);
   repeat
-    if IsLineEnd(Run) then break;
+    if IsLineEnd(Run) then Break;
     case FLine[Run] of
       #92: Inc(Run);  // Backslash, if we have an escaped charcter it can be skipped
     end;

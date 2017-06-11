@@ -945,7 +945,7 @@ var
   i, ii: Integer;
 begin
   if FSelectedOnly and not FSelAvail then
-    exit;
+    Exit;
 
   FPrinting := True;
   FAbort := False;

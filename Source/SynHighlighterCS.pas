@@ -1073,17 +1073,17 @@ begin
     #0:
       begin
         NullProc;
-        exit;
+        Exit;
       end;
     #10:
       begin
         LFProc;
-        exit;
+        Exit;
       end;
     #13:
       begin
         CRProc;
-        exit;
+        Exit;
       end;
   end;
 
@@ -1101,12 +1101,13 @@ begin
             FRange := rsDirective
           else
             FRange := rsUnknown;
-          break;
+          Break;
         end else
           Inc(Run);
-      #10: break;
-      #13: break;
-    else Inc(Run);
+      #10, #13:
+        Break;
+      else
+        Inc(Run);
     end;
 end;
 
@@ -1221,11 +1222,11 @@ begin
             if FLine[Run + 1] = '/' then
             begin // is end of directive as well
               FRange := rsUnknown;
-              break;
+              Break;
             end else if FLine[Run + 1] = '*' then
             begin // might be embedded only
               FRange := rsDirectiveComment;
-              break;
+              Break;
             end else
               Inc(Run);
           end;
@@ -1235,13 +1236,13 @@ begin
             if IsLineEnd(Run) then
             begin
               FRange := rsDirective;
-              break;
+              Break;
             end;
           end;
         #0, #10, #13:
           begin
             FRange := rsUnknown;
-            break;
+            Break;
           end;
         else
           Inc(Run);
@@ -1432,7 +1433,8 @@ begin
   begin
     case FLine[Run] of
       '.':
-        if FLine[Run + 1] = '.' then break;
+        if FLine[Run + 1] = '.' then
+          Break;
     end;
     Inc(Run);
   end;
@@ -1555,13 +1557,13 @@ begin
                   else
                     FRange := rsUnknown;
                   end;
-                break;
+                Break;
               end else Inc(Run);
             #10, #13:
               begin
                 if FRange = rsDirectiveComment then
                   FRange := rsAnsiC;
-                break;
+                Break;
               end;
           else Inc(Run);
           end;

@@ -396,7 +396,7 @@ begin
     {$ELSE}
     MessageBeep(1);
     {$ENDIF}
-    exit;
+    Exit;
   end;
   AForm := TSynEditKeystrokeEditorForm.Create(Self);
   with AForm do
@@ -455,7 +455,7 @@ begin
     {$ELSE}
     MessageBeep(1);
     {$ENDIF}
-    exit;
+    Exit;
   end;
   FKeystrokes[SelItem.Index].Free;
   KeyCmdList.Items.Delete(SelItem.Index);

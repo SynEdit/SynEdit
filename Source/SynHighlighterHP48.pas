@@ -568,7 +568,7 @@ begin
         ((Run + 1 = Length(FLineStr)) or (FLineStr[Run + 2] <= ' ')) then begin
         Inc(Run, 2);
         FRange := rsAsm;
-        break;
+        Break;
       end
       else
         Inc(Run);
@@ -584,7 +584,7 @@ begin
       if FLineStr[Run] = ')' then begin
         Inc(Run);
         FRange := rsRpl;
-        break;
+        Break;
       end
       else
         Inc(Run);
@@ -610,7 +610,7 @@ begin
       if CharInSet(FLineStr[Run], [#10, #13]) then
       begin
         Inc(Run);
-        break;
+        Break;
       end
       else
         Inc(Run);
@@ -652,7 +652,7 @@ begin
       case FLineStr[Run] of
         #10, #13: begin
             Inc(Run);
-            break;
+            Break;
           end;
       else
         Inc(Run);
@@ -671,7 +671,7 @@ begin
       case FLineStr[Run] of
         #10, #13: begin
             Inc(Run);
-            break;
+            Break;
           end;
       else
         Inc(Run);

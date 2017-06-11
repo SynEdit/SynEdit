@@ -263,7 +263,8 @@ begin
   begin
     while pLine^ <> #0 do 
     begin
-      if pLine^ = #9 then break;
+      if pLine^ = #9 then
+        Break;
       Inc(CharsBefore);
       Inc(pLine);
     end;
@@ -355,7 +356,7 @@ begin
             pDest^ := pSrc^;
             Inc(pDest);
           until (pSrc^ = #0);
-          exit;
+          Exit;
         end;
       end
       else
@@ -426,7 +427,7 @@ begin
             pDest^ := pSrc^;
             Inc(pDest);
           until (pSrc^ = #0);
-          exit;
+          Exit;
         end;
       end
       else
@@ -455,7 +456,8 @@ var
 begin
   nW := 2;
   repeat
-    if (nW >= TabWidth) then break;
+    if (nW >= TabWidth) then
+      Break;
     Inc(nW, nW);
   until (nW >= $10000);  // we don't want 64 kByte spaces...
   Result := (nW = TabWidth);
@@ -524,7 +526,7 @@ begin
             #0:
               begin
                 Inc(Result, Index);
-                break;
+                Break;
               end;
             #9:
               begin
@@ -572,16 +574,18 @@ begin
         while iPos < Position do
         begin
           case pNext^ of
-            #0: break;
-            #9: begin
-                  Inc(iPos, TabWidth);
-                  Dec(iPos, iPos mod TabWidth);
-                  if iPos > Position then
-                  begin
-                    InsideTabChar := True;
-                    break;
-                  end;
+            #0:
+              Break;
+            #9:
+              begin
+                Inc(iPos, TabWidth);
+                Dec(iPos, iPos mod TabWidth);
+                if iPos > Position then
+                begin
+                  InsideTabChar := True;
+                  Break;
                 end;
+              end;
             else
               Inc(iPos);
           end;
@@ -607,7 +611,7 @@ begin
       if IsOfCategory(p^) then
       begin
         Result := Start;
-        exit;
+        Exit;
       end;
       Inc(p);
       Inc(Start);
@@ -723,7 +727,7 @@ begin
   while Result > 0 do
   begin
     if (S[Result] <> #0) and (StrScan(P, S[Result]) <> nil) then
-      exit;
+      Exit;
     Dec(Result);
   end;
 end;

@@ -821,7 +821,7 @@ begin
     begin
       FRange := rsText;
       Inc(Run);
-      break;
+      Break;
     end;
     Inc(Run);
   end;
@@ -923,7 +923,7 @@ begin
   if CharInSet(FLine[Run], [#0..#31, '<']) then
   begin
     NextProcedure;
-    exit;
+    Exit;
   end;
 
   FTokenID := tkText;
@@ -954,7 +954,7 @@ begin
           Run := i;
           FRange := rsAmpersand;
         end;
-        break;
+        Break;
       end
       else
         for i := Low(EscapeAmps) To High(EscapeAmps) do
@@ -1036,7 +1036,8 @@ begin
   FTokenID := tkSpace;
   while FLine[Run] <= #32 do
   begin
-    if CharInSet(FLine[Run], [#0, #9, #10, #13]) then break;
+    if CharInSet(FLine[Run], [#0, #9, #10, #13]) then
+      Break;
     Inc(Run);
   end;
 end;
@@ -1084,7 +1085,7 @@ begin
         FRange := rsParam
       else
         FRange := rsText;
-      break;
+      Break;
     end;
     Inc(Run);
   end;

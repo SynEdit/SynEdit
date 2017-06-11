@@ -453,7 +453,7 @@ begin
       or (Start.Line > ALines.Count) or (Start.Line > Stop.Line)
     then
     {$IFDEF SYN_CLX}
-      exit;
+      Exit;
     {$ELSE}
       Abort;
     {$ENDIF}
@@ -462,7 +462,7 @@ begin
     Start.Char := Max(1, Min(Start.Char, Length(ALines[Start.Line - 1]) + 1));
     if (Start.Line = Stop.Line) and (Start.Char >= Stop.Char) then
     {$IFDEF SYN_CLX}
-      exit;
+      Exit;
     {$ELSE}
       Abort;
     {$ENDIF}
@@ -629,7 +629,7 @@ end;
 procedure TSynCustomExporter.SetEncoding(const Value: TSynEncoding);
 begin
   // don't change encoding while streaming as this could corrupt output data
-  if FStreaming then exit;
+  if FStreaming then Exit;
 
   if not (Value in SupportedEncodings) then
     raise ESynEncoding.CreateFmt(SEncodingError, [EncodingStrs[Value],
