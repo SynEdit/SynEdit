@@ -2657,6 +2657,8 @@ procedure TCustomSynEdit.PaintGutter(const AClip: TRect;
     OldColor: TColor;
     OldStyle: TBrushStyle;
   begin
+    FTextDrawer.SetBackColor(Color);
+
     OldStyle := Canvas.Brush.Style;
     OldColor := Canvas.Brush.Color;
 
@@ -2668,6 +2670,8 @@ procedure TCustomSynEdit.PaintGutter(const AClip: TRect;
 
     Canvas.Brush.Style := OldStyle;
     Canvas.Brush.Color := OldColor;
+
+    FTextDrawer.SetBackColor(FGutter.Color);
   end;
 
 var
