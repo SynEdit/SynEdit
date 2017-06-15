@@ -55,6 +55,9 @@ uses
 {$ELSE}
   Windows,
   Graphics,
+{$IFDEF SYN_DirectWrite}
+  Direct2d,
+{$ENDIF}
   SynEditTypes,
   SynEditHighlighter,
   SynUnicode,
@@ -173,8 +176,14 @@ function EnumHighlighterAttris(Highlighter: TSynCustomHighlighter;
 function CalcFCS(const ABuf; ABufSize: Cardinal): Word;
 {$ENDIF}
 
-procedure SynDrawGradient(const ACanvas: TCanvas; const AStartColor, AEndColor: TColor;
-  ASteps: Integer; const ARect: TRect; const AHorizontal: Boolean);
+procedure SynDrawGradient(const ACanvas: TCanvas; const AStartColor,
+  AEndColor: TColor; ASteps: Integer; const ARect: TRect;
+  const AHorizontal: Boolean); overload;
+{$IFDEF SYN_DirectWrite}
+procedure SynDrawGradient(const ACanvas: TDirect2DCanvas; const AStartColor,
+  AEndColor: TColor; ASteps: Integer; const ARect: TRect;
+  const AHorizontal: Boolean); overload;
+{$ENDIF}
 
 function DeleteTypePrefixAndSynSuffix(S: string): string;
 
@@ -1012,5 +1021,64 @@ begin
     end;
   end;
 end;
+
+{$IFDEF SYN_DirectWrite}
+procedure SynDrawGradient(const ACanvas: TDirect2DCanvas; const AStartColor,
+  AEndColor: TColor; ASteps: Integer; const ARect: TRect;
+  const AHorizontal: Boolean);
+var
+  StartColorR, StartColorG, StartColorB: Byte;
+  DiffColorR, DiffColorG, DiffColorB: Integer;
+  i, Size: Integer;
+  PaintRect: TRect;
+begin
+  StartColorR := GetRValue(ColorToRGB(AStartColor));
+  StartColorG := GetGValue(ColorToRGB(AStartColor));
+  StartColorB := GetBValue(ColorToRGB(AStartColor));
+
+  DiffColorR := GetRValue(ColorToRGB(AEndColor)) - StartColorR;
+  DiffColorG := GetGValue(ColorToRGB(AEndColor)) - StartColorG;
+  DiffColorB := GetBValue(ColorToRGB(AEndColor)) - StartColorB;
+
+  ASteps := MinMax(ASteps, 2, 256);
+
+  if AHorizontal then
+  begin
+    Size := ARect.Right - ARect.Left;
+    PaintRect.Top := ARect.Top;
+    PaintRect.Bottom := ARect.Bottom;
+
+    for i := 0 to ASteps - 1 do
+    begin
+      PaintRect.Left := ARect.Left + MulDiv(i, Size, ASteps);
+      PaintRect.Right := ARect.Left + MulDiv(i + 1, Size, ASteps);
+
+      ACanvas.Brush.Color := RGB(StartColorR + MulDiv(i, DiffColorR, ASteps - 1),
+                                 StartColorG + MulDiv(i, DiffColorG, ASteps - 1),
+                                 StartColorB + MulDiv(i, DiffColorB, ASteps - 1));
+
+      ACanvas.FillRect(PaintRect);
+    end;
+  end
+  else
+  begin
+    Size := ARect.Bottom - ARect.Top;
+    PaintRect.Left := ARect.Left;
+    PaintRect.Right := ARect.Right;
+
+    for i := 0 to ASteps - 1 do
+    begin
+      PaintRect.Top := ARect.Top + MulDiv(i, Size, ASteps);
+      PaintRect.Bottom := ARect.Top + MulDiv(i + 1, Size, ASteps);
+
+      ACanvas.Brush.Color := RGB(StartColorR + MulDiv(i, DiffColorR, ASteps - 1),
+                                 StartColorG + MulDiv(i, DiffColorG, ASteps - 1),
+                                 StartColorB + MulDiv(i, DiffColorB, ASteps - 1));
+
+      ACanvas.FillRect(PaintRect);
+    end;
+  end;
+end;
+{$ENDIF}
 
 end.

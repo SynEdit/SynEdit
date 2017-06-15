@@ -74,6 +74,9 @@ uses
   SynEditTypes,
   SynEditKeyConst,
   SynUnicode,
+{$IFDEF SYN_DirectWrite}
+  Direct2D,
+{$ENDIF}
 {$ENDIF}
 {$IFDEF SYN_COMPILER_4_UP}
   Math,
@@ -197,6 +200,7 @@ type
     property GradientStartColor: TColor read FGradientStartColor write SetGradientStartColor default clWindow;
     property GradientEndColor: TColor read FGradientEndColor write SetGradientEndColor default clBtnFace;
     property GradientSteps: Integer read FGradientSteps write SetGradientSteps default 48;
+
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
   end;
 
@@ -228,7 +232,8 @@ type
     property GlyphsVisible: Boolean
       read FGlyphsVisible write SetGlyphsVisible default True;
     property LeftMargin: Integer read FLeftMargin write SetLeftMargin default 2;
-    property Xoffset: Integer read FXoffset write SetXOffset default 12;
+    property XOffset: Integer read FXoffset write SetXOffset default 12;
+
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
   end;
 
@@ -255,6 +260,7 @@ type
     property Glyph: TBitmap read FGlyph write SetGlyph;
     property MaskColor: TColor read FMaskColor write SetMaskColor default clNone;
     property Visible: Boolean read FVisible write SetVisible default True;
+
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
   end;
 
@@ -310,9 +316,15 @@ type
   public
     constructor Create(aModule: THandle; const Name: string; Count: Integer);
     destructor Destroy; override;
-    procedure Draw(ACanvas: TCanvas; Number, X, Y, LineHeight: Integer);
+
+    procedure Draw(ACanvas: TCanvas; Number, X, Y, LineHeight: Integer); overload;
     procedure DrawTransparent(ACanvas: TCanvas; Number, X, Y,
-      LineHeight: Integer; TransparentColor: TColor);
+      LineHeight: Integer; TransparentColor: TColor); overload;
+{$IFDEF SYN_DirectWrite}
+    procedure Draw(ACanvas: TDirect2DCanvas; Number, X, Y, LineHeight: Integer); overload;
+    procedure DrawTransparent(ACanvas: TDirect2DCanvas; Number, X, Y,
+      LineHeight: Integer; TransparentColor: TColor); overload;
+{$ENDIF}
   end;
 
 { TSynHotKey }
@@ -1140,14 +1152,15 @@ type
 var
   InternalResources: TList;
 
-constructor TSynInternalImage.Create(aModule: THandle; const Name: string; Count: Integer);
+constructor TSynInternalImage.Create(aModule: THandle; const Name: string;
+  Count: Integer);
 begin
   inherited Create;
-  FImages := CreateBitmapFromInternalList( aModule, Name );
+  FImages := CreateBitmapFromInternalList(aModule, Name);
   FWidth := (FImages.Width + Count shr 1) div Count;
   FHeight := FImages.Height;
   FCount := Count;
-  end;
+end;
 
 destructor TSynInternalImage.Destroy;
 begin
@@ -1270,6 +1283,51 @@ begin
 {$ENDIF}
   end;
 end;
+
+procedure TSynInternalImage.Draw(ACanvas: TDirect2DCanvas;
+  Number, X, Y, LineHeight: Integer);
+var
+  rcSrc, rcDest: TRect;
+begin
+  if (Number >= 0) and (Number < FCount) then
+  begin
+    if LineHeight >= FHeight then
+    begin
+      rcSrc := Rect(Number * FWidth, 0, (Number + 1) * FWidth, FHeight);
+      Inc(Y, (LineHeight - FHeight) div 2);
+      rcDest := Rect(X, Y, X + FWidth, Y + FHeight);
+    end else
+    begin
+      rcDest := Rect(X, Y, X + FWidth, Y + LineHeight);
+      Y := (FHeight - LineHeight) div 2;
+      rcSrc := Rect(Number * FWidth, Y, (Number + 1) * FWidth,
+        Y + LineHeight);
+    end;
+//    CopyRect(rcDest, FImages.Canvas, rcSrc);
+  end;
+end;
+
+procedure TSynInternalImage.DrawTransparent(ACanvas: TDirect2DCanvas; Number,
+  X, Y, LineHeight: Integer; TransparentColor: TColor);
+var
+  rcSrc, rcDest: TRect;
+begin
+  if (Number >= 0) and (Number < FCount) then
+  begin
+    if LineHeight >= FHeight then begin
+      rcSrc := Rect(Number * FWidth, 0, (Number + 1) * FWidth, FHeight);
+      Inc(Y, (LineHeight - FHeight) div 2);
+      rcDest := Rect(X, Y, X + FWidth, Y + FHeight);
+    end else begin
+      rcDest := Rect(X, Y, X + FWidth, Y + LineHeight);
+      Y := (FHeight - LineHeight) div 2;
+      rcSrc := Rect(Number * FWidth, Y, (Number + 1) * FWidth,
+        Y + LineHeight);
+    end;
+//    ACanvas.BrushCopy(rcDest, FImages, rcSrc, TransparentColor);
+  end;
+end;
+
 
 { TSynHotKey }
 
