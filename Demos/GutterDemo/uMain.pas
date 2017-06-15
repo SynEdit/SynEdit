@@ -70,6 +70,12 @@ begin
   ShapeColorBorder.Brush.Color := SynEdit.Gutter.BorderColor;
   ShapeGradientStartColor.Brush.Color := SynEdit.Gutter.GradientStartColor;
   ShapeGradientStopColor.Brush.Color := SynEdit.Gutter.GradientEndColor;
+  CheckBoxAutoSize.Checked := SynEdit.Gutter.AutoSize;
+  CheckBoxLeadingZeroes.Checked := SynEdit.Gutter.LeadingZeros;
+  CheckBoxShowLineNumbers.Checked := SynEdit.Gutter.ShowLineNumbers;
+  CheckBoxShowModifications.Checked := SynEdit.Gutter.ShowModification;
+  CheckBoxZeroStart.Checked := SynEdit.Gutter.ZeroStart;
+  CheckBoxUseFontStyle.Checked := SynEdit.Gutter.UseFontStyle;
 end;
 
 procedure TFormMain.CheckBoxAutoSizeClick(Sender: TObject);

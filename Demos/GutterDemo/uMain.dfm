@@ -28,9 +28,10 @@ object FormMain: TFormMain
     TabOrder = 0
     Gutter.Font.Charset = DEFAULT_CHARSET
     Gutter.Font.Color = clWindowText
-    Gutter.Font.Height = -11
-    Gutter.Font.Name = 'Courier'
+    Gutter.Font.Height = -16
+    Gutter.Font.Name = 'Comic Sans MS'
     Gutter.Font.Style = []
+    Gutter.ShowLineNumbers = True
     Gutter.GradientEndColor = 13883354
     Highlighter = SynDWSSyn
     Lines.Strings = (
