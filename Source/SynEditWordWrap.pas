@@ -68,7 +68,7 @@ const
 type
   TLineIndex = 0..MaxIndex;
   TRowIndex = 0..MaxIndex;
-  TRowLength = word;
+  TRowLength = Word;
 
   TRowIndexArray = array [TLineIndex] of TRowIndex;
   PRowIndexArray = ^TRowIndexArray;

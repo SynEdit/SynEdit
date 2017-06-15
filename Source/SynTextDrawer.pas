@@ -277,9 +277,6 @@ uses
 {$IFDEF SYN_UNISCRIBE}
   , SynUsp10
 {$ENDIF}
-{$IFDEF SYN_D2D1}
-  , D2D1
-{$ENDIF}
   ;
 
 var

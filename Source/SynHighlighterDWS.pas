@@ -217,7 +217,7 @@ const
 
 function TAnsiStringList.CompareStrings(const S1, S2: string): Integer;
 begin
-   Result := CompareText(S1, S2);
+  Result := CompareText(S1, S2);
 end;
 
 
@@ -851,52 +851,52 @@ end;
 
 procedure TSynDWSSyn.Next;
 begin
-   FAsmStart := False;
-   FTokenPos := Run;
-   case FRange of
-      rsAnsi, rsAnsiAsm:
-         AnsiProc;
-      rsBor, rsBorAsm, rsDirective, rsDirectiveAsm:
-         BorProc;
-      rsHereDocSingle:
-         StringAposMultiProc;
-      rsHereDocDouble:
-         StringQuoteProc;
-   else
-      case FLine[Run] of
-         #0: NullProc;
-         #10: LFProc;
-         #13: CRProc;
-         #1..#9, #11, #12, #14..#32: SpaceProc;
-         '#': AsciiCharProc;
-         '$': IntegerProc;
-         #39: StringAposProc;
-         '"': StringQuoteProc;
-         '0'..'9': NumberProc;
-         'A'..'Z', 'a'..'z', '_': IdentProc;
-         '{': BraceOpenProc;
-         '}', '!', '%', '&', '('..'/', ':'..'@', '['..'^', '`', '~': begin
-            case FLine[Run] of
-               '(': RoundOpenProc;
-               '.': PointProc;
-               ';': SemicolonProc;
-               '/': SlashProc;
-               ':', '>': ColonOrGreaterProc;
-               '<': LowerProc;
-               '@': AddressOpProc;
-            else
-               SymbolProc;
-            end;
-         end;
-         #$0080..#$FFFF :
-            if {$IFDEF SYN_COMPILER_18_UP}Char(FLine[Run]).IsLetterOrDigit{$ELSE}TCharacter.IsLetterOrDigit(FLine[Run]){$ENDIF} then
-               IdentProc
-            else UnknownProc;
-      else
-         UnknownProc;
-      end;
-   end;
-   inherited;
+  FAsmStart := False;
+  FTokenPos := Run;
+  case FRange of
+    rsAnsi, rsAnsiAsm:
+       AnsiProc;
+    rsBor, rsBorAsm, rsDirective, rsDirectiveAsm:
+       BorProc;
+    rsHereDocSingle:
+       StringAposMultiProc;
+    rsHereDocDouble:
+       StringQuoteProc;
+  else
+    case FLine[Run] of
+       #0: NullProc;
+       #10: LFProc;
+       #13: CRProc;
+       #1..#9, #11, #12, #14..#32: SpaceProc;
+       '#': AsciiCharProc;
+       '$': IntegerProc;
+       #39: StringAposProc;
+       '"': StringQuoteProc;
+       '0'..'9': NumberProc;
+       'A'..'Z', 'a'..'z', '_': IdentProc;
+       '{': BraceOpenProc;
+       '}', '!', '%', '&', '('..'/', ':'..'@', '['..'^', '`', '~': begin
+          case FLine[Run] of
+             '(': RoundOpenProc;
+             '.': PointProc;
+             ';': SemicolonProc;
+             '/': SlashProc;
+             ':', '>': ColonOrGreaterProc;
+             '<': LowerProc;
+             '@': AddressOpProc;
+          else
+             SymbolProc;
+          end;
+       end;
+       #$0080..#$FFFF :
+          if {$IFDEF SYN_COMPILER_18_UP}Char(FLine[Run]).IsLetterOrDigit{$ELSE}TCharacter.IsLetterOrDigit(FLine[Run]){$ENDIF} then
+             IdentProc
+          else UnknownProc;
+    else
+       UnknownProc;
+    end;
+  end;
+  inherited;
 end;
 
 function TSynDWSSyn.GetDefaultAttribute(Index: Integer):
@@ -972,27 +972,28 @@ end;
 
 function TSynDWSSyn.GetSampleSource: UnicodeString;
 begin
-  Result := '{ Syntax highlighting }'#13#10 +
-             'procedure TForm1.Button1Click(Sender: TObject);'#13#10 +
-             'var'#13#10 +
-             '  Number, I, X: Integer;'#13#10 +
-             'begin'#13#10 +
-             '  Number := 123456;'#13#10 +
-             '  Caption := ''The Number is'' + #32 + IntToStr(Number);'#13#10 +
-             '  for I := 0 to Number do'#13#10 +
-             '  begin'#13#10 +
-             '    Inc(X);'#13#10 +
-             '    Dec(X);'#13#10 +
-             '    X := X + 1.0;'#13#10 +
-             '    X := X - $5E;'#13#10 +
-             '  end;'#13#10 +
-             '  {$R+}'#13#10 +
-             '  asm'#13#10 +
-             '    mov AX, 1234H'#13#10 +
-             '    mov Number, AX'#13#10 +
-             '  end;'#13#10 +
-             '  {$R-}'#13#10 +
-             'end;';
+  Result := 
+    '{ Syntax highlighting }'#13#10 +
+    'procedure TForm1.Button1Click(Sender: TObject);'#13#10 +
+    'var'#13#10 +
+    '  Number, I, X: Integer;'#13#10 +
+    'begin'#13#10 +
+    '  Number := 123456;'#13#10 +
+    '  Caption := ''The Number is'' + #32 + IntToStr(Number);'#13#10 +
+    '  for I := 0 to Number do'#13#10 +
+    '  begin'#13#10 +
+    '    Inc(X);'#13#10 +
+    '    Dec(X);'#13#10 +
+    '    X := X + 1.0;'#13#10 +
+    '    X := X - $5E;'#13#10 +
+    '  end;'#13#10 +
+    '  {$R+}'#13#10 +
+    '  asm'#13#10 +
+    '    mov AX, 1234H'#13#10 +
+    '    mov Number, AX'#13#10 +
+    '  end;'#13#10 +
+    '  {$R-}'#13#10 +
+    'end;';
 end;
 
 
