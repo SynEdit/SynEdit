@@ -1284,6 +1284,7 @@ begin
   end;
 end;
 
+{$IFDEF SYN_DirectWrite}
 procedure TSynInternalImage.Draw(ACanvas: TDirect2DCanvas;
   Number, X, Y, LineHeight: Integer);
 var
@@ -1327,6 +1328,7 @@ begin
 //    ACanvas.BrushCopy(rcDest, FImages, rcSrc, TransparentColor);
   end;
 end;
+{$ENDIF}
 
 
 { TSynHotKey }

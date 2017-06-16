@@ -1100,5 +1100,5 @@
 
 // DirectWrite
 {$IFDEF SYN_DELPHI_2010_UP}
-  {$DEFINE SYN_DirectWrite}
+  {-$DEFINE SYN_DirectWrite}
 {$ENDIF}
