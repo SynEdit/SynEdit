@@ -110,7 +110,7 @@ uses
   SynEditKbdHandler,
 {$ENDIF}
 {$IFDEF SYN_DirectWrite}
-  Direct2d,
+  D2D1,
 {$ENDIF}
 {$IFDEF UNICODE}
   WideStrUtils,
@@ -532,10 +532,12 @@ type
 {$ENDIF}
 
 {$IFDEF SYN_DirectWrite}
-    FD2DCanvas: TDirect2DCanvas;
+    FRenderTarget: ID2D1HwndRenderTarget;
     FCanUseD2D: Boolean;
     FUseD2D: Boolean;
     FD2DFontSize: Integer;
+    FD2DTypography: IDWriteTypography;
+    FD2DLocale: array [0..84] of WideChar;
 {$ENDIF}
 
 
@@ -1201,7 +1203,6 @@ uses
   AnsiStrings,
 {$ENDIF}
 {$IFDEF SYN_DirectWrite}
-  D2D1,
   CommCtrl,
   ComObj,
 {$ENDIF}
@@ -1616,30 +1617,89 @@ end;
 {$ENDIF}
 
 {$IFDEF SYN_DirectWrite}
+var
+  SingletonD2DFactory: ID2D1Factory;
+
+function D2DFactory(FactoryType: TD2D1FactoryType = D2D1_FACTORY_TYPE_SINGLE_THREADED;
+  FactoryOptions: PD2D1FactoryOptions = nil): ID2D1Factory;
+var
+  LD2DFactory: ID2D1Factory;
+begin
+  if SingletonD2DFactory = nil then
+  begin
+    D2D1CreateFactory(FactoryType, IID_ID2D1Factory, FactoryOptions, LD2DFactory);
+    if InterlockedCompareExchangePointer(Pointer(SingletonD2DFactory), Pointer(LD2DFactory), nil) = nil then
+      LD2DFactory._AddRef;
+  end;
+  Result := SingletonD2DFactory;
+end;
+
+var
+  SingletonDWriteFactory: IDWriteFactory;
+
+function DWriteFactory(FactoryType: TDWriteFactoryType = DWRITE_FACTORY_TYPE_SHARED): IDWriteFactory;
+var
+  LDWriteFactory: IDWriteFactory;
+begin
+  if SingletonDWriteFactory = nil then
+  begin
+    DWriteCreateFactory(FactoryType, IID_IDWriteFactory, IUnknown(LDWriteFactory));
+    if InterlockedCompareExchangePointer(Pointer(SingletonDWriteFactory), Pointer(LDWriteFactory), nil) = nil then
+      LDWriteFactory._AddRef;
+  end;
+  Result := SingletonDWriteFactory;
+end;
+
+function D2D1ColorF(const AColor: TColor): TD2D1ColorF; overload;
+var
+  RGB: Cardinal;
+const
+  CScale = 1 / 255;
+begin
+  RGB := ColorToRGB(AColor);
+  Result.r :=   RGB         and $FF  * CScale;
+  Result.g := ((RGB shr  8) and $FF) * CScale;
+  Result.b := ((RGB shr 16) and $FF) * CScale;
+  Result.a :=  1.0;
+end;
+
 function TCustomSynEdit.CreateD2DCanvas: Boolean;
 var
   Size: TD2D1SizeU;
-  RenderTarget: ID2D1RenderTarget;
+  HR: HRESULT;
+  ClientRect: TRect;
+  TextAntiAliasMode: TD2D1TextAntiAliasMode;
 begin
   Result := False;
   try
     // create Direct2D canvas
-    FD2DCanvas := TDirect2DCanvas.Create(Handle);
-    RenderTarget := FD2DCanvas.RenderTarget;
+    ClientRect := Self.ClientRect;
+    Size := D2D1SizeU(ClientWidth, ClientHeight);
+    GetWindowRect(Handle, ClientRect);
+    HR := D2DFactory.CreateHwndRenderTarget(D2D1RenderTargetProperties,
+      D2D1HwndRenderTargetProperties(Handle, Size), FRenderTarget);
+    System.Win.ComObj.OleCheck(HR);
 
     // initially set the scale (otherwise the text will look strange)
-    Size := D2D1SizeU(ClientWidth, ClientHeight);
-    ID2D1HwndRenderTarget(RenderTarget).Resize(Size);
+    FRenderTarget.Resize(Size);
 
     // initialize font smoothing
     case FFontSmoothing of
       fsmAntiAlias:
-        RenderTarget.SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE);
+        TextAntiAliasMode := D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE;
       fsmClearType:
-        RenderTarget.SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_CLEARTYPE);
+        TextAntiAliasMode := D2D1_TEXT_ANTIALIAS_MODE_CLEARTYPE;
       else // fsmNone also
-        RenderTarget.SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_ALIASED);
+        TextAntiAliasMode := D2D1_TEXT_ANTIALIAS_MODE_ALIASED;
     end;
+
+    FRenderTarget.SetTextAntialiasMode(TextAntiAliasMode);
+
+    DWriteFactory.CreateTypography(FD2DTypography);
+    Assert(FD2DTypography.GetFontFeatureCount = 0);
+
+    if (LCIDToLocaleName(GetUserDefaultLCID, FD2DLocale, 85, 0) = 0) then
+      RaiseLastOSError
   except
     Exit;
   end;
@@ -3025,8 +3085,10 @@ procedure TCustomSynEdit.PaintGutterD2D(const AClip: TRect;
           ImageList_DrawEx(Handle, AMark.ImageIndex, TempImage.Canvas.Handle,
             0, 0, 0, 0, CLR_NONE, CLR_NONE, ILD_TRANSPARENT);
 
+(*
           FD2DCanvas.Draw(FBookMarkOpt.LeftMargin + AGutterOff,
             (AMarkRow - TopLine) * FTextHeight, TempImage);
+*)
         finally
           TempImage.Free;
         end;
@@ -3071,7 +3133,6 @@ var
   LinearGradientBrush: ID2D1LinearGradientBrush;
   SolidColorBrush: ID2D1SolidColorBrush;
   Brush: ID2D1Brush;
-  RenderTarget: ID2D1RenderTarget;
   FontWeight: TDWriteFontWeight;
   FontStyle: TDWriteFontStyle;
   TextFormat: IDWriteTextFormat;
@@ -3085,21 +3146,18 @@ begin
   FirstLine := RowToLine(AFirstRow);
   LastLine := RowToLine(ALastRow);
 
-  RenderTarget := FD2DCanvas.RenderTarget;
-
-  FD2DCanvas.Brush.Style := bsSolid;
   if FGutter.Gradient then
   begin
     GradientStops[0].position := 0;
     GradientStops[0].color := D2D1ColorF(FGutter.GradientStartColor);
     GradientStops[1].position := 1;
     GradientStops[1].color := D2D1ColorF(FGutter.GradientEndColor);
-    RenderTarget.CreateGradientStopCollection(@GradientStops[0], 2,
+    FRenderTarget.CreateGradientStopCollection(@GradientStops[0], 2,
       D2D1_GAMMA_2_2, D2D1_EXTEND_MODE_CLAMP, GradientStopCollection);
 
     LinearGradientBrushProperties.startPoint := D2D1PointF(0, 0);
     LinearGradientBrushProperties.endPoint := D2D1PointF(FGutterWidth, 0);
-    RenderTarget.CreateLinearGradientBrush(LinearGradientBrushProperties,
+    FRenderTarget.CreateLinearGradientBrush(LinearGradientBrushProperties,
       nil, GradientStopCollection, LinearGradientBrush);
 
     Brush := LinearGradientBrush;
@@ -3107,14 +3165,14 @@ begin
   else
   begin
     // create a solid color brush
-    RenderTarget.CreateSolidColorBrush(D2D1ColorF(FGutter.Color), nil,
+    FRenderTarget.CreateSolidColorBrush(D2D1ColorF(FGutter.Color), nil,
       SolidColorBrush);
 
     Brush := SolidColorBrush;
   end;
 
   // draw background
-  RenderTarget.FillRectangle(Rect(0, 0, FGutterWidth, ClientHeight), Brush);
+  FRenderTarget.FillRectangle(Rect(0, 0, FGutterWidth, ClientHeight), Brush);
 
   // release brush
   Brush := nil;
@@ -3147,8 +3205,9 @@ begin
 
     DWriteFactory.CreateTextFormat(PWideChar(CurrentFont.Name), nil,
       FontWeight, FontStyle, DWRITE_FONT_STRETCH_NORMAL, FD2DFontSize,
-      'en-us', TextFormat);
-    RenderTarget.CreateSolidColorBrush(D2D1ColorF(CurrentFont.Color), nil,
+      FD2DLocale, TextFormat);
+    TextFormat.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
+    FRenderTarget.CreateSolidColorBrush(D2D1ColorF(CurrentFont.Color), nil,
       SolidColorBrush);
 
     for CurrentLine := FirstLine to LastLine do
@@ -3165,7 +3224,6 @@ begin
 
       OleCheck(DWriteFactory.CreateTextLayout(PWideChar(Str), Length(Str),
         TextFormat, RectLine.Width, RectLine.Height, TextLayout));
-      TextLayout.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
       OleCheck(TextLayout.GetMetrics(TextMetrics));
 
       TextSize.cx := Round(TextMetrics.widthIncludingTrailingWhitespace);
@@ -3175,7 +3233,7 @@ begin
       if FGutter.ShowModification then
         TextOffset := TextOffset - FGutter.ModificationBarWidth;
 
-      RenderTarget.DrawTextLayout(D2D1PointF(TextOffset - 0.5,
+      FRenderTarget.DrawTextLayout(D2D1PointF(TextOffset - 0.5,
         RectLine.Top + ((FTextHeight - Integer(TextSize.cy)) div 2) - 0.5),
         TextLayout, SolidColorBrush);
     end;
@@ -3192,13 +3250,15 @@ begin
       LineTop := (LineToRow(CurrentLine) - TopLine) * FTextHeight;
       case TSynEditStringList(FLines).Modification[CurrentLine - 1] of
         smModified:
-          RenderTarget.CreateSolidColorBrush(D2D1ColorF(FGutter.ModificationColorModified), nil, SolidColorBrush);
+          FRenderTarget.CreateSolidColorBrush(
+            D2D1ColorF(FGutter.ModificationColorModified), nil, SolidColorBrush);
         smSaved:
-          RenderTarget.CreateSolidColorBrush(D2D1ColorF(FGutter.ModificationColorSaved), nil, SolidColorBrush);
+          FRenderTarget.CreateSolidColorBrush(
+            D2D1ColorF(FGutter.ModificationColorSaved), nil, SolidColorBrush);
         else
           Continue;
       end;
-      RenderTarget.FillRectangle(Rect(FGutterWidth - FGutter.RightOffset -
+      FRenderTarget.FillRectangle(Rect(FGutterWidth - FGutter.RightOffset -
         FGutter.ModificationBarWidth, LineTop, FGutterWidth -
         FGutter.RightOffset, LineTop  + FTextHeight), SolidColorBrush);
 
@@ -3220,12 +3280,12 @@ begin
   // the gutter separator if visible
   if (FGutter.BorderStyle <> gbsNone) and (AClip.Right >= FGutterWidth - 2) then
   begin
-    RenderTarget.CreateSolidColorBrush(D2D1ColorF(FGutter.BorderColor), nil, SolidColorBrush);
+    FRenderTarget.CreateSolidColorBrush(D2D1ColorF(FGutter.BorderColor), nil, SolidColorBrush);
     with AClip do
     begin
       if FGutter.BorderStyle = gbsMiddle then
       begin
-        RenderTarget.DrawLine(
+        FRenderTarget.DrawLine(
           D2D1PointF(FGutterWidth - 1.5, Top + 0.5),
           D2D1PointF(FGutterWidth - 1.5, Bottom + 0.5),
           SolidColorBrush);
@@ -3234,10 +3294,10 @@ begin
         SolidColorBrush := nil;
 
         // create new brush
-        RenderTarget.CreateSolidColorBrush(D2D1ColorF(FGutter.Color), nil,
+        FRenderTarget.CreateSolidColorBrush(D2D1ColorF(FGutter.Color), nil,
           SolidColorBrush);
       end;
-      RenderTarget.DrawLine(
+      FRenderTarget.DrawLine(
         D2D1PointF(FGutterWidth - 0.5, Top + 0.5),
         D2D1PointF(FGutterWidth - 0.5, Bottom + 0.5),
         SolidColorBrush);
@@ -3373,18 +3433,19 @@ begin
 {$IFDEF SYN_DirectWrite}
   if FUseD2D then
   begin
-    if (fsItalic in FD2DCanvas.Font.Style) then
+    if (fsItalic in Self.Font.Style) then
       FontStyle := DWRITE_FONT_STYLE_ITALIC
     else
       FontStyle := DWRITE_FONT_STYLE_NORMAL;
-    if (fsBold in FD2DCanvas.Font.Style) then
+    if (fsBold in Self.Font.Style) then
       FontWeight := DWRITE_FONT_WEIGHT_BOLD
     else
       FontWeight := DWRITE_FONT_WEIGHT_NORMAL;
 
-    DWriteFactory.CreateTextFormat(PWideChar(FD2DCanvas.Font.Name), nil,
+    DWriteFactory.CreateTextFormat(PWideChar(Self.Font.Name), nil,
       FontWeight, FontStyle, DWRITE_FONT_STRETCH_NORMAL, FD2DFontSize,
-      'en-us', TextFormat);
+      FD2DLocale, TextFormat);
+    TextFormat.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
   end;
 {$ENDIF}
 
@@ -3396,8 +3457,6 @@ begin
     begin
       OleCheck(DWriteFactory.CreateTextLayout(@s[i], 1, TextFormat, 0, 0,
         TextLayout));
-      TextLayout.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
-
       OleCheck(TextLayout.GetMetrics(TextMetrics));
       CountOfAvgGlyphs := CeilOfIntDiv(Round(
         TextMetrics.widthIncludingTrailingWhitespace), FCharWidth)
@@ -4324,7 +4383,6 @@ var
   TextFormat: IDWriteTextFormat;
   SolidColorBrush: ID2D1SolidColorBrush;
   SolidColorFontBrush: ID2D1SolidColorBrush;
-  RenderTarget: ID2D1RenderTarget;
 
   vFirstLine: Integer;
   vLastLine: Integer;
@@ -4426,9 +4484,9 @@ var
       ColorBG := colBG;
     end;
 
-    RenderTarget.CreateSolidColorBrush(D2D1ColorF(ColorFG), nil,
+    FRenderTarget.CreateSolidColorBrush(D2D1ColorF(ColorFG), nil,
       SolidColorFontBrush);
-    RenderTarget.CreateSolidColorBrush(D2D1ColorF(ColorBG), nil,
+    FRenderTarget.CreateSolidColorBrush(D2D1ColorF(ColorBG), nil,
       SolidColorBrush);
   end;
 
@@ -4437,7 +4495,7 @@ var
     Color: TColor;
   begin
     if Selected then Color := colSelBG else Color := colBG;
-    RenderTarget.CreateSolidColorBrush(D2D1ColorF(Color), nil, SolidColorBrush);
+    FRenderTarget.CreateSolidColorBrush(D2D1ColorF(Color), nil, SolidColorBrush);
   end;
 
   function ColumnToXValue(Col: Integer): Integer;
@@ -4460,6 +4518,7 @@ var
     i, TabStart, TabLen, CountOfAvgGlyphs, VisibleGlyphPart, FillerCount,
     NonFillerPos: Integer;
     rcTab: TRect;
+//    TextRange: TDwriteTextRange;
     TextLayout: IDWriteTextLayout;
     TextMetrics: TDWriteTextMetrics;
   begin
@@ -4506,7 +4565,6 @@ var
 
         OleCheck(DWriteFactory.CreateTextLayout(@Token[NonFillerPos], 1,
           TextFormat, 0, 0, TextLayout));
-        TextLayout.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
 
         OleCheck(TextLayout.GetMetrics(TextMetrics));
         CountOfAvgGlyphs := CeilOfIntDiv(Round(
@@ -4534,13 +4592,18 @@ var
         Text := ShrinkAtWideGlyphs(Token, First, nCharsToPaint);
       end;
 
-      RenderTarget.FillRectangle(rcToken, SolidColorBrush);
+      FRenderTarget.FillRectangle(rcToken, SolidColorBrush);
 
       OleCheck(DWriteFactory.CreateTextLayout(PWideChar(Text), nCharsToPaint,
         TextFormat, rcToken.Width, rcToken.Height, TextLayout));
-      TextLayout.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
 
-      RenderTarget.DrawTextLayout(D2D1PointF(nX, rcToken.Top), TextLayout,
+(*
+      TextRange.startPosition := 0;
+      TextRange.length := nCharsToPaint;
+      OleCheck(TextLayout.SetTypography(FD2DTypography, TextRange));
+*)
+
+      FRenderTarget.DrawTextLayout(D2D1PointF(nX, rcToken.Top), TextLayout,
         SolidColorFontBrush);
 
       if DoTabPainting then
@@ -4567,13 +4630,12 @@ var
           rcTab.Left := nX;
           rcTab.Right := nX + FTextDrawer.GetCharWidth;
 
-          RenderTarget.FillRectangle(rcToken, SolidColorBrush);
+          FRenderTarget.FillRectangle(rcToken, SolidColorBrush);
 
           OleCheck(DWriteFactory.CreateTextLayout(PWideChar(Text), 1,
-            FD2DCanvas.Font.Handle, rcToken.Width, rcToken.Height, TextLayout));
-          TextLayout.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
+            TextFormat, rcToken.Width, rcToken.Height, TextLayout));
 
-          RenderTarget.DrawTextLayout(D2D1PointF(nX, rcToken.Top), TextLayout,
+          FRenderTarget.DrawTextLayout(D2D1PointF(nX, rcToken.Top), TextLayout,
             SolidColorFontBrush);
 
           for i := 0 to TabLen - 1 do           //wipe the text out so we don't
@@ -4605,9 +4667,9 @@ var
     end
     else
     begin
-      bU1 := False; // to shut up Compiler warning Delphi 2
+      bU1 := False;
       bSel := bLineSelected;
-      bU2 := False; // to shut up Compiler warning Delphi 2
+      bU2 := False;
       bComplexToken := False;
     end;
     // Any token chars accumulated?
@@ -4633,9 +4695,10 @@ var
       else
         FontWeight := DWRITE_FONT_WEIGHT_NORMAL;
 
-      DWriteFactory.CreateTextFormat(PWideChar(FD2DCanvas.Font.Name), nil,
+      DWriteFactory.CreateTextFormat(PWideChar(Self.Font.Name), nil,
         FontWeight, FontStyle, DWRITE_FONT_STRETCH_NORMAL, FD2DFontSize,
-        'en-us', TextFormat);
+        FD2DLocale, TextFormat);
+      TextFormat.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
 
       // Paint the chars
       if bComplexToken then
@@ -4688,7 +4751,7 @@ var
         begin
           SetBackgroundColorBrush(False);
           rcToken.Right := nX1;
-          RenderTarget.FillRectangle(rcToken, SolidColorBrush);
+          FRenderTarget.FillRectangle(rcToken, SolidColorBrush);
           rcToken.Left := nX1;
         end;
 
@@ -4696,7 +4759,7 @@ var
         begin
           SetBackgroundColorBrush(True);
           rcToken.Right := nX2;
-          RenderTarget.FillRectangle(rcToken, SolidColorBrush);
+          FRenderTarget.FillRectangle(rcToken, SolidColorBrush);
           rcToken.Left := nX2;
         end;
 
@@ -4704,14 +4767,14 @@ var
         begin
           SetBackgroundColorBrush(False);
           rcToken.Right := rcLine.Right;
-          RenderTarget.FillRectangle(rcToken, SolidColorBrush);
+          FRenderTarget.FillRectangle(rcToken, SolidColorBrush);
         end;
       end
       else
       begin
         SetBackgroundColorBrush(bLineSelected);
         rcToken.Right := rcLine.Right;
-        RenderTarget.FillRectangle(rcToken, SolidColorBrush);
+        FRenderTarget.FillRectangle(rcToken, SolidColorBrush);
       end;
     end;
   end;
@@ -5059,9 +5122,6 @@ begin
 
   rcToken := AClip;
   rcToken.Left := Max(AClip.Left, FGutterWidth);
-  FD2DCanvas.Brush.Style := bsSolid;
-  FD2DCanvas.Font.Assign(Self.Font);
-  RenderTarget := FD2DCanvas.RenderTarget;
 
   bCurrentLine := False;
 
@@ -5082,9 +5142,9 @@ begin
     if Highlighter <> nil then
       Highlighter.ResetRange;
 
-    RenderTarget.CreateSolidColorBrush(D2D1ColorF(colEditorBG), nil,
+    FRenderTarget.CreateSolidColorBrush(D2D1ColorF(colEditorBG), nil,
       SolidColorBrush);
-    RenderTarget.FillRectangle(rcToken, SolidColorBrush);
+    FRenderTarget.FillRectangle(rcToken, SolidColorBrush);
 
     // release brush
     SolidColorBrush := nil;
@@ -5099,7 +5159,6 @@ begin
   if (vLastLine >= vFirstLine) then
   begin
     ComputeSelectionInfo;
-    FD2DCanvas.Font.Style := Font.Style;
     PaintLinesD2D;
   end;
 
@@ -5111,9 +5170,9 @@ begin
     if Highlighter <> nil then
       Highlighter.ResetRange;
 
-    RenderTarget.CreateSolidColorBrush(D2D1ColorF(colEditorBG), nil,
+    FRenderTarget.CreateSolidColorBrush(D2D1ColorF(colEditorBG), nil,
       SolidColorBrush);
-    RenderTarget.FillRectangle(rcToken, SolidColorBrush);
+    FRenderTarget.FillRectangle(rcToken, SolidColorBrush);
 
     // release brush
     SolidColorBrush := nil;
@@ -5125,10 +5184,10 @@ begin
     nRightEdge := FTextOffset + FRightEdge * FCharWidth; // pixel value
     if (nRightEdge >= AClip.Left) and (nRightEdge <= AClip.Right) then
     begin
-      RenderTarget.CreateSolidColorBrush(D2D1ColorF(FRightEdgeColor), nil,
+      FRenderTarget.CreateSolidColorBrush(D2D1ColorF(FRightEdgeColor), nil,
         SolidColorBrush);
 
-      RenderTarget.DrawLine(
+      FRenderTarget.DrawLine(
         D2D1PointF(nRightEdge + 0.5, AClip.Top + 0.5),
         D2D1PointF(nRightEdge + 0.5, AClip.Bottom + 0.5),
         SolidColorBrush);
@@ -6815,11 +6874,11 @@ begin
   begin
     BeginPaint(Handle, PaintStruct);
     try
-      FD2DCanvas.BeginDraw;
+      FRenderTarget.BeginDraw;
       try
         PaintD2D;
       finally
-        FD2DCanvas.EndDraw;
+        FRenderTarget.EndDraw;
       end;
     finally
       EndPaint(Handle, PaintStruct);
@@ -6870,10 +6929,10 @@ procedure TCustomSynEdit.WMSize(var Msg: TWMSize);
 var
   Size: TD2D1SizeU;
 begin
-  if FD2DCanvas <> nil then
+  if Assigned(FRenderTarget) then
   begin
     Size := D2D1SizeU(ClientWidth, ClientHeight);
-    ID2D1HwndRenderTarget(FD2DCanvas.RenderTarget).Resize(Size);
+    FRenderTarget.Resize(Size);
   end;
 {$ELSE}
 begin
@@ -9836,7 +9895,8 @@ begin
 
         DWriteFactory.CreateTextFormat(PWideChar(FGutter.Font.Name), nil,
           FontWeight, FontStyle, DWRITE_FONT_STRETCH_NORMAL, FD2DFontSize,
-          'en-us', TextFormat);
+          FD2DLocale, TextFormat);
+        TextFormat.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
 
         TextFormat.GetFontCollection(FontCollection);
         FontCollection.FindFamilyName(PWideChar(Self.Font.Name),
@@ -9862,7 +9922,6 @@ begin
         begin
           OleCheck(DWriteFactory.CreateTextLayout(PWideChar('M'), 1, TextFormat,
             0, 0, TextLayout));
-          TextLayout.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
 
           OleCheck(TextLayout.GetMetrics(TextMetrics));
 
@@ -10538,8 +10597,8 @@ var
   FontStyle: TDWriteFontStyle;
   FontMetrics: TDwriteFontMetrics;
   TextFormat: IDWriteTextFormat;
-  Glyph: Word;
-  GlyphMetrics: TDwriteGlyphMetrics;
+  GlyphIndex: Word;
+  GlyphMetrics: array [32..126] of TDwriteGlyphMetrics;
   Ratio: Single;
 {$ENDIF}
   Done: Boolean;
@@ -10577,10 +10636,21 @@ begin
 {$IFDEF SYN_DirectWrite}
   if FUseD2D then
   begin
-    FD2DCanvas.Font.Assign(Self.Font);
-    FD2DFontSize := MulDiv(FD2DCanvas.Font.Size, FD2DCanvas.Font.PixelsPerInch, 72);
+    FD2DFontSize := MulDiv(Self.Font.Size, Self.Font.PixelsPerInch, 72);
 
-    TextFormat := FD2DCanvas.Font.Handle;
+    if (fsItalic in Self.Font.Style) then
+      FontStyle := DWRITE_FONT_STYLE_ITALIC
+    else
+      FontStyle := DWRITE_FONT_STYLE_NORMAL;
+    if (fsBold in Self.Font.Style) then
+      FontWeight := DWRITE_FONT_WEIGHT_BOLD
+    else
+      FontWeight := DWRITE_FONT_WEIGHT_NORMAL;
+
+    DWriteFactory.CreateTextFormat(PWideChar(Self.Font.Name), nil, FontWeight,
+      FontStyle, DWRITE_FONT_STRETCH_NORMAL, FD2DFontSize, FD2DLocale,
+      TextFormat);
+
     TextFormat.GetFontCollection(FontCollection);
     FontCollection.FindFamilyName(PWideChar(Self.Font.Name), FontIndex, FontExists);
     if FontExists then
@@ -10606,11 +10676,12 @@ begin
           FontDW.CreateFontFace(FontFace);
           FontFace.GetMetrics(FontMetrics);
           Ratio := TextFormat.GetFontSize / FontMetrics.designUnitsPerEm;
-          Glyph := Ord('M');
-          FontFace.GetDesignGlyphMetrics(@Glyph, 1, @GlyphMetrics);
+          GlyphIndex := 32;
+          FontFace.GetDesignGlyphMetrics(@GlyphIndex, 127 - 32, @GlyphMetrics[32]);
 
           FTextHeight := Max(FTextHeight, Ceil(Ratio * (FontMetrics.ascent + FontMetrics.descent + FontMetrics.lineGap)));
-          FCharWidth := Max(FCharWidth, Ceil(Ratio * GlyphMetrics.advanceWidth));
+          for GlyphIndex := Low(GlyphMetrics) to High(GlyphMetrics) do
+            FCharWidth := Max(FCharWidth, Ceil(Ratio * GlyphMetrics[GlyphIndex].advanceWidth));
         end;
 
       Done := True;
@@ -11197,7 +11268,7 @@ procedure TCustomSynEdit.DestroyWnd;
 begin
 {$IFDEF SYN_DirectWrite}
   if FCanUseD2D then
-    FD2DCanvas.Free;
+    FRenderTarget := nil;
 {$ENDIF}
 
   if (eoDropFiles in FOptions) and not (csDesigning in ComponentState) then
@@ -11659,15 +11730,17 @@ begin
   Font.Handle := CreateFontIndirect(lf);
 
 {$IFDEF SYN_DirectWrite}
-  if Assigned(FD2DCanvas) then
+  if Assigned(FRenderTarget) then
+  begin
     case FFontSmoothing of
       fsmAntiAlias:
-        FD2DCanvas.RenderTarget.SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE);
+        FRenderTarget.SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE);
       fsmClearType:
-        FD2DCanvas.RenderTarget.SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_CLEARTYPE);
+        FRenderTarget.SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_CLEARTYPE);
       else // fsmNone also
-        FD2DCanvas.RenderTarget.SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_ALIASED);
+        FRenderTarget.SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_ALIASED);
     end;
+  end;
 {$ENDIF}
 end;
 
@@ -12088,18 +12161,19 @@ begin
 {$IFDEF SYN_DirectWrite}
     if FUseD2D then
     begin
-      if (fsItalic in FD2DCanvas.Font.Style) then
+      if (fsItalic in Self.Font.Style) then
         FontStyle := DWRITE_FONT_STYLE_ITALIC
       else
         FontStyle := DWRITE_FONT_STYLE_NORMAL;
-      if (fsBold in FD2DCanvas.Font.Style) then
+      if (fsBold in Self.Font.Style) then
         FontWeight := DWRITE_FONT_WEIGHT_BOLD
       else
         FontWeight := DWRITE_FONT_WEIGHT_NORMAL;
 
-      DWriteFactory.CreateTextFormat(PWideChar(FD2DCanvas.Font.Name), nil,
+      DWriteFactory.CreateTextFormat(PWideChar(Self.Font.Name), nil,
         FontWeight, FontStyle, DWRITE_FONT_STRETCH_NORMAL, FD2DFontSize,
-        'en-us', TextFormat);
+        FD2DLocale, TextFormat);
+      TextFormat.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
     end;
 {$ENDIF}
 
@@ -12113,7 +12187,6 @@ begin
         begin
           OleCheck(DWriteFactory.CreateTextLayout(@s[i], 1, TextFormat, 0, 0,
             TextLayout));
-          TextLayout.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
 
           OleCheck(TextLayout.GetMetrics(TextMetrics));
           CountOfAvgGlyphs := CeilOfIntDiv(Round(
@@ -12156,7 +12229,7 @@ begin
     Result := TBufferCoord(p);
   if Result.Line <= lines.Count then
   begin
-    s := Lines[Result.Line -1];
+    s := Lines[Result.Line - 1];
     l := Length(s);
     x := 0;
     i := 0;
@@ -12164,18 +12237,19 @@ begin
 {$IFDEF SYN_DirectWrite}
     if FUseD2D then
     begin
-      if (fsItalic in FD2DCanvas.Font.Style) then
+      if (fsItalic in Self.Font.Style) then
         FontStyle := DWRITE_FONT_STYLE_ITALIC
       else
         FontStyle := DWRITE_FONT_STYLE_NORMAL;
-      if (fsBold in FD2DCanvas.Font.Style) then
+      if (fsBold in Self.Font.Style) then
         FontWeight := DWRITE_FONT_WEIGHT_BOLD
       else
         FontWeight := DWRITE_FONT_WEIGHT_NORMAL;
 
-      DWriteFactory.CreateTextFormat(PWideChar(FD2DCanvas.Font.Name), nil,
+      DWriteFactory.CreateTextFormat(PWideChar(Self.Font.Name), nil,
         FontWeight, FontStyle, DWRITE_FONT_STRETCH_NORMAL, FD2DFontSize,
-        'en-us', TextFormat);
+        FD2DLocale, TextFormat);
+      TextFormat.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
     end;
 {$ENDIF}
 
@@ -12191,7 +12265,6 @@ begin
         begin
           OleCheck(DWriteFactory.CreateTextLayout(@s[i], 1, TextFormat, 0, 0,
             TextLayout));
-          TextLayout.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
 
           OleCheck(TextLayout.GetMetrics(TextMetrics));
           CountOfAvgGlyphs := CeilOfIntDiv(Round(
