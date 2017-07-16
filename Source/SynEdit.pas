@@ -735,6 +735,7 @@ type
     procedure PaintTextLines(AClip: TRect; const aFirstRow, aLastRow,
       FirstCol, LastCol: Integer); virtual;
 {$IFDEF SYN_DirectWrite}
+    function GetTextFormat(Styles: TFontStyles): IDWriteTextFormat;
     procedure PaintD2D;
     procedure PaintGutterD2D(const AClip: TRect; const aFirstRow,
       aLastRow: Integer); virtual;
@@ -1669,6 +1670,7 @@ var
   HR: HRESULT;
   ClientRect: TRect;
   TextAntiAliasMode: TD2D1TextAntiAliasMode;
+  FontFeature: TDwriteFontFeature;
 begin
   Result := False;
   try
@@ -1697,6 +1699,11 @@ begin
 
     DWriteFactory.CreateTypography(FD2DTypography);
     Assert(FD2DTypography.GetFontFeatureCount = 0);
+
+    // disable kerning
+    FontFeature.nameTag := DWRITE_FONT_FEATURE_TAG_KERNING;
+    FontFeature.parameter := 1;
+    FD2DTypography.AddFontFeature(FontFeature);
 
     if (LCIDToLocaleName(GetUserDefaultLCID, FD2DLocale, 85, 0) = 0) then
       RaiseLastOSError
@@ -3135,6 +3142,7 @@ var
   Brush: ID2D1Brush;
   FontWeight: TDWriteFontWeight;
   FontStyle: TDWriteFontStyle;
+  FontSize: Integer;
   TextFormat: IDWriteTextFormat;
   TextMetrics: TDWriteTextMetrics;
   TextLSMethod: DWRITE_LINE_SPACING_METHOD;
@@ -3190,12 +3198,14 @@ begin
         FontWeight := DWRITE_FONT_WEIGHT_BOLD
       else
         FontWeight := DWRITE_FONT_WEIGHT_NORMAL;
+      FontSize := MulDiv(FGutter.Font.Size, FGutter.Font.PixelsPerInch, 72);
     end
     else
     begin
       CurrentFont := Self.Font;
       FontWeight := DWRITE_FONT_WEIGHT_NORMAL;
       FontStyle := DWRITE_FONT_STYLE_NORMAL;
+      FontSize := FD2DFontSize;
     end;
 
     // prepare the rect initially
@@ -3204,9 +3214,10 @@ begin
     RectLine.Bottom := RectLine.Top;
 
     DWriteFactory.CreateTextFormat(PWideChar(CurrentFont.Name), nil,
-      FontWeight, FontStyle, DWRITE_FONT_STRETCH_NORMAL, FD2DFontSize,
+      FontWeight, FontStyle, DWRITE_FONT_STRETCH_NORMAL, FontSize,
       FD2DLocale, TextFormat);
     TextFormat.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
+
     FRenderTarget.CreateSolidColorBrush(D2D1ColorF(CurrentFont.Color), nil,
       SolidColorBrush);
 
@@ -3422,8 +3433,6 @@ var
   TextFormat: IDWriteTextFormat;
   TextLayout: IDWriteTextLayout;
   TextMetrics: TDwriteTextMetrics;
-  FontWeight: TDWriteFontWeight;
-  FontStyle: TDWriteFontStyle;
 {$ENDIF}
 begin
   Result := S;
@@ -3433,18 +3442,7 @@ begin
 {$IFDEF SYN_DirectWrite}
   if FUseD2D then
   begin
-    if (fsItalic in Self.Font.Style) then
-      FontStyle := DWRITE_FONT_STYLE_ITALIC
-    else
-      FontStyle := DWRITE_FONT_STYLE_NORMAL;
-    if (fsBold in Self.Font.Style) then
-      FontWeight := DWRITE_FONT_WEIGHT_BOLD
-    else
-      FontWeight := DWRITE_FONT_WEIGHT_NORMAL;
-
-    DWriteFactory.CreateTextFormat(PWideChar(Self.Font.Name), nil,
-      FontWeight, FontStyle, DWRITE_FONT_STRETCH_NORMAL, FD2DFontSize,
-      FD2DLocale, TextFormat);
+    TextFormat := GetTextFormat(Self.Font.Style);
     TextFormat.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
   end;
 {$ENDIF}
@@ -4345,6 +4343,26 @@ begin
 end;
 
 {$IFDEF SYN_DirectWrite}
+function TCustomSynEdit.GetTextFormat(Styles: TFontStyles): IDWriteTextFormat;
+var
+  FontWeight: TDWriteFontWeight;
+  FontStyle: TDWriteFontStyle;
+begin
+  // font style changes
+  if (fsItalic in Styles) then
+    FontStyle := DWRITE_FONT_STYLE_ITALIC
+  else
+    FontStyle := DWRITE_FONT_STYLE_NORMAL;
+  if (fsBold in Styles) then
+    FontWeight := DWRITE_FONT_WEIGHT_BOLD
+  else
+    FontWeight := DWRITE_FONT_WEIGHT_NORMAL;
+
+  DWriteFactory.CreateTextFormat(PWideChar(Self.Font.Name), nil,
+    FontWeight, FontStyle, DWRITE_FONT_STRETCH_NORMAL, FD2DFontSize,
+    FD2DLocale, Result);
+end;
+
 procedure TCustomSynEdit.PaintTextLinesD2D(AClip: TRect; const aFirstRow,
   aLastRow, FirstCol, LastCol: Integer);
 var
@@ -4378,8 +4396,6 @@ var
   end;
   SynTabGlyphString: UnicodeString;
 
-  FontWeight: TDWriteFontWeight;
-  FontStyle: TDWriteFontStyle;
   TextFormat: IDWriteTextFormat;
   SolidColorBrush: ID2D1SolidColorBrush;
   SolidColorFontBrush: ID2D1SolidColorBrush;
@@ -4518,7 +4534,7 @@ var
     i, TabStart, TabLen, CountOfAvgGlyphs, VisibleGlyphPart, FillerCount,
     NonFillerPos: Integer;
     rcTab: TRect;
-//    TextRange: TDwriteTextRange;
+    TextRange: TDwriteTextRange;
     TextLayout: IDWriteTextLayout;
     TextMetrics: TDWriteTextMetrics;
   begin
@@ -4597,11 +4613,16 @@ var
       OleCheck(DWriteFactory.CreateTextLayout(PWideChar(Text), nCharsToPaint,
         TextFormat, rcToken.Width, rcToken.Height, TextLayout));
 
-(*
       TextRange.startPosition := 0;
       TextRange.length := nCharsToPaint;
+
+      if fsStrikeOut in Self.Font.Style then
+        TextLayout.SetStrikethrough(True, TextRange);
+
+      if fsUnderline in Self.Font.Style then
+        TextLayout.SetUnderline(True, TextRange);
+
       OleCheck(TextLayout.SetTypography(FD2DTypography, TextRange));
-*)
 
       FRenderTarget.DrawTextLayout(D2D1PointF(nX, rcToken.Top), TextLayout,
         SolidColorFontBrush);
@@ -4672,6 +4693,7 @@ var
       bU2 := False;
       bComplexToken := False;
     end;
+
     // Any token chars accumulated?
     if (TokenAccu.Len > 0) then
     begin
@@ -4686,18 +4708,7 @@ var
         colFG := TokenAccu.FG;
 
       // font style changes
-      if (fsItalic in TokenAccu.Style) then
-        FontStyle := DWRITE_FONT_STYLE_ITALIC
-      else
-        FontStyle := DWRITE_FONT_STYLE_NORMAL;
-      if (fsBold in TokenAccu.Style) then
-        FontWeight := DWRITE_FONT_WEIGHT_BOLD
-      else
-        FontWeight := DWRITE_FONT_WEIGHT_NORMAL;
-
-      DWriteFactory.CreateTextFormat(PWideChar(Self.Font.Name), nil,
-        FontWeight, FontStyle, DWRITE_FONT_STRETCH_NORMAL, FD2DFontSize,
-        FD2DLocale, TextFormat);
+      TextFormat := GetTextFormat(TokenAccu.Style);
       TextFormat.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
 
       // Paint the chars
@@ -9894,7 +9905,8 @@ begin
           FontWeight := DWRITE_FONT_WEIGHT_NORMAL;
 
         DWriteFactory.CreateTextFormat(PWideChar(FGutter.Font.Name), nil,
-          FontWeight, FontStyle, DWRITE_FONT_STRETCH_NORMAL, FD2DFontSize,
+          FontWeight, FontStyle, DWRITE_FONT_STRETCH_NORMAL,
+          MulDiv(FGutter.Font.Size, FGutter.Font.PixelsPerInch, 72),
           FD2DLocale, TextFormat);
         TextFormat.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
 
@@ -10638,20 +10650,9 @@ begin
   begin
     FD2DFontSize := MulDiv(Self.Font.Size, Self.Font.PixelsPerInch, 72);
 
-    if (fsItalic in Self.Font.Style) then
-      FontStyle := DWRITE_FONT_STYLE_ITALIC
-    else
-      FontStyle := DWRITE_FONT_STYLE_NORMAL;
-    if (fsBold in Self.Font.Style) then
-      FontWeight := DWRITE_FONT_WEIGHT_BOLD
-    else
-      FontWeight := DWRITE_FONT_WEIGHT_NORMAL;
-
-    DWriteFactory.CreateTextFormat(PWideChar(Self.Font.Name), nil, FontWeight,
-      FontStyle, DWRITE_FONT_STRETCH_NORMAL, FD2DFontSize, FD2DLocale,
-      TextFormat);
-
+    TextFormat := GetTextFormat(Self.Font.Style);
     TextFormat.GetFontCollection(FontCollection);
+
     FontCollection.FindFamilyName(PWideChar(Self.Font.Name), FontIndex, FontExists);
     if FontExists then
     begin
@@ -10679,7 +10680,7 @@ begin
           GlyphIndex := 32;
           FontFace.GetDesignGlyphMetrics(@GlyphIndex, 127 - 32, @GlyphMetrics[32]);
 
-          FTextHeight := Max(FTextHeight, Ceil(Ratio * (FontMetrics.ascent + FontMetrics.descent + FontMetrics.lineGap)));
+          FTextHeight := Max(FTextHeight, Ceil(Ratio * (FontMetrics.ascent + FontMetrics.descent + FontMetrics.lineGap)) + 2);
           for GlyphIndex := Low(GlyphMetrics) to High(GlyphMetrics) do
             FCharWidth := Max(FCharWidth, Ceil(Ratio * GlyphMetrics[GlyphIndex].advanceWidth));
         end;
@@ -12145,8 +12146,6 @@ var
   TextFormat: IDWriteTextFormat;
   TextLayout: IDWriteTextLayout;
   TextMetrics: TDwriteTextMetrics;
-  FontWeight: TDWriteFontWeight;
-  FontStyle: TDWriteFontStyle;
 {$ENDIF}
 begin
   Canvas.Font := Font;
@@ -12161,18 +12160,7 @@ begin
 {$IFDEF SYN_DirectWrite}
     if FUseD2D then
     begin
-      if (fsItalic in Self.Font.Style) then
-        FontStyle := DWRITE_FONT_STYLE_ITALIC
-      else
-        FontStyle := DWRITE_FONT_STYLE_NORMAL;
-      if (fsBold in Self.Font.Style) then
-        FontWeight := DWRITE_FONT_WEIGHT_BOLD
-      else
-        FontWeight := DWRITE_FONT_WEIGHT_NORMAL;
-
-      DWriteFactory.CreateTextFormat(PWideChar(Self.Font.Name), nil,
-        FontWeight, FontStyle, DWRITE_FONT_STRETCH_NORMAL, FD2DFontSize,
-        FD2DLocale, TextFormat);
+      TextFormat := GetTextFormat(Self.Font.Style);
       TextFormat.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
     end;
 {$ENDIF}
@@ -12217,8 +12205,6 @@ var
   TextFormat: IDWriteTextFormat;
   TextLayout: IDWriteTextLayout;
   TextMetrics: TDwriteTextMetrics;
-  FontWeight: TDWriteFontWeight;
-  FontStyle: TDWriteFontStyle;
 {$ENDIF}
 begin
   Canvas.Font := Font;
@@ -12237,18 +12223,7 @@ begin
 {$IFDEF SYN_DirectWrite}
     if FUseD2D then
     begin
-      if (fsItalic in Self.Font.Style) then
-        FontStyle := DWRITE_FONT_STYLE_ITALIC
-      else
-        FontStyle := DWRITE_FONT_STYLE_NORMAL;
-      if (fsBold in Self.Font.Style) then
-        FontWeight := DWRITE_FONT_WEIGHT_BOLD
-      else
-        FontWeight := DWRITE_FONT_WEIGHT_NORMAL;
-
-      DWriteFactory.CreateTextFormat(PWideChar(Self.Font.Name), nil,
-        FontWeight, FontStyle, DWRITE_FONT_STRETCH_NORMAL, FD2DFontSize,
-        FD2DLocale, TextFormat);
+      TextFormat := GetTextFormat(Self.Font.Style);
       TextFormat.SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
     end;
 {$ENDIF}

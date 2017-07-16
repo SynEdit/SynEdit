@@ -12,6 +12,7 @@ object FormMain: TFormMain
   Font.Style = []
   OldCreateOrder = True
   OnCreate = FormCreate
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object SynEdit: TSynEdit
@@ -27,11 +28,12 @@ object FormMain: TFormMain
     Font.Style = []
     TabOrder = 0
     Gutter.Font.Charset = DEFAULT_CHARSET
-    Gutter.Font.Color = clWindowText
+    Gutter.Font.Color = clRed
     Gutter.Font.Height = -16
     Gutter.Font.Name = 'Comic Sans MS'
-    Gutter.Font.Style = []
+    Gutter.Font.Style = [fsItalic]
     Gutter.ShowLineNumbers = True
+    Gutter.UseFontStyle = False
     Gutter.GradientEndColor = 13883354
     Highlighter = SynDWSSyn
     Lines.Strings = (
@@ -42,7 +44,7 @@ object FormMain: TFormMain
       '  Number, I, X: Integer;'
       'begin'
       '  Number := 123456;'
-      '  Caption := '#39#39'The Number is'#39#39' + #32 + IntToStr(Number);'
+      '  Caption := '#39'The Number is'#39' + #32 + IntToStr(Number);'
       '  for I := 0 to Number do'
       '  begin'
       '    Inc(X);'
@@ -309,6 +311,15 @@ object FormMain: TFormMain
       Caption = 'Gradient'
       TabOrder = 9
       OnClick = CheckBoxGradientClick
+    end
+    object CheckBoxDirect2D: TCheckBox
+      Left = 737
+      Top = 31
+      Width = 64
+      Height = 17
+      Caption = 'Direct2D'
+      TabOrder = 10
+      OnClick = CheckBoxDirect2DClick
     end
   end
   object SynDWSSyn: TSynDWSSyn

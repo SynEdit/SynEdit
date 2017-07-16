@@ -216,8 +216,8 @@ type
     FDrawingCount: Integer;
 
     // GetCharABCWidthsW cache
-    FCharABCWidthCache : array [0..127] of TABC;
-    FCharWidthCache : array [0..127] of Integer;
+    FCharABCWidthCache: array [0..127] of TABC;
+    FCharWidthCache: array [0..127] of Integer;
   protected
     procedure ReleaseETODist; virtual;
     procedure AfterStyleSet; virtual;
@@ -245,6 +245,7 @@ type
       Text: PWideChar; Length: Integer); virtual;
     function TextExtent(const Text: UnicodeString): TSize; overload;
     function TextExtent(Text: PWideChar; Count: Integer): TSize; overload;
+    function TextWidth(const Char: WideChar): Integer; overload;
     function TextWidth(const Text: UnicodeString): Integer; overload;
     function TextWidth(Text: PWideChar; Count: Integer): Integer; overload;
     procedure SetBaseFont(Value: TFont); virtual;
@@ -879,7 +880,7 @@ begin
   FillChar(FCharWidthCache, SizeOf(Integer) * Length(FCharWidthCache), 0);
 end;
 
-function TSynTextDrawer.GetCachedABCWidth(c : Cardinal; var abc : TABC) : Boolean;
+function TSynTextDrawer.GetCachedABCWidth(c: Cardinal; var abc: TABC) : Boolean;
 begin
   if c > High(FCharABCWidthCache) then
   begin
@@ -887,11 +888,11 @@ begin
     Exit;
   end;
   abc := FCharABCWidthCache[c];
-  if (abc.abcA or Integer(abc.abcB) or abc.abcC)=0 then
+  if (abc.abcA or Integer(abc.abcB) or abc.abcC) = 0 then
   begin
     Result := GetCharABCWidthsW(FDC, c, c, abc);
     if Result then
-      FCharABCWidthCache[c]:=abc;
+      FCharABCWidthCache[c] := abc;
   end
   else
     Result := True;
@@ -988,6 +989,24 @@ end;
 function TSynTextDrawer.TextExtent(Text: PWideChar; Count: Integer): TSize;
 begin
   Result := SynUnicode.GetTextSize(FStockBitmap.Canvas.Handle, Text, Count);
+end;
+
+function TSynTextDrawer.TextWidth(const Char: WideChar): Integer;
+var
+  c: Cardinal;
+begin
+  c := Ord(Char);
+  if c <= High(FCharWidthCache) then
+  begin
+    Result := FCharWidthCache[c];
+    if Result = 0 then
+    begin
+      Result := SynUnicode.TextExtent(FStockBitmap.Canvas, Char).cX;
+      FCharWidthCache[c] := Result;
+    end;
+  end
+  else
+    Result := SynUnicode.TextExtent(FStockBitmap.Canvas, Char).cX;
 end;
 
 function TSynTextDrawer.TextWidth(const Text: UnicodeString): Integer;

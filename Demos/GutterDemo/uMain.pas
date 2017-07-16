@@ -12,6 +12,7 @@ type
     CheckBoxAutoSize: TCheckBox;
     CheckBoxCustomLineNumbers: TCheckBox;
     CheckBoxCustomPaint: TCheckBox;
+    CheckBoxDirect2D: TCheckBox;
     CheckBoxGradient: TCheckBox;
     CheckBoxLeadingZeroes: TCheckBox;
     CheckBoxShowLineNumbers: TCheckBox;
@@ -53,6 +54,8 @@ type
     procedure SynEditGutterGetText(Sender: TObject; aLine: Integer;
       var aText: string);
     procedure SynEditGutterPaint(Sender: TObject; aLine, X, Y: Integer);
+    procedure FormShow(Sender: TObject);
+    procedure CheckBoxDirect2DClick(Sender: TObject);
   end;
 
 var
@@ -76,6 +79,12 @@ begin
   CheckBoxShowModifications.Checked := SynEdit.Gutter.ShowModification;
   CheckBoxZeroStart.Checked := SynEdit.Gutter.ZeroStart;
   CheckBoxUseFontStyle.Checked := SynEdit.Gutter.UseFontStyle;
+  CheckBoxDirect2D.Checked := SynEdit.UseDirect2D;
+end;
+
+procedure TFormMain.FormShow(Sender: TObject);
+begin
+  SynEdit.UseDirect2D := False;
 end;
 
 procedure TFormMain.CheckBoxAutoSizeClick(Sender: TObject);
@@ -99,6 +108,11 @@ begin
   else
     SynEdit.OnGutterPaint := nil;
   SynEdit.InvalidateGutter;
+end;
+
+procedure TFormMain.CheckBoxDirect2DClick(Sender: TObject);
+begin
+  SynEdit.UseDirect2D := TCheckBox(Sender).Checked;
 end;
 
 procedure TFormMain.CheckBoxGradientClick(Sender: TObject);
