@@ -208,6 +208,7 @@
         </DCCReference>
         <DCCReference Include="..\..\Source\SynEditHighlighterOptions.pas"/>
         <DCCReference Include="..\..\Source\SynHighlighterAsmMASM.pas"/>
+        <DCCReference Include="..\..\Source\SynHighlighterGo.pas"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
