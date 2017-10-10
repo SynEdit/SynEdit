@@ -10,8 +10,7 @@
   }],
 
   "source_folders": [{
-    "folder": "Source",
-    "base": "Source",
+    "folder": ".",
     "recursive": true,
     "filter": "*"
   }],
