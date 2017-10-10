@@ -1,31 +1,22 @@
 {
-        "search_pathes": 
-    [
-        {
-            "pathes": "Source",
-            "platforms": "Win32;Win64"
-        }
-    ],
-    "browsing_pathes": 
-    [
-        {
-            "pathes": "Source",
-            "platforms": "Win32;Win64"
-        }
-    ],
+  "search_pathes": [{
+    "pathes": "Source",
+    "platforms": "Win32;Win64"
+  }],
 
-    "source_folders":
-    [
-        {
-            "folder": "Source",
-            "base": ".",
-            "recursive": true,
-            "filter": "*"
-        }
-    ],
+  "browsing_pathes": [{
+    "pathes": "Source",
+    "platforms": "Win32;Win64"
+  }],
 
-	"projects":
-	[
+  "source_folders": [{
+    "folder": "Source",
+    "base": "Source",
+    "recursive": true,
+    "filter": "*"
+  }],
+
+	"projects": [
 		{
 			"project": "Packages\\2010\\SynEdit.groupproj",
 			"compiler_min": 21,
@@ -80,6 +71,11 @@
 			"project": "Packages\\RX1\\SynEdit.groupproj",
 			"compiler_min": 31,
 			"compiler_max": 31
+		},
+		{
+			"project": "Packages\\RX2\\SynEdit.groupproj",
+			"compiler_min": 32,
+			"compiler_max": 32
 		}
 	]
 }
