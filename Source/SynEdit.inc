@@ -96,20 +96,30 @@
 (* SYN_DELPHI_2009_UP   : Delphi 2009 or higher is being used.                *)
 (* SYN_DELPHI_2010      : Delphi 2010 is being used.                          *)
 (* SYN_DELPHI_2010_UP   : Delphi 2010 or higher is being used.                *)
-(* SYN_DELPHI_XE        : Delphi XE   is being used.                          *)
-(* SYN_DELPHI_XE_UP     : Delphi XE   or higher is being used.                *)
-(* SYN_DELPHI_XE2       : Delphi XE2  is being used.                          *)
-(* SYN_DELPHI_XE2_UP    : Delphi XE2  or higher is being used.                *)
-(* SYN_DELPHI_XE3       : Delphi XE3  is being used.                          *)
-(* SYN_DELPHI_XE3_UP    : Delphi XE3  or higher is being used.                *)
-(* SYN_DELPHI_XE4       : Delphi XE4  is being used.                          *)
-(* SYN_DELPHI_XE4_UP    : Delphi XE4  or higher is being used.                *)
-(* SYN_DELPHI_XE5       : Delphi XE5  is being used.                          *)
-(* SYN_DELPHI_XE5_UP    : Delphi XE5  or higher is being used.                *)
-(* SYN_DELPHI_XE6       : Delphi XE6  is being used.                          *)
-(* SYN_DELPHI_XE6_UP    : Delphi XE6  or higher is being used.                *)
-(* SYN_DELPHI_XE7       : Delphi XE7  is being used.                          *)
-(* SYN_DELPHI_XE7_UP    : Delphi XE7  or higher is being used.                *)
+(* SYN_DELPHI_XE        : Delphi XE is being used.                            *)
+(* SYN_DELPHI_XE_UP     : Delphi XE or higher is being used.                  *)
+(* SYN_DELPHI_XE2       : Delphi XE2 is being used.                           *)
+(* SYN_DELPHI_XE2_UP    : Delphi XE2 or higher is being used.                 *)
+(* SYN_DELPHI_XE3       : Delphi XE3 is being used.                           *)
+(* SYN_DELPHI_XE3_UP    : Delphi XE3 or higher is being used.                 *)
+(* SYN_DELPHI_XE4       : Delphi XE4 is being used.                           *)
+(* SYN_DELPHI_XE4_UP    : Delphi XE4 or higher is being used.                 *)
+(* SYN_DELPHI_XE5       : Delphi XE5 is being used.                           *)
+(* SYN_DELPHI_XE5_UP    : Delphi XE5 or higher is being used.                 *)
+(* SYN_DELPHI_XE6       : Delphi XE6 is being used.                           *)
+(* SYN_DELPHI_XE6_UP    : Delphi XE6 or higher is being used.                 *)
+(* SYN_DELPHI_XE7       : Delphi XE7 is being used.                           *)
+(* SYN_DELPHI_XE7_UP    : Delphi XE7 or higher is being used.                 *)
+(* SYN_DELPHI_XE8       : Delphi XE8 is being used.                           *)
+(* SYN_DELPHI_XE8_UP    : Delphi XE8 or higher is being used.                 *)
+(* SYN_DELPHI_10        : Delphi RX 10 (Seattle) is being used.               *)
+(* SYN_DELPHI_10_UP     : Delphi RX 10 or higher is being used.               *)
+(* SYN_DELPHI_10_1      : Delphi RX 10.1 (Berlin) is being used.              *)
+(* SYN_DELPHI_10_1_UP   : Delphi RX 10.1 or higher is being used.             *)
+(* SYN_DELPHI_10_2      : Delphi RX 10.2 (Tokyo) is being used.               *)
+(* SYN_DELPHI_10_2_UP   : Delphi RX 10.2 or higher is being used.             *)
+(* SYN_DELPHI_10_3      : Delphi RX 10.3 (Rio) is being used.                 *)
+(* SYN_DELPHI_10_3_UP   : Delphi RX 10.3 or higher is being used.             *)
 (* SYN_KYLIX            : Kylix 1.0 is being using.                           *)
 (* SYN_CLX              : A CLX application is being created.                 *)
 (******************************************************************************)
@@ -1076,10 +1086,6 @@
   {$DEFINE SYN_CPPB_4_UP}
   {$DEFINE SYN_CPPB_5_UP}
   {$DEFINE SYN_CPPB_6_UP}
-{$ENDIF}
-
-{$IFDEF SYN_DELPHI_10_3_UP}
-  {$HIGHCHARUNICODE ON}
 {$ENDIF}
 
 {$IFDEF SYN_CPPB_3}

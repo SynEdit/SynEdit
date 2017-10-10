@@ -190,7 +190,7 @@ uses
 
 const
    // if the language is case-insensitive keywords *must* be in lowercase
-   cKeywords: array[1..96] of UnicodeString = (
+   cKeywords: array[1..95] of UnicodeString = (
       'abstract', 'and', 'array', 'as', 'asm',
       'begin', 'break', 'case', 'cdecl', 'class', 'const', 'constructor',
       'continue', 'deprecated', 'destructor',
@@ -199,14 +199,13 @@ const
       'finally', 'for', 'forward', 'function', 'helper', 'if',
       'implementation', 'implements', 'implies', 'in', 'inherited',
       'initialization', 'inline', 'interface', 'is', 'lambda', 'lazy', 'library',
-      'message', 'method', 'mod', 'new', 'nil', 'not', 'object', 'of',
-      'old', 'on', 'operator', 'or', 'overload', 'override',
-      'pascal', 'partial', 'private', 'procedure', 'program', 'property',
-      'protected', 'public', 'published', 'raise', 'record',
-      'register', 'reintroduce', 'repeat', 'require', 'resourcestring',
-      'sar', 'sealed', 'set', 'shl', 'shr', 'static', 'strict', 'step',
-      'then', 'to', 'try', 'type', 'unit', 'until',
-      'uses', 'var', 'virtual', 'while', 'xor'
+      'method', 'mod', 'new', 'nil', 'not', 'object', 'of', 'old', 'on', 
+      'operator', 'or', 'overload', 'override', 'pascal', 'partial', 'private', 
+      'procedure', 'program', 'property', 'protected', 'public', 'published', 
+      'raise', 'record', 'register', 'reintroduce', 'repeat', 'require', 
+      'resourcestring', 'sar', 'sealed', 'set', 'shl', 'shr', 'static', 
+      'step', 'strict', 'then', 'to', 'try', 'type', 'unit', 'until', 'uses', 
+      'var', 'virtual', 'while', 'xor'
   );
   cKeywordsPropertyScoped: array [0..4] of UnicodeString = (
       'default', 'index', 'read', 'stored', 'write'

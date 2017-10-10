@@ -1159,9 +1159,10 @@ end;
 function TSynCustomHighlighter.IsWordBreakChar(AChar: WideChar): Boolean;
 begin
   case AChar of
-    #0..#32, '.', ',', ';', ':', '"', '''', WideChar(#$B4), WideChar(#$60),
-    WideChar(#$B0), '^', '!', '?', '&', '$', '@', WideChar(#$A7), '%', '#', '~',
-    '[', ']', '(', ')', '{', '}', '<', '>', '-', '=', '+', '*', '/', '\', '|':
+    #0..#32, '.', ',', ';', ':', '"', '''', WideChar(#$00B4), WideChar(#$0060),
+    WideChar(#$00B0), '^', '!', '?', '&', '$', '@', WideChar(#$00A7), '%', '#', 
+    '~', '[', ']', '(', ')', '{', '}', '<', '>', '-', '=', '+', '*', '/', '\', 
+    '|':
       Result := True;
     else
       Result := False;
