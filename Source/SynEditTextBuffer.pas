@@ -796,6 +796,7 @@ begin
     FRange := NullRange;
     FExpandedLength := -1;
     FFlags := [sfExpandedLengthUnknown];
+    Include(FFlags, sfModified);
   end;
   Inc(FCount);
   EndUpdate;
@@ -874,6 +875,7 @@ begin
   FStreaming := True;
   inherited;
   FStreaming := False;
+  ResetModificationIndicator;
 end;
 
 procedure TSynEditStringList.MarkModifiedLinesAsSaved;
