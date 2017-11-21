@@ -2155,7 +2155,7 @@ begin
           OffsetRect(rcInval, Left, Top);
 {$ENDIF}
         if sfLinesChanging in FStateFlags then
-          UnionRect(FInvalidateRect, FInvalidateRect, rcInval)
+          UnionRect(fInvalidateRect, rcInval, fInvalidateRect)
         else
           InvalidateRect(rcInval, False);
       end;
@@ -2391,7 +2391,6 @@ begin
   Exclude(FStateFlags, sfLinesChanging);
   if HandleAllocated then
   begin
-    UpdateScrollBars;
     vOldMode := FActiveSelectionMode;
     SetBlockBegin(CaretXY);
     FActiveSelectionMode := vOldMode;
@@ -5579,7 +5578,6 @@ begin
       if CallEnsureCursorPos then
         EnsureCursorPosVisible;
       Include(FStateFlags, sfCaretChanged);
-      Include(FStateFlags, sfScrollbarChanged);
     finally
       DecPaintLock;
     end;
@@ -7112,6 +7110,7 @@ begin
 
   InvalidateLines(aIndex + 1, MaxInt);
   InvalidateGutterLines(aIndex + 1, MaxInt);
+  Include(fStateFlags, sfScrollbarChanged);
 end;
 
 procedure TCustomSynEdit.ListInserted(Sender: TObject; Index: Integer;
@@ -7134,6 +7133,7 @@ begin
 
   InvalidateLines(Index + 1, MaxInt);
   InvalidateGutterLines(Index + 1, MaxInt);
+  Include(fStateFlags, sfScrollbarChanged);
 
   if (eoAutoSizeMaxScrollWidth in FOptions) then
   begin
