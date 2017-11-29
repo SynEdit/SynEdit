@@ -1144,3 +1144,11 @@
 {$IFDEF SYN_DELPHI_2010_UP}
   {$DEFINE SYN_DirectWrite}
 {$ENDIF}
+
+// Code Folding
+{$IFDEF SYN_DELPHI_2009_UP}
+  {$DEFINE SYN_CodeFolding}
+{$ENDIF}
+
+
+
