@@ -8,7 +8,7 @@ uses
   Vcl.ActnList, System.Actions, Vcl.ActnPopup, Vcl.ToolWin, Vcl.ActnMan,
   Vcl.ActnCtrls, Vcl.ActnMenus, Vcl.PlatformDefaultStyleActnCtrls, SynEditPrint,
   SynEditPythonBehaviour, SynHighlighterPython, SynHighlighterJScript,
-  SynEditHighlighter, SynHighlighterCpp, SynEditCodeFolding;
+  SynEditHighlighter, SynHighlighterCpp, SynEditCodeFolding, SynHighlighterDWS;
 
 type
   TForm1 = class(TForm)
@@ -73,6 +73,8 @@ type
     Level12: TMenuItem;
     Level22: TMenuItem;
     Level32: TMenuItem;
+    SynDWSSyn1: TSynDWSSyn;
+    actDWS: TAction;
     procedure FileOpen1Accept(Sender: TObject);
     procedure FileSaveAs1Accept(Sender: TObject);
     procedure ActSaveExecute(Sender: TObject);
@@ -91,6 +93,7 @@ type
     procedure DialogFontEdit1BeforeExecute(Sender: TObject);
     procedure actFoldExecute(Sender: TObject);
     procedure actFoldUpdate(Sender: TObject);
+    procedure actDWSExecute(Sender: TObject);
   private
     { Private declarations }
     Highlighters : TStringList;
@@ -121,6 +124,13 @@ begin
   SynEditPythonBehaviour1.Editor := nil;
   SynEdit1.OnScanForFoldRanges := ScanForFoldRanges;
   SynEdit1.Highlighter := SynCppSyn1;
+end;
+
+procedure TForm1.actDWSExecute(Sender: TObject);
+begin
+  SynEditPythonBehaviour1.Editor := nil;
+  SynEdit1.OnScanForFoldRanges := ScanForFoldRanges;
+  SynEdit1.Highlighter := SynDwsSyn1;
 end;
 
 procedure TForm1.actFoldExecute(Sender: TObject);

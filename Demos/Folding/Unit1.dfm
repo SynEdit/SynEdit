@@ -23,13 +23,11 @@ object Form1: TForm1
     UseSystemFont = False
     ActionManager = ActionManager1
     Caption = 'ActionMainMenuBar1'
-    Color = clMenuBar
-    ColorMap.DisabledFontColor = 7171437
-    ColorMap.HighlightColor = clWhite
-    ColorMap.BtnSelectedFont = clBlack
-    ColorMap.UnusedColor = clWhite
+    ColorMap.HighlightColor = 14410210
+    ColorMap.BtnSelectedColor = clBtnFace
+    ColorMap.UnusedColor = 14410210
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
+    Font.Color = clWindowText
     Font.Height = -12
     Font.Name = 'Segoe UI'
     Font.Style = []
@@ -49,6 +47,12 @@ object Form1: TForm1
     Font.Style = []
     PopupMenu = PopupActionBar1
     TabOrder = 1
+    CodeFolding.CollapsedLineColor = clGrayText
+    CodeFolding.FolderBarLinesColor = clGrayText
+    CodeFolding.ShowCollapsedLine = True
+    CodeFolding.IndentGuidesColor = clGray
+    CodeFolding.IndentGuides = True
+    UseCodeFolding = False
     Gutter.AutoSize = True
     Gutter.Font.Charset = DEFAULT_CHARSET
     Gutter.Font.Color = clGrayText
@@ -488,6 +492,11 @@ object Form1: TForm1
       OnExecute = actFoldExecute
       OnUpdate = actFoldUpdate
     end
+    object actDWS: TAction
+      Category = 'Highlighter'
+      Caption = 'DelphiWebScript'
+      OnExecute = actDWSExecute
+    end
   end
   object PopupActionBar1: TPopupActionBar
     Left = 528
@@ -613,5 +622,13 @@ object Form1: TForm1
     Editor = SynEdit1
     Left = 536
     Top = 128
+  end
+  object SynDWSSyn1: TSynDWSSyn
+    DefaultFilter = 'DWScript Files (*.dws;*.pas;*.inc)|*.dws;*.pas;*.inc'
+    Options.AutoDetectEnabled = False
+    Options.AutoDetectLineLimit = 0
+    Options.Visible = False
+    Left = 544
+    Top = 184
   end
 end

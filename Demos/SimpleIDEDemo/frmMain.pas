@@ -43,7 +43,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   ActnList, ImgList, ComCtrls, ToolWin, SynEdit, SynEditHighlighter,
-  SynHighlighterPas, uSimpleIDEDebugger, Menus, SynEditTypes;
+  SynHighlighterPas, uSimpleIDEDebugger, Menus, SynEditTypes, System.Actions;
 
 type
   TSimpleIDEMainForm = class(TForm)
