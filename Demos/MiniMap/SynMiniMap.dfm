@@ -20,6 +20,7 @@ object FormSynEditMinimap: TFormSynEditMinimap
     Top = 0
     Width = 5
     Height = 525
+    Color = clBtnFace
     ParentColor = False
   end
   object SynEdit: TSynEdit
@@ -36,7 +37,7 @@ object FormSynEditMinimap: TFormSynEditMinimap
     TabOrder = 0
     BorderStyle = bsNone
     Gutter.Font.Charset = DEFAULT_CHARSET
-    Gutter.Font.Color = clBtnShadow
+    Gutter.Font.Color = clGrayText
     Gutter.Font.Height = -11
     Gutter.Font.Name = 'Courier New'
     Gutter.Font.Style = []
@@ -13609,7 +13610,6 @@ object FormSynEditMinimap: TFormSynEditMinimap
       'end.'
       ''
       '')
-    OnChange = SynEditChange
     OnStatusChange = SynEditStatusChange
     FontSmoothing = fsmNone
   end
@@ -13621,7 +13621,7 @@ object FormSynEditMinimap: TFormSynEditMinimap
     Align = alLeft
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -4
+    Font.Height = -3
     Font.Name = 'Courier New'
     Font.Style = []
     Font.Quality = fqAntialiased
@@ -13654,12 +13654,6 @@ object FormSynEditMinimap: TFormSynEditMinimap
     Options.AutoDetectLineLimit = 0
     Options.Visible = False
     Left = 272
-    Top = 32
-  end
-  object TimerReplicate: TTimer
-    Interval = 250
-    OnTimer = TimerReplicateTimer
-    Left = 208
     Top = 32
   end
 end

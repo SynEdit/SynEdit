@@ -163,6 +163,9 @@ type
     procedure AutoSizeDigitCount(LinesCount: Integer);
     function FormatLineNumber(Line: Integer): string;
     function RealGutterWidth(CharWidth: Integer): Integer;
+//++ DPI-Aware
+    procedure ChangeScale(M, D: Integer); virtual;
+//-- DPI-Aware
   published
     property AutoSize: Boolean read FAutoSize write SetAutoSize default FALSE;
     property BorderStyle: TSynGutterBorderStyle read FBorderStyle
@@ -222,6 +225,9 @@ type
   public
     constructor Create(AOwner: TComponent);
     procedure Assign(Source: TPersistent); override;
+//++ DPI-Aware
+    procedure ChangeScale(M, D: Integer); virtual;
+//-- DPI-Aware
   published
     property BookmarkImages: TImageList
       read FBookmarkImages write SetBookmarkImages;
@@ -256,6 +262,9 @@ type
     procedure Draw(aCanvas: TCanvas; aX, aY, aLineHeight: Integer);
     property Width : Integer read GetWidth;
     property Height : Integer read GetHeight;
+//++ DPI-Aware
+    procedure ChangeScale(M, D: Integer); virtual;
+//-- DPI-Aware
   published
     property Glyph: TBitmap read FGlyph write SetGlyph;
     property MaskColor: TColor read FMaskColor write SetMaskColor default clNone;
@@ -303,7 +312,7 @@ type
   end;
 
   { TSynInternalImage }
-  
+
   TSynInternalImage = class(TObject)
   private
     FImages : TBitmap;
@@ -320,6 +329,9 @@ type
     procedure Draw(ACanvas: TCanvas; Number, X, Y, LineHeight: Integer); overload;
     procedure DrawTransparent(ACanvas: TCanvas; Number, X, Y,
       LineHeight: Integer; TransparentColor: TColor); overload;
+//++ DPI-Aware
+    procedure ChangeScale(M, D: Integer); virtual;
+//-- DPI-Aware
 {$IFDEF SYN_DirectWrite}
     procedure Draw(ACanvas: TDirect2DCanvas; Number, X, Y, LineHeight: Integer); overload;
     procedure DrawTransparent(ACanvas: TDirect2DCanvas; Number, X, Y,
@@ -418,6 +430,12 @@ type
   {$ENDIF}
 {$ENDIF}
 
+//++ DPI-Aware
+  procedure ResizeBitmap(Bitmap: TBitmap; const NewWidth,
+    NewHeight: integer);
+//-- DPI-Aware
+
+
 implementation
 
 uses
@@ -426,6 +444,24 @@ uses
 {$ELSE}
   SynEditMiscProcs;
 {$ENDIF}
+
+//++ DPI-Aware
+procedure ResizeBitmap(Bitmap: TBitmap; const NewWidth,
+  NewHeight: integer);
+var
+  buffer: TBitmap;
+begin
+  buffer := TBitmap.Create;
+  try
+    buffer.SetSize(NewWidth, NewHeight);
+    buffer.Canvas.StretchDraw(Rect(0, 0, NewWidth, NewHeight), Bitmap);
+    Bitmap.SetSize(NewWidth, NewHeight);
+    Bitmap.Canvas.Draw(0, 0, buffer);
+  finally
+    buffer.Free;
+  end;
+end;
+//-- DPI-Aware
 
 { TSynSelectedColor }
 
@@ -466,6 +502,17 @@ begin
 end;
 
 { TSynGutter }
+//++ DPI-Aware
+procedure TSynGutter.ChangeScale(M, D: Integer);
+begin
+ fWidth := MulDiv(fWidth, M, D);
+ fLeftOffset := MulDiv(fLeftOffset, M, D);
+ fRightOffset := MulDiv(fRightOffset, M, D);
+ fFont.Height := MulDiv(fFont.Height, M, D);
+ if Assigned(fOnChange) then fOnChange(Self);
+end;
+//-- DPI-Aware
+
 
 constructor TSynGutter.Create;
 begin
@@ -809,6 +856,17 @@ end;
 
 { TSynBookMarkOpt }
 
+//++ DPI-Aware
+procedure TSynBookMarkOpt.ChangeScale(M, D: Integer);
+Var
+  L : Integer;
+begin
+  L := (M div D) * D;    // Factor multiple of 100%
+  fLeftMargin := MulDiv(fLeftMargin, L, D);
+  fXoffset := MulDiv(fXoffset, L, D);
+end;
+//-- DPI-Aware
+
 constructor TSynBookMarkOpt.Create(AOwner: TComponent);
 begin
   inherited Create;
@@ -879,6 +937,17 @@ begin
 end;
 
 { TSynGlyph }
+
+//++ DPI-Aware
+procedure TSynGlyph.ChangeScale(M, D: Integer);
+Var
+  L : Integer;
+begin
+  L := (M div D) * D;    // Factor multiple of 100%
+  ResizeBitmap(fInternalGlyph, MulDiv(fInternalGlyph.Width, L, D), MulDiv(fInternalGlyph.Height, L, D));
+  ResizeBitmap(fGlyph, MulDiv(fGlyph.Width, L, D), MulDiv(fGlyph.Height, L, D));
+end;
+//-- DPI-Aware
 
 constructor TSynGlyph.Create(aModule: THandle; const aName: string; aMaskColor: TColor);
 begin
@@ -1151,6 +1220,18 @@ type
 
 var
   InternalResources: TList;
+
+//++ DPI-Aware
+procedure TSynInternalImage.ChangeScale(M, D: Integer);
+Var
+  L: Integer;
+begin
+  L := (M div D) * D;    // Factor multiple of 100%
+  fWidth := MulDiv(fWidth, L, D);
+  ResizeBitmap(fImages, fWidth * fCount, MulDiv(fImages.Height, L, D));
+  fHeight := fImages.Height;
+end;
+//-- DPI-Aware
 
 constructor TSynInternalImage.Create(aModule: THandle; const Name: string;
   Count: Integer);

@@ -1,4 +1,4 @@
-{-------------------------------------------------------------------------------
+﻿{-------------------------------------------------------------------------------
 The contents of this file are subject to the Mozilla Public License
 Version 1.1 (the "License"); you may not use this file except in compliance
 with the License. You may obtain a copy of the License at
@@ -57,12 +57,16 @@ uses
   QGraphics,
   QSynEditHighlighter,
   QSynEditTypes,
-  QSynUnicode,  
+  QSynUnicode,
 {$ELSE}
   Graphics,
   SynEditHighlighter,
   SynEditTypes,
   SynUnicode,
+{$ENDIF}
+{$IFDEF SYN_CodeFolding}
+  SynEditCodeFolding,
+  SynRegExpr,
 {$ENDIF}
   SysUtils,
   Classes;
@@ -80,7 +84,11 @@ type
                 );
 
 type
+{$IFDEF SYN_CodeFolding}
+  TSynPythonSyn = class(TSynCustomCodeFoldingHighlighter)
+{$ELSE}
   TSynPythonSyn = class(TSynCustomHighLighter)
+{$ENDIF}
   private
     FStringStarter: WideChar;  // used only for rsMultilineString3 stuff
     FRange: TRangeState;
@@ -100,6 +108,9 @@ type
     FIdentifierAttri: TSynHighlighterAttributes;
     FSpaceAttri: TSynHighlighterAttributes;
     FErrorAttri: TSynHighlighterAttributes;
+{$IFDEF SYN_CodeFolding}
+    BlockOpenerRE : TRegExpr;
+{$ENDIF}
     function IdentKind(MayBe: PWideChar): TtkTokenKind;
     procedure SymbolProc;
     procedure CRProc;
@@ -139,6 +150,11 @@ type
     procedure Next; override;
     procedure SetRange(Value: Pointer); override;
     procedure ResetRange; override;
+{$IFDEF SYN_CodeFolding}
+    procedure InitFoldRanges(FoldRanges : TSynFoldRanges); override;
+    procedure ScanForFoldRanges(FoldRanges: TSynFoldRanges;
+      LinesToScan: TStrings; FromLine: Integer; ToLine: Integer); override;
+{$ENDIF}
   published
     property CommentAttri: TSynHighlighterAttributes read FCommentAttri
     write FCommentAttri;
@@ -366,6 +382,13 @@ begin
   if not FKeywords.Sorted then
   FKeywords.Sort;
 
+{$IFDEF SYN_CodeFolding}
+  BlockOpenerRE := TRegExpr.Create;
+  BlockOpenerRE.Expression := // ':\s*(#.*)?$';
+     '^(def|class|while|for|if|else|elif|try|except|with'+
+     '|(async[ \t]+def)|(async[ \t]+with)|(async[ \t]+for))\b';
+{$ENDIF}
+
   FRange := rsUnknown;
   FCommentAttri := TSynHighlighterAttributes.Create(SYNS_AttrComment, SYNS_FriendlyAttrComment);
   FCommentAttri.Foreground := clGray;
@@ -414,6 +437,9 @@ end; { Create }
 
 destructor TSynPythonSyn.Destroy;
 begin
+{$IFDEF SYN_CodeFolding}
+  BlockOpenerRE.Free;
+{$ENDIF}
   FKeywords.Free;
   inherited;
 end;
@@ -1160,6 +1186,126 @@ procedure TSynPythonSyn.ResetRange;
 begin
   FRange := rsUnknown;
 end;
+
+{$IFDEF SYN_CodeFolding}
+procedure TSynPythonSyn.InitFoldRanges(FoldRanges: TSynFoldRanges);
+begin
+  inherited;
+  FoldRanges.CodeFoldingMode := cfmIndentation;
+end;
+
+procedure TSynPythonSyn.ScanForFoldRanges(FoldRanges: TSynFoldRanges;
+  LinesToScan: TStrings; FromLine, ToLine: Integer);
+var
+  CurLine: string;
+  LeftTrimmedLine : string;
+  Line: Integer;
+  Indent : Integer;
+  TabW : integer;
+  FoldType : integer;
+const
+  MultiLineStringFoldType = 2;
+  ClassDefType = 3;
+  FunctionDefType = 4;
+
+
+  function IsMultiLineString(Line : integer; Range : TRangeState; Fold : Boolean): Boolean;
+  begin
+    Result := True;
+    if TRangeState(GetLineRange(LinesToScan, Line)) = Range then
+    begin
+      if (TRangeState(GetLineRange(LinesToScan, Line - 1)) <> Range) and Fold then
+        FoldRanges.StartFoldRange(Line + 1, MultiLineStringFoldType)
+      else
+        FoldRanges.NoFoldInfo(Line + 1);
+    end
+    else if (TRangeState(GetLineRange(LinesToScan, Line - 1)) = Range) and Fold then
+    begin
+      FoldRanges.StopFoldRange(Line + 1, MultiLineStringFoldType);
+    end else
+      Result := False;
+  end;
+
+  function FoldRegion(Line: Integer): Boolean;
+  begin
+    Result := False;
+    if Uppercase(Copy(LeftTrimmedLine, 1, 7)) = '#REGION' then
+    begin
+      FoldRanges.StartFoldRange(Line + 1, FoldRegionType);
+      Result := True;
+    end
+    else if Uppercase(Copy(LeftTrimmedLine, 1, 10)) = '#ENDREGION' then
+    begin
+      FoldRanges.StopFoldRange(Line + 1, FoldRegionType);
+      Result := True;
+    end;
+  end;
+
+  function LeftSpaces: Integer;
+  var
+    p: PWideChar;
+  begin
+    p := PWideChar(CurLine);
+    if Assigned(p) then
+    begin
+      Result := 0;
+      while (p^ >= #1) and (p^ <= #32) do
+      begin
+        if (p^ = #9) then
+          Inc(Result, TabW)
+        else
+          Inc(Result);
+        Inc(p);
+      end;
+    end
+    else
+      Result := 0;
+  end;
+
+begin
+  //  Deal with multiline strings
+  for Line := FromLine to ToLine do begin
+    if IsMultiLineString(Line, rsMultilineString, True) or
+       IsMultiLineString(Line, rsMultilineString2, True) or
+       IsMultiLineString(Line, rsMultilineString3, False)
+    then
+      Continue;
+
+    // Find Fold regions
+    CurLine := LinesToScan[Line];
+    LeftTrimmedLine := TrimLeft(CurLine);
+
+    // Skip empty lines
+    if LeftTrimmedLine = '' then begin
+      FoldRanges.NoFoldInfo(Line + 1);
+      Continue;
+    end;
+
+    // Find Fold regions
+    if FoldRegion(Line) then
+      Continue;
+
+    TabW := TabWidth(LinesToScan);
+    Indent := LeftSpaces;
+
+    // find fold openers
+    if BlockOpenerRE.Exec(LeftTrimmedLine) then
+    begin
+      if BlockOpenerRE.Match[1] = 'class' then
+        FoldType := ClassDefType
+      else if Pos('def', BlockOpenerRE.Match[1]) >= 1 then
+        FoldType := FunctionDefType
+      else
+        FoldType := 1;
+
+      FoldRanges.StartFoldRange(Line + 1, FoldType, Indent);
+      Continue;
+    end;
+
+    FoldRanges.StopFoldRange(Line + 1, 1, Indent)
+  end;
+end;
+{$ENDIF}
 
 procedure TSynPythonSyn.SetRange(Value: Pointer);
 begin
