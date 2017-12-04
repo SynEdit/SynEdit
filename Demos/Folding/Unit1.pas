@@ -73,6 +73,9 @@ type
     Level12: TMenuItem;
     Level22: TMenuItem;
     Level32: TMenuItem;
+    actShowCollapsedMarks: TAction;
+    actShowCollapsedLines: TAction;
+    actFoldShapeSize: TAction;
     procedure FileOpen1Accept(Sender: TObject);
     procedure FileSaveAs1Accept(Sender: TObject);
     procedure ActSaveExecute(Sender: TObject);
@@ -91,6 +94,10 @@ type
     procedure DialogFontEdit1BeforeExecute(Sender: TObject);
     procedure actFoldExecute(Sender: TObject);
     procedure actFoldUpdate(Sender: TObject);
+    procedure ActionManager1Update(Action: TBasicAction; var Handled: Boolean);
+    procedure actShowCollapsedLinesExecute(Sender: TObject);
+    procedure actShowCollapsedMarksExecute(Sender: TObject);
+    procedure actFoldShapeSizeExecute(Sender: TObject);
   private
     { Private declarations }
     Highlighters : TStringList;
@@ -128,6 +135,17 @@ begin
   SynEdit1.ExecuteCommand(TAction(Sender).Tag, ' ', nil);
 end;
 
+procedure TForm1.actFoldShapeSizeExecute(Sender: TObject);
+Var
+  S : String;
+  Size : Integer;
+begin
+  Size := SynEdit1.CodeFolding.GutterShapeSize;
+  S := InputBox('New Gutter Square Size', 'New size in pixels (odd number):', IntToStr(Size));
+  if TryStrToInt(S, Size) then
+    SynEdit1.CodeFolding.GutterShapeSize := Size;
+end;
+
 procedure TForm1.actFoldUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled := SynEdit1.UseCodeFolding;
@@ -136,6 +154,14 @@ end;
 procedure TForm1.actGutterLinesExecute(Sender: TObject);
 begin
   Synedit1.Gutter.ShowLineNumbers := actGutterLines.Checked;
+end;
+
+procedure TForm1.ActionManager1Update(Action: TBasicAction;
+  var Handled: Boolean);
+begin
+  actCodeFolding.Checked := SynEdit1.UseCodeFolding;
+  actShowCollapsedMarks.Checked := SynEdit1.CodeFolding.ShowCollapsedLine;
+  actShowCollapsedMarks.Checked := SynEdit1.CodeFolding.ShowHintMark;
 end;
 
 procedure TForm1.actJavaScriptExecute(Sender: TObject);
@@ -160,6 +186,11 @@ begin
     SynEdit1.Lines.SaveToFile(FileName);
 end;
 
+procedure TForm1.actShowCollapsedLinesExecute(Sender: TObject);
+begin
+  SynEdit1.CodeFolding.ShowCollapsedLine := TAction(Sender).Checked;
+end;
+
 procedure TForm1.DialogFontEdit1BeforeExecute(Sender: TObject);
 begin
   DialogFontEdit1.Dialog.Font := SynEdit1.Font;
@@ -167,7 +198,7 @@ end;
 
 procedure TForm1.DialogFontEdit1FontDialogApply(Sender: TObject; Wnd: HWND);
 begin
-  SynEdit1.Font := DialogFontEdit1.Dialog.Font;
+ SynEdit1.Font.Assign(DialogFontEdit1.Dialog.Font);
 end;
 
 procedure TForm1.DialogPrintDlg1Accept(Sender: TObject);
@@ -349,6 +380,11 @@ begin
     if not FindBraces(Line) then
       TopFoldRanges.NoFoldInfo(Line + 1);
   end; // while Line
+end;
+
+procedure TForm1.actShowCollapsedMarksExecute(Sender: TObject);
+begin
+  SynEdit1.CodeFolding.ShowHintMark := TAction(Sender).Checked;
 end;
 
 end.

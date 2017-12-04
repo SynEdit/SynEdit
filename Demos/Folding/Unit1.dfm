@@ -49,12 +49,20 @@ object Form1: TForm1
     Font.Style = []
     PopupMenu = PopupActionBar1
     TabOrder = 1
+    CodeFolding.CollapsedLineColor = clGrayText
+    CodeFolding.FolderBarLinesColor = clGrayText
+    CodeFolding.ShowCollapsedLine = False
+    CodeFolding.IndentGuidesColor = clGray
+    CodeFolding.IndentGuides = True
+    UseCodeFolding = False
     Gutter.AutoSize = True
     Gutter.Font.Charset = DEFAULT_CHARSET
-    Gutter.Font.Color = clGrayText
-    Gutter.Font.Height = -12
+    Gutter.Font.Color = clWindowText
+    Gutter.Font.Height = -13
     Gutter.Font.Name = 'Consolas'
     Gutter.Font.Style = []
+    Gutter.GradientStartColor = clWindowText
+    Gutter.GradientEndColor = clWindow
     Lines.Strings = (
       
         'This project demonstrates the code folding capabilities of Syned' +
@@ -220,6 +228,28 @@ object Form1: TForm1
               item
                 Items = <
                   item
+                    Action = actShowCollapsedLines
+                    Caption = '&Collapsed Lines'
+                  end
+                  item
+                    Action = actShowCollapsedMarks
+                    Caption = 'C&ollapsed Marks'
+                  end
+                  item
+                    Caption = '-'
+                  end
+                  item
+                    Action = actFoldShapeSize
+                  end>
+                Caption = 'Fo&lding Options'
+                UsageCount = 1
+              end
+              item
+                Caption = '-'
+              end
+              item
+                Items = <
+                  item
                     Action = actFoldAll
                     Caption = '&All'
                   end
@@ -279,9 +309,16 @@ object Form1: TForm1
           end>
         ActionBar = ActionMainMenuBar1
       end>
+    OnUpdate = ActionManager1Update
     Left = 464
     Top = 32
     StyleName = 'Platform Default'
+    object actShowCollapsedLines: TAction
+      Category = 'Folding Options'
+      AutoCheck = True
+      Caption = 'Collapsed Lines'
+      OnExecute = actShowCollapsedLinesExecute
+    end
     object FileOpen1: TFileOpen
       Category = 'File'
       Caption = '&Open...'
@@ -487,6 +524,18 @@ object Form1: TForm1
       Caption = 'Level 3'
       OnExecute = actFoldExecute
       OnUpdate = actFoldUpdate
+    end
+    object actShowCollapsedMarks: TAction
+      Category = 'Folding Options'
+      AutoCheck = True
+      Caption = 'Collapsed Marks'
+      Checked = True
+      OnExecute = actShowCollapsedMarksExecute
+    end
+    object actFoldShapeSize: TAction
+      Category = 'Folding Options'
+      Caption = 'Gutter Square Size..'
+      OnExecute = actFoldShapeSizeExecute
     end
   end
   object PopupActionBar1: TPopupActionBar
