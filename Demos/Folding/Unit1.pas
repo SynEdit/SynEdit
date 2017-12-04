@@ -101,6 +101,8 @@ type
     procedure actShowCollapsedMarksExecute(Sender: TObject);
     procedure actFoldShapeSizeExecute(Sender: TObject);
     procedure actDWSExecute(Sender: TObject);
+    procedure SynEdit1GutterGetText(Sender: TObject; aLine: Integer;
+      var aText: string);
   private
     { Private declarations }
     Highlighters : TStringList;
@@ -117,7 +119,8 @@ implementation
 uses
   SynEditTextBuffer,
   SynEditTypes,
-  uHighlighterProcs, SynEditKeyCmds;
+  SynEditKeyCmds,
+  uHighlighterProcs;
 
 {$R *.dfm}
 
@@ -333,23 +336,23 @@ var
     end; // for Col
   end;
 
-function FoldRegion(Line: Integer): Boolean;
-var
-  S : string;
-begin
-  Result := False;
-  S := TrimLeft(CurLine);
-  if Uppercase(Copy(S, 1, 14)) = '#PRAGMA REGION' then
+  function FoldRegion(Line: Integer): Boolean;
+  var
+    S : string;
   begin
-    TopFoldRanges.StartFoldRange(Line + 1, FoldRegionType);
-    Result := True;
-  end
-  else if Uppercase(Copy(S, 1, 17)) = '#PRAGMA ENDREGION' then
-  begin
-    TopFoldRanges.StopFoldRange(Line + 1, FoldRegionType);
-    Result := True;
+    Result := False;
+    S := TrimLeft(CurLine);
+    if Uppercase(Copy(S, 1, 14)) = '#PRAGMA REGION' then
+    begin
+      TopFoldRanges.StartFoldRange(Line + 1, FoldRegionType);
+      Result := True;
+    end
+    else if Uppercase(Copy(S, 1, 17)) = '#PRAGMA ENDREGION' then
+    begin
+      TopFoldRanges.StopFoldRange(Line + 1, FoldRegionType);
+      Result := True;
+    end;
   end;
-end;
 
 begin
   for Line := FromLine to ToLine do
@@ -385,6 +388,19 @@ begin
     if not FindBraces(Line) then
       TopFoldRanges.NoFoldInfo(Line + 1);
   end; // while Line
+end;
+
+procedure TForm1.SynEdit1GutterGetText(Sender: TObject; aLine: Integer;
+  var aText: string);
+begin
+  if aLine = TSynEdit(Sender).CaretY then
+    Exit;
+
+  if aLine mod 10 <> 0 then
+    if aLine mod 5 <> 0 then
+      aText := '·'
+    else
+      aText := '-';
 end;
 
 procedure TForm1.actShowCollapsedMarksExecute(Sender: TObject);

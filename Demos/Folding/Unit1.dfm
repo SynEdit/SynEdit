@@ -23,13 +23,11 @@ object Form1: TForm1
     UseSystemFont = False
     ActionManager = ActionManager1
     Caption = 'ActionMainMenuBar1'
-    Color = clMenuBar
-    ColorMap.DisabledFontColor = 7171437
-    ColorMap.HighlightColor = clWhite
-    ColorMap.BtnSelectedFont = clBlack
-    ColorMap.UnusedColor = clWhite
+    ColorMap.HighlightColor = 14410210
+    ColorMap.BtnSelectedColor = clBtnFace
+    ColorMap.UnusedColor = 14410210
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
+    Font.Color = clWindowText
     Font.Height = -12
     Font.Name = 'Segoe UI'
     Font.Style = []
@@ -70,7 +68,6 @@ object Form1: TForm1
       
         'Use the menu to open one of the demo files in the project direct' +
         'ory.'
-      '- demo.pas'
       '- demo.cpp'
       '- demo.js'
       '- demo.py'
@@ -111,6 +108,7 @@ object Form1: TForm1
       'in the unit SynEditCodeFolding.pas.')
     Options = [eoAutoIndent, eoDragDropEditing, eoEnhanceEndKey, eoGroupUndo, eoShowScrollHint, eoSmartTabDelete, eoSmartTabs, eoTabIndent, eoTabsToSpaces, eoTrimTrailingSpaces]
     TabWidth = 4
+    OnGutterGetText = SynEdit1GutterGetText
     FontSmoothing = fsmNone
   end
   object ActionManager1: TActionManager
