@@ -994,42 +994,51 @@ var
     end;
   end;
 
-  function FindBraces(Line: Integer): Boolean;
+  function FindBeginEnd(Line: Integer): Boolean;
   var
     Col: Integer;
   begin
     Result := False;
 
-    for Col := 1 to Length(CurLine) do
+    Col := 1;
+    while Col < Length(CurLine) do
     begin
-      // We've found a starting character
-      if CurLine[col] = '{' then
-      begin
-        // Char must have proper highlighting (ignore stuff inside comments...)
-        if GetHighlighterAttriAtRowCol(LinesToScan, Line, Col) <> fCommentAttri then
-        begin
-          // And ignore lines with both opening and closing chars in them
-          if not LineHasChar(Line, '}', col + 1) then begin
-            FoldRanges.StartFoldRange(Line + 1, 1);
-            Result := True;
+      case CurLine[col] of
+       'b':
+          if Lowercase(Copy(CurLine, col, 5)) = 'begin' then
+          begin
+            if GetHighlighterAttriAtRowCol(LinesToScan, Line, Col) <> fCommentAttri then
+            begin
+              // TODO: ignore lines with both opening and closing token in them
+
+              FoldRanges.StartFoldRange(Line + 1, 1);
+              Result := True;
+
+              // Skip until a newline
+              break;
+            end;
           end;
-          // Skip until a newline
-          break;
-        end;
-      end else if CurLine[col] = '}' then
-      begin
-        if GetHighlighterAttriAtRowCol(LinesToScan, Line, Col) <> fCommentAttri then
-        begin
-          // And ignore lines with both opening and closing chars in them
-          if not LineHasChar(Line, '{', col + 1) then begin
-            FoldRanges.StopFoldRange(Line + 1, 1);
-            Result := True;
+       'e':
+          if Lowercase(Copy(CurLine, col, 3)) = 'end' then
+          begin
+            if GetHighlighterAttriAtRowCol(LinesToScan, Line, Col) <> fCommentAttri then
+            begin
+              // TODO: ignore lines with both opening and closing token in them
+
+              if CurLine[col + 3] <> '.' then
+              begin
+                FoldRanges.StopFoldRange(Line + 1, 1);
+                Result := True;
+              end;
+
+              // Skip until a newline
+              break;
+            end;
           end;
-          // Skip until a newline
-          break;
-        end;
       end;
-    end; // for Col
+
+      Inc(Col);
+    end;
   end;
 
   function FoldRegion(Line: Integer): Boolean;
@@ -1062,6 +1071,14 @@ begin
         FoldRanges.NoFoldInfo(Line + 1);
       Continue;
     end
+    else if TRangeState(GetLineRange(LinesToScan, Line)) = rsBor then
+    begin
+      if TRangeState(GetLineRange(LinesToScan, Line - 1)) <> rsBor then
+        FoldRanges.StartFoldRange(Line + 1, 2)
+      else
+        FoldRanges.NoFoldInfo(Line + 1);
+      Continue;
+    end
     else if TRangeState(GetLineRange(LinesToScan, Line - 1)) = rsANSI then
     begin
       FoldRanges.StopFoldRange(Line + 1, 2);
@@ -1080,8 +1097,8 @@ begin
     if FoldRegion(Line) then
       Continue;
 
-    // Find an braces on this line  (Fold Type 1)
-    if not FindBraces(Line) then
+    // Find begin/end in this line
+    if not FindBeginEnd(Line) then
       FoldRanges.NoFoldInfo(Line + 1);
   end; // while Line
 end;

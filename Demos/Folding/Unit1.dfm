@@ -108,6 +108,7 @@ object Form1: TForm1
       'in the unit SynEditCodeFolding.pas.')
     Options = [eoAutoIndent, eoDragDropEditing, eoEnhanceEndKey, eoGroupUndo, eoShowScrollHint, eoSmartTabDelete, eoSmartTabs, eoTabIndent, eoTabsToSpaces, eoTrimTrailingSpaces]
     TabWidth = 4
+    OnGutterGetText = SynEdit1GutterGetText
     FontSmoothing = fsmNone
   end
   object ActionManager1: TActionManager
@@ -207,6 +208,7 @@ object Form1: TForm1
                   end
                   item
                     Action = actDWS
+                    Caption = '&DelphiWebScript'
                   end
                   item
                     Action = actJavaScript
