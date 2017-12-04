@@ -116,6 +116,7 @@ type
     FZeroStart: Boolean;
     FLeftOffset: Integer;
     FRightOffset: Integer;
+    FRightMargin: integer;
     FOnChange: TNotifyEvent;
     FCursor: TCursor;
     FVisible: Boolean;
@@ -138,6 +139,7 @@ type
     procedure SetLeadingZeros(const Value: Boolean);
     procedure SetLeftOffset(Value: Integer);
     procedure SetRightOffset(Value: Integer);
+    procedure SetRightMargin(Value: integer);
     procedure SetShowLineNumbers(const Value: Boolean);
     procedure SetShowModification(const Value: Boolean);
     procedure SetUseFontStyle(Value: Boolean);
@@ -187,6 +189,8 @@ type
     property ModificationColorSaved: TColor read FModificationColorSaved
       write SetModificationColorSaved default clLime;
     property RightOffset: Integer read FRightOffset write SetRightOffset
+      default 2;
+    property RightMargin: integer read FRightMargin write SetRightMargin
       default 2;
     property ShowLineNumbers: Boolean read FShowLineNumbers
       write SetShowLineNumbers default FALSE;
@@ -531,6 +535,7 @@ begin
   FDigitCount := 4;
   FAutoSizeDigitCount := FDigitCount;
   FRightOffset := 2;
+  FRightMargin := 2;
   FBorderColor := clWindow;
   FBorderStyle := gbsMiddle;
   FLineNumberStart := 1;
@@ -570,6 +575,7 @@ begin
     FLeftOffset := Src.FLeftOffset;
     FDigitCount := Src.FDigitCount;
     FRightOffset := Src.FRightOffset;
+    FRightMargin := Src.FRightMargin;
     FAutoSize := Src.FAutoSize;
     FAutoSizeDigitCount := Src.FAutoSizeDigitCount;
     FLineNumberStart := Src.FLineNumberStart;
@@ -630,13 +636,13 @@ begin
   else
   begin
     if FShowLineNumbers then
-      Result := FLeftOffset + FRightOffset + FAutoSizeDigitCount * CharWidth + 2
+      Result := fLeftOffset + fRightOffset + fAutoSizeDigitCount * CharWidth + FRightMargin
     else
       Result := FWidth;
 
     // take modification indicator into account
     if FShowModification then
-      Result := Result + 4;
+      Result := Result + FModificationBarWidth;
   end;
 end;
 
@@ -699,6 +705,15 @@ begin
   if FRightOffset <> Value then begin
     FRightOffset := Value;
     if Assigned(FOnChange) then FOnChange(Self);
+  end;
+end;
+
+procedure TSynGutter.SetRightMargin(Value: integer);
+begin
+  Value := Max(0, Value);
+  if fRightMargin <> Value then begin
+    fRightMargin := Value;
+    if Assigned(fOnChange) then fOnChange(Self);
   end;
 end;
 
