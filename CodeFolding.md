@@ -1,4 +1,5 @@
-Code folding support 
+***Code folding support*** 
+
 **Introduction**
 
 This pull request adds code folding support for SynEdit.  It blends well
