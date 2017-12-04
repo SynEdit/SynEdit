@@ -6,7 +6,6 @@ uses
   Vcl.Forms,
   Unit1 in 'Unit1.pas' {Form1},
   Vcl.Themes,
-  Vcl.Styles,
   uHighlighterProcs in '..\uHighlighterProcs.pas';
 
 {$R *.res}

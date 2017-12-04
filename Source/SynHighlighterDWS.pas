@@ -977,8 +977,8 @@ var
   CurLine: String;
   Line: Integer;
 
-  function LineHasChar(Line: Integer; character: char;
-    StartCol : Integer): boolean; // faster than Pos!
+  function LineHasChar(Line: Integer; Character: Char;
+    StartCol : Integer): Boolean; // faster than Pos!
   var
     i: Integer;
   begin
@@ -987,16 +987,16 @@ var
       if CurLine[i] = character then begin
         // Char must have proper highlighting (ignore stuff inside comments...)
         if GetHighlighterAttriAtRowCol(LinesToScan, Line, I) <> fCommentAttri then begin
-          result := true;
+          Result := True;
           break;
         end;
       end;
     end;
   end;
 
-  function FindBraces(Line: Integer) : Boolean;
-  Var
-    Col : Integer;
+  function FindBraces(Line: Integer): Boolean;
+  var
+    Col: Integer;
   begin
     Result := False;
 
@@ -1033,17 +1033,17 @@ var
   end;
 
   function FoldRegion(Line: Integer): Boolean;
-  Var
-    S : string;
+  var
+    S: string;
   begin
     Result := False;
     S := TrimLeft(CurLine);
-    if Uppercase(Copy(S, 1, 9)) = '//#REGION' then
+    if Uppercase(Copy(S, 1, 8)) = '{$REGION' then
     begin
       FoldRanges.StartFoldRange(Line + 1, FoldRegionType);
       Result := True;
     end
-    else if Uppercase(Copy(S, 1, 12)) = '//#ENDREGION' then
+    else if Uppercase(Copy(S, 1, 12)) = '{$ENDREGION}' then
     begin
       FoldRanges.StopFoldRange(Line + 1, FoldRegionType);
       Result := True;

@@ -126,6 +126,8 @@
                     <Source Name="MainSource">FoldingDemo.dpr</Source>
                 </Source>
                 <Excluded_Packages>
+                    <Excluded_Packages Name="C:\Program Files (x86)\Delphinus\19.0\Bpl\Delphinus.bpl">File C:\Program Files (x86)\Delphinus\19.0\Bpl\Delphinus.bpl not found</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\19.0\Bpl\SynEdit_D102T.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\19.0\Bpl\SynEdit_D102T.bpl not found</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dcloffice2k250.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dclofficexp250.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
                 </Excluded_Packages>

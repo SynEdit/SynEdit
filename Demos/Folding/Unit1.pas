@@ -3,12 +3,13 @@ unit Unit1;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, SynEdit, Vcl.Menus, Vcl.StdActns,
-  Vcl.ActnList, System.Actions, Vcl.ActnPopup, Vcl.ToolWin, Vcl.ActnMan,
-  Vcl.ActnCtrls, Vcl.ActnMenus, Vcl.PlatformDefaultStyleActnCtrls, SynEditPrint,
-  SynEditPythonBehaviour, SynHighlighterPython, SynHighlighterJScript,
-  SynEditHighlighter, SynHighlighterCpp, SynEditCodeFolding, SynHighlighterDWS;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, SynEdit, Vcl.Menus,
+  Vcl.StdActns, Vcl.ActnList, System.Actions, Vcl.ActnPopup, Vcl.ToolWin,
+  Vcl.ActnMan, Vcl.ActnCtrls, Vcl.ActnMenus, Vcl.PlatformDefaultStyleActnCtrls,
+  SynEditPrint, SynEditPythonBehaviour, SynHighlighterPython,
+  SynEditCodeFolding, SynHighlighterJScript, SynEditHighlighter,
+  SynHighlighterCpp, SynHighlighterDWS;
 
 type
   TForm1 = class(TForm)
@@ -38,7 +39,7 @@ type
     SynCppSyn1: TSynCppSyn;
     SynJScriptSyn1: TSynJScriptSyn;
     SynPythonSyn1: TSynPythonSyn;
-    SynEditPythonBehaviour1: TSynEditPythonBehaviour;
+    PythonBehaviour: TSynEditPythonBehaviour;
     actCPP: TAction;
     actJavaScript: TAction;
     actPython: TAction;
@@ -73,13 +74,15 @@ type
     Level12: TMenuItem;
     Level22: TMenuItem;
     Level32: TMenuItem;
+    actShowCollapsedMarks: TAction;
+    actShowCollapsedLines: TAction;
+    actFoldShapeSize: TAction;
     SynDWSSyn1: TSynDWSSyn;
     actDWS: TAction;
     procedure FileOpen1Accept(Sender: TObject);
     procedure FileSaveAs1Accept(Sender: TObject);
     procedure ActSaveExecute(Sender: TObject);
     procedure DialogPrintDlg1Accept(Sender: TObject);
-    procedure DialogFontEdit1FontDialogApply(Sender: TObject; Wnd: HWND);
     procedure actGutterLinesExecute(Sender: TObject);
     procedure actCPPExecute(Sender: TObject);
     procedure actJavaScriptExecute(Sender: TObject);
@@ -93,6 +96,10 @@ type
     procedure DialogFontEdit1BeforeExecute(Sender: TObject);
     procedure actFoldExecute(Sender: TObject);
     procedure actFoldUpdate(Sender: TObject);
+    procedure ActionManager1Update(Action: TBasicAction; var Handled: Boolean);
+    procedure actShowCollapsedLinesExecute(Sender: TObject);
+    procedure actShowCollapsedMarksExecute(Sender: TObject);
+    procedure actFoldShapeSizeExecute(Sender: TObject);
     procedure actDWSExecute(Sender: TObject);
   private
     { Private declarations }
@@ -121,21 +128,32 @@ end;
 
 procedure TForm1.actCPPExecute(Sender: TObject);
 begin
-  SynEditPythonBehaviour1.Editor := nil;
+  PythonBehaviour.Editor := nil;
   SynEdit1.OnScanForFoldRanges := ScanForFoldRanges;
   SynEdit1.Highlighter := SynCppSyn1;
 end;
 
 procedure TForm1.actDWSExecute(Sender: TObject);
 begin
-  SynEditPythonBehaviour1.Editor := nil;
-  SynEdit1.OnScanForFoldRanges := ScanForFoldRanges;
+  PythonBehaviour.Editor := nil;
+  SynEdit1.OnScanForFoldRanges := nil;
   SynEdit1.Highlighter := SynDwsSyn1;
 end;
 
 procedure TForm1.actFoldExecute(Sender: TObject);
 begin
   SynEdit1.ExecuteCommand(TAction(Sender).Tag, ' ', nil);
+end;
+
+procedure TForm1.actFoldShapeSizeExecute(Sender: TObject);
+var
+  S : String;
+  Size : Integer;
+begin
+  Size := SynEdit1.CodeFolding.GutterShapeSize;
+  S := InputBox('New Gutter Square Size', 'New size in pixels (odd number):', IntToStr(Size));
+  if TryStrToInt(S, Size) then
+    SynEdit1.CodeFolding.GutterShapeSize := Size;
 end;
 
 procedure TForm1.actFoldUpdate(Sender: TObject);
@@ -148,17 +166,25 @@ begin
   Synedit1.Gutter.ShowLineNumbers := actGutterLines.Checked;
 end;
 
+procedure TForm1.ActionManager1Update(Action: TBasicAction;
+  var Handled: Boolean);
+begin
+  actCodeFolding.Checked := SynEdit1.UseCodeFolding;
+  actShowCollapsedMarks.Checked := SynEdit1.CodeFolding.ShowCollapsedLine;
+  actShowCollapsedMarks.Checked := SynEdit1.CodeFolding.ShowHintMark;
+end;
+
 procedure TForm1.actJavaScriptExecute(Sender: TObject);
 begin
-  SynEditPythonBehaviour1.Editor := nil;
+  PythonBehaviour.Editor := nil;
   SynEdit1.OnScanForFoldRanges := nil;
   SynEdit1.Highlighter := SynJScriptSyn1;
 end;
 
 procedure TForm1.actPythonExecute(Sender: TObject);
 begin
-  SynEditPythonBehaviour1.Editor := Synedit1;
-  SynEditPythonBehaviour1.Editor := nil;
+  PythonBehaviour.Editor := Synedit1;
+  PythonBehaviour.Editor := nil;
   SynEdit1.Highlighter := SynPythonSyn1;
 end;
 
@@ -170,14 +196,14 @@ begin
     SynEdit1.Lines.SaveToFile(FileName);
 end;
 
+procedure TForm1.actShowCollapsedLinesExecute(Sender: TObject);
+begin
+  SynEdit1.CodeFolding.ShowCollapsedLine := TAction(Sender).Checked;
+end;
+
 procedure TForm1.DialogFontEdit1BeforeExecute(Sender: TObject);
 begin
   DialogFontEdit1.Dialog.Font := SynEdit1.Font;
-end;
-
-procedure TForm1.DialogFontEdit1FontDialogApply(Sender: TObject; Wnd: HWND);
-begin
-  SynEdit1.Font := DialogFontEdit1.Dialog.Font;
 end;
 
 procedure TForm1.DialogPrintDlg1Accept(Sender: TObject);
@@ -192,9 +218,9 @@ begin
   SynEdit1.Lines.LoadFromFile(FileName);
   SynEdit1.Highlighter := GetHighlighterFromFileExt(Highlighters, ExtractFileExt(FileName));
   if SynEdit1.Highlighter = SynPythonSyn1 then
-    SynEditPythonBehaviour1.Editor := SynEdit1
+    PythonBehaviour.Editor := SynEdit1
   else
-    SynEditPythonBehaviour1.Editor := nil;
+    PythonBehaviour.Editor := nil;
   if SynEdit1.Highlighter = SynCppSyn1 then
     SynEdit1.OnScanForFoldRanges := ScanForFoldRanges
   else
@@ -269,7 +295,7 @@ var
   end;
 
   function FindBraces(Line: Integer) : Boolean;
-  Var
+  var
     Col : Integer;
   begin
     Result := False;
@@ -308,7 +334,7 @@ var
   end;
 
 function FoldRegion(Line: Integer): Boolean;
-Var
+var
   S : string;
 begin
   Result := False;
@@ -359,6 +385,11 @@ begin
     if not FindBraces(Line) then
       TopFoldRanges.NoFoldInfo(Line + 1);
   end; // while Line
+end;
+
+procedure TForm1.actShowCollapsedMarksExecute(Sender: TObject);
+begin
+  SynEdit1.CodeFolding.ShowHintMark := TAction(Sender).Checked;
 end;
 
 end.

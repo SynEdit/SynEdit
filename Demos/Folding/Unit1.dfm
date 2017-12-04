@@ -49,7 +49,7 @@ object Form1: TForm1
     TabOrder = 1
     CodeFolding.CollapsedLineColor = clGrayText
     CodeFolding.FolderBarLinesColor = clGrayText
-    CodeFolding.ShowCollapsedLine = True
+    CodeFolding.ShowCollapsedLine = False
     CodeFolding.IndentGuidesColor = clGray
     CodeFolding.IndentGuides = True
     UseCodeFolding = False
@@ -59,6 +59,8 @@ object Form1: TForm1
     Gutter.Font.Height = -12
     Gutter.Font.Name = 'Consolas'
     Gutter.Font.Style = []
+    Gutter.GradientStartColor = clWindowText
+    Gutter.GradientEndColor = clWindow
     Lines.Strings = (
       
         'This project demonstrates the code folding capabilities of Syned' +
@@ -93,8 +95,8 @@ object Form1: TForm1
         '[ssCtrl, ssShift]);'
       ''
       
-        'Note: The JavaScript, and Python highlighters are Code Folding e' +
-        'nabled, but'
+        'Note: The JavaScript, DWS and Python highlighters are Code Foldi' +
+        'ng enabled, but'
       
         'the C++ highlighter is not.  Code folding for C++ is provided by' +
         ' a Synedit '
@@ -204,6 +206,9 @@ object Form1: TForm1
                     Caption = '&C++'
                   end
                   item
+                    Action = actDWS
+                  end
+                  item
                     Action = actJavaScript
                     Caption = '&JavaScript'
                   end
@@ -220,6 +225,29 @@ object Form1: TForm1
               item
                 Action = actCodeFolding
                 Caption = '&Code Folding'
+              end
+              item
+                Items = <
+                  item
+                    Action = actShowCollapsedLines
+                    Caption = '&Collapsed Lines'
+                  end
+                  item
+                    Action = actShowCollapsedMarks
+                    Caption = 'C&ollapsed Marks'
+                  end
+                  item
+                    Caption = '-'
+                  end
+                  item
+                    Action = actFoldShapeSize
+                    Caption = '&Gutter Square Size..'
+                  end>
+                Caption = 'Fo&lding Options'
+                UsageCount = 1
+              end
+              item
+                Caption = '-'
               end
               item
                 Items = <
@@ -283,9 +311,16 @@ object Form1: TForm1
           end>
         ActionBar = ActionMainMenuBar1
       end>
-    Left = 464
+    OnUpdate = ActionManager1Update
+    Left = 440
     Top = 32
     StyleName = 'Platform Default'
+    object actShowCollapsedLines: TAction
+      Category = 'Folding Options'
+      AutoCheck = True
+      Caption = 'Collapsed Lines'
+      OnExecute = actShowCollapsedLinesExecute
+    end
     object FileOpen1: TFileOpen
       Category = 'File'
       Caption = '&Open...'
@@ -389,7 +424,6 @@ object Form1: TForm1
       Dialog.Font.Name = 'Tahoma'
       Dialog.Font.Style = []
       Dialog.Options = [fdEffects, fdFixedPitchOnly]
-      Dialog.OnApply = DialogFontEdit1FontDialogApply
       Hint = 'Font Select'
       BeforeExecute = DialogFontEdit1BeforeExecute
     end
@@ -497,9 +531,21 @@ object Form1: TForm1
       Caption = 'DelphiWebScript'
       OnExecute = actDWSExecute
     end
+    object actShowCollapsedMarks: TAction
+      Category = 'Folding Options'
+      AutoCheck = True
+      Caption = 'Collapsed Marks'
+      Checked = True
+      OnExecute = actShowCollapsedMarksExecute
+    end
+    object actFoldShapeSize: TAction
+      Category = 'Folding Options'
+      Caption = 'Gutter Square Size..'
+      OnExecute = actFoldShapeSizeExecute
+    end
   end
   object PopupActionBar1: TPopupActionBar
-    Left = 528
+    Left = 532
     Top = 32
     object N1: TMenuItem
       Caption = '-'
@@ -594,33 +640,33 @@ object Form1: TForm1
     Font.Style = []
     TabWidth = 8
     Color = clWhite
-    Left = 472
+    Left = 440
     Top = 176
   end
   object SynCppSyn1: TSynCppSyn
     Options.AutoDetectEnabled = False
     Options.AutoDetectLineLimit = 0
     Options.Visible = False
-    Left = 524
+    Left = 532
     Top = 80
   end
   object SynJScriptSyn1: TSynJScriptSyn
     Options.AutoDetectEnabled = False
     Options.AutoDetectLineLimit = 0
     Options.Visible = False
-    Left = 472
+    Left = 440
     Top = 80
   end
   object SynPythonSyn1: TSynPythonSyn
     Options.AutoDetectEnabled = False
     Options.AutoDetectLineLimit = 0
     Options.Visible = False
-    Left = 480
+    Left = 440
     Top = 128
   end
-  object SynEditPythonBehaviour1: TSynEditPythonBehaviour
+  object PythonBehaviour: TSynEditPythonBehaviour
     Editor = SynEdit1
-    Left = 536
+    Left = 532
     Top = 128
   end
   object SynDWSSyn1: TSynDWSSyn
@@ -628,7 +674,7 @@ object Form1: TForm1
     Options.AutoDetectEnabled = False
     Options.AutoDetectLineLimit = 0
     Options.Visible = False
-    Left = 544
-    Top = 184
+    Left = 532
+    Top = 176
   end
 end
