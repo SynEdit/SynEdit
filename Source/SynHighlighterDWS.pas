@@ -54,6 +54,7 @@ uses
   Classes,
 {$IFDEF SYN_CodeFolding}
   SynEditCodeFolding,
+  SynRegExpr,
 {$ENDIF}
   Character;
 
@@ -100,6 +101,10 @@ type
     FDirecAttri: TSynHighlighterAttributes;
     FIdentifierAttri: TSynHighlighterAttributes;
     FSpaceAttri: TSynHighlighterAttributes;
+{$IFDEF SYN_CodeFolding}
+    RE_BlockBegin : TRegExpr;
+    RE_BlockEnd : TRegExpr;
+{$ENDIF}
     function AltFunc: TtkTokenKind;
     function KeywordFunc: TtkTokenKind;
     function FuncAsm: TtkTokenKind;
@@ -295,6 +300,16 @@ begin
   FRange := rsUnknown;
   FAsmStart := False;
   FDefaultFilter := SYNS_FilterDWS;
+
+{$IFDEF SYN_CodeFolding}
+  RE_BlockBegin := TRegExpr.Create;
+  RE_BlockBegin.Expression := '\b(begin|record|class)\b';
+  RE_BlockBegin.ModifierI := True;
+
+  RE_BlockEnd := TRegExpr.Create;
+  RE_BlockEnd.Expression := '\bend\b';
+  RE_BlockEnd.ModifierI := True;
+{$ENDIF}
 end;
 
 // Destroy
@@ -971,65 +986,52 @@ begin
 end;
 
 {$IFDEF SYN_CodeFolding}
+type
+  TRangeStates = set of TRangeState;
+
+Const
+  FoldTypeComment = 11;
+  FoldTypeAsm = 12;
+  FoldTypeHereDocDouble = 13;
+  FoldTypeHereDocSingle = 14;
+  FoldTypeConditionalDirective = 15;
+
+
 procedure TSynDWSSyn.ScanForFoldRanges(FoldRanges: TSynFoldRanges;
   LinesToScan: TStrings; FromLine, ToLine: Integer);
 var
   CurLine: String;
   Line: Integer;
 
-  function LineHasChar(Line: Integer; Character: Char;
-    StartCol : Integer): Boolean; // faster than Pos!
-  var
-    i: Integer;
-  begin
-    result := false;
-    for I := StartCol to Length(CurLine) do begin
-      if CurLine[i] = character then begin
-        // Char must have proper highlighting (ignore stuff inside comments...)
-        if GetHighlighterAttriAtRowCol(LinesToScan, Line, I) <> fCommentAttri then begin
-          Result := True;
-          break;
-        end;
-      end;
-    end;
-  end;
-
-  function FindBraces(Line: Integer): Boolean;
+  function BlockDelimiter(Line: Integer): Boolean;
   var
     Col: Integer;
+    Index: Integer;
   begin
     Result := False;
 
-    for Col := 1 to Length(CurLine) do
+    if RE_BlockBegin.Exec(CurLine) then
     begin
-      // We've found a starting character
-      if CurLine[col] = '{' then
+      // Char must have proper highlighting (ignore stuff inside comments...)
+      Index :=  RE_BlockBegin.MatchPos[0];
+      if GetHighlighterAttriAtRowCol(LinesToScan, Line, Index) <> fCommentAttri then
       begin
-        // Char must have proper highlighting (ignore stuff inside comments...)
-        if GetHighlighterAttriAtRowCol(LinesToScan, Line, Col) <> fCommentAttri then
-        begin
-          // And ignore lines with both opening and closing chars in them
-          if not LineHasChar(Line, '}', col + 1) then begin
-            FoldRanges.StartFoldRange(Line + 1, 1);
-            Result := True;
-          end;
-          // Skip until a newline
-          break;
-        end;
-      end else if CurLine[col] = '}' then
-      begin
-        if GetHighlighterAttriAtRowCol(LinesToScan, Line, Col) <> fCommentAttri then
-        begin
-          // And ignore lines with both opening and closing chars in them
-          if not LineHasChar(Line, '{', col + 1) then begin
-            FoldRanges.StopFoldRange(Line + 1, 1);
-            Result := True;
-          end;
-          // Skip until a newline
-          break;
+        // And ignore lines with both opening and closing chars in them
+        Re_BlockEnd.InputString := CurLine;
+        if not RE_BlockEnd.Exec(Index + 1) then begin
+          FoldRanges.StartFoldRange(Line + 1, 1);
+          Result := True;
         end;
       end;
-    end; // for Col
+    end else if RE_BlockEnd.Exec(CurLine) then
+    begin
+      Index :=  RE_BlockBegin.MatchPos[0];
+      if GetHighlighterAttriAtRowCol(LinesToScan, Line, Index) <> fCommentAttri then
+      begin
+        FoldRanges.StopFoldRange(Line + 1, 1);
+        Result := True;
+      end;
+    end;
   end;
 
   function FoldRegion(Line: Integer): Boolean;
@@ -1043,30 +1045,61 @@ var
       FoldRanges.StartFoldRange(Line + 1, FoldRegionType);
       Result := True;
     end
-    else if Uppercase(Copy(S, 1, 12)) = '{$ENDREGION}' then
+    else if Uppercase(Copy(S, 1, 11)) = '{$ENDREGION' then
     begin
       FoldRanges.StopFoldRange(Line + 1, FoldRegionType);
       Result := True;
     end;
   end;
 
+  function ConditionalDirective(Line: Integer): Boolean;
+  var
+    S: string;
+  begin
+    Result := False;
+    S := TrimLeft(CurLine);
+    if Uppercase(Copy(S, 1, 7)) = '{$IFDEF' then
+    begin
+      FoldRanges.StartFoldRange(Line + 1, FoldTypeConditionalDirective);
+      Result := True;
+    end
+    else if Uppercase(Copy(S, 1, 7)) = '{$ENDIF' then
+    begin
+      FoldRanges.StopFoldRange(Line + 1, FoldTypeConditionalDirective);
+      Result := True;
+    end;
+  end;
+
+  function IsMultiLineStatement(Line : integer; Ranges: TRangeStates;
+     Fold : Boolean; FoldType: Integer = 1): Boolean;
+  begin
+    Result := True;
+    if TRangeState(GetLineRange(LinesToScan, Line)) in Ranges then
+    begin
+      if Fold and not (TRangeState(GetLineRange(LinesToScan, Line - 1)) in Ranges) then
+        FoldRanges.StartFoldRange(Line + 1, FoldType)
+      else
+        FoldRanges.NoFoldInfo(Line + 1);
+    end
+    else if Fold and (TRangeState(GetLineRange(LinesToScan, Line - 1)) in Ranges) then
+    begin
+      FoldRanges.StopFoldRange(Line + 1, FoldType);
+    end else
+      Result := False;
+  end;
+
 begin
   for Line := FromLine to ToLine do
   begin
-    // Deal first with Multiline comments (Fold Type 2)
-    if TRangeState(GetLineRange(LinesToScan, Line)) = rsANSI then
-    begin
-      if TRangeState(GetLineRange(LinesToScan, Line - 1)) <> rsANSI then
-        FoldRanges.StartFoldRange(Line + 1, 2)
-      else
-        FoldRanges.NoFoldInfo(Line + 1);
+    // Deal first with Multiline statements
+    if IsMultiLineStatement(Line, [rsAnsi], True, FoldTypeComment) or
+       IsMultiLineStatement(Line, [rsAsm, rsAnsiAsm, rsBorAsm, rsDirectiveAsm], True, FoldTypeAsm) or
+       IsMultiLineStatement(Line, [rsHereDocDouble], True, FoldTypeHereDocDouble)  or
+       IsMultiLineStatement(Line, [rsHereDocSingle], True, FoldTypeHereDocSingle)  or
+       IsMultiLineStatement(Line, [rsHereDocSingle], True, FoldTypeHereDocSingle)  or
+       IsMultiLineStatement(Line, [rsDirective], False)
+    then
       Continue;
-    end
-    else if TRangeState(GetLineRange(LinesToScan, Line - 1)) = rsANSI then
-    begin
-      FoldRanges.StopFoldRange(Line + 1, 2);
-      Continue;
-    end;
 
     CurLine := LinesToScan[Line];
 
@@ -1076,12 +1109,16 @@ begin
       Continue;
     end;
 
+    //  Deal with ConditionalDirectives
+    if ConditionalDirective(Line) then
+      Continue;
+
     // Find Fold regions
     if FoldRegion(Line) then
       Continue;
 
-    // Find an braces on this line  (Fold Type 1)
-    if not FindBraces(Line) then
+    // Find begin or end  (Fold Type 1)
+    if not BlockDelimiter(Line) then
       FoldRanges.NoFoldInfo(Line + 1);
   end; // while Line
 end;

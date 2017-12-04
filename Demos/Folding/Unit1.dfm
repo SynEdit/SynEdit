@@ -23,11 +23,13 @@ object Form1: TForm1
     UseSystemFont = False
     ActionManager = ActionManager1
     Caption = 'ActionMainMenuBar1'
-    ColorMap.HighlightColor = 14410210
-    ColorMap.BtnSelectedColor = clBtnFace
-    ColorMap.UnusedColor = 14410210
+    Color = clMenuBar
+    ColorMap.DisabledFontColor = 7171437
+    ColorMap.HighlightColor = clWhite
+    ColorMap.BtnSelectedFont = clBlack
+    ColorMap.UnusedColor = clWhite
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -12
     Font.Name = 'Segoe UI'
     Font.Style = []
@@ -68,6 +70,7 @@ object Form1: TForm1
       
         'Use the menu to open one of the demo files in the project direct' +
         'ory.'
+      '- demo.pas'
       '- demo.cpp'
       '- demo.js'
       '- demo.py'
@@ -207,6 +210,7 @@ object Form1: TForm1
                   end
                   item
                     Action = actDWS
+                    Caption = '&DelphiWebScript'
                   end
                   item
                     Action = actJavaScript
