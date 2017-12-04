@@ -23,13 +23,11 @@ object Form1: TForm1
     UseSystemFont = False
     ActionManager = ActionManager1
     Caption = 'ActionMainMenuBar1'
-    Color = clMenuBar
-    ColorMap.DisabledFontColor = 7171437
-    ColorMap.HighlightColor = clWhite
-    ColorMap.BtnSelectedFont = clBlack
-    ColorMap.UnusedColor = clWhite
+    ColorMap.HighlightColor = 14410210
+    ColorMap.BtnSelectedColor = clBtnFace
+    ColorMap.UnusedColor = 14410210
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
+    Font.Color = clWindowText
     Font.Height = -12
     Font.Name = 'Segoe UI'
     Font.Style = []
@@ -57,8 +55,8 @@ object Form1: TForm1
     UseCodeFolding = False
     Gutter.AutoSize = True
     Gutter.Font.Charset = DEFAULT_CHARSET
-    Gutter.Font.Color = clWindowText
-    Gutter.Font.Height = -13
+    Gutter.Font.Color = clGrayText
+    Gutter.Font.Height = -12
     Gutter.Font.Name = 'Consolas'
     Gutter.Font.Style = []
     Gutter.GradientStartColor = clWindowText
@@ -97,8 +95,8 @@ object Form1: TForm1
         '[ssCtrl, ssShift]);'
       ''
       
-        'Note: The JavaScript, and Python highlighters are Code Folding e' +
-        'nabled, but'
+        'Note: The JavaScript, DWS and Python highlighters are Code Foldi' +
+        'ng enabled, but'
       
         'the C++ highlighter is not.  Code folding for C++ is provided by' +
         ' a Synedit '
@@ -208,6 +206,9 @@ object Form1: TForm1
                     Caption = '&C++'
                   end
                   item
+                    Action = actDWS
+                  end
+                  item
                     Action = actJavaScript
                     Caption = '&JavaScript'
                   end
@@ -240,6 +241,7 @@ object Form1: TForm1
                   end
                   item
                     Action = actFoldShapeSize
+                    Caption = '&Gutter Square Size..'
                   end>
                 Caption = 'Fo&lding Options'
                 UsageCount = 1
@@ -310,7 +312,7 @@ object Form1: TForm1
         ActionBar = ActionMainMenuBar1
       end>
     OnUpdate = ActionManager1Update
-    Left = 464
+    Left = 440
     Top = 32
     StyleName = 'Platform Default'
     object actShowCollapsedLines: TAction
@@ -422,7 +424,6 @@ object Form1: TForm1
       Dialog.Font.Name = 'Tahoma'
       Dialog.Font.Style = []
       Dialog.Options = [fdEffects, fdFixedPitchOnly]
-      Dialog.OnApply = DialogFontEdit1FontDialogApply
       Hint = 'Font Select'
       BeforeExecute = DialogFontEdit1BeforeExecute
     end
@@ -525,6 +526,11 @@ object Form1: TForm1
       OnExecute = actFoldExecute
       OnUpdate = actFoldUpdate
     end
+    object actDWS: TAction
+      Category = 'Highlighter'
+      Caption = 'DelphiWebScript'
+      OnExecute = actDWSExecute
+    end
     object actShowCollapsedMarks: TAction
       Category = 'Folding Options'
       AutoCheck = True
@@ -539,7 +545,7 @@ object Form1: TForm1
     end
   end
   object PopupActionBar1: TPopupActionBar
-    Left = 528
+    Left = 532
     Top = 32
     object N1: TMenuItem
       Caption = '-'
@@ -634,33 +640,41 @@ object Form1: TForm1
     Font.Style = []
     TabWidth = 8
     Color = clWhite
-    Left = 472
+    Left = 440
     Top = 176
   end
   object SynCppSyn1: TSynCppSyn
     Options.AutoDetectEnabled = False
     Options.AutoDetectLineLimit = 0
     Options.Visible = False
-    Left = 524
+    Left = 532
     Top = 80
   end
   object SynJScriptSyn1: TSynJScriptSyn
     Options.AutoDetectEnabled = False
     Options.AutoDetectLineLimit = 0
     Options.Visible = False
-    Left = 472
+    Left = 440
     Top = 80
   end
   object SynPythonSyn1: TSynPythonSyn
     Options.AutoDetectEnabled = False
     Options.AutoDetectLineLimit = 0
     Options.Visible = False
-    Left = 480
+    Left = 440
     Top = 128
   end
-  object SynEditPythonBehaviour1: TSynEditPythonBehaviour
+  object PythonBehaviour: TSynEditPythonBehaviour
     Editor = SynEdit1
-    Left = 536
+    Left = 532
     Top = 128
+  end
+  object SynDWSSyn1: TSynDWSSyn
+    DefaultFilter = 'DWScript Files (*.dws;*.pas;*.inc)|*.dws;*.pas;*.inc'
+    Options.AutoDetectEnabled = False
+    Options.AutoDetectLineLimit = 0
+    Options.Visible = False
+    Left = 532
+    Top = 176
   end
 end
