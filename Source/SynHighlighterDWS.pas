@@ -1150,13 +1150,18 @@ Var
   FoldRange: TSynFoldRange;
 begin
   ImplementationIndex := - 1;
-  // Skip the last one
-  for i  := FoldRanges.Ranges.Count - 2 downto 0 do
+  for i  := FoldRanges.Ranges.Count - 1 downto 0 do
   begin
     if FoldRanges.Ranges.List[i].FoldType = FT_Implementation then
       ImplementationIndex := i
     else if FoldRanges.Ranges.List[i].FoldType = FT_CodeDeclaration then
     begin
+      if ImplementationIndex >= 0 then begin
+        // Code declaration in the Interface part of a unit
+        FoldRanges.Ranges.Delete(i);
+        Dec(ImplementationIndex);
+        continue;
+      end;
       // Examine the following ranges
       SkipTo := 0;
       j := i + 1;
