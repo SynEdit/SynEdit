@@ -1,17 +1,29 @@
 unit Unit1;
+(*
+   Unit documentation
+*)
+
 
 interface
-
+{$REGION interface}
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, SynEdit, Vcl.Menus,
   Vcl.StdActns, Vcl.ActnList, System.Actions, Vcl.ActnPopup, Vcl.ToolWin,
+{$IFDEF CPPU64}
   Vcl.ActnMan, Vcl.ActnCtrls, Vcl.ActnMenus, Vcl.PlatformDefaultStyleActnCtrls,
   SynEditPrint, SynEditPythonBehaviour, SynHighlighterPython,
+{$ENDIF CPPU64}
   SynEditCodeFolding, SynHighlighterJScript, SynEditHighlighter,
   SynHighlighterCpp, SynHighlighterDWS;
 
 type
+
+  TPerson = record
+    Name: string;
+    SurName: string;
+  end;
+
   TForm1 = class(TForm)
     ActionManager1: TActionManager;
     ActionMainMenuBar1: TActionMainMenuBar;
@@ -101,13 +113,9 @@ type
     procedure actShowCollapsedMarksExecute(Sender: TObject);
     procedure actFoldShapeSizeExecute(Sender: TObject);
     procedure actDWSExecute(Sender: TObject);
-    procedure SynEdit1GutterGetText(Sender: TObject; aLine: Integer;
-      var aText: string);
-    procedure SynEdit1StatusChange(Sender: TObject; Changes: TSynStatusChanges);
   private
     { Private declarations }
     Highlighters : TStringList;
-    OldCaretY: Integer;
   public
     { Public declarations }
     FileName : String;
@@ -115,16 +123,29 @@ type
 
 var
   Form1: TForm1;
-
+{$ENDREGION interface}
 implementation
 
 uses
   SynEditTextBuffer,
   SynEditTypes,
-  SynEditKeyCmds,
-  uHighlighterProcs;
+  uHighlighterProcs, SynEditKeyCmds;
 
 {$R *.dfm}
+
+function CountBits(const AValue: Longword): Byte;
+asm
+  mov  ecx, eax
+  xor  al, al
+  test ecx, ecx
+  jz   @@ending
+ @@counting:
+  shr  ecx, 1
+  adc  al, 0
+  test ecx, ecx
+  jnz  @@counting
+ @@ending:
+end;
 
 procedure TForm1.actCodeFoldingExecute(Sender: TObject);
 begin
@@ -231,11 +252,6 @@ begin
   else
     SynEdit1.OnScanForFoldRanges := nil;
   SynEdit1.UseCodeFolding := actCodeFolding.Checked;
-
-  if (SynEdit1.Highlighter = SynPythonSyn1) or (SynEdit1.Highlighter = SynCppSyn1) then
-    SynEdit1.TabWidth := 4
-  else
-    SynEdit1.TabWidth := 2;
 end;
 
 procedure TForm1.FileSaveAs1Accept(Sender: TObject);
@@ -343,23 +359,23 @@ var
     end; // for Col
   end;
 
-  function FoldRegion(Line: Integer): Boolean;
-  var
-    S : string;
+function FoldRegion(Line: Integer): Boolean;
+var
+  S : string;
+begin
+  Result := False;
+  S := TrimLeft(CurLine);
+  if Uppercase(Copy(S, 1, 14)) = '#PRAGMA REGION' then
   begin
-    Result := False;
-    S := TrimLeft(CurLine);
-    if Uppercase(Copy(S, 1, 14)) = '#PRAGMA REGION' then
-    begin
-      TopFoldRanges.StartFoldRange(Line + 1, FoldRegionType);
-      Result := True;
-    end
-    else if Uppercase(Copy(S, 1, 17)) = '#PRAGMA ENDREGION' then
-    begin
-      TopFoldRanges.StopFoldRange(Line + 1, FoldRegionType);
-      Result := True;
-    end;
+    TopFoldRanges.StartFoldRange(Line + 1, FoldRegionType);
+    Result := True;
+  end
+  else if Uppercase(Copy(S, 1, 17)) = '#PRAGMA ENDREGION' then
+  begin
+    TopFoldRanges.StopFoldRange(Line + 1, FoldRegionType);
+    Result := True;
   end;
+end;
 
 begin
   for Line := FromLine to ToLine do
@@ -395,34 +411,6 @@ begin
     if not FindBraces(Line) then
       TopFoldRanges.NoFoldInfo(Line + 1);
   end; // while Line
-end;
-
-procedure TForm1.SynEdit1GutterGetText(Sender: TObject; aLine: Integer;
-  var aText: string);
-begin
-  if aLine = TSynEdit(Sender).CaretY then
-    Exit;
-
-  if aLine mod 10 <> 0 then
-    if aLine mod 5 <> 0 then
-      aText := '·'
-    else
-      aText := '-';
-end;
-
-procedure TForm1.SynEdit1StatusChange(Sender: TObject;
-  Changes: TSynStatusChanges);
-Var
-  NewCaretY: Integer;
-begin
-  if (scCaretY in Changes) and SynEdit1.Gutter.Visible
-    and SynEdit1.Gutter.ShowLineNumbers then
-  begin
-    NewCaretY := SynEdit1.CaretY;
-    SynEdit1.InvalidateGutterLine(OldCaretY);
-    SynEdit1.InvalidateGutterLine(NewCaretY);
-    OldCaretY := NewCaretY;
-  end;
 end;
 
 procedure TForm1.actShowCollapsedMarksExecute(Sender: TObject);

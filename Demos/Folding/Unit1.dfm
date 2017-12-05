@@ -20,12 +20,13 @@ object Form1: TForm1
     Top = 0
     Width = 635
     Height = 25
-    UseSystemFont = False
     ActionManager = ActionManager1
     Caption = 'ActionMainMenuBar1'
-    ColorMap.HighlightColor = 14410210
-    ColorMap.BtnSelectedColor = clBtnFace
-    ColorMap.UnusedColor = 14410210
+    Color = clMenuBar
+    ColorMap.DisabledFontColor = 7171437
+    ColorMap.HighlightColor = clWhite
+    ColorMap.BtnSelectedFont = clBlack
+    ColorMap.UnusedColor = clWhite
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -12
@@ -109,6 +110,7 @@ object Form1: TForm1
     Options = [eoAutoIndent, eoDragDropEditing, eoEnhanceEndKey, eoGroupUndo, eoShowScrollHint, eoSmartTabDelete, eoSmartTabs, eoTabIndent, eoTabsToSpaces, eoTrimTrailingSpaces]
     TabWidth = 4
     OnGutterGetText = SynEdit1GutterGetText
+    OnStatusChange = SynEdit1StatusChange
     FontSmoothing = fsmNone
   end
   object ActionManager1: TActionManager

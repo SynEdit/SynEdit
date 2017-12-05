@@ -2488,6 +2488,9 @@ begin
 {$IFDEF SYN_CodeFolding}
   if (sfLinesChanging in fStateFlags) and fAllFoldRanges.StopScanning(fLines) then
   begin
+    if Assigned(fHighlighter) and (fHighlighter is TSynCustomCodeFoldingHighlighter) then
+      TSynCustomCodeFoldingHighlighter(fHighlighter).AdjustFoldRanges(AllFoldRanges,
+      fLines);
     InvalidateGutter;
     Include(fStateFlags, sfScrollbarChanged);
   end;
@@ -13513,6 +13516,9 @@ begin
      and StopScanning will be called when LinesChanged is executed }
   if not (sfLinesChanging in fStateFlags) and fAllFoldRanges.StopScanning(fLines) then
   begin
+    if Assigned(fHighlighter) and (fHighlighter is TSynCustomCodeFoldingHighlighter) then
+      TSynCustomCodeFoldingHighlighter(fHighlighter).AdjustFoldRanges(AllFoldRanges,
+      fLines);
     InvalidateGutter;
     Include(fStateFlags, sfScrollbarChanged);
   end;

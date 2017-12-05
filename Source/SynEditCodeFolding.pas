@@ -278,6 +278,10 @@ type
     // Called after Highlighter ranges have been set
     procedure ScanForFoldRanges(FoldRanges: TSynFoldRanges;
       LinesToScan: TStrings; FromLine: Integer; ToLine: Integer); virtual; abstract;
+    // Called immediately after FoldRanges have been recreated
+    // Override only if some finetuning of the FoldRanges is need.
+    procedure AdjustFoldRanges(FoldRanges: TSynFoldRanges;
+      LinesToScan: TStrings); virtual;
   end;
 
   Const
@@ -874,6 +878,12 @@ begin
 end;
 
 { TSynCustomCodeFoldingHighlighter }
+
+procedure TSynCustomCodeFoldingHighlighter.AdjustFoldRanges(
+  FoldRanges: TSynFoldRanges; LinesToScan: TStrings);
+begin
+  // Do nothing
+end;
 
 function TSynCustomCodeFoldingHighlighter.GetHighlighterAttriAtRowCol(
   const Lines: TStrings; const Line: Integer;
