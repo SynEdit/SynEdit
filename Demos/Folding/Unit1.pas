@@ -103,9 +103,11 @@ type
     procedure actDWSExecute(Sender: TObject);
     procedure SynEdit1GutterGetText(Sender: TObject; aLine: Integer;
       var aText: string);
+    procedure SynEdit1StatusChange(Sender: TObject; Changes: TSynStatusChanges);
   private
     { Private declarations }
     Highlighters : TStringList;
+    OldCaretY: Integer;
   public
     { Public declarations }
     FileName : String;
@@ -229,6 +231,11 @@ begin
   else
     SynEdit1.OnScanForFoldRanges := nil;
   SynEdit1.UseCodeFolding := actCodeFolding.Checked;
+
+  if (SynEdit1.Highlighter = SynPythonSyn1) or (SynEdit1.Highlighter = SynCppSyn1) then
+    SynEdit1.TabWidth := 4
+  else
+    SynEdit1.TabWidth := 2;
 end;
 
 procedure TForm1.FileSaveAs1Accept(Sender: TObject);
@@ -401,6 +408,21 @@ begin
       aText := '·'
     else
       aText := '-';
+end;
+
+procedure TForm1.SynEdit1StatusChange(Sender: TObject;
+  Changes: TSynStatusChanges);
+Var
+  NewCaretY: Integer;
+begin
+  if (scCaretY in Changes) and SynEdit1.Gutter.Visible
+    and SynEdit1.Gutter.ShowLineNumbers then
+  begin
+    NewCaretY := SynEdit1.CaretY;
+    SynEdit1.InvalidateGutterLine(OldCaretY);
+    SynEdit1.InvalidateGutterLine(NewCaretY);
+    OldCaretY := NewCaretY;
+  end;
 end;
 
 procedure TForm1.actShowCollapsedMarksExecute(Sender: TObject);

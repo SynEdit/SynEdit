@@ -24,7 +24,6 @@ type
     SurName: string;
   end;
 
-
   TForm1 = class(TForm)
     ActionManager1: TActionManager;
     ActionMainMenuBar1: TActionMainMenuBar;
@@ -133,6 +132,20 @@ uses
   uHighlighterProcs, SynEditKeyCmds;
 
 {$R *.dfm}
+
+function CountBits(const AValue: Longword): Byte;
+asm
+  mov  ecx, eax
+  xor  al, al
+  test ecx, ecx
+  jz   @@ending
+ @@counting:
+  shr  ecx, 1
+  adc  al, 0
+  test ecx, ecx
+  jnz  @@counting
+ @@ending:
+end;
 
 procedure TForm1.actCodeFoldingExecute(Sender: TObject);
 begin
