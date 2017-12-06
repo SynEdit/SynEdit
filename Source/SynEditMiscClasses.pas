@@ -12,7 +12,7 @@ The Original Code is: SynEditMiscClasses.pas, released 2000-04-07.
 The Original Code is based on the mwSupportClasses.pas file from the
 mwEdit component suite by Martin Waldenburg and other developers, the Initial
 Author of this file is Michael Hieke.
-Unicode translation by Maël Hörz.
+Unicode translation by Maï¿½l Hï¿½rz.
 All Rights Reserved.
 
 Contributors to the SynEdit and mwEdit projects are listed in the
@@ -636,7 +636,9 @@ begin
   else
   begin
     if FShowLineNumbers then
-      Result := fLeftOffset + fRightOffset + fAutoSizeDigitCount * CharWidth + FRightMargin
+      Result := FLeftOffset + FRightOffset + FAutoSizeDigitCount * CharWidth + FRightMargin
+    else if FAutoSize then
+      Result := FLeftOffset + FRightOffset + FRightMargin
     else
       Result := FWidth;
 

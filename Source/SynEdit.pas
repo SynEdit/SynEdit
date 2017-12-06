@@ -4389,9 +4389,6 @@ var
     vEndRow: Integer;
     TokenFG, TokenBG: TColor;
     TokenStyle: TFontStyles;
-{$IFDEF SYN_CodeFolding}
-    Index : Integer;
-{$ENDIF}
   begin
     // Initialize rcLine for drawing. Note that Top and Bottom are updated
     // inside the loop. Get only the starting point for this.
@@ -4408,7 +4405,7 @@ var
     for nLine := vFirstLine to vLastLine do
     begin
 {$IFDEF SYN_CodeFolding}
-      if UseCodeFolding and AllFoldRanges.FoldHidesLine(nLine, Index) then
+      if UseCodeFolding and AllFoldRanges.FoldHidesLine(nLine) then
         continue;
 {$ENDIF}
       sLine := TSynEditStringList(Lines).ExpandedStrings[nLine - 1];
@@ -5936,6 +5933,9 @@ begin
         end;
         FCaretY := Value.Line;
         Include(FStatusChanges, scCaretY);
+{$IFDEF SYN_CodeFolding}
+        UncollapseAroundLine(fCaretY);
+{$ENDIF}
       end;
       // Call UpdateLastCaretX before DecPaintLock because the event handler it
       // calls could raise an exception, and we don't want fLastCaretX to be
@@ -6564,8 +6564,6 @@ begin
 end;
 
 function TCustomSynEdit.GetCollapseMarkRect(Row, Line: Integer): TRect;
-Var
-  Index : integer;
 begin
   Result := Rect(0, 0, 0, 0);
 
@@ -6575,7 +6573,7 @@ begin
   if Line < 0 then
     Line := RowToLine(Row);
 
-  if not AllFoldRanges.CollapsedFoldStartAtLine(Line, Index) then
+  if not AllFoldRanges.CollapsedFoldStartAtLine(Line) then
     Exit;
 
   { Prepare rect }
@@ -11039,7 +11037,6 @@ var
   iNewCursor: TCursor;
 {$IFDEF SYN_CodeFolding}
   ptRowCol: TDisplayCoord;
-  Index: Integer;
   Rect: TRect;
 {$ENDIF}
 begin
@@ -11058,7 +11055,7 @@ begin
   ptLineCol := DisplayToBufferPos(ptRowCol);
   if (ptCursor.X < fGutterWidth) then begin
     if UseCodeFolding and
-      fAllFoldRanges.FoldStartAtLine(ptLineCol.Line, Index) then
+      fAllFoldRanges.FoldStartAtLine(ptLineCol.Line) then
     begin
       Rect := GetFoldShapeRect(ptRowCol.Row);
       if PtInRect(Rect, ptCursor) then
@@ -11071,7 +11068,7 @@ begin
     if (eoDragDropEditing in fOptions) and (not MouseCapture) and IsPointInSelection(ptLineCol) then
       iNewCursor := crArrow
     else if UseCodeFolding and CodeFolding.ShowHintMark and
-      fAllFoldRanges.CollapsedFoldStartAtLine(ptLineCol.Line, Index) then
+      fAllFoldRanges.CollapsedFoldStartAtLine(ptLineCol.Line) then
     begin
       Rect := GetCollapseMarkRect(ptRowCol.Row, ptLineCol.Line);
       if PtInRect(Rect, ptCursor) then

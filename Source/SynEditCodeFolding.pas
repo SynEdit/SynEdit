@@ -178,15 +178,20 @@ type
     destructor Destroy; override;
 
     {utility routines}
-    function FoldStartAtLine(Line: Integer; out Index: Integer): Boolean;
-    function CollapsedFoldStartAtLine(Line: Integer; out Index: Integer): Boolean;
-    function FoldEndAtLine(Line: Integer; out Index: Integer)  : Boolean;
+    function FoldStartAtLine(Line: Integer): Boolean; overload;
+    function FoldStartAtLine(Line: Integer; out Index: Integer): Boolean; overload;
+    function CollapsedFoldStartAtLine(Line: Integer): Boolean; overload;
+    function CollapsedFoldStartAtLine(Line: Integer; out Index: Integer): Boolean; overload;
+    function FoldEndAtLine(Line: Integer)  : Boolean; overload;
+    function FoldEndAtLine(Line: Integer; out Index: Integer)  : Boolean; overload;
     function FoldAroundLineEx(Line: Integer; WantCollapsed, AcceptFromLine,
       AcceptToLine: Boolean; out Index: Integer): Boolean;
-    function CollapsedFoldAroundLine(Line: Integer; out Index: Integer): Boolean;
-    function FoldAroundLine(Line: Integer; out Index: Integer) : Boolean;
-    function FoldHidesLine(Line: Integer; out Index: Integer) : Boolean;
-    function FoldExtendsLine(Line: Integer; out Index: Integer) : Boolean;
+    function CollapsedFoldAroundLine(Line: Integer): Boolean; overload;
+    function CollapsedFoldAroundLine(Line: Integer; out Index: Integer): Boolean; overload;
+    function FoldAroundLine(Line: Integer) : Boolean; overload;
+    function FoldAroundLine(Line: Integer; out Index: Integer) : Boolean; overload;
+    function FoldHidesLine(Line: Integer) : Boolean; overload;
+    function FoldHidesLine(Line: Integer; out Index: Integer) : Boolean; overload;
     function FoldsAtLevel(Level : integer) : TArray<Integer>;
     function FoldsOfType(aType : integer) : TArray<Integer>;
 
@@ -296,10 +301,24 @@ Uses
 
 { TSynEditFoldRanges }
 
+function TSynFoldRanges.CollapsedFoldAroundLine(Line: Integer): Boolean;
+Var
+  Index: Integer;
+begin
+  Result := CollapsedFoldAroundLine(Line, Index);
+end;
+
 function TSynFoldRanges.CollapsedFoldAroundLine(Line: Integer;
   out Index: Integer): Boolean;
 begin
   Result := FoldAroundLineEx(Line, True, False, False, Index);
+end;
+
+function TSynFoldRanges.CollapsedFoldStartAtLine(Line: Integer): Boolean;
+Var
+  Index: Integer;
+begin
+  Result := CollapsedFoldStartAtLine(Line, Index);
 end;
 
 function TSynFoldRanges.CollapsedFoldStartAtLine(Line: Integer;
@@ -336,6 +355,13 @@ begin
   fCollapsedState.Free;
   fFoldInfoList.Free;
   inherited;
+end;
+
+function TSynFoldRanges.FoldAroundLine(Line: Integer): Boolean;
+Var
+  Index: Integer;
+begin
+  Result := FoldAroundLine(Line, Index);
 end;
 
 function TSynFoldRanges.FoldAroundLine(Line: Integer;
@@ -386,10 +412,18 @@ begin
         Break; // sorted by line. don't bother scanning further
 end;
 
-function TSynFoldRanges.FoldExtendsLine(Line: Integer;
-  out Index: Integer): Boolean;
+function TSynFoldRanges.FoldEndAtLine(Line: Integer): Boolean;
+Var
+  Index: Integer;
 begin
-  Result := FoldAroundLineEx(Line, True, True, True, Index);
+   Result := FoldEndAtLine(Line, Index);
+end;
+
+function TSynFoldRanges.FoldHidesLine(Line: Integer): Boolean;
+Var
+  Index: Integer;
+begin
+  Result := FoldHidesLine(Line, Index);
 end;
 
 function TSynFoldRanges.FoldHidesLine(Line: Integer;
@@ -508,6 +542,13 @@ begin
   finally
     ResultList.Free;
   end;
+end;
+
+function TSynFoldRanges.FoldStartAtLine(Line: Integer): Boolean;
+Var
+  Index: Integer;
+begin
+  Result := FoldStartAtLine(Line, Index);
 end;
 
 function TSynFoldRanges.FoldStartAtLine(Line: Integer; out Index: Integer): Boolean;
