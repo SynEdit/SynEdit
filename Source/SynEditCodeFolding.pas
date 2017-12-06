@@ -243,6 +243,7 @@ type
     procedure SetGutterShapeSize(const Value: Integer);
   public
     constructor Create;
+    procedure Assign(Source: TPersistent); override;
     property OnChange: TSynCodeFoldingChangeEvent read fOnChange write fOnChange;
   published
     // Size of the gutter shapes in pixels at 96 PPI - had to be odd number
@@ -853,6 +854,22 @@ procedure TSynFoldRange.Move(Count: Integer);
 begin
   Inc(FromLine, Count);
   Inc(ToLine, Count);
+end;
+
+procedure TSynCodeFolding.Assign(Source: TPersistent);
+begin
+ if Source is TSynCodeFolding then
+ begin
+   fIndentGuides := TSynCodeFolding(Source).fIndentGuides;
+   fCollapsedLineColor := TSynCodeFolding(Source).fCollapsedLineColor;
+   fFolderBarLinesColor := TSynCodeFolding(Source).fFolderBarLinesColor;
+   fIndentGuidesColor := TSynCodeFolding(Source).fIndentGuidesColor;
+   fShowCollapsedLine := TSynCodeFolding(Source).fShowCollapsedLine;
+   fShowHintMark := TSynCodeFolding(Source).fShowHintMark;
+   fGutterShapeSize := TSynCodeFolding(Source).fGutterShapeSize;
+ end
+ else
+   inherited Assign(Source);
 end;
 
 constructor TSynCodeFolding.Create;
