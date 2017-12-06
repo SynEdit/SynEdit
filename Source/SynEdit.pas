@@ -8065,10 +8065,12 @@ begin
 
       // Redraw fold mark
       InvalidateGutterLines(FromLine, MaxInt);
-    end;
+
+      UpdateScrollBars;
+    end else
+      // Update Scrollbars
+      Include(fStateFlags, sfScrollbarChanged);
   end;
-  // Update Scrollbars
-  Include(fStateFlags, sfScrollbarChanged);
 end;
 
 procedure TCustomSynEdit.CollapseAll;
@@ -8142,11 +8144,12 @@ begin
     InvalidateGutterLines(FromLine, MaxInt);
 
     // Make sure we can see the cursor
-//    EnsureCursorPosVisible;
+    // EnsureCursorPosVisible;
 
+    UpdateScrollBars;
+  end else
     // Update Scrollbars
     Include(fStateFlags, sfScrollbarChanged);
-  end;
 end;
 
 procedure TCustomSynEdit.UncollapseAroundLine(Line: Integer);

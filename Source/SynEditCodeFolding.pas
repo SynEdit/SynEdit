@@ -614,27 +614,19 @@ begin
       end else
          break;
 
-  if not fRangesNeedFixing then
-    // No need to recreate just adjust Ranges
-    for i := fRanges.Count - 1 downto 0 do
-      with fRanges.List[i] do
-        if (FromLine > aIndex + aCount)
-        then
-           // Move after affected area
-           fRanges.List[i].Move(-aCount)
-        else if (FromLine > aIndex) or
-           ((ToLine > aIndex) and (ToLine <= aIndex + aCount))
-        then begin
-          if CodeFoldingMode = cfmStandard then
-            // Should not happpen given that fRangesNeedFixing is False
-            raise TSynCodeFoldingException.Create('Error in TSynFoldRanges.LinesDeleted')
-          else begin
-            fRangesNeedFixing := True;
-            break
-          end;
-        end else if (ToLine > aIndex + aCount)
-        then
-          Dec(fRanges.List[i].ToLine, aCount);
+  for i := fRanges.Count - 1 downto 0 do
+    with fRanges.List[i] do
+      if (FromLine > aIndex + aCount) then
+        // Move after affected area
+        Ranges.List[i].Move(-aCount)
+      else if FromLine > aIndex then
+      begin
+        fRangesNeedFixing := True;
+        fRanges.Delete(i);
+      end else if ToLine > aIndex + aCount then
+        Dec(fRanges.List[i].ToLine, aCount)
+      else if ToLine > aIndex then
+        Dec(fRanges.List[i].ToLine, ToLine - aIndex)
 end;
 
 function TSynFoldRanges.LinesInserted(aIndex, aCount: Integer): Integer;
