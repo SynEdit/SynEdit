@@ -7685,6 +7685,7 @@ begin
 {$ENDIF}
 
   InvalidateLines(Index + 1, vEndLine);
+  InvalidateGutterLines(Index + 1, vEndLine);
 
   if (eoAutoSizeMaxScrollWidth in FOptions) then
   begin
