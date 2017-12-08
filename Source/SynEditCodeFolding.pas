@@ -178,15 +178,20 @@ type
     destructor Destroy; override;
 
     {utility routines}
-    function FoldStartAtLine(Line: Integer; out Index: Integer): Boolean;
-    function CollapsedFoldStartAtLine(Line: Integer; out Index: Integer): Boolean;
-    function FoldEndAtLine(Line: Integer; out Index: Integer)  : Boolean;
+    function FoldStartAtLine(Line: Integer): Boolean; overload;
+    function FoldStartAtLine(Line: Integer; out Index: Integer): Boolean; overload;
+    function CollapsedFoldStartAtLine(Line: Integer): Boolean; overload;
+    function CollapsedFoldStartAtLine(Line: Integer; out Index: Integer): Boolean; overload;
+    function FoldEndAtLine(Line: Integer)  : Boolean; overload;
+    function FoldEndAtLine(Line: Integer; out Index: Integer)  : Boolean; overload;
     function FoldAroundLineEx(Line: Integer; WantCollapsed, AcceptFromLine,
       AcceptToLine: Boolean; out Index: Integer): Boolean;
-    function CollapsedFoldAroundLine(Line: Integer; out Index: Integer): Boolean;
-    function FoldAroundLine(Line: Integer; out Index: Integer) : Boolean;
-    function FoldHidesLine(Line: Integer; out Index: Integer) : Boolean;
-    function FoldExtendsLine(Line: Integer; out Index: Integer) : Boolean;
+    function CollapsedFoldAroundLine(Line: Integer): Boolean; overload;
+    function CollapsedFoldAroundLine(Line: Integer; out Index: Integer): Boolean; overload;
+    function FoldAroundLine(Line: Integer) : Boolean; overload;
+    function FoldAroundLine(Line: Integer; out Index: Integer) : Boolean; overload;
+    function FoldHidesLine(Line: Integer) : Boolean; overload;
+    function FoldHidesLine(Line: Integer; out Index: Integer) : Boolean; overload;
     function FoldsAtLevel(Level : integer) : TArray<Integer>;
     function FoldsOfType(aType : integer) : TArray<Integer>;
 
@@ -243,6 +248,7 @@ type
     procedure SetGutterShapeSize(const Value: Integer);
   public
     constructor Create;
+    procedure Assign(Source: TPersistent); override;
     property OnChange: TSynCodeFoldingChangeEvent read fOnChange write fOnChange;
   published
     // Size of the gutter shapes in pixels at 96 PPI - had to be odd number
@@ -295,10 +301,24 @@ Uses
 
 { TSynEditFoldRanges }
 
+function TSynFoldRanges.CollapsedFoldAroundLine(Line: Integer): Boolean;
+Var
+  Index: Integer;
+begin
+  Result := CollapsedFoldAroundLine(Line, Index);
+end;
+
 function TSynFoldRanges.CollapsedFoldAroundLine(Line: Integer;
   out Index: Integer): Boolean;
 begin
   Result := FoldAroundLineEx(Line, True, False, False, Index);
+end;
+
+function TSynFoldRanges.CollapsedFoldStartAtLine(Line: Integer): Boolean;
+Var
+  Index: Integer;
+begin
+  Result := CollapsedFoldStartAtLine(Line, Index);
 end;
 
 function TSynFoldRanges.CollapsedFoldStartAtLine(Line: Integer;
@@ -335,6 +355,13 @@ begin
   fCollapsedState.Free;
   fFoldInfoList.Free;
   inherited;
+end;
+
+function TSynFoldRanges.FoldAroundLine(Line: Integer): Boolean;
+Var
+  Index: Integer;
+begin
+  Result := FoldAroundLine(Line, Index);
 end;
 
 function TSynFoldRanges.FoldAroundLine(Line: Integer;
@@ -385,10 +412,18 @@ begin
         Break; // sorted by line. don't bother scanning further
 end;
 
-function TSynFoldRanges.FoldExtendsLine(Line: Integer;
-  out Index: Integer): Boolean;
+function TSynFoldRanges.FoldEndAtLine(Line: Integer): Boolean;
+Var
+  Index: Integer;
 begin
-  Result := FoldAroundLineEx(Line, True, True, True, Index);
+   Result := FoldEndAtLine(Line, Index);
+end;
+
+function TSynFoldRanges.FoldHidesLine(Line: Integer): Boolean;
+Var
+  Index: Integer;
+begin
+  Result := FoldHidesLine(Line, Index);
 end;
 
 function TSynFoldRanges.FoldHidesLine(Line: Integer;
@@ -509,6 +544,13 @@ begin
   end;
 end;
 
+function TSynFoldRanges.FoldStartAtLine(Line: Integer): Boolean;
+Var
+  Index: Integer;
+begin
+  Result := FoldStartAtLine(Line, Index);
+end;
+
 function TSynFoldRanges.FoldStartAtLine(Line: Integer; out Index: Integer): Boolean;
 {
   If Result is False it Returns the First Index with Line greater than Line
@@ -613,27 +655,19 @@ begin
       end else
          break;
 
-  if not fRangesNeedFixing then
-    // No need to recreate just adjust Ranges
-    for i := fRanges.Count - 1 downto 0 do
-      with fRanges.List[i] do
-        if (FromLine > aIndex + aCount)
-        then
-           // Move after affected area
-           fRanges.List[i].Move(-aCount)
-        else if (FromLine > aIndex) or
-           ((ToLine > aIndex) and (ToLine <= aIndex + aCount))
-        then begin
-          if CodeFoldingMode = cfmStandard then
-            // Should not happpen given that fRangesNeedFixing is False
-            raise TSynCodeFoldingException.Create('Error in TSynFoldRanges.LinesDeleted')
-          else begin
-            fRangesNeedFixing := True;
-            break
-          end;
-        end else if (ToLine > aIndex + aCount)
-        then
-          Dec(fRanges.List[i].ToLine, aCount);
+  for i := fRanges.Count - 1 downto 0 do
+    with fRanges.List[i] do
+      if (FromLine > aIndex + aCount) then
+        // Move after affected area
+        Ranges.List[i].Move(-aCount)
+      else if FromLine > aIndex then
+      begin
+        fRangesNeedFixing := True;
+        fRanges.Delete(i);
+      end else if ToLine > aIndex + aCount then
+        Dec(fRanges.List[i].ToLine, aCount)
+      else if ToLine > aIndex then
+        Dec(fRanges.List[i].ToLine, ToLine - aIndex)
 end;
 
 function TSynFoldRanges.LinesInserted(aIndex, aCount: Integer): Integer;
@@ -853,6 +887,22 @@ procedure TSynFoldRange.Move(Count: Integer);
 begin
   Inc(FromLine, Count);
   Inc(ToLine, Count);
+end;
+
+procedure TSynCodeFolding.Assign(Source: TPersistent);
+begin
+ if Source is TSynCodeFolding then
+ begin
+   fIndentGuides := TSynCodeFolding(Source).fIndentGuides;
+   fCollapsedLineColor := TSynCodeFolding(Source).fCollapsedLineColor;
+   fFolderBarLinesColor := TSynCodeFolding(Source).fFolderBarLinesColor;
+   fIndentGuidesColor := TSynCodeFolding(Source).fIndentGuidesColor;
+   fShowCollapsedLine := TSynCodeFolding(Source).fShowCollapsedLine;
+   fShowHintMark := TSynCodeFolding(Source).fShowHintMark;
+   fGutterShapeSize := TSynCodeFolding(Source).fGutterShapeSize;
+ end
+ else
+   inherited Assign(Source);
 end;
 
 constructor TSynCodeFolding.Create;
