@@ -3379,8 +3379,6 @@ var
   FontSize: Integer;
   TextFormat: IDWriteTextFormat;
   TextMetrics: TDWriteTextMetrics;
-  TextLSMethod: DWRITE_LINE_SPACING_METHOD;
-  TextLineSpacing, TextBaseline: Single;
   TextOffset: Integer;
   TextSize: TSize;
   TextLayout: IDWriteTextLayout;
