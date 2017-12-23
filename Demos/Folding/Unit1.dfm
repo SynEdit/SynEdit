@@ -219,6 +219,10 @@ object Form1: TForm1
                   item
                     Action = actPython
                     Caption = '&Python'
+                  end
+                  item
+                    Action = actPascal
+                    Caption = 'P&ascal'
                   end>
                 Caption = '&Highlighter'
                 UsageCount = 1
@@ -547,6 +551,11 @@ object Form1: TForm1
       Caption = 'Gutter Square Size..'
       OnExecute = actFoldShapeSizeExecute
     end
+    object actPascal: TAction
+      Category = 'Highlighter'
+      Caption = 'Pascal'
+      OnExecute = actPascalExecute
+    end
   end
   object PopupActionBar1: TPopupActionBar
     Left = 532
@@ -680,5 +689,12 @@ object Form1: TForm1
     Options.Visible = False
     Left = 532
     Top = 176
+  end
+  object SynPasSyn1: TSynPasSyn
+    Options.AutoDetectEnabled = False
+    Options.AutoDetectLineLimit = 0
+    Options.Visible = False
+    Left = 440
+    Top = 232
   end
 end

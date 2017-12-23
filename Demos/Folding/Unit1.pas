@@ -9,7 +9,7 @@ uses
   Vcl.ActnMan, Vcl.ActnCtrls, Vcl.ActnMenus, Vcl.PlatformDefaultStyleActnCtrls,
   SynEditPrint, SynEditPythonBehaviour, SynHighlighterPython,
   SynEditCodeFolding, SynHighlighterJScript, SynEditHighlighter,
-  SynHighlighterCpp, SynHighlighterDWS;
+  SynHighlighterCpp, SynHighlighterDWS, SynHighlighterPas;
 
 type
   TForm1 = class(TForm)
@@ -79,6 +79,8 @@ type
     actFoldShapeSize: TAction;
     SynDWSSyn1: TSynDWSSyn;
     actDWS: TAction;
+    SynPasSyn1: TSynPasSyn;
+    actPascal: TAction;
     procedure FileOpen1Accept(Sender: TObject);
     procedure FileSaveAs1Accept(Sender: TObject);
     procedure ActSaveExecute(Sender: TObject);
@@ -104,6 +106,7 @@ type
     procedure SynEdit1GutterGetText(Sender: TObject; aLine: Integer;
       var aText: string);
     procedure SynEdit1StatusChange(Sender: TObject; Changes: TSynStatusChanges);
+    procedure actPascalExecute(Sender: TObject);
   private
     { Private declarations }
     Highlighters : TStringList;
@@ -428,6 +431,13 @@ end;
 procedure TForm1.actShowCollapsedMarksExecute(Sender: TObject);
 begin
   SynEdit1.CodeFolding.ShowHintMark := TAction(Sender).Checked;
+end;
+
+procedure TForm1.actPascalExecute(Sender: TObject);
+begin
+  PythonBehaviour.Editor := nil;
+  SynEdit1.OnScanForFoldRanges := nil;
+  SynEdit1.Highlighter := SynPasSyn1;
 end;
 
 end.
