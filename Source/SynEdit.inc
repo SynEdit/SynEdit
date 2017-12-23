@@ -1146,7 +1146,7 @@
 {$ENDIF}
 
 // Code Folding
-{$IFDEF SYN_DELPHI_2009_UP}
+{$IFDEF SYN_DELPHI_XE3_UP}
   {$DEFINE SYN_CodeFolding}
 {$ENDIF}
 
