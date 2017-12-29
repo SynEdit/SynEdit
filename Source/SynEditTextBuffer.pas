@@ -403,7 +403,7 @@ end;
 
 procedure TSynEditStringList.Delete(Index: Integer);
 begin
-  if (Index < 0) or (Index > FCount) then
+  if (Index < 0) or (Index >= FCount) then
     ListIndexOutOfBounds(Index);
   BeginUpdate;
   {$IFDEF OWN_UnicodeString_MEMMGR}
@@ -433,11 +433,11 @@ var
 {$ENDIF OWN_UnicodeString_MEMMGR}
 begin
   if NumLines > 0 then begin
-    if (Index < 0) or (Index > FCount) then
+    if (Index < 0) or (Index >= FCount) then
       ListIndexOutOfBounds(Index);
-    LinesAfter := FCount - (Index + NumLines - 1);
+    LinesAfter := FCount - (Index + NumLines);
     if LinesAfter < 0 then
-      NumLines := FCount - Index - 1;
+      NumLines := FCount - Index;
     {$IFDEF OWN_UnicodeString_MEMMGR}
     for I := Index to Index + NumLines - 1 do
       with FList[I] do
