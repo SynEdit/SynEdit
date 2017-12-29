@@ -1,4 +1,4 @@
-{-------------------------------------------------------------------------------
+﻿{-------------------------------------------------------------------------------
 The contents of this file are subject to the Mozilla Public License
 Version 1.1 (the "License"); you may not use this file except in compliance
 with the License. You may obtain a copy of the License at
@@ -550,6 +550,9 @@ type
 {$IFDEF SYN_DirectWrite}
     function CreateD2DCanvas: Boolean;
 {$ENDIF}
+
+    function RectWidth(R: TRect): Integer;
+    function RectHeight(R: TRect): Integer;
 
     procedure BookMarkOptionsChanged(Sender: TObject);
     procedure ComputeCaret(X, Y: Integer);
@@ -1680,7 +1683,7 @@ begin
     GetWindowRect(Handle, ClientRect);
     HR := D2DFactory.CreateHwndRenderTarget(D2D1RenderTargetProperties,
       D2D1HwndRenderTargetProperties(Handle, Size), FRenderTarget);
-    System.Win.ComObj.OleCheck(HR);
+    OleCheck(HR);
 
     // initially set the scale (otherwise the text will look strange)
     FRenderTarget.Resize(Size);
@@ -2026,6 +2029,11 @@ end;
 function TCustomSynEdit.GetWordAtCursor: UnicodeString;
 begin
    Result := GetWordAtRowCol(CaretXY);
+end;
+
+function TCustomSynEdit.RectHeight(R: TRect): Integer;
+begin
+  Result := Abs(R.Bottom - R.Top);
 end;
 
 procedure TCustomSynEdit.HideCaret;
@@ -3234,7 +3242,7 @@ begin
         OnGutterGetText(Self, CurrentLine, Str);
 
       OleCheck(DWriteFactory.CreateTextLayout(PWideChar(Str), Length(Str),
-        TextFormat, RectLine.Width, RectLine.Height, TextLayout));
+        TextFormat, RectWidth(RectLine), RectHeight(RectLine), TextLayout));
       OleCheck(TextLayout.GetMetrics(TextMetrics));
 
       TextSize.cx := Round(TextMetrics.widthIncludingTrailingWhitespace);
@@ -4611,7 +4619,7 @@ var
       FRenderTarget.FillRectangle(rcToken, SolidColorBrush);
 
       OleCheck(DWriteFactory.CreateTextLayout(PWideChar(Text), nCharsToPaint,
-        TextFormat, rcToken.Width, rcToken.Height, TextLayout));
+        TextFormat, RectWidth(rcToken), RectHeight(rcToken), TextLayout));
 
       TextRange.startPosition := 0;
       TextRange.length := nCharsToPaint;
@@ -4654,7 +4662,7 @@ var
           FRenderTarget.FillRectangle(rcToken, SolidColorBrush);
 
           OleCheck(DWriteFactory.CreateTextLayout(PWideChar(Text), 1,
-            TextFormat, rcToken.Width, rcToken.Height, TextLayout));
+            TextFormat, RectWidth(rcToken), RectHeight(rcToken), TextLayout));
 
           FRenderTarget.DrawTextLayout(D2D1PointF(nX, rcToken.Top), TextLayout,
             SolidColorFontBrush);
@@ -6905,6 +6913,11 @@ begin
   if not ReadOnly then
     PasteFromClipboard;
   Message.Result := ord(True);
+end;
+
+function TCustomSynEdit.RectWidth(R: TRect): Integer;
+begin
+  Result := Abs(R.Right - R.Left);
 end;
 
 procedure TCustomSynEdit.WMCancelMode(var Message:TMessage);
