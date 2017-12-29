@@ -12,17 +12,14 @@ type
     SynEditMiniMap: TSynEdit;
     Splitter: TSplitter;
     SynDWSSyn: TSynDWSSyn;
-    TimerReplicate: TTimer;
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
-    procedure SynEditChange(Sender: TObject);
     procedure SynEditStatusChange(Sender: TObject; Changes: TSynStatusChanges);
     procedure SynEditMiniMapSpecialLineColors(Sender: TObject; Line: Integer;
       var Special: Boolean; var FG, BG: TColor);
     procedure SynEditMiniMapMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure SynEditMiniMapEnter(Sender: TObject);
-    procedure TimerReplicateTimer(Sender: TObject);
   end;
 
 var
@@ -39,8 +36,7 @@ begin
   // double buffer both SynEdit instances
   SynEditMiniMap.DoubleBuffered := True;
   SynEdit.DoubleBuffered := True;
-
-  TimerReplicateTimer(Self);
+  SynEditMiniMap.SetLinesPointer(SynEdit);
 end;
 
 procedure TFormSynEditMinimap.FormResize(Sender: TObject);
@@ -71,11 +67,6 @@ begin
   BG := clBtnFace;
 end;
 
-procedure TFormSynEditMinimap.SynEditChange(Sender: TObject);
-begin
-  TimerReplicate.Enabled := True;
-end;
-
 procedure TFormSynEditMinimap.SynEditStatusChange(Sender: TObject;
   Changes: TSynStatusChanges);
 begin
@@ -86,30 +77,6 @@ begin
     Max(1, SynEdit.TopLine - (SynEditMiniMap.LinesInWindow -
     SynEdit.LinesInWindow) div 2);
   SynEditMiniMap.Invalidate;
-end;
-
-procedure TFormSynEditMinimap.TimerReplicateTimer(Sender: TObject);
-var
-  I: Integer;
-begin
-  TimerReplicate.Enabled := False;
-
-  SynEditMiniMap.BeginUpdate;
-  try
-    while SynEditMiniMap.Lines.Count > SynEdit.Lines.Count do
-      SynEditMiniMap.Lines.Delete(SynEditMiniMap.Lines.Count - 1);
-    for I := 0 to Min(SynEdit.Lines.Count, SynEditMiniMap.Lines.Count) - 1 do
-      if SynEditMiniMap.Lines[I] <> SynEdit.Lines[I] then
-        SynEditMiniMap.Lines[I] := SynEdit.Lines[I];
-    for I := SynEditMiniMap.Lines.Count to SynEdit.Lines.Count - 1 do
-      SynEditMiniMap.Lines.Add(SynEdit.Lines[I]);
-  finally
-    SynEditMiniMap.EndUpdate;
-  end;
-
-  SynEditMiniMap.Tag := 0;
-  SynEditMiniMap.Invalidate;
-  SynEditStatusChange(Sender, []);
 end;
 
 end.

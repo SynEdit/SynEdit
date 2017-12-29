@@ -205,6 +205,21 @@ const
 
   ecString          = 630;  //Insert a whole string
 
+  {$IFDEF SYN_CodeFolding}
+  ecFoldAll         = 701;
+  ecUnfoldAll       = 702;
+  ecFoldNearest     = 705;
+  ecUnfoldNearest   = 706;
+  ecFoldLevel1      = 711;
+  ecFoldLevel2      = 712;
+  ecFoldLevel3      = 713;
+  ecUnfoldLevel1    = 721;
+  ecUnfoldLevel2    = 722;
+  ecUnfoldLevel3    = 723;
+  ecFoldRegions      = 731;
+  ecUnfoldRegions    = 732;
+  {$ENDIF}
+
   ecUserFirst       = 1001; // Start of user-defined commands
 
 type
@@ -261,8 +276,9 @@ type
   public
     constructor Create(AOwner: TPersistent);
     function Add: TSynEditKeyStroke;
-    procedure AddKey(const ACmd: TSynEditorCommand; const AKey: Word;
-       const AShift: TShiftState);
+    procedure AddKey(const ACmd: TSynEditorCommand; const AKey: word;
+       const AShift: TShiftState; const AKey2: word = 0;
+       const AShift2: TShiftState = []);
     procedure Assign(Source: TPersistent); override;
     function FindCommand(Cmd: TSynEditorCommand): Integer;
     function FindKeycode(Code: Word; SS: TShiftState): Integer;
@@ -319,7 +335,11 @@ type
 {$ENDIF}
 
 const
+{$IFDEF SYN_CodeFolding}
+  EditorCommandStrs: array[0..113] of TIdentMapEntry = (
+{$ELSE}
   EditorCommandStrs: array[0..101] of TIdentMapEntry = (
+{$ENDIF}
     (Value: ecNone; Name: 'ecNone'),
     (Value: ecLeft; Name: 'ecLeft'),
     (Value: ecRight; Name: 'ecRight'),
@@ -421,7 +441,23 @@ const
     (Value: ecLowerCaseBlock; Name: 'ecLowerCaseBlock'),
     (Value: ecToggleCaseBlock; Name: 'ecToggleCaseBlock'),
     (Value: ecTitleCaseBlock; Name: 'ecTitleCaseBlock'),
+{$IFDEF SYN_CodeFolding}
+    (Value: ecString; Name:'ecString'),
+    (Value: ecFoldAll; Name:'ecFoldAll'),
+    (Value: ecUnfoldAll; Name:'ecUnfoldAll'),
+    (Value: ecFoldNearest; Name:'ecFoldNearest'),
+    (Value: ecUnfoldNearest; Name:'ecUnfoldNearest'),
+    (Value: ecFoldLevel1; Name:'ecFoldLevel1'),
+    (Value: ecFoldLevel2; Name:'ecFoldLevel2'),
+    (Value: ecFoldLevel3; Name:'ecFoldLevel3'),
+    (Value: ecUnfoldLevel1; Name:'ecUnfoldLevel1'),
+    (Value: ecUnfoldLevel2; Name:'ecUnfoldLevel2'),
+    (Value: ecUnfoldLevel3; Name:'ecUnfoldLevel3'),
+    (Value: ecFoldRegions; Name:'ecFoldRanges'),
+    (Value: ecUnfoldRegions; Name:'ecUnfoldRanges'));
+{$ELSE}
     (Value: ecString; Name:'ecString'));
+{$ENDIF}
 
 procedure GetEditorCommandValues(Proc: TGetStrProc);
 var
@@ -652,8 +688,8 @@ begin
   Result := TSynEditKeyStroke(inherited Add);
 end;
 
-procedure TSynEditKeyStrokes.AddKey(const ACmd: TSynEditorCommand; const AKey: Word;
-  const AShift: TShiftState);
+procedure TSynEditKeyStrokes.AddKey(const ACmd: TSynEditorCommand; const AKey: word;
+  const AShift: TShiftState; const AKey2: word; const AShift2: TShiftState);
 var
   NewKeystroke: TSynEditKeyStroke;
 begin
@@ -661,6 +697,8 @@ begin
   try
     NewKeystroke.Key := AKey;
     NewKeystroke.Shift := AShift;
+    NewKeystroke.Key2 := AKey2;
+    NewKeystroke.Shift2 := AShift2;
     NewKeystroke.Command := ACmd;
   except
     NewKeystroke.Free;
@@ -870,6 +908,18 @@ begin
   AddKey(ecColumnSelect, ord('C'), [ssCtrl,ssShift]);
   AddKey(ecLineSelect, ord('L'), [ssCtrl,ssShift]);
   AddKey(ecMatchBracket, ord('B'), [ssCtrl,ssShift]);
+{$IFDEF SYN_CodeFolding}
+  AddKey(ecFoldAll, VK_OEM_MINUS, [ssCtrl, ssShift]);   {- _}
+  AddKey(ecUnfoldAll,  VK_OEM_PLUS, [ssCtrl, ssShift]); {= +}
+  AddKey(ecFoldNearest, VK_OEM_2, [ssCtrl]);  // Divide {'/'}
+  AddKey(ecUnfoldNearest, VK_OEM_2, [ssCtrl, ssShift]);
+  AddKey(ecFoldLevel1, ord('K'), [ssCtrl], Ord('1'), [ssCtrl]);
+  AddKey(ecFoldLevel2, ord('K'), [ssCtrl], Ord('2'), [ssCtrl]);
+  AddKey(ecFoldLevel3, ord('K'), [ssCtrl], Ord('3'), [ssCtrl]);
+  AddKey(ecUnfoldLevel1, ord('K'), [ssCtrl, ssShift], Ord('1'), [ssCtrl, ssShift]);
+  AddKey(ecUnfoldLevel2, ord('K'), [ssCtrl, ssShift], Ord('2'), [ssCtrl, ssShift]);
+  AddKey(ecUnfoldLevel3, ord('K'), [ssCtrl, ssShift], Ord('3'), [ssCtrl, ssShift]);
+{$ENDIF}
 end;
 
 procedure TSynEditKeyStrokes.SetItem(Index: Integer; Value: TSynEditKeyStroke);

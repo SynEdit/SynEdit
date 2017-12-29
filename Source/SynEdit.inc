@@ -1141,6 +1141,14 @@
 {-$DEFINE SYN_UNISCRIBE}
 
 // DirectWrite
-{$IFDEF SYN_DELPHI_2010_UP}
+{$IFDEF SYN_DELPHI_XE2_UP}
   {$DEFINE SYN_DirectWrite}
 {$ENDIF}
+
+// Code Folding
+{$IFDEF SYN_DELPHI_XE3_UP}
+  {$DEFINE SYN_CodeFolding}
+{$ENDIF}
+
+
+

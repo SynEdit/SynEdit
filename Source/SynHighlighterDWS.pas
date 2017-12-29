@@ -52,6 +52,10 @@ uses
   SynEditHighlighter,
   SysUtils,
   Classes,
+{$IFDEF SYN_CodeFolding}
+  SynEditCodeFolding,
+  SynRegExpr,
+{$ENDIF}
   Character;
 
 type
@@ -71,7 +75,11 @@ type
    end;
 
 type
+{$IFDEF SYN_CodeFolding}
+  TSynDWSSyn = class(TSynCustomCodeFoldingHighlighter)
+{$ELSE}
   TSynDWSSyn = class(TSynCustomHighlighter)
+{$ENDIF}
   private
     FAsmStart: Boolean;
     FRange: TRangeState;
@@ -93,6 +101,11 @@ type
     FDirecAttri: TSynHighlighterAttributes;
     FIdentifierAttri: TSynHighlighterAttributes;
     FSpaceAttri: TSynHighlighterAttributes;
+{$IFDEF SYN_CodeFolding}
+    RE_BlockBegin : TRegExpr;
+    RE_BlockEnd : TRegExpr;
+    RE_Code: TRegExpr;
+{$ENDIF}
     function AltFunc: TtkTokenKind;
     function KeywordFunc: TtkTokenKind;
     function FuncAsm: TtkTokenKind;
@@ -158,6 +171,12 @@ type
     // and highlighting. It modifies the basic TSynDWSSyn to reproduce
     // the most recent Delphi editor highlighting.
 
+{$IFDEF SYN_CodeFolding}
+    procedure ScanForFoldRanges(FoldRanges: TSynFoldRanges;
+      LinesToScan: TStrings; FromLine: Integer; ToLine: Integer); override;
+    procedure AdjustFoldRanges(FoldRanges: TSynFoldRanges;
+      LinesToScan: TStrings); override;
+{$ENDIF}
   published
     property AsmAttri: TSynHighlighterAttributes read FAsmAttri write FAsmAttri;
     property CommentAttri: TSynHighlighterAttributes read FCommentAttri
@@ -284,6 +303,20 @@ begin
   FRange := rsUnknown;
   FAsmStart := False;
   FDefaultFilter := SYNS_FilterDWS;
+
+{$IFDEF SYN_CodeFolding}
+  RE_BlockBegin := TRegExpr.Create;
+  RE_BlockBegin.Expression := '\b(begin|record|class)\b';
+  RE_BlockBegin.ModifierI := True;
+
+  RE_BlockEnd := TRegExpr.Create;
+  RE_BlockEnd.Expression := '\bend\b';
+  RE_BlockEnd.ModifierI := True;
+
+  RE_Code := TRegExpr.Create;
+  RE_Code.Expression := '^\s*(function|procedure)\b';
+  RE_Code.ModifierI := True;
+{$ENDIF}
 end;
 
 // Destroy
@@ -958,6 +991,232 @@ function TSynDWSSyn.GetRange: Pointer;
 begin
   Result := Pointer(FRange);
 end;
+
+{$IFDEF SYN_CodeFolding}
+type
+  TRangeStates = set of TRangeState;
+
+Const
+  FT_Standard = 1;  // begin end, class end, record end
+  FT_Comment = 11;
+  FT_Asm = 12;
+  FT_HereDocDouble = 13;
+  FT_HereDocSingle = 14;
+  FT_ConditionalDirective = 15;
+  FT_CodeDeclaration = 16;
+  FT_CodeDeclarationWithBody = 17;
+  FT_Implementation = 18;
+
+procedure TSynDWSSyn.ScanForFoldRanges(FoldRanges: TSynFoldRanges;
+  LinesToScan: TStrings; FromLine, ToLine: Integer);
+var
+  CurLine: String;
+  Line: Integer;
+
+  function BlockDelimiter(Line: Integer): Boolean;
+  var
+    Index: Integer;
+  begin
+    Result := False;
+
+    if RE_BlockBegin.Exec(CurLine) then
+    begin
+      // Char must have proper highlighting (ignore stuff inside comments...)
+      Index :=  RE_BlockBegin.MatchPos[0];
+      if GetHighlighterAttriAtRowCol(LinesToScan, Line, Index) <> fCommentAttri then
+      begin
+        // And ignore lines with both opening and closing chars in them
+        Re_BlockEnd.InputString := CurLine;
+        if not RE_BlockEnd.Exec(Index + 1) then begin
+          FoldRanges.StartFoldRange(Line + 1, FT_Standard);
+          Result := True;
+        end;
+      end;
+    end else if RE_BlockEnd.Exec(CurLine) then
+    begin
+      Index :=  RE_BlockBegin.MatchPos[0];
+      if GetHighlighterAttriAtRowCol(LinesToScan, Line, Index) <> fCommentAttri then
+      begin
+        FoldRanges.StopFoldRange(Line + 1, FT_Standard);
+        Result := True;
+      end;
+    end;
+  end;
+
+  function FoldRegion(Line: Integer): Boolean;
+  var
+    S: string;
+  begin
+    Result := False;
+    S := TrimLeft(CurLine);
+    if Uppercase(Copy(S, 1, 8)) = '{$REGION' then
+    begin
+      FoldRanges.StartFoldRange(Line + 1, FoldRegionType);
+      Result := True;
+    end
+    else if Uppercase(Copy(S, 1, 11)) = '{$ENDREGION' then
+    begin
+      FoldRanges.StopFoldRange(Line + 1, FoldRegionType);
+      Result := True;
+    end;
+  end;
+
+  function ConditionalDirective(Line: Integer): Boolean;
+  var
+    S: string;
+  begin
+    Result := False;
+    S := TrimLeft(CurLine);
+    if Uppercase(Copy(S, 1, 7)) = '{$IFDEF' then
+    begin
+      FoldRanges.StartFoldRange(Line + 1, FT_ConditionalDirective);
+      Result := True;
+    end
+    else if Uppercase(Copy(S, 1, 7)) = '{$ENDIF' then
+    begin
+      FoldRanges.StopFoldRange(Line + 1, FT_ConditionalDirective);
+      Result := True;
+    end;
+  end;
+
+  function IsMultiLineStatement(Line : integer; Ranges: TRangeStates;
+     Fold : Boolean; FoldType: Integer = 1): Boolean;
+  begin
+    Result := True;
+    if TRangeState(GetLineRange(LinesToScan, Line)) in Ranges then
+    begin
+      if Fold and not (TRangeState(GetLineRange(LinesToScan, Line - 1)) in Ranges) then
+        FoldRanges.StartFoldRange(Line + 1, FoldType)
+      else
+        FoldRanges.NoFoldInfo(Line + 1);
+    end
+    else if Fold and (TRangeState(GetLineRange(LinesToScan, Line - 1)) in Ranges) then
+    begin
+      FoldRanges.StopFoldRange(Line + 1, FoldType);
+    end else
+      Result := False;
+  end;
+
+begin
+  for Line := FromLine to ToLine do
+  begin
+    // Deal first with Multiline statements
+    if IsMultiLineStatement(Line, [rsAnsi], True, FT_Comment) or
+       IsMultiLineStatement(Line, [rsAsm, rsAnsiAsm, rsBorAsm, rsDirectiveAsm], True, FT_Asm) or
+       IsMultiLineStatement(Line, [rsHereDocDouble], True, FT_HereDocDouble)  or
+       IsMultiLineStatement(Line, [rsHereDocSingle], True, FT_HereDocSingle)  or
+       IsMultiLineStatement(Line, [rsHereDocSingle], True, FT_HereDocSingle)  or
+       IsMultiLineStatement(Line, [rsBor], True, FT_Comment) or
+       IsMultiLineStatement(Line, [rsDirective], False)
+    then
+      Continue;
+
+    CurLine := LinesToScan[Line];
+
+    // Skip empty lines
+    if CurLine = '' then begin
+      FoldRanges.NoFoldInfo(Line + 1);
+      Continue;
+    end;
+
+    //  Deal with ConditionalDirectives
+    if ConditionalDirective(Line) then
+      Continue;
+
+    // Find Fold regions
+    if FoldRegion(Line) then
+      Continue;
+
+    // Implementation
+    if Uppercase(TrimLeft(CurLine)) = 'IMPLEMENTATION' then
+      FoldRanges.StartFoldRange(Line +1, FT_Implementation)
+    // Functions and procedures
+    else if RE_Code.Exec(CurLine) then
+      FoldRanges.StartFoldRange(Line +1, FT_CodeDeclaration)
+    // Find begin or end  (Fold Type 1)
+    else if not BlockDelimiter(Line) then
+      FoldRanges.NoFoldInfo(Line + 1);
+  end; //for Line
+end;
+
+procedure TSynDWSSyn.AdjustFoldRanges(FoldRanges: TSynFoldRanges;
+      LinesToScan: TStrings);
+{
+   Provide folding for procedures and functions included nested ones.
+}
+Var
+  i, j, SkipTo: Integer;
+  ImplementationIndex: Integer;
+  FoldRange: TSynFoldRange;
+begin
+  ImplementationIndex := - 1;
+  for i  := FoldRanges.Ranges.Count - 1 downto 0 do
+  begin
+    if FoldRanges.Ranges.List[i].FoldType = FT_Implementation then
+      ImplementationIndex := i
+    else if FoldRanges.Ranges.List[i].FoldType = FT_CodeDeclaration then
+    begin
+      if ImplementationIndex >= 0 then begin
+        // Code declaration in the Interface part of a unit
+        FoldRanges.Ranges.Delete(i);
+        Dec(ImplementationIndex);
+        continue;
+      end;
+      // Examine the following ranges
+      SkipTo := 0;
+      j := i + 1;
+      while J < FoldRanges.Ranges.Count do begin
+        FoldRange := FoldRanges.Ranges.List[j];
+        Inc(j);
+        case FoldRange.FoldType of
+          // Nested procedure or function
+          FT_CodeDeclarationWithBody:
+            begin
+              SkipTo := FoldRange.ToLine;
+              continue;
+            end;
+          FT_Standard:
+          // possibly begin end;
+            if FoldRange.ToLine <= SkipTo then
+              Continue
+            else if RE_BlockBegin.Exec(LinesToScan[FoldRange.FromLine - 1]) then
+            begin
+              if LowerCase(RE_BlockBegin.Match[0]) = 'begin' then
+              begin
+                // function or procedure followed by begin end block
+                // Adjust ToLine
+                FoldRanges.Ranges.List[i].ToLine := FoldRange.ToLine;
+                FoldRanges.Ranges.List[i].FoldType := FT_CodeDeclarationWithBody;
+                break
+              end else
+              begin
+                // class or record declaration follows, so
+                FoldRanges.Ranges.Delete(i);
+                break;
+               end;
+            end else
+              Assert(False, 'TSynDWSSyn.AdjustFoldRanges');
+        else
+          begin
+            if FoldRange.ToLine <= SkipTo then
+              Continue
+            else begin
+              // Otherwise delete
+              // eg. function definitions within a class definition
+              FoldRanges.Ranges.Delete(i);
+              break
+            end;
+          end;
+        end;
+      end;
+    end;
+  end;
+  if ImplementationIndex >= 0 then
+    // Looks better without it
+    //FoldRanges.Ranges.List[ImplementationIndex].ToLine := LinesToScan.Count;
+    FoldRanges.Ranges.Delete(ImplementationIndex);
+end;
+{$ENDIF}
 
 procedure TSynDWSSyn.SetRange(Value: Pointer);
 begin
