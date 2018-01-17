@@ -377,7 +377,8 @@ begin
   for i := 1 to Length(S) do
   begin
     Inc(j);
-    CountOfAvgGlyphs := Ceil(TextWidth(FCanvas, S[i]) / fCharWidth);
+    // Introduce a small tolerance Issue 54
+    CountOfAvgGlyphs := Ceil(TextWidth(FCanvas, S[i]) / fCharWidth - 0.04);
 
     if j + CountOfAvgGlyphs > Length(Result) then
       SetLength(Result, Length(Result) + 128);
@@ -700,7 +701,8 @@ var
     for i := 0 to Length(Text) - 1 do
     begin
       Size := GetTextSize(FCanvas.Handle, @Text[i + 1], 1);
-      FETODist[i] := Ceil(Size.cx / CharWidth) * CharWidth;
+      // Introduce a small tolerance (#54)
+      FETODist[i] := Ceil(Size.cx / CharWidth - 0.04) * CharWidth;
     end;
   end;
   {$ENDIF}
