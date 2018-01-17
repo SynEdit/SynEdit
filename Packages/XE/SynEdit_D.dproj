@@ -114,8 +114,6 @@
 					</VersionInfoKeys>
 				</Delphi.Personality>
 				<Platforms>
-					<Platform value="Win64">False</Platform>
-					<Platform value="OSX32">False</Platform>
 					<Platform value="Win32">True</Platform>
 				</Platforms>
 			</BorlandProject>
