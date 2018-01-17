@@ -71,6 +71,7 @@
 			<DCCReference Include="..\..\Source\SynDBEdit.pas"/>
 			<DCCReference Include="..\..\Source\SynEdit.pas"/>
 			<DCCReference Include="..\..\Source\SynEditAutoComplete.pas"/>
+			<DCCReference Include="..\..\Source\SynEditCodeFolding.pas"/>
 			<DCCReference Include="..\..\Source\SynEditDocumentManager.pas"/>
 			<DCCReference Include="..\..\Source\SynEditExport.pas"/>
 			<DCCReference Include="..\..\Source\SynEditHighlighter.pas"/>
@@ -126,6 +127,7 @@
 			<DCCReference Include="..\..\Source\SynHighlighterFoxpro.pas"/>
 			<DCCReference Include="..\..\Source\SynHighlighterGalaxy.pas"/>
 			<DCCReference Include="..\..\Source\SynHighlighterGeneral.pas"/>
+			<DCCReference Include="..\..\Source\SynHighlighterGo.pas"/>
 			<DCCReference Include="..\..\Source\SynHighlighterGWS.pas"/>
 			<DCCReference Include="..\..\Source\SynHighlighterHashEntries.pas"/>
 			<DCCReference Include="..\..\Source\SynHighlighterHaskell.pas"/>
@@ -230,7 +232,6 @@
 					</VersionInfoKeys>
 				</Delphi.Personality>
 				<Platforms>
-					<Platform value="Win64">True</Platform>
 					<Platform value="Win32">True</Platform>
 				</Platforms>
 			</BorlandProject>
