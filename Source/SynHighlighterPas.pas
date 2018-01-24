@@ -194,6 +194,7 @@ type
     class function GetFriendlyLanguageName: UnicodeString; override;
   public
     constructor Create(AOwner: TComponent); override;
+	destructor Destroy; override;
     function GetDefaultAttribute(Index: Integer): TSynHighlighterAttributes;
       override;
     function GetEol: Boolean; override;
@@ -721,6 +722,16 @@ begin
   RE_Code.Expression := '^\s*(function|procedure)\b';
   RE_Code.ModifierI := True;
 {$ENDIF}
+end;
+
+destructor TSynPasSyn.Destroy;
+begin
+{$IFDEF SYN_CodeFolding}
+  FreeAndNil(RE_BlockBegin);
+  FreeAndNil(RE_BlockEnd);
+  FreeAndNil(RE_Code);
+{$ENDIF}
+  inherited;
 end;
 
 procedure TSynPasSyn.AddressOpProc;
