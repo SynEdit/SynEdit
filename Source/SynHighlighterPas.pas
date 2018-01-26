@@ -13,7 +13,7 @@ The Original Code is based on the mwPasSyn.pas file from the
 mwEdit component suite by Martin Waldenburg and other developers, the Initial
 Author of this file is Martin Waldenburg.
 Portions created by Martin Waldenburg are Copyright (C) 1998 Martin Waldenburg.
-Unicode translation by Maël Hörz.
+Unicode translation by Maï¿½l Hï¿½rz.
 All Rights Reserved.
 
 Contributors to the SynEdit and mwEdit projects are listed in the
@@ -194,6 +194,7 @@ type
     class function GetFriendlyLanguageName: UnicodeString; override;
   public
     constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override; 
     function GetDefaultAttribute(Index: Integer): TSynHighlighterAttributes;
       override;
     function GetEol: Boolean; override;
@@ -722,6 +723,16 @@ begin
   RE_Code.ModifierI := True;
 {$ENDIF}
 end;
+
+destructor TSynPasSyn.Destroy; 
+begin 
+{$IFDEF SYN_CodeFolding} 
+  FreeAndNil(RE_BlockBegin); 
+  FreeAndNil(RE_BlockEnd); 
+  FreeAndNil(RE_Code); 
+{$ENDIF} 
+  inherited; 
+end; 
 
 procedure TSynPasSyn.AddressOpProc;
 begin
