@@ -1746,7 +1746,7 @@ begin
     GetWindowRect(Handle, ClientRect);
     HR := D2DFactory.CreateHwndRenderTarget(D2D1RenderTargetProperties,
       D2D1HwndRenderTargetProperties(Handle, Size), FRenderTarget);
-    System.Win.ComObj.OleCheck(HR);
+    OleCheck(HR);
 
     // initially set the scale (otherwise the text will look strange)
     FRenderTarget.Resize(Size);
@@ -3379,8 +3379,6 @@ var
   FontSize: Integer;
   TextFormat: IDWriteTextFormat;
   TextMetrics: TDWriteTextMetrics;
-  TextLSMethod: DWRITE_LINE_SPACING_METHOD;
-  TextLineSpacing, TextBaseline: Single;
   TextOffset: Integer;
   TextSize: TSize;
   TextLayout: IDWriteTextLayout;

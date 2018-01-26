@@ -167,8 +167,10 @@ uses
   SynHighlighterDfm,
   SynHighlighterDml,
   SynHighlighterDOT,
-  {$ifdef SYN_DELPHI_2009_UP}
+  {$ifdef SYN_DELPHI_2010_UP}
   SynHighlighterAsmMASM,
+  {$endif}
+  {$ifdef SYN_DELPHI_2009_UP}
   SynHighlighterDWS,
   {$endif}
   SynHighlighterEiffel,
@@ -278,7 +280,7 @@ begin
     TSynCACSyn, TSynCacheSyn, TSynFoxproSyn, TSynSQLSyn, TSynSDDSyn,
     //assembler
     TSynADSP21xxSyn, TSynAsmSyn, TSynHC11Syn, TSynHP48Syn, TSynSTSyn,
-    {$ifdef SYN_DELPHI_2009_UP}
+    {$ifdef SYN_DELPHI_2010_UP}
     TSynAsmMASMSyn,
     {$endif}
     //data modeling
