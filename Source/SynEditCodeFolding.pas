@@ -106,6 +106,8 @@ unit SynEditCodeFolding;
 }
 interface
 
+{$I SynEdit.Inc}
+
 uses
   Graphics,
   Types,
