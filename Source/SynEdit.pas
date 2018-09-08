@@ -2450,7 +2450,7 @@ function TCustomSynEdit.LeftSpacesEx(const Line: string; WantTabs: Boolean; Calc
 var
   p: PWideChar;
 begin
-  p := PWideChar(Line);
+  p := PWideChar(UnicodeString(Line));
   if Assigned(p) and ((eoAutoIndent in fOptions) or CalcAlways) then
   begin
     Result := 0;
