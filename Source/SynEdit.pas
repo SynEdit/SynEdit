@@ -611,7 +611,7 @@ type
     function GetWordWrap: Boolean;
     procedure GutterChanged(Sender: TObject);
     function LeftSpaces(const Line: UnicodeString): Integer;
-    function LeftSpacesEx(const Line: string; WantTabs: Boolean; CalcAlways : Boolean = False): Integer;
+    function LeftSpacesEx(const Line: UnicodeString; WantTabs: Boolean; CalcAlways : Boolean = False): Integer;
     function GetLeftSpacing(CharCount: Integer; WantTabs: Boolean): UnicodeString;
     procedure LinesChanging(Sender: TObject);
     procedure MoveCaretAndSelection(const ptBefore, ptAfter: TBufferCoord;
@@ -2446,7 +2446,7 @@ begin
   Result := LeftSpacesEx(Line, False);
 end;
 
-function TCustomSynEdit.LeftSpacesEx(const Line: string; WantTabs: Boolean; CalcAlways : Boolean = False): Integer;
+function TCustomSynEdit.LeftSpacesEx(const Line: UnicodeString; WantTabs: Boolean; CalcAlways : Boolean = False): Integer;
 var
   p: PWideChar;
 begin
