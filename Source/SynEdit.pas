@@ -190,7 +190,7 @@ type
 
   TSynStateFlag = (sfCaretChanged, sfScrollbarChanged, sfLinesChanging,
     sfIgnoreNextChar, sfCaretVisible, sfDblClicked, sfPossibleGutterClick,
-    sfWaitForDragging, sfInsideRedo, sfGutterDragging);
+    sfWaitForDragging, sfInsideRedo, sfGutterDragging, sfMouseCaptured);
 
   TSynStateFlags = set of TSynStateFlag;
 
@@ -2575,6 +2575,11 @@ begin
     FBlockEnd := TmpEnd;
 
     MouseCapture := True;
+    //For some reason SynEdit could get to a state where MouseCapture was True
+    //while just scrolling the window. That resulted in contents being painted
+    //while vertical scrollbar was moved. To make sure that we paint only when
+    //a MouseDown has happened inside the SynEdit Window, an extra flag is used.
+    Include(FStateFlags, sfMouseCaptured);
     //if mousedown occurred in selected block begin drag operation
     Exclude(FStateFlags, sfWaitForDragging);
     if bWasSel and (eoDragDropEditing in FOptions) and (X >= FGutterWidth + 2)
@@ -2643,7 +2648,7 @@ begin
 {$ENDIF}
     end;
   end
-  else if (ssLeft in Shift) and MouseCapture then
+  else if (ssLeft in Shift) and MouseCapture and (sfMouseCaptured in FStateFlags) then
   begin
     // should we begin scrolling?
     ComputeScroll(X, Y);
@@ -2703,7 +2708,7 @@ begin
     try
       InternalCaretXY := vCaret;
       // if MouseCapture is True we're changing selection. otherwise we're dragging
-      if MouseCapture then
+      if MouseCapture and (sfMouseCaptured in FStateFlags) then
         SetBlockEnd(CaretXY);
     finally
       DecPaintLock;
@@ -2729,6 +2734,7 @@ begin
   if (Button = mbRight) and (Shift = [ssRight]) and Assigned(PopupMenu) then
     Exit;
   MouseCapture := False;
+  Exclude(FStateFlags, sfMouseCaptured);
   if (sfPossibleGutterClick in FStateFlags) and (X < FGutterWidth) and (Button <> mbRight) then
     DoOnGutterClick(Button, X, Y)
   else
@@ -7771,6 +7777,7 @@ begin
       SetWordBlock(CaretXY);
     inherited;
     Include(FStateFlags, sfDblClicked);
+    Exclude(FStateFlags, sfMouseCaptured);
     MouseCapture := False;
   end
   else
@@ -11078,7 +11085,7 @@ begin
     SetCursor(Screen.Cursors[FGutter.Cursor])
   else begin
     ptLineCol := DisplayToBufferPos(PixelsToRowColumn(ptCursor.X, ptCursor.Y));
-    if (eoDragDropEditing in FOptions) and (not MouseCapture) and IsPointInSelection(ptLineCol) then
+    if (eoDragDropEditing in FOptions) and (not MouseCapture) and not (sfMouseCaptured in FStateFlags) and IsPointInSelection(ptLineCol) then
       iNewCursor := crArrow
     else
 {$ENDIF}
