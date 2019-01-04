@@ -75,15 +75,6 @@ unit SynHighlighterVrml97;
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  Qt,
-  QControls,
-  QGraphics,
-  QSynEditTypes,
-  QSynEditHighlighter,
-  QSynHighlighterHashEntries,
-  QSynUnicode,
-{$ELSE}
   Windows,
   Messages,
   Registry,
@@ -92,8 +83,7 @@ uses
   SynEditTypes,
   SynEditHighlighter,
   SynHighlighterHashEntries,
-  SynUnicode,  
-{$ENDIF}
+  SynUnicode,
   SysUtils,
   Classes;
 
@@ -248,11 +238,7 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditStrConst;
-{$ELSE}
   SynEditStrConst;
-{$ENDIF}
 
 const
   Events: UnicodeString =

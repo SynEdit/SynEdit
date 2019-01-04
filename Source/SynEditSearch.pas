@@ -1,4 +1,4 @@
-{-------------------------------------------------------------------------------
+﻿{-------------------------------------------------------------------------------
 The contents of this file are subject to the Mozilla Public License
 Version 1.1 (the "License"); you may not use this file except in compliance
 with the License. You may obtain a copy of the License at
@@ -45,15 +45,9 @@ unit SynEditSearch;
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditTypes,
-  QSynEditMiscClasses,
-  QSynUnicode,   
-{$ELSE}
   SynEditTypes,
   SynEditMiscClasses,
   SynUnicode,
-{$ENDIF}
   Classes;
 
 type
@@ -104,11 +98,7 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  Types,
-{$ELSE}
   Windows,
-{$ENDIF}
   SysUtils;
 
 constructor TSynEditSearch.Create(aOwner: TComponent);

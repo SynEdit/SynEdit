@@ -54,16 +54,10 @@ unit SynHighlighterGalaxy;
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  QGraphics,
-  QSynEditHighlighter,
-  QSynUnicode,
-{$ELSE}
   Windows,
   Graphics,
   SynEditHighlighter,
   SynUnicode,
-{$ENDIF}
   SysUtils, Classes;
 
 type
@@ -114,10 +108,9 @@ type
     procedure Next; override;
     procedure SetRange(Value: Pointer); override;
     procedure ResetRange; override;
-    {$IFNDEF SYN_CLX}
+
     function SaveToRegistry(RootKey: HKEY; Key: string): Boolean; override;
     function LoadFromRegistry(RootKey: HKEY; Key: string): Boolean; override;
-    {$ENDIF}
   published
     property CommentAttri: TSynHighlighterAttributes read FCommentAttri
       write FCommentAttri;
@@ -134,11 +127,7 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditStrConst;
-{$ELSE}
   SynEditStrConst;
-{$ENDIF}
 
 function TSynGalaxySyn.IsIdentChar(AChar: WideChar): Boolean;
 begin
@@ -407,7 +396,6 @@ begin
   Result := SYNS_LangGalaxy;
 end;
 
-{$IFNDEF SYN_CLX}
 function TSynGalaxySyn.LoadFromRegistry(RootKey: HKEY; Key: string): Boolean;
 var
   r: TBetterRegistry;
@@ -448,7 +436,6 @@ begin
     r.Free;
   end;
 end;
-{$ENDIF}
 
 class function TSynGalaxySyn.GetFriendlyLanguageName: UnicodeString;
 begin

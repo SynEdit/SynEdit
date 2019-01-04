@@ -58,18 +58,11 @@ unit SynHighlighterCS;
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  QGraphics,
-  QSynEditTypes,
-  QSynEditHighlighter,
-  QSynUnicode,
-{$ELSE}
   Graphics,
   SynEditTypes,
   SynEditHighlighter,
   SynEditMiscClasses,
   SynUnicode,
-{$ENDIF}
   SysUtils,
   Classes;
 
@@ -277,12 +270,8 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditStrConst;
-{$ELSE}
   Windows,
   SynEditStrConst;
-{$ENDIF}
 
 const
   KeyWords: array[0..74] of UnicodeString = (
@@ -1851,7 +1840,6 @@ end;
 procedure TSynCSSyn.EnumUserSettings(settings: TStrings);
 begin
   { returns the user settings that exist in the registry }
-  {$IFNDEF SYN_CLX}
   with TBetterRegistry.Create do
   begin
     try
@@ -1868,7 +1856,6 @@ begin
       Free;
     end;
   end;
-  {$ENDIF}
 end;
 
 function TSynCSSyn.UseUserSettings(settingIndex: Integer): Boolean;
@@ -1879,7 +1866,6 @@ function TSynCSSyn.UseUserSettings(settingIndex: Integer): Boolean;
 //   False: problem reading settings or invalid version specified - old settings
 //          were preserved
 
-  {$IFNDEF SYN_CLX}
   function ReadCPPBSettings(settingIndex: Integer): Boolean;
 
     function ReadCPPBSetting(settingTag: string; attri: TSynHighlighterAttributes; key: string): Boolean;
@@ -1989,14 +1975,9 @@ function TSynCSSyn.UseUserSettings(settingIndex: Integer): Boolean;
       end;
     finally s.Free; end;
   end; { ReadCPPBSettings }
-  {$ENDIF}
 
 begin
-  {$IFNDEF SYN_CLX}
   Result := ReadCPPBSettings(settingIndex);
-  {$ELSE}
-  Result := False;
-  {$ENDIF}
 end; { TSynCSSyn.UseUserSettings }
 
 function TSynCSSyn.GetSampleSource: UnicodeString;

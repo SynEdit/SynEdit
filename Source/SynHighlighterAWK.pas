@@ -52,17 +52,10 @@ interface
 {$I SynEdit.Inc}
 
 uses
-{$IFDEF SYN_CLX}
-  QGraphics,
-  QSynEditTypes,
-  QSynEditHighlighter,
-  QSynUnicode,
-{$ELSE}
   Graphics,
   SynEditTypes,
   SynEditHighlighter,
   SynUnicode,
-{$ENDIF}
   SysUtils,
   Classes;
 
@@ -143,11 +136,7 @@ uses
 {$IFDEF UNICODE}
   WideStrUtils,
 {$ENDIF}
-{$IFDEF SYN_CLX}
-  QSynEditStrConst;
-{$ELSE}
   SynEditStrConst;
-{$ENDIF}
 
 procedure TSynAWKSyn.MakeSyntaxList;
 begin

@@ -52,16 +52,10 @@ unit SynHighlighterMulti;
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditTypes,
-  QSynEditHighlighter,
-  QSynUnicode,  
-{$ELSE}
   Windows,
   SynEditTypes,
   SynEditHighlighter,
   SynUnicode,
-{$ENDIF}
   Classes;
 
 type
@@ -242,10 +236,8 @@ type
     function UpdateRangeProcs: Boolean;
     property CurrScheme: Integer read FCurrScheme write FCurrScheme;
     property CurrLine: UnicodeString read FLineStr;
-{$IFNDEF SYN_CLX}
     function LoadFromRegistry(RootKey: HKEY; Key: string): Boolean; override;
     function SaveToRegistry(RootKey: HKEY; Key: string): Boolean; override;
-{$ENDIF}
     function IsIdentChar(AChar: WideChar): Boolean; override;
   published
     property Schemes: TSchemes read FSchemes write SetSchemes;
@@ -259,17 +251,10 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QGraphics,
-  QSynEditMiscProcs,
-  QSynRegExpr,
-  QSynEditStrConst,
-{$ELSE}
   Graphics,
   SynEditMiscProcs,
   SynRegExpr,
   SynEditStrConst,
-{$ENDIF}
   SysUtils;
 
 procedure CheckExpression(const Expr: UnicodeString);
@@ -707,7 +692,6 @@ begin
   FSampleSource := Value;
 end;
 
-{$IFNDEF SYN_CLX}
 function TSynMultiSyn.LoadFromRegistry(RootKey: HKEY;
   Key: string): Boolean;
 var
@@ -766,7 +750,6 @@ begin
     r.Free;
   end;
 end;
-{$ENDIF}
 
 function TSynMultiSyn.GetRange: Pointer;
 begin

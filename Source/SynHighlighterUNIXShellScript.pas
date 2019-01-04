@@ -52,17 +52,10 @@ unit SynHighlighterUNIXShellScript;
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  QGraphics,
-  QSynEditTypes,
-  QSynEditHighlighter,
-  QSynUnicode,
-{$ELSE}
   Graphics,
   SynEditTypes,
   SynEditHighlighter,
   SynUnicode,
-{$ENDIF}
   SysUtils,
   Classes;
 
@@ -164,13 +157,8 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditMiscProcs,
-  QSynEditStrConst;
-{$ELSE}
   SynEditMiscProcs,
   SynEditStrConst;
-{$ENDIF}
 
 const
   ShellScriptKeys: array[0..109] of UnicodeString = (

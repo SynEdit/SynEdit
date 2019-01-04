@@ -53,17 +53,10 @@ unit SynHighlighterPython;
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  QGraphics,
-  QSynEditHighlighter,
-  QSynEditTypes,
-  QSynUnicode,
-{$ELSE}
   Graphics,
   SynEditHighlighter,
   SynEditTypes,
   SynUnicode,
-{$ENDIF}
 {$IFDEF SYN_CodeFolding}
   SynEditCodeFolding,
   SynRegExpr,
@@ -188,11 +181,7 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditStrConst;
-{$ELSE}
   SynEditStrConst;
-{$ENDIF}
 
 var
   GlobalKeywords: TUnicodeStringList;

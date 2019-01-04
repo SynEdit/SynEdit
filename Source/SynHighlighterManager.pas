@@ -96,16 +96,6 @@ uses
 {$ELSE}
   DsgnIntf,
 {$ENDIF}
-{$IFDEF SYN_CLX}
-  Qt,
-  QForms,
-  QControls,
-  QStdCtrls,
-  QCheckLst,
-  Types,
-  QSynEditHighlighter,
-  QSynEditStrConst,
-{$ELSE}
   Windows,
   Forms,
   Controls,
@@ -113,7 +103,6 @@ uses
   CheckLst,
   SynEditHighlighter,
   SynEditStrConst,
-{$ENDIF}
   SysUtils;
 
 type
@@ -284,18 +273,10 @@ begin
   inherited;
   if (csDesigning in ComponentState) and (AOwner is TCustomForm) then begin
     form := TCustomForm(AOwner);
-{$IFDEF SYN_CLX}
-    dsgn := form.DesignerHook as TDesignerClass;
-{$ELSE}
     dsgn := form.Designer as TDesignerClass;
-{$ENDIF}
     highlight := GetPlaceableHighlighters;
     if highlight.Count = 0 then
-{$IFDEF SYN_CLX}
-      Application.MessageBox('No highlighters found!','Highlighter Manager', [smbOK], smsWarning)
-{$ELSE}
       Application.MessageBox('No highlighters found!','Highlighter Manager', MB_OK + MB_ICONEXCLAMATION)
-{$ENDIF}
     else
     begin
       synForm := TSynHighlighterForm.Create(highlight);
@@ -320,11 +301,7 @@ begin
   Width  := 410;
   Height := 243;
   Position := poScreenCenter;
-{$IFDEF SYN_CLX}
-  BorderStyle := fbsDialog;
-{$ELSE}
   BorderStyle := bsDialog;
-{$ENDIF}
 
   Highlight := highlighters;
   
