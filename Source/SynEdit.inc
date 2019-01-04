@@ -1156,11 +1156,6 @@
 // Turn this off if you don't need complex script support, since it is slower
 {-$DEFINE SYN_UNISCRIBE}
 
-// DirectWrite
-{$IFDEF SYN_DELPHI_XE2_UP}
-  {$DEFINE SYN_DirectWrite}
-{$ENDIF}
-
 // Code Folding
 {$IFDEF SYN_DELPHI_XE_UP}
   {$DEFINE SYN_CodeFolding}

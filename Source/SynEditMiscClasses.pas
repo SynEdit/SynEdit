@@ -57,9 +57,6 @@ uses
   SynEditTypes,
   SynEditKeyConst,
   SynUnicode,
-{$IFDEF SYN_DirectWrite}
-  Direct2D,
-{$ENDIF}
 {$IFDEF SYN_COMPILER_4_UP}
   Math,
 {$ENDIF}
@@ -318,11 +315,6 @@ type
 //++ DPI-Aware
     procedure ChangeScale(M, D: Integer); virtual;
 //-- DPI-Aware
-{$IFDEF SYN_DirectWrite}
-    procedure Draw(ACanvas: TDirect2DCanvas; Number, X, Y, LineHeight: Integer); overload;
-    procedure DrawTransparent(ACanvas: TDirect2DCanvas; Number, X, Y,
-      LineHeight: Integer; TransparentColor: TColor); overload;
-{$ENDIF}
   end;
 
 { TSynHotKey }
@@ -1334,52 +1326,6 @@ begin
     ACanvas.BrushCopy(rcDest, FImages, rcSrc, TransparentColor);
   end;
 end;
-
-{$IFDEF SYN_DirectWrite}
-procedure TSynInternalImage.Draw(ACanvas: TDirect2DCanvas;
-  Number, X, Y, LineHeight: Integer);
-var
-  rcSrc, rcDest: TRect;
-begin
-  if (Number >= 0) and (Number < FCount) then
-  begin
-    if LineHeight >= FHeight then
-    begin
-      rcSrc := Rect(Number * FWidth, 0, (Number + 1) * FWidth, FHeight);
-      Inc(Y, (LineHeight - FHeight) div 2);
-      rcDest := Rect(X, Y, X + FWidth, Y + FHeight);
-    end else
-    begin
-      rcDest := Rect(X, Y, X + FWidth, Y + LineHeight);
-      Y := (FHeight - LineHeight) div 2;
-      rcSrc := Rect(Number * FWidth, Y, (Number + 1) * FWidth,
-        Y + LineHeight);
-    end;
-//    CopyRect(rcDest, FImages.Canvas, rcSrc);
-  end;
-end;
-
-procedure TSynInternalImage.DrawTransparent(ACanvas: TDirect2DCanvas; Number,
-  X, Y, LineHeight: Integer; TransparentColor: TColor);
-var
-  rcSrc, rcDest: TRect;
-begin
-  if (Number >= 0) and (Number < FCount) then
-  begin
-    if LineHeight >= FHeight then begin
-      rcSrc := Rect(Number * FWidth, 0, (Number + 1) * FWidth, FHeight);
-      Inc(Y, (LineHeight - FHeight) div 2);
-      rcDest := Rect(X, Y, X + FWidth, Y + FHeight);
-    end else begin
-      rcDest := Rect(X, Y, X + FWidth, Y + LineHeight);
-      Y := (FHeight - LineHeight) div 2;
-      rcSrc := Rect(Number * FWidth, Y, (Number + 1) * FWidth,
-        Y + LineHeight);
-    end;
-//    ACanvas.BrushCopy(rcDest, FImages, rcSrc, TransparentColor);
-  end;
-end;
-{$ENDIF}
 
 
 { TSynHotKey }

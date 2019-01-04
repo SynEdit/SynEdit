@@ -47,9 +47,6 @@ interface
 uses
   Windows,
   Graphics,
-{$IFDEF SYN_DirectWrite}
-  Direct2d,
-{$ENDIF}
   SynEditTypes,
   SynEditHighlighter,
   SynUnicode,
