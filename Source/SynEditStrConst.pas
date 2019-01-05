@@ -33,9 +33,7 @@ located at http://SynEdit.SourceForge.net
 Known Issues:
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSynEditStrConst}
 unit SynEditStrConst;
-{$ENDIF}
 
 {$I SynEdit.inc}
 

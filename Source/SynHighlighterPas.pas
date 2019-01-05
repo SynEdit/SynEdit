@@ -1150,7 +1150,7 @@ var
       end;
     end else if RE_BlockEnd.Exec(CurLine) then
     begin
-      Index :=  BlockEnd.MatchPos[0];
+      Index := RE_BlockEnd.MatchPos[0];
       if GetHighlighterAttriAtRowCol(LinesToScan, Line, Index) <> fCommentAttri then
       begin
         FoldRanges.StopFoldRange(Line + 1, FT_Standard);
