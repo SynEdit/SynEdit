@@ -45,9 +45,7 @@ Known Issues:
 //todo: remove FShowSpecChar variable
 //todo: remove the several Undo block types?
 
-{$IFNDEF QSYNEDIT}
 unit SynEdit;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 
