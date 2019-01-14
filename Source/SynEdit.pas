@@ -96,6 +96,10 @@ const
    // not defined in all Delphi versions
   WM_MOUSEWHEEL = $020A;
 {$ENDIF}
+{$IFNDEF SYN_COMPILER_7_UP}
+  // not defined in all Delphi versions
+  WS_EX_COMPOSITED = $02000000;
+{$ENDIF}
 
    // maximum scroll range
   MAX_SCROLL = 32767;
