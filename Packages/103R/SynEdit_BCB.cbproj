@@ -63,20 +63,20 @@
         <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-        <IncludePath>..\Source\;$(BDS)\include\vcl;..\Source;$(IncludePath)</IncludePath>
+        <IncludePath>..\..\Source\;$(BDS)\include\vcl;$(IncludePath)</IncludePath>
         <LinkPackageStatics>rtl.lib;vcldb.lib;adortl.lib;bdertl.lib;vcldbx.lib;ibxpress.lib;dsnap.lib;dsnapcon.lib;teeui.lib;teedb.lib;tee.lib;bcbsmp.lib;inetdbbde.lib;inetdbxpress.lib;dbexpress.lib;bcbie.lib;soaprtl.lib;dbxcds.lib;indycore.lib;indysystem.lib;bcboffice2k.lib</LinkPackageStatics>
         <ILINK_FullDebugInfo>true</ILINK_FullDebugInfo>
         <DCC_IncludePath>.\;$(BDS)\lib;$(BDS)\lib\obj;$(DCC_IncludePath)</DCC_IncludePath>
         <BCC_PCHCache>true</BCC_PCHCache>
         <ILINK_AppType>Windows</ILINK_AppType>
         <DCC_UnitSearchPath>.\;$(BDS)\lib;$(BDS)\lib\obj;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
-        <BRCC_IncludePath>..\Source;$(BDS)\include;$(BDS)\include\vcl;$(BRCC_IncludePath)</BRCC_IncludePath>
-        <BRCC_UserSuppliedOptions> -I..\Source;$(BDS)\include;$(BDS)\include\vcl;$(BDS)\include\dinkumware</BRCC_UserSuppliedOptions>
+        <BRCC_IncludePath>..\..\Source;$(BDS)\include;$(BDS)\include\vcl;$(BRCC_IncludePath)</BRCC_IncludePath>
+        <BRCC_UserSuppliedOptions> -I..\..\Source;$(BDS)\include;$(BDS)\include\vcl;$(BDS)\include\dinkumware</BRCC_UserSuppliedOptions>
         <ILINK_GenerateLibFile>true</ILINK_GenerateLibFile>
         <BCC_SourceDebuggingOn>true</BCC_SourceDebuggingOn>
-        <TASM_IncludePath>..\Source;$(BDS)\include;$(BDS)\include\vcl;$(TASM_IncludePath)</TASM_IncludePath>
+        <TASM_IncludePath>..\..\Source;$(BDS)\include;$(BDS)\include\vcl;$(TASM_IncludePath)</TASM_IncludePath>
         <UsePackages>true</UsePackages>
-        <BCC_IncludePath>..\Source;$(BDS)\include;$(BDS)\include\vcl;$(BCC_IncludePath)</BCC_IncludePath>
+        <BCC_IncludePath>..\..\Source;$(BDS)\include;$(BDS)\include\vcl;$(BCC_IncludePath)</BCC_IncludePath>
         <ILINK_GenerateImportLibrary>true</ILINK_GenerateImportLibrary>
         <DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
         <BCC_DisableOptimizations>true</BCC_DisableOptimizations>
@@ -87,7 +87,7 @@
         <TASM_AdditionalSwitches> /w2</TASM_AdditionalSwitches>
         <AllPackageLibs>rtl.lib;vcldb.lib;adortl.lib;vcldbx.lib;dsnap.lib;dsnapcon.lib;teeui.lib;teedb.lib;tee.lib;dsnapcon.lib;bcbsmp.lib;inetdbbde.lib;inetdbxpress.lib;dbexpress.lib;bcbie.lib;soaprtl.lib;dbxcds.lib;indycore.lib;indysystem.lib;bcboffice2k.lib</AllPackageLibs>
         <ILINK_Description>SynEdit component suite</ILINK_Description>
-        <ILINK_LibraryPath>..\Source\;$(BDS)\include\vcl;..\Source;$(BDS)\lib\obj;$(BDS)\lib;$(BDS)\Source\Toolsapi;$(BDS)\lib\psdk;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+        <ILINK_LibraryPath>..\..\Source\;$(BDS)\include\vcl;$(BDS)\lib\obj;$(BDS)\lib;$(BDS)\Source\Toolsapi;$(BDS)\lib\psdk;$(ILINK_LibraryPath)</ILINK_LibraryPath>
         <Multithreaded>true</Multithreaded>
         <DCC_AdditionalSwitches> -M -LUDesignIDE</DCC_AdditionalSwitches>
         <DynamicRTL>true</DynamicRTL>
@@ -122,7 +122,7 @@
         <BCC_Defines>_DEBUG;$(BCC_Defines);$(BCC_Defines)</BCC_Defines>
         <BCC_UserSuppliedOptions> -Vx -r- -k -Ve -k</BCC_UserSuppliedOptions>
         <LinkPackageStatics>rtl.lib;vcldb.lib;adortl.lib;vcldbx.lib;dsnap.lib;dsnapcon.lib;teeui.lib;teedb.lib;tee.lib;bcbsmp.lib;inetdbbde.lib;inetdbxpress.lib;dbexpress.lib;bcbie.lib;soaprtl.lib;dbxcds.lib;indycore.lib;indysystem.lib;bcboffice2k.lib</LinkPackageStatics>
-        <DCC_UnitSearchPath>..\Source;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>..\..\Source;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DllSuffix>RX2</DllSuffix>
     </PropertyGroup>
@@ -177,15 +177,15 @@
             <BuildOrder>12</BuildOrder>
             <BuildOrder>11</BuildOrder>
         </PackageImport>
-        <DelphiCompile Include="..\Source\SynEditPropertyReg.pas">
+        <DelphiCompile Include="..\..\Source\SynEditPropertyReg.pas">
             <BuildOrder>26</BuildOrder>
             <BuildOrder>1</BuildOrder>
         </DelphiCompile>
-        <ResFiles Include="..\Source\SynEditReg.dcr">
+        <ResFiles Include="..\..\Source\SynEditReg.dcr">
             <BuildOrder>-1</BuildOrder>
             <BuildOrder>23</BuildOrder>
         </ResFiles>
-        <DelphiCompile Include="..\Source\SynEditReg.pas">
+        <DelphiCompile Include="..\..\Source\SynEditReg.pas">
             <BuildOrder>6</BuildOrder>
             <BuildOrder>20</BuildOrder>
         </DelphiCompile>
@@ -236,12 +236,12 @@
                 </VersionInfoKeys>
                 <HistoryLists_hlIncludePath>
                     <HistoryLists_hlIncludePath Name="Count">1</HistoryLists_hlIncludePath>
-                    <HistoryLists_hlIncludePath Name="Item0">..\Source;$(BCB)\include;$(BCB)\include\vcl</HistoryLists_hlIncludePath>
+                    <HistoryLists_hlIncludePath Name="Item0">..\..\Source;$(BCB)\include;$(BCB)\include\vcl</HistoryLists_hlIncludePath>
                 </HistoryLists_hlIncludePath>
                 <HistoryLists_hlLibraryPath>
                     <HistoryLists_hlLibraryPath Name="Count">2</HistoryLists_hlLibraryPath>
-                    <HistoryLists_hlLibraryPath Name="Item0">..\Source;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\Source\Toolsapi</HistoryLists_hlLibraryPath>
-                    <HistoryLists_hlLibraryPath Name="Item1">..\Source;$(BCB)\lib\obj;$(BCB)\lib</HistoryLists_hlLibraryPath>
+                    <HistoryLists_hlLibraryPath Name="Item0">..\..\Source;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\Source\Toolsapi</HistoryLists_hlLibraryPath>
+                    <HistoryLists_hlLibraryPath Name="Item1">..\..\Source;$(BCB)\lib\obj;$(BCB)\lib</HistoryLists_hlLibraryPath>
                 </HistoryLists_hlLibraryPath>
                 <HistoryLists_hlDebugSourcePath>
                     <HistoryLists_hlDebugSourcePath Name="Count">1</HistoryLists_hlDebugSourcePath>
