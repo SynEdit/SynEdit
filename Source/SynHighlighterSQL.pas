@@ -1448,6 +1448,8 @@ begin
 end;
 
 procedure TSynSQLSyn.AsciiCharProc;
+var
+  IsEsc: Boolean;
 begin
   // Oracle SQL allows strings to go over multiple lines
   if FLine[Run] = #0 then
@@ -1472,12 +1474,17 @@ begin
     end
     else
     begin
+      IsEsc := False;
       if (Run > 0) or (FRange <> rsString) or
         ((FLine[Run] <> #39) and (FLine[Run - 1] <> '\')) then
       begin
         FRange := rsString;
         repeat
-          if (FLine[Run] <> '\') and (FLine[Run + 1] = #39) then
+          if FLine[Run] = '\' then
+            IsEsc := not IsEsc
+          else
+            IsEsc := False;
+          if (not IsEsc) and (FLine[Run + 1] = #39) then
           begin
             Inc(Run);
             Break;
@@ -1485,7 +1492,7 @@ begin
           Inc(Run);
         until IsLineEnd(Run);
       end;
-      if (FLine[Run] = #39) and not(FLine[Run-1] = '\') then
+      if (FLine[Run] = #39) and (not IsEsc) then
       begin
         Inc(Run);
         FRange := rsUnknown;
