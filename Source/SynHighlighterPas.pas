@@ -1378,9 +1378,10 @@ var
 begin
   { returns the user settings that exist in the registry }
   // See UseUserSettings below where these strings are used
-  LWowNode := '';
   {$ifdef WIN64}
-    LWowNode := 'WOW6432Node\';
+  LWowNode := 'WOW6432Node\';
+  {$else}
+  LWowNode := '';
   {$ENDIF}
 
   LoadKeyVersions('\SOFTWARE\'+ LWOWNode + 'Borland\Delphi', '');
