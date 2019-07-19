@@ -920,6 +920,7 @@ begin
       Exclude(FFlags, sfHasTabs);
       Exclude(FFlags, sfHasNoTabs);
       Include(FFlags, sfModified);
+      Exclude(FFlags, sfSaved);
       {$IFDEF OWN_UnicodeString_MEMMGR}
         SetListString(Index, S);
       {$ELSE}
