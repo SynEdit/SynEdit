@@ -383,7 +383,7 @@ procedure TSynWordWrapPlugin.Reset;
 begin
   Assert(Editor.CharsInWindow >= 0);
 
-  FMaxRowLength := Editor.CharsInWindow;
+  FMaxRowLength := Min(Editor.MaxScrollWidth, Editor.CharsInWindow); // see github issue #129
   FMinRowLength := Editor.CharsInWindow - (Editor.CharsInWindow div 3);
 
   if FMinRowLength <= 0 then

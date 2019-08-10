@@ -614,6 +614,7 @@ begin
   AddAttribute(FCommentAttri);
   AddAttribute(FIdentifierAttri);
   AddAttribute(FInterfaceQualifierAttri);
+  AddAttribute(FInternalFunctionsAttri);
   AddAttribute(FInvalidAttri);
   AddAttribute(FKeyAttri);
   AddAttribute(FNumberAttri);
