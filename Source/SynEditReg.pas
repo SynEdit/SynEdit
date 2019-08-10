@@ -32,9 +32,7 @@ located at http://SynEdit.SourceForge.net
 Known Issues:
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNEDITREG}
 unit SynEditReg;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
@@ -95,6 +93,7 @@ uses
   SynHighlighterGalaxy,
   SynHighlighterGeneral,
   SynHighlighterGo,
+  SynHighlighterGLSL,
   SynHighlighterHaskell,
   SynHighlighterHC11,
   SynHighlighterHP48, 
@@ -189,7 +188,7 @@ begin
     {$ifdef SYN_DELPHI_2009_UP}
     TSynDWSSyn,
     {$endif}
-    TSynKixSyn, TSynPerlSyn, TSynPythonSyn,
+    TSynKixSyn, TSynPerlSyn, TSynPythonSyn, TSynGLSLSyn,
     TSynTclTkSyn, TSynGWScriptSyn, TSynRubySyn, TSynUNIXShellScriptSyn,
     //database
     TSynCACSyn, TSynCacheSyn, TSynFoxproSyn, TSynSQLSyn, TSynSDDSyn,

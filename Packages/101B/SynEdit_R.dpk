@@ -92,6 +92,8 @@ contains
   SynHighlighterFoxpro in '..\..\Source\SynHighlighterFoxpro.pas',
   SynHighlighterGalaxy in '..\..\Source\SynHighlighterGalaxy.pas',
   SynHighlighterGeneral in '..\..\Source\SynHighlighterGeneral.pas',
+  SynHighlighterGLSL in '..\..\Source\SynHighlighterGLSL.pas',
+  SynHighlighterGo in '..\..\Source\SynHighlighterGo.pas',
   SynHighlighterGWS in '..\..\Source\SynHighlighterGWS.pas',
   SynHighlighterHashEntries in '..\..\Source\SynHighlighterHashEntries.pas',
   SynHighlighterHaskell in '..\..\Source\SynHighlighterHaskell.pas',
@@ -140,7 +142,6 @@ contains
   SynHighlighterEiffel in '..\..\Source\SynHighlighterEiffel.pas',
   SynUnicode in '..\..\Source\SynUnicode.pas' {$IFNDEF CPUX64},
   SynUsp10 in '..\..\Source\SynUsp10.pas' {$ENDIF},
-  SynEditHighlighterOptions in '..\..\Source\SynEditHighlighterOptions.pas',
-  SynHighlighterGo in '..\..\Source\SynHighlighterGo.pas';
+  SynEditHighlighterOptions in '..\..\Source\SynEditHighlighterOptions.pas';
 
 end.

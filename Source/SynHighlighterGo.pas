@@ -9,7 +9,7 @@ WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
 the specific language governing rights and limitations under the License.
 
 Code template generated with SynGen.
-The original code is: C:\Users\Public\Code\SynEdit\SynGen\Test GO\SynHighlighterGo.pas, released 2017-06-01.
+The original code is: SynHighlighterGo.pas, released 2017-06-01.
 Description: Syntax Parser/Highlighter
 The initial author of this file is Christian-W. Budde.
 Copyright (c) 2017, all rights reserved.
