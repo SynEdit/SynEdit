@@ -43,9 +43,7 @@ Known Issues:
 The SynHighlighterUNIXShellScript unit provides SynEdit with a UNIX Shell Script highlighter.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERUNIXSHELLSCRIPT}
 unit SynHighlighterUNIXShellScript;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

@@ -33,9 +33,7 @@ located at http://SynEdit.SourceForge.net
 
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNHIGHLIGHTERCPM}
 unit SynHighlighterCPM;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

@@ -43,9 +43,7 @@ This highlighter can be used to highlight text in which several languages are pr
 For example, in HTML as well as HTML tags there can also be JavaScript and/or VBScript present.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERMULTI}
 unit SynHighlighterMulti;
-{$ENDIF}
 
 {$I SynEdit.inc}
 

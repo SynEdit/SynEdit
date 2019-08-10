@@ -34,9 +34,7 @@ located at http://SynEdit.SourceForge.net
 
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QWEBIDL}
 unit SynHighlighterWebIDL;
-{$ENDIF}
 
 {$I SynEdit.inc}
 

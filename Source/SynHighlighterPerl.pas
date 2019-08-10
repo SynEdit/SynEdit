@@ -46,9 +46,7 @@ Known Issues:
 The SynHighlighterPerl unit provides SynEdit with a Perl syntax highlighter.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERPERL}
 unit SynHighlighterPerl;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

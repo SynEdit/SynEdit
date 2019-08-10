@@ -44,9 +44,7 @@ The SynHighlighterBat unit provides SynEdit with a MS-DOS Batch file (.bat) high
 The highlighter supports the formatting of keywords and parameters (batch file arguments).
 }
 
-{$IFNDEF QSYNHIGHLIGHTERBAT}
 unit SynHighlighterBat;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

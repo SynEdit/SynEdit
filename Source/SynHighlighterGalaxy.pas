@@ -45,9 +45,7 @@ Galaxy is a PBEM game for 10 to 500+ players, to see it wokring goto: http://mem
 The keywords in the string list KeyWords have to be in lowercase and sorted.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERGALAXY}
 unit SynHighlighterGalaxy;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

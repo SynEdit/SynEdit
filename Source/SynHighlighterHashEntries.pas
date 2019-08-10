@@ -44,9 +44,7 @@ The classes in this unit can be used to use the hashing algorithm while still
 having the ability to change the set of keywords.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERHASHENTRIES}
 unit SynHighlighterHashEntries;
-{$ENDIF}
 
 {$I SynEdit.inc}
 

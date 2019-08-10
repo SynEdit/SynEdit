@@ -43,9 +43,7 @@ Known Issues:
 The SynHighlighterJava unit provides SynEdit with a Java source (.java) highlighter.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERJAVA}
 unit SynHighlighterJava;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

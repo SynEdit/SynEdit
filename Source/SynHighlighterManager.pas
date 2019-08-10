@@ -43,9 +43,7 @@ Known Issues:
 Provides a component to manage many highlighters in a single project.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERMANAGER}
 unit SynHighlighterManager;
-{$ENDIF}
 
 {$I SynEdit.inc}
 

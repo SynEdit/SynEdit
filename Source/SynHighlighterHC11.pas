@@ -45,9 +45,7 @@ The highlighter supports all 68HC11 op codes.
 Thanks to Martin Waldenburg, David Muir, Hideo Koiso and Nick Hoddinott.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERHC11}
 unit SynHighlighterHC11;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

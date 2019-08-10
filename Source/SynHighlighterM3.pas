@@ -39,9 +39,7 @@ Known Issues:
 The SynHighlighterM3 unit provides SynEdit with a Modula-3 (.m3) highlighter.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERM3}
 unit SynHighlighterM3;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

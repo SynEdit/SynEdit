@@ -43,9 +43,7 @@ Known Issues:
 The SynHighlighterAWK unit provides SynEdit with a AWK Script (.awk) highlighter.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERAWK}
 unit SynHighlighterAWK;
-{$ENDIF}
 
 interface
 

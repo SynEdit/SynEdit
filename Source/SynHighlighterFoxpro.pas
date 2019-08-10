@@ -44,9 +44,7 @@ The SynHighlighterFoxpro unit provides SynEdit with a Foxpro syntax highlighter.
 Thanks to Martin Waldenburg.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERFOXPRO}
 unit SynHighlighterFoxpro;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

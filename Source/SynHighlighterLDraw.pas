@@ -42,9 +42,7 @@ located at http://SynEdit.SourceForge.net
 The SynHighlighterLDraw unit provides SynEdit with a LEGO LDraw (.ldr / .dat) highlighter.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERLDRAW}
 unit SynHighlighterLDraw;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

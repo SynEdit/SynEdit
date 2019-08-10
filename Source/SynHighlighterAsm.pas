@@ -45,9 +45,7 @@ The highlighter supports all x86 op codes, Intel MMX and AMD 3D NOW! op codes.
 Thanks to Martin Waldenburg, Hideo Koiso.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERASM}
 unit SynHighlighterAsm;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

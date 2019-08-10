@@ -43,9 +43,7 @@ The SynHighlighterDOT unit provides SynEdit with a DOT Graph Drawing (.dot) high
 The highlighter formats DOT source code ref.: http://www.research.att.com/sw/tools/graphviz/.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERDOT}
 unit SynHighlighterDOT;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

@@ -43,9 +43,7 @@ Known Issues:
 The SynHighlighterADSP21xx unit provides a ADSP21xx DSP assembler highlighter for SynEdit.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERADSP21XX}
 unit SynHighlighterADSP21xx;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

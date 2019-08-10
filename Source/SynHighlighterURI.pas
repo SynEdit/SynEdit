@@ -66,9 +66,7 @@ someone@somewhere.org
 www.host.org
 }
 
-{$IFNDEF QSYNHIGHLIGHTERURI}
 unit SynHighlighterURI;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

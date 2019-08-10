@@ -35,9 +35,7 @@ located at http://SynEdit.SourceForge.net
 
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNHIGHLIGHTERMSG}
 unit SynHighlighterMsg;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

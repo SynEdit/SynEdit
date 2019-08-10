@@ -49,9 +49,7 @@ Known Issues:
 The SynHighlighterXML unit provides SynEdit with an XML highlighter.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERXML}
 unit SynHighlighterXML;
-{$ENDIF}
 
 interface
 

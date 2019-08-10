@@ -47,9 +47,7 @@ The SynHighlighterSQL implements a highlighter for SQL for the SynEdit projects.
 Different SQL dialects can be selected via the Dialect property.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERSQL}
 unit SynHighlighterSQL;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

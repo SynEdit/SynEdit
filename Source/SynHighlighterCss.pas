@@ -51,9 +51,7 @@ http://www.ashleybrown.co.uk/
 ashley@ashleybrown.co.uk
 }
 
-{$IFNDEF QSYNHIGHLIGHTERCSS}
 unit SynHighlighterCSS;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

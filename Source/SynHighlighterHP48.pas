@@ -43,9 +43,7 @@ Known Issues:
 The unit SynHighlighterHP48 provides SynEdit with a HP48 assembler highlighter.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERHP48}
 unit SynHighlighterHP48;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

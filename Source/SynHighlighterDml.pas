@@ -44,9 +44,7 @@ Known Issues:
 The SynHighlighterDml unit provides SynEdit with a Dml highlighter.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERDML}
 unit SynHighlighterDml;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

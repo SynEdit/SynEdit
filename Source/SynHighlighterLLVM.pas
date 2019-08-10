@@ -34,9 +34,7 @@ located at http://SynEdit.SourceForge.net
 
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QLLVM_IR}
 unit SynHighlighterLLVM;
-{$ENDIF}
 
 {$I SynEdit.inc}
 

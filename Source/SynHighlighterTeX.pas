@@ -35,9 +35,7 @@ The unit SynHighlighterTeX provides SynEdit with a TeX highlighter.
 Known Issues:
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNHIGHLIGHTERTEX}
 unit SynHighlighterTeX;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

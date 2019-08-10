@@ -44,9 +44,7 @@ The SynHighlighterCAC unit provides SynEdit with a CA-Clipper syntax highlighter
 Thanks to Primoz Gabrijelcic, Andy Jeffries.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERCAC}
 unit SynHighlighterCAC;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

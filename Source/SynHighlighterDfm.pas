@@ -44,9 +44,7 @@ The SynHighlighterDfm unit provides SynEdit with a Delphi Form Source (.dfm) hig
 The highlighter formats form source code similar to when forms are viewed as text in the Delphi editor.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERDFM}
 unit SynHighlighterDfm;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

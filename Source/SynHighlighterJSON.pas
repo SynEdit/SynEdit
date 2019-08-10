@@ -29,9 +29,7 @@ You may retrieve the latest version of this file at the SynEdit home page,
 located at http://SynEdit.SourceForge.net
 }
 
-{$IFNDEF QSYNHIGHLIGHTERJSON}
 unit SynHighlighterJSON;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

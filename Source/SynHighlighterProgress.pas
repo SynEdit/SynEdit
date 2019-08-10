@@ -45,9 +45,7 @@ Thanks to Michael Hieke for providing a sample highlighter on which this
 highlighter is based.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERPROGRESS}
 unit SynHighlighterProgress;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

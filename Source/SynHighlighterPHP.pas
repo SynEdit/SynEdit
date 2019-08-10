@@ -46,9 +46,7 @@ The SynHighlighterPHP unit provides SynEdit with a PHP syntax highlighter.
 Thanks to Martin Waldenburg.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERPHP}
 unit SynHighlighterPHP;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

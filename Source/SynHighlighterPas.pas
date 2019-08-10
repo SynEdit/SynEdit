@@ -48,9 +48,7 @@ Two extra properties included (DelphiVersion, PackageSource):
   PackageSource - Allows you to enable/disable the highlighting of package keywords
 }
 
-{$IFNDEF QSYNHIGHLIGHTERPAS}
 unit SynHighlighterPas;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

@@ -34,9 +34,7 @@ located at http://SynEdit.SourceForge.net
 Known Issues:
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNHIGHLIGHTERMODELICA}
 unit SynHighlighterModelica;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

@@ -43,9 +43,7 @@ Known Issues:
 The SynHighlighterKix unit provides SynEdit with a Kix script file syntax highlighter.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERKIX}
 unit SynHighlighterKix;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

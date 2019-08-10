@@ -44,9 +44,7 @@ Known Issues:
 The SynHighlighterHTML unit provides SynEdit with an HTML highlighter.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERHTML}
 unit SynHighlighterHtml;
-{$ENDIF}
 
 interface
 

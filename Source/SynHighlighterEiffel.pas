@@ -42,9 +42,7 @@ located at http://SynEdit.SourceForge.net
 The SynHighlighterEiffel unit provides SynEdit with an Eiffel highlighter.
 }
 
-{$IFNDEF QSYNHIGHLIGHTEREIFFEL}
 unit SynHighlighterEiffel;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 

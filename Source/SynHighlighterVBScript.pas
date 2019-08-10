@@ -44,9 +44,7 @@ The SynHighlighterVBScript unit provides SynEdit with a VisualBasic Script (.vbs
 Thanks to Primoz Gabrijelcic and Martin Waldenburg.
 }
 
-{$IFNDEF QSYNHIGHLIGHTERVBSCRIPT}
 unit SynHighlighterVBScript;
-{$ENDIF}
 
 {$I SynEdit.Inc}
 
