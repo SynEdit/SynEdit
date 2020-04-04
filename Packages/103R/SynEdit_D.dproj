@@ -50,6 +50,7 @@
         <VerInfo_Locale>1031</VerInfo_Locale>
         <DCC_E>false</DCC_E>
         <DCC_F>false</DCC_F>
+        <DllSuffix>103R</DllSuffix>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_UsePackage>SynEdit_R;$(DCC_UsePackage)</DCC_UsePackage>

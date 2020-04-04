@@ -56,6 +56,7 @@
         <VerInfo_Locale>1031</VerInfo_Locale>
         <DCC_F>false</DCC_F>
         <DCC_E>false</DCC_E>
+        <DllSuffix>103R</DllSuffix>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_Namespace>Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
@@ -155,6 +156,7 @@
         <DCCReference Include="..\..\Source\SynHighlighterFoxpro.pas"/>
         <DCCReference Include="..\..\Source\SynHighlighterGalaxy.pas"/>
         <DCCReference Include="..\..\Source\SynHighlighterGeneral.pas"/>
+        <DCCReference Include="..\..\Source\SynHighlighterGLSL.pas"/>
         <DCCReference Include="..\..\Source\SynHighlighterGWS.pas"/>
         <DCCReference Include="..\..\Source\SynHighlighterHashEntries.pas"/>
         <DCCReference Include="..\..\Source\SynHighlighterHaskell.pas"/>
