@@ -3948,7 +3948,9 @@ begin
     else
       vStartOfBlock := CaretXY;
 
+    Inc(FPaintTransientLock);
     SetSelTextPrimitiveEx(PasteMode, PWideChar(GetClipboardText), True);
+    Dec(FPaintTransientLock);
     vEndOfBlock := BlockEnd;
     if PasteMode = smNormal then
       FUndoList.AddChange(crPaste, vStartOfBlock, vEndOfBlock, SelText,
