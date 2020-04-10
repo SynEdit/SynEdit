@@ -1643,7 +1643,7 @@ end;
 procedure TSynSQLSyn.MinusProc;
 begin
   Inc(Run);
-  if FLine[Run] = '-' then
+  if (FLine[Run] = '-') and (FLine[Run+1] = ' ') then
   begin
     FTokenID := tkComment;
     repeat
