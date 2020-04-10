@@ -212,7 +212,7 @@ uses
 
 const
    // if the language is case-insensitive keywords *must* be in lowercase
-   cKeywords: array[1..95] of UnicodeString = (
+   cKeywords: array[1..94] of UnicodeString = (
       'abstract', 'and', 'array', 'as', 'asm',
       'begin', 'break', 'case', 'cdecl', 'class', 'const', 'constructor',
       'continue', 'deprecated', 'destructor',
@@ -226,8 +226,8 @@ const
       'procedure', 'program', 'property', 'protected', 'public', 'published', 
       'raise', 'record', 'register', 'reintroduce', 'repeat', 'require', 
       'resourcestring', 'sar', 'sealed', 'set', 'shl', 'shr', 'static', 
-      'step', 'strict', 'then', 'to', 'try', 'type', 'unit', 'until', 'uses', 
-      'var', 'virtual', 'while', 'xor'
+      'strict', 'then', 'to', 'try', 'type', 'unit', 'until', 'uses', 'var', 
+      'virtual', 'while', 'xor'
   );
   cKeywordsUnitScoped: array [0..0] of UnicodeString = (
       'namespace'
