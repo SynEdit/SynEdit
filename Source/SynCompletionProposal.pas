@@ -1,4 +1,4 @@
-{-------------------------------------------------------------------------------
+﻿{-------------------------------------------------------------------------------
 The contents of this file are subject to the Mozilla Public License
 Version 1.1 (the "License"); you may not use this file except in compliance
 with the License. You may obtain a copy of the License at
@@ -1795,7 +1795,7 @@ var
         CompareString := StripFormatCommands(CompareString);
     end;
 
-    if fMatchTextAnywhere then
+    if FMatchTextAnywhere then
     begin
       if Value <> '' then
       begin
@@ -1851,11 +1851,11 @@ begin
     Exit;
   if FMatchText then
   begin
-    if fMatchTextAnywhere then
+    if FMatchTextAnywhere then
       Position := 0;
     RecalcList;
     AdjustScrollBarPosition;
-    if not fMatchTextAnywhere then
+    if not FMatchTextAnywhere then
       Position := 0;
     
     if Visible and Assigned(FOnChangePosition) and (DisplayType = ctCode) then
@@ -2798,6 +2798,7 @@ begin
     Form.UsePrettyText := scoUsePrettyText in Value;
     Form.UseInsertList := scoUseInsertList in Value;
     Form.MatchText := scoLimitToMatchedText in Value;
+    Form.MatchTextAnywhere := scoLimitToMatchedTextAnywhere in Value;
     Form.CompleteWithTab := scoCompleteWithTab in Value;
     Form.CompleteWithEnter := scoCompleteWithEnter in Value;
   end;
