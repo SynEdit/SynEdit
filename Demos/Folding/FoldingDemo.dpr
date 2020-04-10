@@ -4,7 +4,7 @@ program FoldingDemo;
 
 uses
   Vcl.Forms,
-  Unit1 in 'Unit1.pas' {Form1},
+  Unit1 in 'Unit1.pas' {FormFoldingDemo},
   Vcl.Themes,
   uHighlighterProcs in '..\uHighlighterProcs.pas';
 
@@ -13,6 +13,6 @@ uses
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TFormFoldingDemo, FormFoldingDemo);
   Application.Run;
 end.

@@ -1243,7 +1243,7 @@ begin
       FoldRanges.StartFoldRange(Line +1, FT_Implementation)
     // Functions and procedures
     else if RE_Code.Exec(CurLine) then
-      FoldRanges.StartFoldRange(Line +1, FT_CodeDeclaration)
+      FoldRanges.StartFoldRange(Line + 1, FT_CodeDeclaration)
     // Find begin or end  (Fold Type 1)
     else if not BlockDelimiter(Line) then
       FoldRanges.NoFoldInfo(Line + 1);
