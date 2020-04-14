@@ -1411,7 +1411,7 @@ begin
   Width := 200;
   Cursor := crIBeam;
   Color := clWindow;
-{$IFDEF SYN_WIN32}
+{$IFDEF MSWINDOWS}
   FFontDummy.Name := 'Courier New';
   FFontDummy.Size := 10;
 {$ENDIF}
@@ -2725,7 +2725,7 @@ begin
       end;
   end;
 
-{$IFDEF SYN_WIN32}
+{$IFDEF MSWINDOWS}
   // draw Word wrap glyphs transparently over gradient
   if FGutter.Gradient then
     Canvas.Brush.Style := bsClear;
@@ -2737,7 +2737,7 @@ begin
         FWordWrapGlyph.Draw(Canvas,
                             (FGutterWidth - FGutter.RightOffset - 2) - FWordWrapGlyph.Width,
                             (cLine - TopLine) * FTextHeight, FTextHeight);
-{$IFDEF SYN_WIN32}
+{$IFDEF MSWINDOWS}
   // restore brush
   if FGutter.Gradient then
     Canvas.Brush.Style := bsSolid;

@@ -146,12 +146,8 @@
 {$I SynEditJedi.inc}
 
 {------------------------------------------------------------------------------}
-{ SYN_WIN32, SYN_LINUX and SYN_KYLIX defines                                   }
+{ SYN_LINUX and SYN_KYLIX defines                                              }
 {------------------------------------------------------------------------------}
-
-{$IFDEF WIN32}
-  {$DEFINE SYN_WIN32}
-{$ENDIF}
 
 {$IFDEF LINUX}
   {$DEFINE SYN_LINUX}
@@ -1128,10 +1124,17 @@
   {$ObjExportAll On}
 {$ENDIF}
 
+{------------------------------------------------------------------------------}
+{ MSWINDOWS and SYN_WIN32                                                      }
+{------------------------------------------------------------------------------}
+
 {$IFDEF SYN_KYLIX}
   Kylix is no longer supported. Please refer to the branch 'Kylix'
 {$ELSE}
-  {$DEFINE SYN_WIN32}
+  {$IFNDEF SYN_COMPILER_16_UP}
+    {$DEFINE MSWINOWS}
+  {$ENDIF}
+  {$DEFINE SYN_WIN32} // deprecated, do not use
 {$ENDIF}
 
 {------------------------------------------------------------------------------}
@@ -1147,7 +1150,7 @@
 {.$DEFINE SYN_HEREDOC}
 
 // Define OWN_UnicodeString_MEMMGR to speed up WideStrings-handling
-{$IFDEF SYN_WIN32}
+{$IFDEF MSWINOWS}
   {$IFNDEF UNICODE}
     {$DEFINE OWN_UnicodeString_MEMMGR}
   {$ENDIF}
@@ -1160,6 +1163,3 @@
 {$IFDEF SYN_DELPHI_XE_UP}
   {$DEFINE SYN_CodeFolding}
 {$ENDIF}
-
-
-
