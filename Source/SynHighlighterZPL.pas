@@ -33,26 +33,17 @@ located at http://SynEdit.SourceForge.net
 
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNHIGHLIGHTERZPL}
 unit SynHighlighterZPL;
-{$ENDIF}
 
 {$I SynEdit.inc}
 
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  QGraphics,
-  QSynEditTypes,
-  QSynEditHighlighter,
-  QSynUnicode,
-{$ELSE}
   Graphics,
   SynEditTypes,
   SynEditHighlighter,
   SynUnicode,
-{$ENDIF}
   SysUtils,
   Classes;
 
@@ -80,6 +71,7 @@ type
     procedure SetCommentScript(const Value: boolean);
   protected
     function GetDefaultAttribute(Index: Integer): TSynHighlighterAttributes; override;
+    function GetSampleSource: UnicodeString;
   public
     class function GetLanguageName: string; override;
     class function GetFriendlyLanguageName: UnicodeString; override;
@@ -103,11 +95,7 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditStrConst;
-{$ELSE}
   SynEditStrConst;
-{$ENDIF}
 
 resourcestring
   SYNS_FilterZPL = '*.zpl;*.zplx';
@@ -319,6 +307,17 @@ begin
       Inc(Run)
     else
       Break;
+end;
+
+function TSynZPLSyn.GetSampleSource: UnicodeString;
+begin
+  Result :=
+    '^XA'#13#10+
+    '^LH30,6161'#13#10+
+    '^FO20,10'#13#10+
+    '^ADN,90,50'#13#10+
+    '^FDHello^FS'#13#10+
+    '^XZ';
 end;
 
 initialization
