@@ -67,11 +67,10 @@ type
     procedure TextProc;
     procedure SlashProc;
     procedure NumberProc;
-    procedure FieldDataProc;
     procedure SetCommentScript(const Value: boolean);
   protected
     function GetDefaultAttribute(Index: Integer): TSynHighlighterAttributes; override;
-    function GetSampleSource: UnicodeString;
+    function GetSampleSource: UnicodeString; override;
   public
     class function GetLanguageName: string; override;
     class function GetFriendlyLanguageName: UnicodeString; override;
@@ -136,10 +135,6 @@ begin
   SetAttributesOnChange(DefHighlightChange);
 
   FDefaultFilter := SYNS_FilterZPL;
-end;
-
-procedure TSynZPLSyn.FieldDataProc;
-begin
 end;
 
 function TSynZPLSyn.GetDefaultAttribute(
