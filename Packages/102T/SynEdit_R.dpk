@@ -137,6 +137,7 @@ contains
   SynHighlighterVBScript in '..\..\Source\SynHighlighterVBScript.pas',
   SynHighlighterVrml97 in '..\..\Source\SynHighlighterVrml97.pas',
   SynHighlighterXML in '..\..\Source\SynHighlighterXML.pas',
+  SynHighlighterZPL in '..\..\Source\SynHighlighterZPL.pas',
   SynMacroRecorder in '..\..\Source\SynMacroRecorder.pas',
   SynMemo in '..\..\Source\SynMemo.pas',
   SynRegExpr in '..\..\Source\SynRegExpr.pas',
