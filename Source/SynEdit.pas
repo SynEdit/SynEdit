@@ -47,7 +47,7 @@ Known Issues:
 
 unit SynEdit;
 
-{$I SynEdit.Inc}
+{$I SynEdit.inc}
 
 interface
 
