@@ -5607,7 +5607,7 @@ begin
     FHighlighter.NextToEol;
     iRange := FHighlighter.GetRange;
     if TSynEditStringList(Lines).Ranges[Result] = iRange then
-      Exit; // avoid the final Decrement
+      Exit; // avoid the final decrement
     TSynEditStringList(Lines).Ranges[Result] := iRange;
     Inc(Result);
   until (Result = Lines.Count);
