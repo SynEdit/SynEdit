@@ -62,9 +62,8 @@ type
   TtkTokenKind = (tkAsm, tkComment, tkIdentifier, tkKey, tkNull, tkNumber,
     tkSpace, tkString, tkSymbol, tkUnknown, tkFloat, tkHex, tkDirec, tkChar);
 
-  TRangeState = (rsANil, rsCommentAnsi, rsCommentC, rsAsm,
-    rsAsmCommentAnsi, rsAsmCommentC, rsCommentBor, rsAsmCommentBor,
-    rsProperty, rsExports, rsDirective, rsAsmDirective,
+  TRangeState = (rsANil, rsCommentAnsi, rsCommentC, rsAsm, rsAsmCommentC,
+    rsCommentBor, rsProperty, rsExports, rsDirective, rsAsmDirective,
     rsStringSingle, rsStringDouble, rsType, rsUnit, rsUnknown);
 
   PIdentFuncTableFunc = ^TIdentFuncTableFunc;
@@ -572,7 +571,7 @@ begin
         if FLine[Run] = '}' then
         begin
           Inc(Run);
-          if FRange in [rsAsmCommentBor, rsAsmDirective] then
+          if FRange in [rsAsmDirective] then
             FRange := rsAsm
           else
             FRange := rsUnknown;
@@ -596,7 +595,11 @@ begin
   else
   begin
     if FRange = rsAsm then
-      FRange := rsAsmCommentBor
+    begin
+      FTokenID := tkSymbol;
+      Inc(Run);
+      Exit;
+    end
     else
       FRange := rsCommentBor;
   end;
@@ -769,7 +772,7 @@ begin
     repeat
       if (FLine[Run] = '*') and (FLine[Run + 1] = FCommentClose) then begin
         Inc(Run, 2);
-        if FRange in [rsAsmCommentAnsi, rsAsmCommentC] then
+        if FRange in [rsAsmCommentC] then
           FRange := rsAsm
         else
           FRange := rsUnknown;
@@ -788,7 +791,11 @@ begin
       begin
         Inc(Run);
         if FRange = rsAsm then
-          FRange := rsAsmCommentAnsi
+        begin
+          Inc(Run);
+          FTokenID := tkSymbol;
+          Exit;
+        end
         else
           FRange := rsCommentAnsi;
         FTokenID := tkComment;
@@ -930,9 +937,9 @@ begin
   FAsmStart := False;
   FTokenPos := Run;
   case FRange of
-    rsCommentAnsi, rsAsmCommentAnsi, rsCommentC, rsAsmCommentC:
+    rsCommentAnsi, rsCommentC, rsAsmCommentC:
         CommentAnsiProc;
-    rsCommentBor, rsAsmCommentBor, rsDirective, rsAsmDirective:
+    rsCommentBor, rsDirective, rsAsmDirective:
        CommentBorProc;
     rsStringSingle:
        StringAposMultiProc;
@@ -1146,7 +1153,7 @@ begin
   begin
     // Deal first with Multiline statements
     if IsMultiLineStatement(Line, [rsCommentAnsi, rsCommentC, rsCommentBor], True, FT_Comment) or
-       IsMultiLineStatement(Line, [rsAsm, rsAsmCommentAnsi, rsAsmCommentBor, rsAsmDirective], True, FT_Asm) or
+       IsMultiLineStatement(Line, [rsAsm, rsAsmCommentC, rsAsmDirective], True, FT_Asm) or
        IsMultiLineStatement(Line, [rsStringDouble], True, FT_StringDouble) or
        IsMultiLineStatement(Line, [rsStringSingle], True, FT_StringSingle) or
        IsMultiLineStatement(Line, [rsDirective], False)
