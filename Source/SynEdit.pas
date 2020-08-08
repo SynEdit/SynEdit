@@ -8167,11 +8167,13 @@ begin
           begin
             BeginUndoBlock;
             try
-              FUndoList.AddChange(crDelete, FBlockBegin, FBlockEnd, Helper,
+              FUndoList.AddChange(crDelete, FBlockBegin, FBlockEnd, SelText,
                 smNormal);
-              StartOfBlock := FBlockBegin;
+              StartOfBlock := BlockBegin;
+              EndOfBlock.Line := BlockBegin.Line;
+              EndOfBlock.Char := BlockBegin.Char + Length(s);
               SetSelTextPrimitive(s);
-              FUndoList.AddChange(crInsert, FBlockBegin, FBlockEnd, Helper,
+              FUndoList.AddChange(crInsert, StartOfBlock, EndOfBlock, '',
                 smNormal);
             finally
               EndUndoBlock;
