@@ -740,7 +740,7 @@ begin
       '0'..'9':
         NumberProc;
       'A'..'Z', 'a'..'z', '_', '$', #$AA, #$B5, #$BA, #$C0..#$D6, #$D8..#$F6,
-      #$F8..#$2C1:
+      #$0F8..#$2C1:
         IdentProc;
     else
       UnknownProc;
@@ -826,7 +826,7 @@ function TSynECMAScriptSyn.IsIdentChar(AChar: WideChar): Boolean;
 begin
   case AChar of
     'A'..'Z', 'a'..'z', '_', '$', #$AA, #$B5, #$BA, #$C0..#$D6, #$D8..#$F6,
-    #$F8..#$2C1:
+    #$0F8..#$2C1:
       Result := True;
     else
       Result := False;
