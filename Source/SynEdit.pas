@@ -1,4 +1,4 @@
-{-------------------------------------------------------------------------------
+ï»¿{-------------------------------------------------------------------------------
 The contents of this file are subject to the Mozilla Public License
 Version 1.1 (the "License"); you may not use this file except in compliance
 with the License. You may obtain a copy of the License at
@@ -12,7 +12,7 @@ The Original Code is: SynEdit.pas, released 2000-04-07.
 The Original Code is based on mwCustomEdit.pas by Martin Waldenburg, part of
 the mwEdit component suite.
 Portions created by Martin Waldenburg are Copyright (C) 1998 Martin Waldenburg.
-Unicode translation by Maël Hörz.
+Unicode translation by MaÃ«l HÃ¶rz.
 All Rights Reserved.
 
 Contributors to the SynEdit and mwEdit projects are listed in the
@@ -109,6 +109,21 @@ const
   MAX_MARKS = 16;
 
   SYNEDIT_CLIPBOARD_FORMAT = 'SynEdit Control Block Type';
+
+  // Reconversion string.
+  IMR_COMPOSITIONWINDOW         =  $0001;
+  IMR_CANDIDATEWINDOW           =  $0002;
+  IMR_COMPOSITIONFONT           =  $0003;
+  IMR_RECONVERTSTRING           =  $0004;
+  IMR_CONFIRMRECONVERTSTRING    =  $0005;
+  IMR_QUERYCHARPOSITION         =  $0006;
+  IMR_DOCUMENTFEED              =  $0007;
+
+  SCS_SETSTR                    =  GCS_COMPREADSTR or GCS_COMPSTR;
+  SCS_CHANGEATTR                =  GCS_COMPREADATTR or GCS_COMPATTR;
+  SCS_CHANGECLAUSE              =  GCS_COMPREADCLAUSE or GCS_COMPCLAUSE;
+  SCS_SETRECONVERTSTRING        =  $00010000;
+  SCS_QUERYRECONVERTSTRING      =  $00020000;
 
 var
   SynEditClipboardFormat: UINT;
@@ -342,6 +357,20 @@ type
     FindText: UnicodeString) of object;
 {$ENDIF}
 
+  // Reconversion string.
+  PReconvertString = ^TReconvertString;
+  TReconvertString = record
+    dwSize: DWord;
+    dwVersion: DWord;
+    dwStrLen: DWord;
+    dwStrOffset: DWord;
+    dwCompStrLen: DWord;
+    dwCompStrOffset: DWord;
+    dwTargetStrLen: DWord;
+    dwTargetStrOffset: DWord;
+  end;
+
+
   TCustomSynEdit = class(TCustomControl)
   private
     procedure CMHintShow(var Msg: TMessage); message CM_HINTSHOW;
@@ -363,6 +392,7 @@ type
     procedure WMImeChar(var Msg: TMessage); message WM_IME_CHAR;
     procedure WMImeComposition(var Msg: TMessage); message WM_IME_COMPOSITION;
     procedure WMImeNotify(var Msg: TMessage); message WM_IME_NOTIFY;
+    procedure WMImeRequest(var Message: TMessage); message WM_IME_REQUEST;
     procedure WMKillFocus(var Msg: TWMKillFocus); message WM_KILLFOCUS;
     procedure WMSetCursor(var Msg: TWMSetCursor); message WM_SETCURSOR;
     procedure WMSetFocus(var Msg: TWMSetFocus); message WM_SETFOCUS;
@@ -4920,6 +4950,7 @@ var
   vCaretDisplay: TDisplayCoord;
   vCaretPix: TPoint;
   cf: TCompositionForm;
+  vSelStartPix: TPoint;
 begin
   if (PaintLock <> 0) or not (Focused or FAlwaysShowCaret) then
     Include(FStateFlags, sfCaretChanged)
@@ -4945,9 +4976,17 @@ begin
       SetCaretPos(CX, CY);
       HideCaret;
     end;
-    cf.dwStyle := CFS_POINT;
-    cf.ptCurrentPos := Point(CX, CY);
-    ImmSetCompositionWindow(ImmGetContext(Handle), @cf);
+    if (Self.SelAvail = False) then
+    begin
+      cf.dwStyle := CFS_POINT;
+      cf.ptCurrentPos := Point(CX, CY);
+      ImmSetCompositionWindow(ImmGetContext(Handle), @cf);
+    end
+    else
+    begin
+      vSelStartPix := Self.RowColumnToPixels(BufferToDisplayPos(Self.BlockBegin));
+      Self.SetImeCompositionWindow(Self.Font, vSelStartPix.X, vSelStartPix.Y);
+    end;
   end;
 end;
 
@@ -5427,6 +5466,113 @@ begin
     end;
   end;
   inherited;
+end;
+
+procedure TCustomSynEdit.WMImeRequest(var Message: TMessage);
+var
+  pReconvert: PReconvertString;
+  TargetText: string;
+  TargetByteLength: Integer;
+  pTarget: PChar;
+  H: HIMC;
+begin
+  case Message.WParam of
+    IMR_RECONVERTSTRING:
+      begin
+        // Reconversion string
+        if (Self.SelLength <> 0) then
+        begin
+          TargetText := Self.SelText;
+        end
+        else
+        begin
+          if (Self.Lines.Count >= Self.CaretY - 1) then
+            TargetText := Self.Lines[Self.CaretY - 1]
+          else
+            TargetText := '';
+        end;
+        TargetByteLength := Length(TargetText) * sizeof(Char);
+
+        if (Message.LParam = 0) then
+        begin
+          // 1st time (get buffer size (bytes))
+          // Select only one row
+          if (Self.BlockBegin.Line = Self.BlockEnd.Line) then
+            Message.Result := Sizeof(TReconvertString) + TargetByteLength
+          else
+            Message.Result := 0;
+        end
+        else
+        begin
+          // 2nd time
+          pReconvert := Pointer(Message.LParam);
+          pReconvert.dwSize := Sizeof(TReconvertString);
+          pReconvert.dwVersion := 0;
+          pReconvert.dwStrLen := Length(TargetText);
+          pReconvert.dwStrOffset := Sizeof(TReconvertString);
+
+          pTarget := Pointer(Message.LParam + Sizeof(TReconvertString));
+          move(TargetText[1], pTarget^, TargetByteLength);
+
+          if (Self.SelLength <> 0) then
+          begin
+            pReconvert.dwTargetStrLen := 0;
+            pReconvert.dwTargetStrOffset := 0;
+            pReconvert.dwCompStrLen := Length(TargetText);
+            pReconvert.dwCompStrOffset := 0;
+          end
+          else
+          begin
+            pReconvert.dwTargetStrLen := 0;
+            pReconvert.dwTargetStrOffset := (Self.CaretX - 1) * sizeof(Char);
+            H := Imm32GetContext(Handle);
+            try
+              ImmSetCompositionString(H, SCS_QUERYRECONVERTSTRING, pReconvert, Sizeof(TReconvertString) + TargetByteLength, nil, 0);
+              if (pReconvert.dwCompStrLen <> 0) then
+              begin
+                Self.CaretX := pReconvert.dwCompStrOffset div sizeof(Char) + 1;
+                Self.SelStart := RowColToCharIndex(Self.CaretXY);
+                Self.SelLength := pReconvert.dwCompStrLen;
+              end;
+            finally
+              Imm32ReleaseContext(Handle, H);
+            end;
+          end;
+          Message.Result := Sizeof(TReconvertString) + TargetByteLength;
+        end;
+      end;
+    IMR_DOCUMENTFEED:
+      begin
+        // Notifies an application when the selected IME needs the converted string from the application.
+        if (Self.Lines.Count >= Self.CaretY) then
+          TargetText := Self.Lines[Self.CaretY]
+        else
+          TargetText := '';
+        if (Message.LParam = 0) then
+        begin
+          // 1st time (get line size (bytes))
+          Message.Result := Sizeof(TReconvertString) + Length(TargetText) * sizeof(Char);
+        end
+        else
+        begin
+          // 2nd time
+          pReconvert := Pointer(Message.LParam);
+          pReconvert.dwSize := Sizeof(TReconvertString);
+          pReconvert.dwVersion := 0;
+          pReconvert.dwStrLen := Length(TargetText);
+          pReconvert.dwStrOffset := Sizeof(TReconvertString);
+          pReconvert.dwCompStrLen := 0;
+          pReconvert.dwCompStrOffset := 0;
+          pReconvert.dwTargetStrLen := 0;
+          pReconvert.dwTargetStrOffset := (Self.CaretX - 1) * sizeof(Char);
+
+          pTarget := Pointer(Message.LParam + Sizeof(TReconvertString));
+          move(TargetText[1], pTarget^, Length(TargetText) * sizeof(Char));
+
+          Message.Result := Sizeof(TReconvertString) + Length(TargetText) * sizeof(Char);
+        end;
+      end;
+  end;
 end;
 
 procedure TCustomSynEdit.WMKillFocus(var Msg: TWMKillFocus);
