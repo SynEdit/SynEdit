@@ -86,6 +86,7 @@ contains
   SynHighlighterCS in '..\..\Source\SynHighlighterCS.pas',
   SynHighlighterDfm in '..\..\Source\SynHighlighterDfm.pas',
   SynHighlighterDml in '..\..\Source\SynHighlighterDml.pas',
+  SynHighlighterECMAScript in '..\..\Source\SynHighlighterECMAScript.pas',
   SynHighlighterFortran in '..\..\Source\SynHighlighterFortran.pas',
   SynHighlighterFoxpro in '..\..\Source\SynHighlighterFoxpro.pas',
   SynHighlighterGalaxy in '..\..\Source\SynHighlighterGalaxy.pas',
