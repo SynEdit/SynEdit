@@ -118,12 +118,21 @@ uses
   SynEditHighlighter;
 
 type
+{$IFDEF SYN_DELPHI_2009}
+  TArray<T> = array of T;
+  // hack to fix Incompatible types: 'SynEdit.TArray<System.Integer>' and 'SynEditCodeFolding.TArray<System.Integer>'
+  _TIntegerArray = TArray<Integer>;
+{$ENDIF}
+
 {$IFNDEF SYN_DELPHI_XE3_UP}
   // use small hack in XE and XE2 to make internal array accessible as in XE3 and up
   TList<T> = class(Generics.Collections.TList<T>)
   private
     function GetList: TArray<T>;
   public
+    {$IFNDEF SYN_DELPHI_XE_UP}
+    function ToArray: TArray<T>;
+    {$ENDIF}
     property List: TArray<T> read GetList;
   end;
 {$ENDIF}
@@ -207,7 +216,6 @@ type
     function FoldHidesLine(Line: Integer; out Index: Integer) : Boolean; overload;
     function FoldsAtLevel(Level : integer) : TArray<Integer>;
     function FoldsOfType(aType : integer) : TArray<Integer>;
-
     {Scanning support}
     procedure StoreCollapsedState;
     procedure RestoreCollapsedState;
@@ -311,6 +319,17 @@ implementation
 uses
   SynEditTextBuffer,
   Math;
+
+{$IFNDEF SYN_DELPHI_XE_UP}
+function TList<T>.ToArray: TArray<T>;
+var
+  i: Integer;
+begin
+  SetLength(Result, Count);
+  for i := 0 to Count - 1 do
+    Result[i] := Items[i];
+end;
+{$ENDIF}
 
 {$IFNDEF SYN_DELPHI_XE3_UP}
 function TList<T>.GetList: TArray<T>;
