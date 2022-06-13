@@ -870,7 +870,7 @@ end;
 function TSynECMAScriptSyn.IsIdentChar(AChar: WideChar): Boolean;
 begin
   case AChar of
-    'A'..'Z', 'a'..'z', '_', '$',
+    'A'..'Z', 'a'..'z', '_', '$', '0'..'9',
     #$00AA, #$00B5, #$00BA, #$00C0..#$00D6, #$00D8..#$00F6, #$00F8..#$02C1:
       Result := True;
     else
