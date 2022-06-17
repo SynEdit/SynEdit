@@ -221,15 +221,6 @@ begin
   if FLine[Run] = '-' then
     Inc(Run);
 
-  // ensure that a zero is followed by a dot
-  if FLine[Run] = '0' then
-    if FLine[Run + 1] <> '.' then
-    begin
-      FTokenID := tkUnknown;
-      while (FLine[Run] <> #32) and not IsLineEnd(Run) do Inc(Run);
-      Exit;
-    end;
-
   // at least any digit must appear here
   if not ExpectDigit then
   begin
