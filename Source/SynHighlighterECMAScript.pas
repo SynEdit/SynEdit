@@ -62,11 +62,12 @@ type
     tkNumber,
     tkSpace,
     tkString,
+    tkTemplate,
     tkSymbol,
     tkUnknown);
 
   TRangeState = (rsUnknown, rsMultiLineComment, rsSingleLineComment { not used },
-    rsDoubleQuotedString, rsSingleQuotedString, rsBacktickQuotedString);
+    rsDoubleQuotedString, rsSingleQuotedString, rsTemplateString, rsTemplate);
 
   TProcTableProc = procedure of object;
 
@@ -90,6 +91,7 @@ type
     FSpaceAttri: TSynHighlighterAttributes;
     FStringAttri: TSynHighlighterAttributes;
     FSymbolAttri: TSynHighlighterAttributes;
+    FTemplateAttri: TSynHighlighterAttributes;
     function AltFunc(Index: Integer): TtkTokenKind;
     function FuncKeyWord(Index: Integer): TtkTokenKind;
     function FuncReservedWord(Index: Integer): TtkTokenKind;
@@ -152,12 +154,14 @@ type
     property SpaceAttri: TSynHighlighterAttributes read FSpaceAttri write FSpaceAttri;
     property StringAttri: TSynHighlighterAttributes read FStringAttri write FStringAttri;
     property SymbolAttri: TSynHighlighterAttributes read FSymbolAttri write FSymbolAttri;
+    property TemplateAttri: TSynHighlighterAttributes read FTemplateAttri write FTemplateAttri;
   end;
 
 implementation
 
 uses
   SynEditStrConst;
+
 
 resourcestring
   SYNS_FilterECMAScript = 'JavaScript files (*.js)|*.js';
@@ -212,6 +216,10 @@ begin
 
   FSymbolAttri := TSynHighlighterAttributes.Create(SYNS_AttrSymbol, SYNS_FriendlyAttrSymbol);
   AddAttribute(FSymbolAttri);
+
+  // to do: add SYNS_AttrTemplate, SYNS_FriendlyAttrTemplate to SynEditStrConst
+  FTemplateAttri := TSynHighlighterAttributes.Create('Template', 'Template');
+  AddAttribute(FTemplateAttri);
 
   SetAttributesOnChange(DefHighlightChange);
   InitIdent;
@@ -607,45 +615,57 @@ procedure TSynECMAScriptSyn.StringProc;
     iFirstSlashPos: Integer;
   begin
     iFirstSlashPos := Run - 1;
-    while (iFirstSlashPos > 0) and (FLine[iFirstSlashPos] = '\') do
+    while (iFirstSlashPos >= 0) and (FLine[iFirstSlashPos] = '\') do
       Dec(iFirstSlashPos);
     Result := (Run - iFirstSlashPos + 1) mod 2 <> 0;
   end;
 
 const
-  QuoteChars: array [rsDoubleQuotedString..rsBacktickQuotedString] of Char = ('"', #39, '`');
+  CloseChars: array [rsDoubleQuotedString..rsTemplate] of Char = ('"', #39, '`', '}');
 var
-  QuoteChar: Char;
+  CloseChar: Char;
 begin
   FTokenID := tkString;
-  if not (FRange in [rsDoubleQuotedString..rsBacktickQuotedString]) then
+  if FRange = rsTemplate then begin
+    FTokenID := tkTemplate;
+    if (FLine[Run] = #0) then Inc(Run);
+  end
+  else if not (FRange in [rsDoubleQuotedString..rsTemplateString]) then
   begin
     case FLine[Run] of
       '"': FRange := rsDoubleQuotedString;
       #39: FRange := rsSingleQuotedString;
-      '`': FRange := rsBacktickQuotedString;
+      '`': FRange := rsTemplateString;
     end;
     Inc(Run);
   end
   else if IsLineEnd(Run) then
   begin
-    if (FRange <> rsBacktickQuotedString) and not IsEscaped then FRange := rsUnknown;
+    if not (FRange in [rsTemplateString, rsTemplate]) and not IsEscaped then
+      FRange := rsUnknown;
     Inc(Run);
     Exit;
   end;
 
-  QuoteChar := QuoteChars[FRange];
+  CloseChar := CloseChars[FRange];
   while not IsLineEnd(Run) do
   begin
-    if (FLine[Run] = QuoteChar) then
+    if (FLine[Run] = CloseChar) then
     begin
-      FRange := rsUnknown;
+      if (FRange = rsTemplate) then
+        FRange := rsTemplateString
+      else
+        FRange := rsUnknown;
       Inc(Run);
       Exit;
     end
-    else if (FLine[Run] = '\') and ((FLine[Run+1] = '\') or (FLine[Run+1] = QuoteChar)) then
-      Inc(Run);
-
+    else if (FLine[Run] = '\') and ((FLine[Run+1] = '\') or (FLine[Run+1] = CloseChar)) then
+      Inc(Run)
+    else if (FRange = rsTemplateString) and (FLine[Run] = '$') and (FLine[Run+1] = '{') and not IsEscaped then
+    begin
+      FRange := rsTemplate;
+      Exit;
+    end;
     Inc(Run);
   end;
 end;
@@ -735,7 +755,7 @@ begin
   FTokenPos := Run;
   case FRange of
     rsMultiLineComment: MultiLineCommentProc;
-    rsDoubleQuotedString..rsBacktickQuotedString: StringProc;
+    rsDoubleQuotedString..rsTemplate: StringProc;
   else
     case FLine[Run] of
       #0:
@@ -853,6 +873,8 @@ begin
       Result := FSpaceAttri;
     tkString:
       Result := FStringAttri;
+    tkTemplate:
+      Result := FTemplateAttri;
     tkSymbol:
       Result := FSymbolAttri;
     tkUnknown:
