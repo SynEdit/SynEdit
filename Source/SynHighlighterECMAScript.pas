@@ -45,6 +45,9 @@ uses
   SynEditTypes,
   SynEditHighlighter,
   SynUnicode,
+{$IFDEF SYN_CodeFolding}
+  SynEditCodeFolding,
+{$ENDIF}
   SysUtils,
   Classes;
 
@@ -59,11 +62,12 @@ type
     tkNumber,
     tkSpace,
     tkString,
+    tkTemplate,
     tkSymbol,
     tkUnknown);
 
-  TRangeState = (rsUnknown, rsMultiLineComment, rsSingleLineComment,
-    rsDoubleQuotedString, rsSingleQuotedString);
+  TRangeState = (rsUnknown, rsMultiLineComment, rsSingleLineComment { not used },
+    rsDoubleQuotedString, rsSingleQuotedString, rsTemplateString, rsTemplate);
 
   TProcTableProc = procedure of object;
 
@@ -71,7 +75,11 @@ type
   TIdentFuncTableFunc = function (Index: Integer): TtkTokenKind of object;
 
 type
+{$IFDEF SYN_CodeFolding}
+  TSynECMAScriptSyn = class(TSynCustomCodeFoldingHighlighter)
+{$ELSE}
   TSynECMAScriptSyn = class(TSynCustomHighlighter)
+{$ENDIF}
   private
     FRange: TRangeState;
     FTokenId: TtkTokenKind;
@@ -83,6 +91,7 @@ type
     FSpaceAttri: TSynHighlighterAttributes;
     FStringAttri: TSynHighlighterAttributes;
     FSymbolAttri: TSynHighlighterAttributes;
+    FTemplateAttri: TSynHighlighterAttributes;
     function AltFunc(Index: Integer): TtkTokenKind;
     function FuncKeyWord(Index: Integer): TtkTokenKind;
     function FuncReservedWord(Index: Integer): TtkTokenKind;
@@ -134,6 +143,9 @@ type
     function GetTokenKind: Integer; override;
     function IsIdentChar(AChar: WideChar): Boolean; override;
     procedure Next; override;
+{$IFDEF SYN_CodeFolding}
+    procedure ScanForFoldRanges(FoldRanges: TSynFoldRanges; LinesToScan: TStrings; FromLine: Integer; ToLine: Integer); override;
+{$ENDIF}
   published
     property CommentAttri: TSynHighlighterAttributes read FCommentAttri write FCommentAttri;
     property IdentifierAttri: TSynHighlighterAttributes read FIdentifierAttri write FIdentifierAttri;
@@ -142,6 +154,7 @@ type
     property SpaceAttri: TSynHighlighterAttributes read FSpaceAttri write FSpaceAttri;
     property StringAttri: TSynHighlighterAttributes read FStringAttri write FStringAttri;
     property SymbolAttri: TSynHighlighterAttributes read FSymbolAttri write FSymbolAttri;
+    property TemplateAttri: TSynHighlighterAttributes read FTemplateAttri write FTemplateAttri;
   end;
 
 implementation
@@ -149,13 +162,13 @@ implementation
 uses
   SynEditStrConst;
 
+
 resourcestring
   SYNS_FilterECMAScript = 'JavaScript files (*.js)|*.js';
   SYNS_LangECMAScript = 'ECMA Script';
   SYNS_FriendlyLangECMAScript = 'ECMA Script';
 
 const
-  // as this language is case-insensitive keywords *must* be in lowercase
   KeyWords: array[0..52] of UnicodeString = (
     'as', 'async', 'await', 'break', 'case', 'catch', 'class', 'const',
     'continue', 'debugger', 'default', 'delete', 'do', 'else', 'enum', 'export',
@@ -178,7 +191,7 @@ const
 constructor TSynECMAScriptSyn.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  FCaseSensitive := False;
+  FCaseSensitive := True;
 
   FCommentAttri := TSynHighLighterAttributes.Create(SYNS_AttrComment, SYNS_FriendlyAttrComment);
   FCommentAttri.Style := [fsItalic];
@@ -204,6 +217,10 @@ begin
   FSymbolAttri := TSynHighlighterAttributes.Create(SYNS_AttrSymbol, SYNS_FriendlyAttrSymbol);
   AddAttribute(FSymbolAttri);
 
+  // to do: add SYNS_AttrTemplate, SYNS_FriendlyAttrTemplate to SynEditStrConst
+  FTemplateAttri := TSynHighlighterAttributes.Create('Template', 'Template');
+  AddAttribute(FTemplateAttri);
+
   SetAttributesOnChange(DefHighlightChange);
   InitIdent;
   FDefaultFilter := SYNS_FilterECMAScript;
@@ -218,6 +235,9 @@ begin
     if KeyIndices[i] = -1 then
       FIdentFuncTable[i] := AltFunc;
 
+{ we could get rid of all this (and some more elsewhere) if we stop
+  differentiating between keyword types, which we do in the end anyway,
+  when we apply the same attribute to tkKey, tkReserved and tkStrict }
   FIdentFuncTable[12] := FuncReservedWord;
   FIdentFuncTable[65] := FuncKeyWord;
   FIdentFuncTable[106] := FuncKeyWord;
@@ -521,15 +541,12 @@ begin
     '/':
       begin
         FTokenId := tkComment;
-        FRange := rsSingleLineComment;
         repeat
           Inc(Run);
         until IsLineEnd(Run);
-        FTokenId := tkComment;
       end;
     '*':
       begin
-        Inc(Run, 1);
         FRange := rsMultiLineComment;
         FTokenId := tkComment;
         repeat
@@ -547,6 +564,8 @@ begin
         Inc(Run);
         FTokenID := tkSymbol;
       end;
+  else
+    FTokenId := tkSymbol;
   end;
 end;
 
@@ -567,8 +586,7 @@ begin
           FRange := rsUnknown;
           Break;
         end;
-        if not IsLineEnd(Run) then
-          Inc(Run);
+        Inc(Run);
       until IsLineEnd(Run);
     end;
   end;
@@ -591,19 +609,65 @@ begin
 end;
 
 procedure TSynECMAScriptSyn.StringProc;
+
+  function IsEscaped: Boolean;
+  var
+    iFirstSlashPos: Integer;
+  begin
+    iFirstSlashPos := Run - 1;
+    while (iFirstSlashPos >= 0) and (FLine[iFirstSlashPos] = '\') do
+      Dec(iFirstSlashPos);
+    Result := (Run - iFirstSlashPos + 1) mod 2 <> 0;
+  end;
+
+const
+  CloseChars: array [rsDoubleQuotedString..rsTemplate] of Char = ('"', #39, '`', '}');
 var
-  QuoteChar: UnicodeString;
+  CloseChar: Char;
 begin
   FTokenID := tkString;
-  QuoteChar := FLine[Run];   // We could have '"' or #39
-  if (FLine[Run + 1] = QuoteChar) and (FLine[Run + 2] = QuoteChar) then Inc(Run, 2);
-  repeat
-    if IsLineEnd(Run) then
-      Break;
+  if FRange = rsTemplate then begin
+    FTokenID := tkTemplate;
+    if (FLine[Run] = #0) then Inc(Run);
+  end
+  else if not (FRange in [rsDoubleQuotedString..rsTemplateString]) then
+  begin
+    case FLine[Run] of
+      '"': FRange := rsDoubleQuotedString;
+      #39: FRange := rsSingleQuotedString;
+      '`': FRange := rsTemplateString;
+    end;
     Inc(Run);
-  until (FLine[Run] = QuoteChar) and (FLine[Pred(Run)] <> '\');
-  if not IsLineEnd(Run) then
+  end
+  else if IsLineEnd(Run) then
+  begin
+    if not (FRange in [rsTemplateString, rsTemplate]) and not IsEscaped then
+      FRange := rsUnknown;
     Inc(Run);
+    Exit;
+  end;
+
+  CloseChar := CloseChars[FRange];
+  while not IsLineEnd(Run) do
+  begin
+    if (FLine[Run] = CloseChar) then
+    begin
+      if (FRange = rsTemplate) then
+        FRange := rsTemplateString
+      else
+        FRange := rsUnknown;
+      Inc(Run);
+      Exit;
+    end
+    else if (FLine[Run] = '\') and ((FLine[Run+1] = '\') or (FLine[Run+1] = CloseChar)) then
+      Inc(Run)
+    else if (FRange = rsTemplateString) and (FLine[Run] = '$') and (FLine[Run+1] = '{') and not IsEscaped then
+    begin
+      FRange := rsTemplate;
+      Exit;
+    end;
+    Inc(Run);
+  end;
 end;
 
 procedure TSynECMAScriptSyn.IdentProc;
@@ -691,6 +755,7 @@ begin
   FTokenPos := Run;
   case FRange of
     rsMultiLineComment: MultiLineCommentProc;
+    rsDoubleQuotedString..rsTemplate: StringProc;
   else
     case FLine[Run] of
       #0:
@@ -701,7 +766,7 @@ begin
         CRProc;
       #1..#9, #11, #12, #14..#32:
         SpaceProc;
-      '"', #39:
+      '"', #39, '`':
         StringProc;
       '%':
         ModSymbolProc;
@@ -739,8 +804,8 @@ begin
         SymbolProc;
       '0'..'9':
         NumberProc;
-      'A'..'Z', 'a'..'z', '_', '$', #$AA, #$B5, #$BA, #$C0..#$D6, #$D8..#$F6,
-      #$0F8..#$2C1:
+      'A'..'Z', 'a'..'z', '_', '$', 
+      #$00AA, #$00B5, #$00BA, #$00C0..#$00D6, #$00D8..#$00F6, #$00F8..#$02C1: { see documentation for HIGHCHARUNICODE }
         IdentProc;
     else
       UnknownProc;
@@ -808,6 +873,8 @@ begin
       Result := FSpaceAttri;
     tkString:
       Result := FStringAttri;
+    tkTemplate:
+      Result := FTemplateAttri;
     tkSymbol:
       Result := FSymbolAttri;
     tkUnknown:
@@ -825,8 +892,8 @@ end;
 function TSynECMAScriptSyn.IsIdentChar(AChar: WideChar): Boolean;
 begin
   case AChar of
-    'A'..'Z', 'a'..'z', '_', '$', #$AA, #$B5, #$BA, #$C0..#$D6, #$D8..#$F6,
-    #$0F8..#$2C1:
+    'A'..'Z', 'a'..'z', '_', '$', '0'..'9',
+    #$00AA, #$00B5, #$00BA, #$00C0..#$00D6, #$00D8..#$00F6, #$00F8..#$02C1:
       Result := True;
     else
       Result := False;
@@ -882,6 +949,119 @@ function TSynECMAScriptSyn.GetRange: Pointer;
 begin
   Result := Pointer(FRange);
 end;
+
+{$IFDEF SYN_CodeFolding}
+procedure TSynECMAScriptSyn.ScanForFoldRanges(FoldRanges: TSynFoldRanges; LinesToScan: TStrings; FromLine, ToLine: Integer);
+var
+  CurLine: String;
+  Line: Integer;
+
+  function LineHasChar(Line: Integer; Character: Char; StartCol: Integer): Boolean; // faster than Pos!
+  var
+    i: Integer;
+  begin
+    Result := False;
+    for i := StartCol to Length(CurLine) do
+      if CurLine[i] = Character then
+        // Char must have proper highlighting (ignore stuff inside comments...)
+        if GetHighlighterAttriAtRowCol(LinesToScan, Line, i) <> FCommentAttri then
+        begin
+          Result := True;
+          Break;
+        end;
+  end;
+
+  function FindBraces(Line: Integer) : Boolean;
+  var
+    Col : Integer;
+  begin
+    Result := False;
+    for Col := 1 to Length(CurLine) do
+    begin
+      // We've found a starting character
+      if CurLine[Col] = '{' then
+      begin
+        // Char must have proper highlighting (ignore stuff inside comments...)
+        if GetHighlighterAttriAtRowCol(LinesToScan, Line, Col) <> FCommentAttri then
+        begin
+          // And ignore lines with both opening and closing chars in them
+          if not LineHasChar(Line, '}', Col + 1) then
+          begin
+            FoldRanges.StartFoldRange(Line + 1, 1);
+            Result := True;
+          end;
+          // Skip until a newline
+          Break;
+        end;
+      end
+      else if CurLine[col] = '}' then
+      begin
+        if GetHighlighterAttriAtRowCol(LinesToScan, Line, Col) <> FCommentAttri then
+        begin
+          // And ignore lines with both opening and closing chars in them
+          if not LineHasChar(Line, '{', Col + 1) then begin
+            FoldRanges.StopFoldRange(Line + 1, 1);
+            Result := True;
+          end;
+          // Skip until a newline
+          Break;
+        end;
+      end;
+    end; // for Col
+  end;
+
+  function FoldRegion(Line: Integer): Boolean;
+  var
+    S : string;
+  begin
+    Result := False;
+    S := TrimLeft(CurLine);
+    if Uppercase(Copy(S, 1, 9)) = '//#REGION' then
+    begin
+      FoldRanges.StartFoldRange(Line + 1, FoldRegionType);
+      Result := True;
+    end
+    else if Uppercase(Copy(S, 1, 12)) = '//#ENDREGION' then
+    begin
+      FoldRanges.StopFoldRange(Line + 1, FoldRegionType);
+      Result := True;
+    end;
+  end;
+
+begin
+  for Line := FromLine to ToLine do
+  begin
+    // Deal first with Multiline comments (Fold Type 2)
+    if TRangeState(GetLineRange(LinesToScan, Line)) = rsMultiLineComment then
+    begin
+      if TRangeState(GetLineRange(LinesToScan, Line - 1)) <> rsMultiLineComment then
+        FoldRanges.StartFoldRange(Line + 1, 2)
+      else
+        FoldRanges.NoFoldInfo(Line + 1);
+      Continue;
+    end
+    else if TRangeState(GetLineRange(LinesToScan, Line - 1)) = rsMultiLineComment then
+    begin
+      FoldRanges.StopFoldRange(Line + 1, 2);
+      Continue;
+    end;
+
+    CurLine := LinesToScan[Line];
+
+    // Skip empty lines
+    if CurLine = '' then begin
+      FoldRanges.NoFoldInfo(Line + 1);
+      Continue;
+    end;
+
+    // Find Fold regions
+    if FoldRegion(Line) then Continue;
+
+    // Find an braces on this line  (Fold Type 1)
+    if not FindBraces(Line) then FoldRanges.NoFoldInfo(Line + 1);
+  end;
+end;
+{$ENDIF}
 
 initialization
   RegisterPlaceableHighlighter(TSynECMAScriptSyn);
